@@ -2,14 +2,29 @@
   "name": "server",
   "version": "1.0.0",
   "main": "server.js",
+  "description": "Server-side for the PassaPraFrente app",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node --watch test.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "node",
+    "express",
+    "restful",
+    "api",
+    "back-end",
+    "server",
+    "sqlserver",
+    "web-app"
+  ],
+  "authors": [
+    "Hugo Pereira",
+    "Paulo Gonçalves",
+    "Duarte Pereira",
+    "Hugo Especial", 
+    "Marco Cardoso"
+  ],
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "express": "^4.21.2"
   }
