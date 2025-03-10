@@ -1,16 +1,14 @@
 # PassaPraFrente
- 
-Grupo No. 4 :
 
-  No.27970 – Hugo Pereira 
-
-  No.27963 – Hugo Especial 
-
-  No.27966 – Paulo Gonçalves 
-
-  No.27959 – Duarte Pereira 
-
-  No.27969 – Marco Cardoso 
+## Grupo Nº 4
+### Elementos
+| Número | Nome |
+|--------|------|
+| 27970  | Hugo Pereira |
+| 27963  | Hugo Especial  |
+| 27969  | Marco Cardoso  |
+| 27959  | Duarte Pereira |
+| 27966  | Paulo Gonçalves |
 
 Licenciatura em Engenharia Sistemas Informáticos 
 
