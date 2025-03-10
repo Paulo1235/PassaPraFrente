@@ -17,15 +17,37 @@
     "sqlserver",
     "web-app"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Paulo1235/PassaPraFrente"
+  },
   "authors": [
     "Hugo Pereira",
     "Paulo Gonçalves",
     "Duarte Pereira",
-    "Hugo Especial", 
+    "Hugo Especial",
     "Marco Cardoso"
   ],
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
+    "bcrypt": "^5.1.1",
+    "colors": "^1.4.0",
+    "compression": "^1.8.0",
+    "config": "^3.3.12",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "http-status-codes": "^2.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "mssql": "^11.0.1",
+    "nodemailer": "^6.10.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "standard": "^17.1.2",
+    "swagger-autogen": "^2.23.7"
   }
 }
