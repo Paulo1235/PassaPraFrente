@@ -5,7 +5,7 @@
   "description": "Server-side for the PassaPraFrente app",
   "type": "module",
   "scripts": {
-    "start": "node --watch test.js"
+    "start": "node --watch server.js"
   },
   "keywords": [
     "node",
