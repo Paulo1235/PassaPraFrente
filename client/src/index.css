@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/*Font*/
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+
 /*
  ? Cores do figma
 */
@@ -20,4 +23,36 @@
 .App {
   background-color: var(--background);
   height: 100vh; /* Ocupa 100% da altura da tela */
+
+  font-family: "Jua", sans-serif;
+}
+
+.black-rectangle{
+  background-color: var(--background-secondary);
+  /*border: solid 1px red;*/
+  border-radius: 64px;
+
+  width: 1423px;
+  height: 721px;
+}
+
+.white-rectangle{
+  background-color: var(--white);
+
+  height: 609px;
+  width: 747px;
+  border-radius: 64px;
+}
+
+.text{
+  color: var(--button);
+}
+
+.btn-login{
+  background-color: var(--button-secondary);
+  color: white;
+
+  border-radius: 64px;
+  width: 335px;
+  height: 61px;
 }
