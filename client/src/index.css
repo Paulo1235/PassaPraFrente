@@ -1,13 +1,23 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ ? Cores do figma
+*/
+:root {
+  --background: #E0E5B6;
+  --background-secondary: #24251D;
+
+  --button: #73802A;
+  --button-secondary: #CAAD7E;
+
+  --gray: #ADADAD;
+  --red: #FF0000;
+  --white: #FFFAEE;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.App {
+  background-color: var(--background);
+  height: 100vh; /* Ocupa 100% da altura da tela */
 }
