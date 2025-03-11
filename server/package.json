@@ -5,7 +5,9 @@
   "description": "Server-side for the PassaPraFrente app",
   "type": "module",
   "scripts": {
-    "start": "node --watch server.js"
+    "test": "jest",
+    "dev": "node --watch server.js",
+    "swagger": "node --watch ./utils/swagger.js"
   },
   "keywords": [
     "node",
@@ -48,6 +50,10 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "standard": "^17.1.2",
-    "swagger-autogen": "^2.23.7"
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "eslintConfig": {
+    "extends": "standard"
   }
 }

@@ -1,7 +1,7 @@
-import config from "config";
+import config from 'config'
 
-// config.get para cada variável só acontece 1 vez
-const PORT = config.get("PORT");
-const NODE_ENV = config.get("NODE_ENV");
+const NAME = config.get('APP.NAME')
+const PORT = config.get('APP.PORT')
+const NODE_ENV = config.get('NODE_ENV')
 
-export { PORT, NODE_ENV }
+export { NAME, PORT, NODE_ENV }

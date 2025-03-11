@@ -1,4 +1,7 @@
 {
-  "PORT": 6000,
-  "NODE_ENV": "development"
+  "NODE_ENV": "development",
+  "APP" : {
+    "NAME": "PassaPraFrente - Development",
+    "PORT": 5000
+  }
 }
