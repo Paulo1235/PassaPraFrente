@@ -4,7 +4,7 @@ import { readJSON, writeJSON } from '../utils/file-helper.js'
 
 export class UserRepository {
   static async loadUsers () {
-    return await readJSON('users.json') || []
+    return await readJSON('users.json')
   }
 
   static async getUserById (id) {
@@ -18,15 +18,12 @@ export class UserRepository {
   }
 
   static async createUser (input) {
-    const users = await this.loadUsers()
     const newUser = {
       id: randomUUID(),
       ...input
     }
 
-    users.push(newUser)
-
-    await writeJSON('users.json', users)
+    writeJSON('users.json', newUser)
 
     return newUser
   }
@@ -38,7 +35,7 @@ export class UserRepository {
 
     users.splice(userIndex, 1)
 
-    await writeJSON('users.json', users)
+    writeJSON('users.json', userIndex)
 
     return true
   }
@@ -53,7 +50,7 @@ export class UserRepository {
       ...input
     }
 
-    await writeJSON('users.json', users)
+    writeJSON('users.json', users)
 
     return users[userIndex]
   }

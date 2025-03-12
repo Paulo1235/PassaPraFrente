@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import path from 'path'
+import path from 'node:path'
 
 import { createRequire } from 'node:module'
 
@@ -11,6 +11,8 @@ export const readJSON = (filePath) => {
   return require(absolutePath)
 }
 
-export const writeJSON = async ({ filePath, data }) => {
-  await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf8')
+export const writeJSON = (filePath, data) => {
+  if (!data) console.error('Data not defined!')
+
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8')
 }

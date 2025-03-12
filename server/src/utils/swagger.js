@@ -7,10 +7,10 @@ const doc = {
     title: 'My API',
     description: 'Description'
   },
-  host: `localhost:${PORT}`
+  host: `localhost:${PORT}/api`
 }
 
-const outputFile = '../docs/swagger-output.json'
+const outputFile = '../../docs/swagger-output.json'
 const routes = ['../routes/user-routes.js']
 
 swaggerAutogen(outputFile, routes, doc)
