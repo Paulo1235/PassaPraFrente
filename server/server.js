@@ -10,7 +10,8 @@ import colors from 'colors'
 import swaggerUi from 'swagger-ui-express'
 
 import { PORT, NODE_ENV, NAME } from './config.js'
-import { readJSON } from './utils/read-json.js'
+import { readJSON } from './src/utils/file-helper.js'
+import { userRouter } from './src/routes/user-routes.js'
 
 const app = express()
 
@@ -41,6 +42,8 @@ app.use(cookieParser())
 app.use(compression({ threshold: 1024 }))
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
+
+app.use('/api', userRouter)
 
 app.get('/', (req, res) => {
   res.status(StatusCodes.OK).json({

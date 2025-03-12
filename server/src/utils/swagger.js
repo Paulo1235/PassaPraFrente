@@ -1,6 +1,6 @@
 import swaggerAutogen from 'swagger-autogen'
 
-import { PORT } from '../config'
+import { PORT } from '../../config.js'
 
 const doc = {
   info: {
@@ -11,6 +11,6 @@ const doc = {
 }
 
 const outputFile = '../docs/swagger-output.json'
-const routes = ['../routes/user-routes.js ']
+const routes = ['../routes/user-routes.js']
 
 swaggerAutogen(outputFile, routes, doc)

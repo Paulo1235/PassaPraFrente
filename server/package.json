@@ -7,7 +7,9 @@
   "scripts": {
     "test": "jest",
     "dev": "node --watch server.js",
-    "swagger": "node --watch ./utils/swagger.js"
+    "swagger": "node --watch ./utils/swagger.js",
+    "lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "keywords": [
     "node",
