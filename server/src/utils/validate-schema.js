@@ -9,6 +9,8 @@ export const validateSchema = (schema, isPartial) => {
       const schemaToUse = isPartial ? schema.partial() : schema
 
       const result = schemaToUse.parse(req.body)
+      console.log(req.body)
+      console.log(result)
 
       if (!result.success) {
         throw new z.ZodError(result.error.errors)

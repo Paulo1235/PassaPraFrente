@@ -10,7 +10,7 @@
     "PASSWORD": "",
     "SERVER_NAME": "",
     "DATABASE": "",
-    "PORTDB": ,
+    "PORTDB": "numero da porta",
     "INSTANCENAME": ""
   },
   "EMAIL": {

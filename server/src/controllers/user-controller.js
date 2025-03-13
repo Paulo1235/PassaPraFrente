@@ -3,7 +3,6 @@ import StatusCodes from 'http-status-codes'
 import { UserRepository } from '../repositories/user-repository.js'
 import { ErrorApplication } from '../utils/error-handler.js'
 import { response } from '../utils/response.js'
-import { hashPassword } from '../utils/bcrypt.js'
 
 export class UserController {
   static async getUserById (req, res) {
@@ -43,15 +42,14 @@ export class UserController {
   }
 
   static async createUser (req, res) {
-    const { email, name, password } = req.body
+    const { nome, dataNasc, imagemURL, contacto } = req.body
 
     try {
-      const hashedPassword = await hashPassword(password)
-
       const newUser = {
-        email,
-        name,
-        password: hashedPassword
+        nome,
+        dataNasc,
+        imagemURL,
+        contacto
       }
 
       const user = await UserRepository.createUser(newUser)
@@ -71,11 +69,11 @@ export class UserController {
     }
   }
 
-  static deleteUser (req, res) {
+  static async deleteUser (req, res) {
     const { id } = req.params
 
     try {
-      const result = UserRepository.deleteUser(id)
+      const result = await UserRepository.deleteUser(id)
 
       if (!result) {
         throw new ErrorApplication('User not found', StatusCodes.NOT_FOUND)
@@ -87,16 +85,16 @@ export class UserController {
         response(res, false, error.statusCodes, error.message)
       } else {
         console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while creating an user')
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while deleting an user')
       }
     }
   }
 
-  static updateUser (req, res) {
+  static async updateUser (req, res) {
     const data = req.body
     const { id } = req.params
     try {
-      const result = UserRepository.updateUser({ id, data })
+      const result = await UserRepository.updateUser({ id, data })
 
       if (!result) {
         throw new ErrorApplication('User could not be found', StatusCodes.NOT_FOUND)

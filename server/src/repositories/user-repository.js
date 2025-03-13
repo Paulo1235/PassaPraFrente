@@ -1,57 +1,59 @@
-import { randomUUID } from 'node:crypto'
+import sql from 'mssql'
 
-import { readJSON, writeJSON } from '../utils/file-helper.js'
+import { dbConfig } from '../database/db-config.js'
 
 export class UserRepository {
-  static async loadUsers () {
-    return await readJSON('users.json')
+  static async getUserById (id) {
+    const pool = await sql.connect(dbConfig)
+    const user = await pool.request()
+      .input('id', sql.Int, id)
+      .query('select * from Utilizador where Utilizador_ID = @id')
+    return user.recordset
   }
 
-  static async getUserById (id) {
-    const users = await this.loadUsers()
-
-    return users.find(user => user.id === id)
+  static async getUserByEmail (email) {
+    const pool = await sql.connect(dbConfig)
+    const user = await pool.request()
+      .input('email', sql.VarChar, email)
+      .query('select * from Utilizador Join Autenticacao on Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID')
+    return user.recordset
   }
 
   static async getAllUsers () {
-    return await this.loadUsers()
+    const pool = await sql.connect(dbConfig)
+    const users = await pool.request()
+      .query('select * from Utilizador')
+    return users.recordset
   }
 
-  static async createUser (input) {
-    const newUser = {
-      id: randomUUID(),
-      ...input
-    }
-
-    writeJSON('users.json', newUser)
-
-    return newUser
+  static async createUser (nome, dataNasc, imagemURL, contacto) {
+    const pool = await sql.connect(dbConfig)
+    const user = await pool.request()
+      .input('nome', sql.VarChar, nome)
+      .input('dataNasc', sql.Date, dataNasc)
+      .input('imagemURL', sql.VarChar, imagemURL)
+      .input('contacto', sql.VarChar, contacto)
+      .query('insert into Utilizador (Nome, DataNasc, Imagem_URL, Contacto) Values (@nome, @dataNasc, @imagemURL, @contacto)')
+    return user.recordset
   }
 
   static async deleteUser (id) {
-    const users = await this.loadUsers()
-    const userIndex = users.findIndex(user => user.id === id)
-    if (userIndex === -1) return false
-
-    users.splice(userIndex, 1)
-
-    writeJSON('users.json', userIndex)
-
+    const pool = await sql.connect(dbConfig)
+    await pool.request()
+      .input('id', sql.Int, id)
+      .query('delete from Utilizador where Utilizador_ID = @id')
     return true
   }
 
-  static async updateUser ({ id, input }) {
-    const users = await this.loadUsers()
-    const userIndex = users.findIndex(user => user.id === id)
-    if (userIndex === -1) return false
-
-    users[userIndex] = {
-      ...users[userIndex],
-      ...input
-    }
-
-    writeJSON('users.json', users)
-
-    return users[userIndex]
+  static async updateUser ({ id, nome, dataNasc, imagemURL, contacto }) {
+    const pool = await sql.connect(dbConfig)
+    const user = await pool.request()
+      .input('nome', sql.VarChar, nome)
+      .input('dataNasc', sql.Date, dataNasc)
+      .input('imagemURL', sql.VarChar, imagemURL)
+      .input('contacto', sql.VarChar, contacto)
+      .input('id', sql.Int, id)
+      .query('update Utilizador set  Nome =@ nome, DataNasc = @dataNasc, Imagem_URL = @imagemURL, Contacto = @contacto where Utilizador_ID = @id')
+    return user.recordset
   }
 }

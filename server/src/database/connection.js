@@ -1,7 +1,7 @@
 import colors from 'colors'
 import sql from 'mssql'
 
-import { dbConfig } from './dbConfig.js'
+import { dbConfig } from './db-config.js'
 
 colors.enable()
 
