@@ -13,6 +13,7 @@ import { PORT, NODE_ENV, NAME, MAX, WINDOWMS } from './config.js'
 import { readJSON } from './src/utils/file-helper.js'
 import { userRouter } from './src/routes/user-routes.js'
 import { response } from './src/utils/response.js'
+import { checkDatabaseConnection } from './src/database/connection.js'
 
 const app = express()
 
@@ -54,12 +55,14 @@ app.all('*', (req, res) => {
   response(res, false, StatusCodes.NOT_FOUND, `${req.method} ${req.originalUrl} not found!`)
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`\nApp '${NAME}' is running.`
     .bold.green +
     '\nActive in: ' +
     `http://localhost:${PORT}`.underline.blue
   )
+
+  await checkDatabaseConnection()
 })
 
 export default app

@@ -1,8 +1,8 @@
-import { zod } from 'zod'
+import { z } from 'zod'
 
-export const userSchema = zod.object({
-  name: zod.string().max(40).min(1).trim(),
-  imageUrl: zod.url(),
-  contacto: zod.startsWith('+').string(22),
-  dataNascimento: zod.date()
+export const userSchema = z.object({
+  name: z.string().max(40).min(1).trim(),
+  imageUrl: z.string().url(),
+  contacto: z.string(22).startsWith('+'),
+  dataNascimento: z.date()
 })
