@@ -1,6 +1,6 @@
 import { zod } from 'zod'
 
-const user = zod.object({
+export const proposalLoanSchema = zod.object({
   novoValorFinal: zod.number().trim().gte(1),
   NovaDataInicioFinal: zod.date(),
   NovaDataFimFinal: zod.date(),

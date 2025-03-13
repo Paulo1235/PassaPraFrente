@@ -3,12 +3,13 @@ import { StatusCodes } from 'http-status-codes'
 
 import { response } from '../utils/response.js'
 
-const userSchema = z.object({
-  name: z.string(),
+export const userSchema = z.object({
   email: z.string().email(),
-  password: z.string()
+  password: z.string(),
+  emailConfirmar: z.boolean()
 })
 
+// Funções
 export const validateUser = async (req, res, next) => {
   try {
     const result = userSchema.parse(req.body)

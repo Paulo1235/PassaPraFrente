@@ -1,5 +1,5 @@
 import { zod } from 'zod'
 
-const user = zod.object({
+export const entryGiveawaySchema = zod.object({
   dataInscricao: zod.date()
 })

@@ -1,5 +1,5 @@
 import { zod } from 'zod'
 
-const user = zod.object({
+export const categorySchema = zod.object({
   nomeCategoria: zod.string().max(20).min(1).trim()
 })
