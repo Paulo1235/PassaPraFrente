@@ -9,9 +9,10 @@ import compression from 'compression'
 import colors from 'colors'
 import swaggerUi from 'swagger-ui-express'
 
-import { PORT, NODE_ENV, NAME } from './config.js'
+import { PORT, NODE_ENV, NAME, MAX, WINDOWMS } from './config.js'
 import { readJSON } from './src/utils/file-helper.js'
 import { userRouter } from './src/routes/user-routes.js'
+import { response } from './src/utils/response.js'
 
 const app = express()
 
@@ -24,8 +25,8 @@ const corsOptions = {
 }
 
 const limiter = rateLimit({
-  max: 50,
-  windowMs: 10 * 60 * 1000,
+  max: MAX,
+  windowMs: WINDOWMS,
   message: 'Too many requests from this IP. Try again later.'
 })
 
@@ -46,17 +47,11 @@ app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
 app.use('/api', userRouter)
 
 app.get('/', (req, res) => {
-  res.status(StatusCodes.OK).json({
-    success: true,
-    message: 'Hello World'
-  })
+  response(res, true, StatusCodes.OK, 'Hello World')
 })
 
 app.all('*', (req, res) => {
-  res.status(StatusCodes.NOT_FOUND).json({
-    success: false,
-    message: `${req.method} ${req.originalUrl} not found!`
-  })
+  response(res, false, StatusCodes.NOT_FOUND, `${req.method} ${req.originalUrl} not found!`)
 })
 
 app.listen(PORT, () => {

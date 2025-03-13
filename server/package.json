@@ -6,8 +6,10 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "dev": "node --watch server.js",
-    "swagger": "node --watch ./src/utils/swagger.js",
+    "dev-env": "cross-env NODE_ENV=development node --watch server.js",
+    "start-env": "cross-env NODE_ENV=production node --watch server.js",
+    "test-env": "cross-env NODE_ENV=testing node --watch server.js",
+    "doc": "node ./src/utils/swagger.js",
     "lint": "standard",
     "lint:fix": "standard --fix"
   },
@@ -40,6 +42,7 @@
     "config": "^3.3.12",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",
     "helmet": "^8.0.0",
