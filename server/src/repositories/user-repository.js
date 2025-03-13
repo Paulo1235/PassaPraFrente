@@ -26,14 +26,22 @@ export class UserRepository {
     return users.recordset
   }
 
-  static async createUser (nome, dataNasc, imagemURL, contacto) {
+  static async createUser (input) {
     const pool = await sql.connect(dbConfig)
+
+    const typeUserId = 1
+
     const user = await pool.request()
-      .input('nome', sql.VarChar, nome)
-      .input('dataNasc', sql.Date, dataNasc)
-      .input('imagemURL', sql.VarChar, imagemURL)
-      .input('contacto', sql.VarChar, contacto)
-      .query('insert into Utilizador (Nome, DataNasc, Imagem_URL, Contacto) Values (@nome, @dataNasc, @imagemURL, @contacto)')
+      .input('nome', sql.VarChar, input.name)
+      .input('dataNasc', sql.Date, input.birthDate)
+      .input('imagemURL', sql.VarChar, input.imageUrl)
+      .input('contacto', sql.VarChar, input.contact)
+      .input('tipoUtilizadorID', sql.Int, typeUserId)
+      .query(`
+        INSERT INTO Utilizador (Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID)
+        VALUES (@nome, @dataNasc, @imagemURL, @contacto, @tipoUtilizadorID)
+      `)
+
     return user.recordset
   }
 

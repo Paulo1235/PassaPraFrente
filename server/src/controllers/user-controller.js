@@ -42,14 +42,14 @@ export class UserController {
   }
 
   static async createUser (req, res) {
-    const { nome, dataNasc, imagemURL, contacto } = req.body
+    const { name, birthDate, imageUrl, contact } = req.body
 
     try {
       const newUser = {
-        nome,
-        dataNasc,
-        imagemURL,
-        contacto
+        name,
+        birthDate,
+        imageUrl,
+        contact
       }
 
       const user = await UserRepository.createUser(newUser)
