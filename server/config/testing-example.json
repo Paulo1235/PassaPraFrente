@@ -1,0 +1,27 @@
+{
+  "NODE_ENV": "testing",
+  "APP" : {
+    "NAME": "PassaPraFrente - Testing",
+    "PORT": 7000
+  },
+  "SALT_ROUNDS": 1,
+  "DATABASE": {
+    "USER": "",
+    "PASSWORD": "",
+    "SERVER_NAME": "",
+    "DATABASE": "",
+    "PORTDB": ,
+    "INSTANCENAME": ""
+  },
+  "EMAIL": {
+    "SMTP_HOST": "",
+    "SMTP_PORT": "",
+    "SMTP_SERVICE": "",
+    "SMTP_MAIL": "",
+    "SMTP_PASSWORD": ""
+  },
+  "RATE_LIMIT": {
+    "MAX": 100,
+    "WINDOWMS": 600000
+  }
+}
