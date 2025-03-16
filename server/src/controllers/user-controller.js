@@ -41,34 +41,6 @@ export class UserController {
     }
   }
 
-  static async createUser (req, res) {
-    const { name, birthDate, imageUrl, contact } = req.body
-
-    try {
-      const newUser = {
-        name,
-        birthDate,
-        imageUrl,
-        contact
-      }
-
-      const user = await UserRepository.createUser(newUser)
-
-      if (!user) {
-        throw new ErrorApplication('User could not be created', StatusCodes.INTERNAL_SERVER_ERROR)
-      }
-
-      response(res, true, StatusCodes.CREATED, user)
-    } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while creating an user')
-      }
-    }
-  }
-
   static async deleteUser (req, res) {
     const { id } = req.params
 

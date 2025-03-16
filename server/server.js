@@ -14,6 +14,7 @@ import { readJSON } from './src/utils/file-helper.js'
 import { userRouter } from './src/routes/user-routes.js'
 import { response } from './src/utils/response.js'
 import { checkDatabaseConnection } from './src/database/connection.js'
+import { authRouter } from './src/routes/auth-routes.js'
 
 const app = express()
 
@@ -45,7 +46,7 @@ app.use(compression({ threshold: 1024 }))
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
 
-app.use('/api', userRouter)
+app.use('/api', userRouter, authRouter)
 
 app.get('/', (req, res) => {
   response(res, true, StatusCodes.OK, 'Hello World')
