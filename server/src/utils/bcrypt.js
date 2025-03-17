@@ -22,6 +22,6 @@ export const comparePassword = async (password, hashedPassword) => {
     return isMatch
   } catch (error) {
     console.error('Error while comparing password:', error.message)
-    throw new ErrorApplication('Failed to hash password', StatusCodes.INTERNAL_SERVER_ERROR)
+    throw new ErrorApplication('Error in password comparison', StatusCodes.INTERNAL_SERVER_ERROR)
   }
 }

@@ -1,8 +1,0 @@
-{
-  "NODE_ENV": "development",
-  "APP" : {
-    "NAME": "PassaPraFrente - Development",
-    "PORT": 5000
-  },
-  "SALT_ROUNDS": 10
-}

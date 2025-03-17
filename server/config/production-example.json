@@ -1,0 +1,27 @@
+{
+  "NODE_ENV": "production",
+  "APP" : {
+    "NAME": "PassaPraFrente - Production",
+    "PORT": 6000
+  },
+  "SALT_ROUNDS": 10,
+  "DATABASE": {
+    "USER": "",
+    "PASSWORD": "",
+    "SERVER_NAME": "",
+    "DATABASE": "",
+    "PORTDB": ,
+    "INSTANCENAME": ""
+  },
+  "EMAIL": {
+    "SMTP_HOST": "",
+    "SMTP_PORT": "",
+    "SMTP_SERVICE": "",
+    "SMTP_MAIL": "",
+    "SMTP_PASSWORD": ""
+  },
+  "RATE_LIMIT": {
+    "MAX": 30,
+    "WINDOWMS": 600000
+  }
+}
