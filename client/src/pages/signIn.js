@@ -22,7 +22,7 @@ function SignIn() {
   };
 
   return (
-    <div className='App flex justify-center items-center'>
+    <div className='App h-[100vh] flex justify-center items-center'>
       <div className='black-rectangle flex pl-10 text-3xl'>
       <div className='left ml-20 flex flex-col items-start justify-center'>
         <div className='white-rectangle flex flex-col'>
@@ -124,10 +124,10 @@ function SignIn() {
                     />
                   </div>
                   <span className='text-lg text-error'>{errors.password2 && touched.password2 && errors.password2}</span>
-                  <span className='text text-base flex justify-end'><a href='https://google.com'>Alterar Palavra-Passe</a></span>
+                  <span className='text text-base flex justify-end'><a href='/recoverpass'>Alterar Palavra-Passe</a></span>
                   <div className='pt-5 flex flex-col self-center justify-center'>
                     <button type='submit' className='btn-login' disabled={isSubmitting}>Entrar</button>
-                    <span className='text-base text-center pt-2'>Ainda sem conta? <a href='https://google.com' className='text'>Clique Aqui!</a></span>
+                    <span className='text-base text-center pt-2'>Ja tem conta? <a href='/' className='text'>Clique Aqui!</a></span>
                   </div>
                 </form>
               )}

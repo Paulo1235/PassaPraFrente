@@ -1,0 +1,15 @@
+/*Font*/
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap'); /*Raleway*/
+
+aside{
+    background-color: #FFFAEE;
+    width: 200px;
+
+    font-family: "Raleway", sans-serif;
+
+}
+
+.debug{
+    border: solid 1px red;
+}

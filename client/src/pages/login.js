@@ -7,6 +7,7 @@ import eyeIco from '../images/eyeIco.svg'
 
 import { Formik } from 'formik';
 import { useState } from 'react';
+import { Helmet } from 'react-helmet';
 
 function Login() {
 
@@ -17,7 +18,10 @@ function Login() {
   };
 
   return (
-    <div className='App flex justify-center items-center'>
+    <div className='App h-[100vh] flex justify-center items-center'>
+      <Helmet>
+        <title>Bem-Vindo!</title>
+      </Helmet>
       <div className='black-rectangle flex pl-10 text-3xl'>
         <div className='left ml-20 flex flex-col items-start justify-center'>
           <img src={logo} alt="logo" />
@@ -93,10 +97,10 @@ function Login() {
                     />
                   </div>
                   <span className='text-lg text-error'>{errors.password && touched.password && errors.password}</span>
-                  <span className='text text-base flex justify-end'><a href='https://google.com'>Alterar Palavra-Passe</a></span>
+                  <span className='text text-base flex justify-end'><a href='/recoverpass'>Alterar Palavra-Passe</a></span>
                   <div className='pt-10 flex flex-col self-center justify-center'>
                     <button type='submit' className='btn-login' disabled={isSubmitting}>Entrar</button>
-                    <span className='text-base text-center pt-2'>Ainda sem conta? <a href='https://google.com' className='text'>Clique Aqui!</a></span>
+                    <span className='text-base text-center pt-2'>Ainda sem conta? <a href='/signin' className='text'>Clique Aqui!</a></span>
                   </div>
                 </form>
               )}

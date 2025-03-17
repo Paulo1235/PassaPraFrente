@@ -7,7 +7,7 @@ import { Formik } from 'formik';
 
 function SignIn() {
   return (
-    <div className='App flex justify-center items-center'>
+    <div className='App h-[100vh] flex justify-center items-center'>
       <div className='black-rectangle flex pl-10 text-3xl'>
         <div className='left ml-20 flex flex-col items-start justify-center'>
           <img src={logo} alt="logo" />
@@ -18,7 +18,7 @@ function SignIn() {
             <span className='text text-4xl pt-20 pl-10'>Alterar Palavra-Passe</span>
             <span className='text-lg mt-10 mx-20 text-center'>Vai ser enviado um email com um link para <span className='flex flex-col items-center'>escrever a nova palavra passe.</span></span>
             <Formik
-              initialValues={{ email: ''}}
+              initialValues={{ email: '' }}
               validate={values => {
                 const errors = {};
                 if (!values.email) {
@@ -45,15 +45,14 @@ function SignIn() {
                 handleBlur,
                 handleSubmit,
                 isSubmitting,
-                /* and other goodies */
               }) => (
                 <form onSubmit={handleSubmit} className='mx-20 mt-3 flex flex-col'>
                   <label className='text pt-2' htmlFor='email'>Email:</label>
-                  <input 
-                    className='mt-2 p-2 border border-gray-300 rounded' 
-                    type='text' 
-                    id='email' 
-                    name='email' 
+                  <input
+                    className='mt-2 p-2 border border-gray-300 rounded'
+                    type='text'
+                    id='email'
+                    name='email'
                     placeholder='teste@gmail.com'
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -62,7 +61,7 @@ function SignIn() {
                   <span className='text-lg text-error'>{errors.email && touched.email && errors.email}</span>
                   <div className='pt-10 flex flex-col self-center justify-center'>
                     <button type='submit' className='btn-login' disabled={isSubmitting}>Enviar</button>
-                    <span className='text-base text-center pt-2'>Ainda sem conta? <a href='https://google.com' className='text'>Clique Aqui!</a></span>
+                    <span className='text-base text-center pt-2'>Ainda sem conta? <a href='/signin' className='text'>Clique Aqui!</a></span>
                   </div>
                 </form>
               )}

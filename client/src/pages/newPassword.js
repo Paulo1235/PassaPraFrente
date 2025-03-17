@@ -22,7 +22,7 @@ function NewPassword() {
   };
 
   return (
-    <div className='App flex justify-center items-center'>
+    <div className='App h-[100vh] flex justify-center items-center'>
       <div className='black-rectangle flex pl-10 text-3xl'>
         <div className='left ml-20 flex flex-col items-start justify-center'>
           <img src={logo} alt="logo" />
@@ -111,7 +111,7 @@ function NewPassword() {
                   <span className='text-lg text-error'>{errors.password2 && touched.password2 && errors.password2}</span>
                   <div className='pt-10 flex flex-col self-center justify-center'>
                     <button type='submit' className='btn-login' disabled={isSubmitting}>Enviar</button>
-                    <span className='text-base text-center pt-2'>Ainda sem conta? <a href='https://google.com' className='text'>Clique Aqui!</a></span>
+                    <span className='text-base text-center pt-2'>Ainda sem conta? <a href='/signin' className='text'>Clique Aqui!</a></span>
                   </div>
                 </form>
               )}

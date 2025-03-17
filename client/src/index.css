@@ -4,6 +4,7 @@
 
 /*Font*/
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap'); /*Raleway*/
 
 /*
  ? Cores do figma
@@ -22,10 +23,12 @@
 
 .App {
   background-color: var(--background);
-  height: 100vh; /* Ocupa 100% da altura da tela */
 
   font-family: "Jua", sans-serif;
+  font-family: "Raleway", sans-serif;
+  font-weight: 500;
 
+  /*height: 100vh;*/
   user-select: none;
 }
 
