@@ -12,7 +12,9 @@ import SignIn from './pages/signIn'
 import RecoverPass from './pages/recoverPass'
 import NewPassword from './pages/newPassword'
 
-import Template from './pages/template'
+import Main from './pages/main'
+
+import CreateSale from './pages/createSale';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -23,7 +25,8 @@ root.render(
       <Route path="/recoverpass" element={<RecoverPass />} />
       <Route path="/newpassword" element={<NewPassword />} />
       <Route path="/sidebartest" element={<SideBar />} />
-      <Route path="/template" element={<Template />} />
+      <Route path="/index" element={<Main />} />
+      <Route path="/createsale" element={<CreateSale />} />
     </Routes>
   </BrowserRouter>
 );

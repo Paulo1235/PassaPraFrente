@@ -1,18 +1,19 @@
-//? Pagina apenas para servir como modelo para colocar a sidebar+conteudo
 import React from 'react'
 import { Helmet } from 'react-helmet'
 
+//? CSS
 import '../components/css/sidebar.css'
 import '../index.css'
+
 //? Components
 import SideBar from '../components/sideBar'
 import Card from '../components/card'
 
-const Teste = () => {
+const Main = () => {
   return (
     <div className='flex flex-row'>
       <Helmet>
-        <title>Template</title>
+        <title>Loja</title>
       </Helmet>
       <SideBar />
       <div className='App sm:ml-48 w-screen flex flex-col'>
@@ -81,4 +82,4 @@ const Teste = () => {
   )
 }
 
-export default Teste
+export default Main
