@@ -9,7 +9,7 @@ import { ErrorApplication } from '../utils/error-handler.js'
 import { comparePassword, hashPassword } from '../utils/bcrypt.js'
 import { sendToken } from '../utils/jwt.js'
 import { response } from '../utils/response.js'
-import { ACCESS_TOKEN_SECRET_KEY, ACCESS_TOKEN_EXPIRE, DIRNAME } from '../../config.js'
+import { ACCESS_TOKEN_SECRET_KEY, DIRNAME, ACTIVATION_CODE_EXPIRE } from '../../config.js'
 import { sendEmail } from '../utils/send-email.js'
 
 export class AuthController {
@@ -21,14 +21,15 @@ export class AuthController {
     }
 
     try {
-      const existingUser = await UserRepository.getUserByEmail(email)
+      // const existingUser = await UserRepository.getUserByEmail(email)
+
+      const existingUser = await UserRepository.existsUserByEmail(email)
 
       if (existingUser) {
-        throw new ErrorApplication('User already exists', StatusCodes.CONFLICT)
+        throw new ErrorApplication('Utilizador já existe.', StatusCodes.CONFLICT)
       }
 
       const hashedPassword = await hashPassword(password)
-      const confirmarEmail = 0
 
       const user = {
         name,
@@ -36,36 +37,22 @@ export class AuthController {
         imageUrl,
         contact,
         email,
-        password: hashedPassword,
-        confirmarEmail
+        password: hashedPassword
       }
 
-      const activationToken = AuthController.createActivationToken(user)
+      const createdUser = await UserRepository.createUser(user)
 
-      const activationCode = activationToken.activationCode
+      if (!createdUser) {
+        throw new ErrorApplication('Não foi possível criar conta.', StatusCodes.BAD_REQUEST)
+      }
 
-      const data = { user, activationCode }
-
-      await ejs.renderFile(path.join(DIRNAME, 'src/mails/activation-mail.ejs'), data)
-
-      await sendEmail({
-        email: user.email,
-        subject: 'Ativação de conta',
-        template: 'activation-mail.ejs',
-        data
-      })
-
-      return res.status(StatusCodes.OK).json({
-        success: true,
-        message: 'Check your email for account verification',
-        activationToken: activationToken.token
-      })
+      response(res, true, StatusCodes.CREATED, createdUser)
     } catch (error) {
       if (error instanceof ErrorApplication) {
         response(res, false, error.statusCodes, error.message)
       } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while creating an user')
+        console.error('Erro ao criar conta: ', error.message)
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao criar a conta.')
       }
     }
   }
@@ -77,20 +64,18 @@ export class AuthController {
       const user = await UserRepository.getUserByEmail(email)
 
       if (!user) {
-        throw new ErrorApplication('User could not be found', StatusCodes.NOT_FOUND)
+        throw new ErrorApplication('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
       }
-
-      console.log(user)
 
       const isMatch = await comparePassword(password, user.Password)
 
       if (!isMatch) {
-        throw new ErrorApplication('Incorrect password', StatusCodes.BAD_REQUEST)
+        throw new ErrorApplication('Palavra-passe incorreta', StatusCodes.BAD_REQUEST)
       }
 
-      // const { password, ...publicUser } = user
+      const { Password: _, ...publicUser } = user
 
-      sendToken(user, StatusCodes.OK, res)
+      sendToken(publicUser, StatusCodes.OK, res)
     } catch (error) {
       if (error instanceof ErrorApplication) {
         response(res, false, error.statusCodes, error.message)
@@ -119,9 +104,68 @@ export class AuthController {
     const token = jwt.sign(
       { user, activationCode },
       ACCESS_TOKEN_SECRET_KEY,
-      { expiresIn: ACCESS_TOKEN_EXPIRE * 60 }
+      { expiresIn: ACTIVATION_CODE_EXPIRE * 60 * 60 }
     )
 
     return { token, activationCode }
+  }
+
+  static async sendAccountActivationEmail (req, res) {
+    const user = req.user
+
+    const activationToken = AuthController.createActivationToken(user)
+
+    const activationCode = activationToken.activationCode
+
+    const data = { user, activationCode }
+
+    try {
+      await ejs.renderFile(path.join(DIRNAME, 'src/mails/activation-mail.ejs'), data)
+
+      await sendEmail({
+        email: user.Email,
+        subject: 'Ativação de conta',
+        template: 'activation-mail.ejs',
+        data
+      })
+
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        message: 'Verifique o seu email para ativar a conta.',
+        activationToken: activationToken.token
+      })
+    } catch (error) {
+      console.error('Erro ao enviar o email', error.message)
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao enviar o email para a sua conta.')
+    }
+  }
+
+  static async activateUser (req, res) {
+    const id = req.user.Utilizador_ID
+
+    const { activationToken, activationCode } = req.body
+
+    try {
+      const token = jwt.verify(activationToken, ACCESS_TOKEN_SECRET_KEY)
+
+      if (token.activationCode !== activationCode) {
+        throw new ErrorApplication('Código de ativação incorreto.', StatusCodes.BAD_REQUEST)
+      }
+
+      const user = await UserRepository.activateUser(id)
+
+      if (!user) {
+        throw new ErrorApplication('Ocorreu erro ao ativar conta.', StatusCodes.BAD_REQUEST)
+      }
+
+      response(res, true, StatusCodes.OK, 'Conta ativada com sucesso.')
+    } catch (error) {
+      if (error instanceof ErrorApplication) {
+        response(res, false, error.statusCodes, error.message);
+      } else {
+        console.error('Erro ao ativar a conta: ', error.message)
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao ativar a sua conta.')
+      }
+    }
   }
 }

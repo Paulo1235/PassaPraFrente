@@ -9,11 +9,11 @@ export class UserRepository {
     const user = await pool.request()
       .input('id', sql.Int, id)
       .query(`
-        SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail
+        SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail, Password
         FROM Utilizador 
         JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID 
-        WHERE Utilizador_ID = @id
-      `)
+        WHERE Utilizador.Utilizador_ID = @id
+        `)
 
     await closeConnection(pool)
 
@@ -26,13 +26,35 @@ export class UserRepository {
     const user = await pool.request()
       .input('email', sql.VarChar, email)
       .query(
-        `SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail
+        `SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail, Password
          FROM Utilizador 
          JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID 
          WHERE email = @email
       `)
 
+    await closeConnection(pool)
+
     return user.recordset[0]
+  }
+
+  static async existsUserByEmail (email) {
+    const pool = await getConnection()
+
+    const user = await pool.request()
+      .input('email', sql.VarChar, email)
+      .query(
+        `SELECT Email
+         FROM Autenticacao 
+         WHERE email = @email
+      `)
+
+    await closeConnection(pool)
+
+    if (user.rowsAffected[0] > 0) {
+      return true
+    }
+
+    return false
   }
 
   static async getAllUsers () {
@@ -54,8 +76,6 @@ export class UserRepository {
     const pool = await getConnection()
     const transaction = pool.transaction()
 
-    const typeUserId = 1
-
     try {
       await transaction.begin()
 
@@ -64,11 +84,10 @@ export class UserRepository {
         .input('dataNasc', sql.Date, input.birthDate)
         .input('imagemURL', sql.VarChar, input.imageUrl)
         .input('contacto', sql.VarChar, input.contact)
-        .input('tipoUtilizadorID', sql.Int, typeUserId)
         .query(`
-          INSERT INTO Utilizador (Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID)
+          INSERT INTO Utilizador (Nome, DataNasc, ImagemURL, Contacto)
           OUTPUT INSERTED.Utilizador_ID
-          VALUES (@nome, @dataNasc, @imagemURL, @contacto, @tipoUtilizadorID)
+          VALUES (@nome, @dataNasc, @imagemURL, @contacto)
         `)
 
       const userId = user.recordset[0].Utilizador_ID
@@ -76,11 +95,10 @@ export class UserRepository {
       await transaction.request()
         .input('email', sql.VarChar, input.email)
         .input('password', sql.VarChar, input.password)
-        .input('confirmarEmail', sql.TinyInt, input.confirmarEmail)
         .input('utilizadorId', sql.Int, userId)
         .query(`
-          INSERT INTO Autenticacao (Email, Password, ConfirmarEmail, Utilizador_ID)
-          VALUES (@email, @password, @confirmarEmail, @utilizadorId)
+          INSERT INTO Autenticacao (Email, Password, Utilizador_ID)
+          VALUES (@email, @password, @utilizadorId)
         `)
 
       await transaction.commit()
@@ -120,5 +138,24 @@ export class UserRepository {
     await closeConnection(pool)
 
     return user.recordset
+  }
+
+  static async activateUser (id) {
+    const pool = await getConnection()
+
+    const confirmEmailValue = 1
+
+    const updatedUser = await pool.request()
+      .input('id', sql.Int, id)
+      .input('confirmarEmail', sql.Int, confirmEmailValue)
+      .query('UPDATE Autenticacao SET ConfirmarEmail = @confirmarEmail WHERE Utilizador_ID = @id')
+
+    await closeConnection(pool)
+
+    if (updatedUser.rowsAffected[0] > 0) {
+      return true
+    }
+
+    return false
   }
 }

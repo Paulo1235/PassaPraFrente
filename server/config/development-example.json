@@ -9,9 +9,9 @@
     "USER": "",
     "PASSWORD": "",
     "SERVER_NAME": "",
-    "DATABASE": "",
-    "PORTDB": "numero da porta",
-    "INSTANCENAME": ""
+    "DATABASE": "PassaPraFrente",
+    "PORTDB": 1433,
+    "INSTANCENAME": "MSSQLSERVER"
   },
   "EMAIL": {
     "SMTP_HOST": "",
@@ -23,5 +23,12 @@
   "RATE_LIMIT": {
     "MAX": 50,
     "WINDOWMS": 600000
+  },
+  "TOKEN": {
+    "ACCESS_TOKEN_SECRET_KEY": "",
+    "REFRESH_TOKEN_SECRET_KEY": "",
+    "ACCESS_TOKEN_EXPIRE": "",
+    "REFRESH_TOKEN_EXPIRE": "",
+    "ACTIVATION_CODE_EXPIRE": ""
   }
 }

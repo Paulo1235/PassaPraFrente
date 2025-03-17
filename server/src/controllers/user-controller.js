@@ -95,9 +95,22 @@ export class UserController {
       if (error instanceof ErrorApplication) {
         response(res, false, error.statusCodes, error.message)
       } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while finding an user')
+        console.error('Erro ao obter utilizador por email: ', error.message)
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Um erro ocorreu ao encontrar um utilizador.')
       }
+    }
+  }
+
+  static async getUserInfo (req, res) {
+    const id = req.user.Utilizador_ID
+
+    try {
+      const user = await UserRepository.getUserById(id)
+
+      response(res, true, StatusCodes.OK, user)
+    } catch (error) {
+      console.error('Erro ao obter utilizador: ', error.message)
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao obter o utilizador.')
     }
   }
 }

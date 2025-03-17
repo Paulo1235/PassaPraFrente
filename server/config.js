@@ -21,6 +21,7 @@ export const ACCESS_TOKEN_SECRET_KEY = config.get('TOKEN.ACCESS_TOKEN_SECRET_KEY
 export const REFRESH_TOKEN_SECRET_KEY = config.get('TOKEN.REFRESH_TOKEN_SECRET_KEY')
 export const ACCESS_TOKEN_EXPIRE = config.get('TOKEN.ACCESS_TOKEN_EXPIRE')
 export const REFRESH_TOKEN_EXPIRE = config.get('TOKEN.REFRESH_TOKEN_EXPIRE')
+export const ACTIVATION_CODE_EXPIRE = config.get('TOKEN.ACTIVATION_CODE_EXPIRE')
 
 export const DIRNAME = import.meta.dirname
 

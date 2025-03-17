@@ -16,13 +16,13 @@ const tokenOptions = {
 
 export const sendToken = (user, statusCodes, res) => {
   const accessToken = jwt.sign(
-    { id: user.id },
+    { id: user.Utilizador_ID },
     ACCESS_TOKEN_SECRET_KEY,
     { expiresIn: ACCESS_TOKEN_EXPIRE * 60 }
   )
 
   const refreshToken = jwt.sign(
-    { id: user.id },
+    { id: user.Utilizador_ID },
     REFRESH_TOKEN_SECRET_KEY,
     { expiresIn: REFRESH_TOKEN_EXPIRE * 60 * 60 }
   )

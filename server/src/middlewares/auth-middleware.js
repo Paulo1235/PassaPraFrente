@@ -12,30 +12,45 @@ export class AuthMiddleware {
 
     try {
       if (!accessToken) {
-        throw new ErrorApplication('User not logged in', StatusCodes.UNAUTHORIZED)
+        throw new ErrorApplication('Não se encontra logado.', StatusCodes.UNAUTHORIZED)
       }
 
       const payload = jwt.verify(accessToken, ACCESS_TOKEN_SECRET_KEY)
 
       if (!payload) {
-        throw new ErrorApplication('Unathorized access', StatusCodes.UNAUTHORIZED)
+        throw new ErrorApplication('Acesso inválido.', StatusCodes.UNAUTHORIZED)
       }
 
       const user = await UserRepository.getUserById(payload.id)
 
       if (!user) {
-        throw new ErrorApplication('User not found', StatusCodes.NOT_FOUND)
+        throw new ErrorApplication('Utilizador não encontrado', StatusCodes.NOT_FOUND)
       }
 
       req.user = user
+
       next()
     } catch (error) {
       if (error instanceof ErrorApplication) {
         response(res, false, error.statusCodes, error.message)
       } else {
         console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while authenticated the user')
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao autenticar o utilizador. Tente fazer login novamente.')
       }
     }
+  }
+
+  static async isVerified (req, res, next) {
+    const user = req.user
+
+    if (!user) {
+      throw new ErrorApplication('Utilizador não encontrado', StatusCodes.NOT_FOUND)
+    }
+
+    if (user.ConfirmarEmail !== 1) {
+      throw new ErrorApplication('A sua conta não está verificada', StatusCodes.BAD_REQUEST)
+    }
+
+    next()
   }
 }
