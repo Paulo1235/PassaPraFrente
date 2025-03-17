@@ -16,6 +16,10 @@ export class AuthController {
   static async createUser (req, res) {
     const { name, birthDate, imageUrl, contact, email, password, confirmPassword } = req.body
 
+    if (password !== confirmPassword) {
+      response(res, false, StatusCodes.BAD_REQUEST, 'Incorrect password')
+    }
+
     try {
       const existingUser = await UserRepository.getUserByEmail(email)
 
@@ -23,12 +27,8 @@ export class AuthController {
         throw new ErrorApplication('User already exists', StatusCodes.CONFLICT)
       }
 
-      if (password !== confirmPassword) {
-        throw new ErrorApplication('Incorrect password', StatusCodes.BAD_REQUEST)
-      }
-
       const hashedPassword = await hashPassword(password)
-      const confirmarEmail = 0 // padeiro
+      const confirmarEmail = 0
 
       const user = {
         name,
@@ -40,7 +40,7 @@ export class AuthController {
         confirmarEmail
       }
 
-      const activationToken = await AuthController.createActivationToken(user)
+      const activationToken = AuthController.createActivationToken(user)
 
       const activationCode = activationToken.activationCode
 
@@ -80,6 +80,8 @@ export class AuthController {
         throw new ErrorApplication('User could not be found', StatusCodes.NOT_FOUND)
       }
 
+      console.log(user)
+
       const isMatch = await comparePassword(password, user.Password)
 
       if (!isMatch) {
@@ -94,7 +96,7 @@ export class AuthController {
         response(res, false, error.statusCodes, error.message)
       } else {
         console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while creating an user')
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while logging in')
       }
     }
   }
@@ -111,7 +113,7 @@ export class AuthController {
     }
   }
 
-  static async createActivationToken (user) {
+  static createActivationToken (user) {
     const activationCode = crypto.randomInt(1000, 10000).toString()
 
     const token = jwt.sign(

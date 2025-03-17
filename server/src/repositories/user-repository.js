@@ -1,6 +1,6 @@
 import sql from 'mssql'
 
-import { getConnection } from '../database/db-config.js'
+import { closeConnection, getConnection } from '../database/db-config.js'
 
 export class UserRepository {
   static async getUserById (id) {
@@ -8,9 +8,16 @@ export class UserRepository {
 
     const user = await pool.request()
       .input('id', sql.Int, id)
-      .query('SELECT * FROM Utilizador WHERE Utilizador_ID = @id')
+      .query(`
+        SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail
+        FROM Utilizador 
+        JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID 
+        WHERE Utilizador_ID = @id
+      `)
 
-    return user.recordset
+    await closeConnection(pool)
+
+    return user.recordset[0]
   }
 
   static async getUserByEmail (email) {
@@ -18,7 +25,12 @@ export class UserRepository {
 
     const user = await pool.request()
       .input('email', sql.VarChar, email)
-      .query('SELECT * FROM Utilizador JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID WHERE email = @email')
+      .query(
+        `SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail
+         FROM Utilizador 
+         JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID 
+         WHERE email = @email
+      `)
 
     return user.recordset[0]
   }
@@ -27,7 +39,13 @@ export class UserRepository {
     const pool = await getConnection()
 
     const users = await pool.request()
-      .query('SELECT * FROM Utilizador JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID')
+      .query(`
+        SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail
+        FROM Utilizador 
+        JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID
+      `)
+
+    await closeConnection(pool)
 
     return users.recordset
   }
@@ -48,10 +66,10 @@ export class UserRepository {
         .input('contacto', sql.VarChar, input.contact)
         .input('tipoUtilizadorID', sql.Int, typeUserId)
         .query(`
-        INSERT INTO Utilizador (Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID)
-        OUTPUT INSERTED.Utilizador_ID
-        VALUES (@nome, @dataNasc, @imagemURL, @contacto, @tipoUtilizadorID)
-      `)
+          INSERT INTO Utilizador (Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID)
+          OUTPUT INSERTED.Utilizador_ID
+          VALUES (@nome, @dataNasc, @imagemURL, @contacto, @tipoUtilizadorID)
+        `)
 
       const userId = user.recordset[0].Utilizador_ID
 
@@ -61,9 +79,9 @@ export class UserRepository {
         .input('confirmarEmail', sql.TinyInt, input.confirmarEmail)
         .input('utilizadorId', sql.Int, userId)
         .query(`
-        INSERT INTO Autenticacao (Email, Password, ConfirmarEmail, Utilizador_ID)
-        VALUES (@email, @password, @confirmarEmail, @utilizadorId)
-    `)
+          INSERT INTO Autenticacao (Email, Password, ConfirmarEmail, Utilizador_ID)
+          VALUES (@email, @password, @confirmarEmail, @utilizadorId)
+        `)
 
       await transaction.commit()
 
@@ -71,6 +89,8 @@ export class UserRepository {
     } catch (error) {
       await transaction.rollback()
       console.error('Internal error: ', error.message)
+    } finally {
+      await closeConnection(pool)
     }
   }
 
@@ -80,6 +100,8 @@ export class UserRepository {
     await pool.request()
       .input('id', sql.Int, id)
       .query('DELETE FROM Utilizador WHERE Utilizador_ID = @id')
+
+    await closeConnection(pool)
 
     return true
   }
@@ -94,6 +116,8 @@ export class UserRepository {
       .input('contacto', sql.VarChar, contacto)
       .input('id', sql.Int, id)
       .query('update Utilizador set  Nome =@ nome, DataNasc = @dataNasc, Imagem_URL = @imagemURL, Contacto = @contacto where Utilizador_ID = @id')
+
+    await closeConnection(pool)
 
     return user.recordset
   }

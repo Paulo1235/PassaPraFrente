@@ -15,9 +15,7 @@ export class UserController {
         throw new ErrorApplication('User not found', StatusCodes.NOT_FOUND)
       }
 
-      const { password, ...publicUser } = user
-
-      response(res, true, StatusCodes.OK, publicUser)
+      response(res, true, StatusCodes.OK, user)
     } catch (error) {
       if (error instanceof ErrorApplication) {
         response(res, false, error.statusCodes, error.message)
@@ -32,9 +30,7 @@ export class UserController {
     try {
       const users = await UserRepository.getAllUsers()
 
-      const publicUsers = users.map(({ password, ...user }) => user)
-
-      response(res, true, StatusCodes.OK, publicUsers)
+      response(res, true, StatusCodes.OK, users)
     } catch (error) {
       console.error('Internal error: ', error.message)
       response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while finding all users')
@@ -65,6 +61,7 @@ export class UserController {
   static async updateUser (req, res) {
     const data = req.body
     const { id } = req.params
+
     try {
       const result = await UserRepository.updateUser({ id, data })
 
@@ -79,6 +76,27 @@ export class UserController {
       } else {
         console.error('Internal error: ', error.message)
         response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while creating an user')
+      }
+    }
+  }
+
+  static async getUserByEmail (req, res) {
+    const { email } = req.params
+
+    try {
+      const user = await UserRepository.getUserByEmail(email)
+
+      if (!user) {
+        throw new ErrorApplication('User not found', StatusCodes.NOT_FOUND)
+      }
+
+      response(res, true, StatusCodes.OK, user)
+    } catch (error) {
+      if (error instanceof ErrorApplication) {
+        response(res, false, error.statusCodes, error.message)
+      } else {
+        console.error('Internal error: ', error.message)
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while finding an user')
       }
     }
   }

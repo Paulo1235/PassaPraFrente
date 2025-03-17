@@ -4,14 +4,19 @@
   "main": "server.js",
   "description": "Server-side for the PassaPraFrente app",
   "type": "module",
+  "private": true,
   "scripts": {
-    "test": "jest",
-    "dev-env": "cross-env NODE_ENV=development node --watch server.js",
-    "start-env": "cross-env NODE_ENV=production node --watch server.js",
-    "test-env": "cross-env NODE_ENV=testing node --watch server.js",
+    "build": "node build",
+    "start": "node server.js",
+    "start:dev": "cross-env NODE_ENV=development node --watch server.js",
+    "start:debug": "node --inspect --watch server.js",
+    "start:prod": "cross-env NODE_ENV=production node dist/main",
+    "start:test": "cross-env NODE_ENV=testing jest",
     "doc": "node ./src/utils/swagger.js",
     "lint": "standard",
-    "lint:fix": "standard --fix"
+    "lint:fix": "standard --fix",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage"
   },
   "keywords": [
     "node",
@@ -34,7 +39,7 @@
     "Hugo Especial",
     "Marco Cardoso"
   ],
-  "license": "ISC",
+  "license": "UNLICENSED",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "colors": "^1.4.0",
