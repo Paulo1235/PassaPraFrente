@@ -53,4 +53,26 @@ export class AuthMiddleware {
 
     next()
   }
+
+  // static async authorizedRoles (req, res, next, roles) {
+  //   const id = req.user.Utilizador_ID
+
+  //   const role = await UserRepository.getUserRole(id)
+  //   if (!roles.include(role)) {
+  //     response(res, true, StatusCodes.OK, 'Não tem acesso a esta rota')
+  //   }
+  //   next()
+  // }
+
+  static authorizedRoles (roles) {
+    return async (req, res, next) => {
+      const id = req.user.Utilizador_ID
+      const role = await UserRepository.getUserRole(id)
+      if (!roles.includes(role)) {
+        response(res, true, StatusCodes.OK, 'Não tem acesso a esta rota')
+        return
+      }
+      next()
+    }
+  }
 }

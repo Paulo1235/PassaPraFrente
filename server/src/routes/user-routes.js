@@ -13,7 +13,7 @@ userRouter
   .put(validateSchema(userSchema, true), UserController.updateUser)
   .delete(UserController.deleteUser)
 
-userRouter.get('/users', AuthMiddleware.isAuthenticated, AuthMiddleware.isVerified, UserController.getAllUsers)
+userRouter.get('/users', AuthMiddleware.isAuthenticated, AuthMiddleware.isVerified, AuthMiddleware.authorizedRoles(['admin']), UserController.getAllUsers)
 
 userRouter.get('/users/email/:email', UserController.getUserByEmail)
 

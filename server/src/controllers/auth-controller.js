@@ -161,7 +161,7 @@ export class AuthController {
       response(res, true, StatusCodes.OK, 'Conta ativada com sucesso.')
     } catch (error) {
       if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message);
+        response(res, false, error.statusCodes, error.message)
       } else {
         console.error('Erro ao ativar a conta: ', error.message)
         response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao ativar a sua conta.')
