@@ -13,6 +13,7 @@ import RecoverPass from './pages/recoverPassPage'
 import NewPassword from './pages/newPasswordPage'
 
 import Main from './pages/mainPage'
+import AdminMain from './pages/adminMainPage'
 import Account from './pages/accountPage'
 
 //? Business Processes
@@ -30,6 +31,7 @@ root.render(
       <Route path="/newpassword" element={<NewPassword />} />
       <Route path="/sidebartest" element={<SideBar />} />
       <Route path="/index" element={<Main />} />
+      <Route path="/indexadmin" element={<AdminMain />} />
       <Route path="/sale" element={<LookSale />} />
       <Route path="/loan" element={<LookLoan />} />
       <Route path="/draw" element={<LookDraw />} />
