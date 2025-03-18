@@ -14,6 +14,8 @@ import NewPassword from './pages/newPassword'
 
 import Main from './pages/main'
 
+import Account from './pages/account'
+
 import CreateSale from './pages/createSale';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -27,6 +29,7 @@ root.render(
       <Route path="/sidebartest" element={<SideBar />} />
       <Route path="/index" element={<Main />} />
       <Route path="/createsale" element={<CreateSale />} />
+      <Route path="/account" element={<Account />} />
     </Routes>
   </BrowserRouter>
 );
