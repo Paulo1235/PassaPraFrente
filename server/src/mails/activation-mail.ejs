@@ -1,15 +1,104 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Confirmar conta | PassaPraFrente</title>
-</head>
-<body>
-  <section>
-    <h1>Bem vindo à PassaPraFrente</h1>
-    <p>Olá <%= user.name %></p>
-    <p>Código de ativação: <%= activationCode %></p>
-  </section>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Confirmar conta | PassaPraFrente</title>
+    <style>
+      :root {
+        --background: #e0e5b6;
+        --background-secondary: #24251d;
+        --gray: #adadad;
+        --red: #ff0000;
+        --white: #fffaee;
+        --green: #4caf50;
+        --text-color: #333;
+        --font-family: "Raleway", sans-serif;
+      }
+
+      body {
+        font-family: var(--font-family);
+        margin: 0;
+        padding: 0;
+        background-color: var(--background);
+        color: var(--text-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        text-align: center;
+      }
+
+      section {
+        background-color: var(--white);
+        border-radius: 8px;
+        padding: 40px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        max-width: 500px;
+      }
+
+      h1 {
+        font-size: 40px;
+        color: var(--green);
+        margin-bottom: 20px;
+      }
+
+      p {
+        font-size: 18px;
+        color: var(--background-secondary);
+        margin-bottom: 15px;
+      }
+
+      .activation-code {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--white);
+        background-color: var(--red);
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: inline-block;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        user-select: none;
+      }
+
+      .activation-code:hover {
+        background-color: #e60000;
+        cursor: pointer;
+      }
+
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 32px;
+        }
+
+        .activation-code {
+          font-size: 21px;
+        }
+
+        p {
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h1>Bem-vindo à PassaPraFrente!</h1>
+      <main>
+        <p>Olá, <%= user.name %></p>
+        <p>O seu código de ativação:</p>
+        <div class="activation-code"><%= activationCode %></div>
+      </main>
+    </section>
+  </body>
 </html>
