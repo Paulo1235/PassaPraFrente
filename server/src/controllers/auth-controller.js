@@ -62,7 +62,7 @@ export class AuthController {
 
     try {
       const user = await UserRepository.getUserByEmail(email)
-
+      
       if (!user) {
         throw new ErrorApplication('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
       }

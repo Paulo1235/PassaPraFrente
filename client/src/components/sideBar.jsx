@@ -16,13 +16,10 @@ const Sidebar = () => {
         setIsOpen(true)
       }
     }
-
     // Set initial state
     checkIfMobile()
-
     // Add event listener for window resize
     window.addEventListener("resize", checkIfMobile)
-
     // Clean up
     return () => window.removeEventListener("resize", checkIfMobile)
   }, [])
@@ -66,7 +63,7 @@ const Sidebar = () => {
         <nav className="flex flex-col justify-center space-y-4 flex-1 w-full px-4">
           <button
             type="button"
-            className="text-[#ADADAD] bg-[#FFFAEE] hover:bg-[#FFFAEE]/90 focus:ring-4 focus:outline-none focus:ring-[#FFFAEE]/50 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
+            className="text-[#ADADAD] bg-[#FFFAEE] hover:bg-[#D4CFC3]/90 focus:ring-4 focus:outline-none focus:ring-[#FFFAEE]/50 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
           >
             <Home className="w-6 h-6 mr-3 text-[#ADADAD]" />
             <a href="/index">Inicial</a>
@@ -74,7 +71,7 @@ const Sidebar = () => {
 
           <button
             type="button"
-            className="text-[#ADADAD] bg-[#FFFAEE] hover:bg-[#FFFAEE]/90 focus:ring-4 focus:outline-none focus:ring-[#FFFAEE]/50 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
+            className="text-[#ADADAD] bg-[#FFFAEE] hover:bg-[#D4CFC3]/90 focus:ring-4 focus:outline-none focus:ring-[#FFFAEE]/50 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
           >
             <User className="w-6 h-6 mr-3 text-[#ADADAD]" />
             <a href="/account">Conta</a>

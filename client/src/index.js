@@ -7,16 +7,16 @@ import './index.css';
 //? Components
 import SideBar from './components/sideBar'
 //? Pages
-import Login from './pages/login';
-import SignIn from './pages/signIn'
-import RecoverPass from './pages/recoverPass'
-import NewPassword from './pages/newPassword'
+import Login from './pages/loginPage';
+import SignIn from './pages/signInPage'
+import RecoverPass from './pages/recoverPassPage'
+import NewPassword from './pages/newPasswordPage'
 
-import Main from './pages/main'
+import Main from './pages/mainPage'
+import Account from './pages/accountPage'
 
-import Account from './pages/account'
-
-import CreateSale from './pages/createSale';
+//? Business Processes
+import CreateSale from './pages/createSalePage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

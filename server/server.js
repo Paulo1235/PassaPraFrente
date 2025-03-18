@@ -21,7 +21,7 @@ const app = express()
 const swaggerOutput = readJSON('docs/swagger-output.json')
 
 const corsOptions = {
-  origin: ['http://localhost:3000'],
+  origin: ['http://localhost:3000'], // mudar para 3000
   methods: ['POST', 'GET', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type'],
   credentials: true

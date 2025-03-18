@@ -9,7 +9,7 @@ import { ErrorApplication } from '../utils/error-handler.js'
 export class AuthMiddleware {
   static async isAuthenticated (req, res, next) {
     const accessToken = req.cookies?.accessToken
-
+    //console.log(accessToken)
     try {
       if (!accessToken) {
         throw new ErrorApplication('Não se encontra logado.', StatusCodes.UNAUTHORIZED)

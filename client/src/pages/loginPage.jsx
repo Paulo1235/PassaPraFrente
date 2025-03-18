@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import useAuthStore from '../stores/offstore'
+
 //? CSS
 import '../index.css'
 //? Logo
@@ -14,6 +16,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom'
 
 function Login() {
+
+  const { login, loading, error } = useAuthStore((state) => state);
+
+  const handleLogin = (email, password) => {
+    login(email, password);
+  };
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -71,21 +79,25 @@ function Login() {
               onSubmit={(values, { setSubmitting }) => {
                 setTimeout(() => {
 
-                  axios.post('http://localhost:5000/api/auth/login', {
-                    email: values.email,
-                    password: values.password
-                  })
-                    .then(function (response) {
-                      console.log(response);
-                      //navigate("/index")
-                    })
-                    .catch(function (error) {
-                      if (error.response && error.response.data && error.response.data.message) {
-                        notify(error.response.data.message);
-                      } else {
-                        notify("Erro desconhecido, tente novamente!");
-                      }
-                    });
+                  // axios.post('http://localhost:5000/api/auth/login', {
+                  //   email: values.email,
+                  //   password: values.password
+                  // })
+                  //   .then(function (response) {
+                  //     //console.log(response);
+                  //     setAuthenticated(true);
+                  //     navigate("/index")
+                  //   })
+                  //   .catch(function (error) {
+                  //     if (error.response && error.response.data && error.response.data.message) {
+                  //       notify(error.response.data.message);
+                  //     } else {
+                  //       notify("Erro desconhecido, tente novamente!");
+                  //     }
+                  //   });
+
+                  handleLogin(values.email, values.password);
+                  navigate("/index")
 
                   setSubmitting(false);
                 }, 400);
