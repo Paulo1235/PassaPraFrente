@@ -1,13 +1,22 @@
 import React from "react";
 import logoEmpresa from '../images/logoEmpresa.png';
-
-import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 const Card = (props) => {
-  const notify = () => toast("Card Aberto!");
+
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    if (props.category === "Vendas") {
+      navigate("/sale");
+    } else if (props.category === "Emprestimos") {
+      navigate("/loan");
+    } else if (props.category === "Sorteios") {
+      navigate("/draw");
+    }
+  };
   return (
-    <div className="w-[200px] h-[250px] rounded-lg bg-white shadow-lg cursor-pointer" onClick={notify}>
-       <ToastContainer />
+    <div className="w-[200px] h-[250px] rounded-lg bg-white shadow-lg cursor-pointer" onClick={handleCardClick}>
       <div className="bg-black mx-5 mt-3 rounded-lg">
         <img
           src={logoEmpresa}

@@ -16,7 +16,9 @@ import Main from './pages/mainPage'
 import Account from './pages/accountPage'
 
 //? Business Processes
-import CreateSale from './pages/createSalePage';
+import LookSale from './pages/lookSalePage';
+import LookLoan from './pages/lookLoanPage';
+import LookDraw from './pages/lookDrawPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -28,7 +30,9 @@ root.render(
       <Route path="/newpassword" element={<NewPassword />} />
       <Route path="/sidebartest" element={<SideBar />} />
       <Route path="/index" element={<Main />} />
-      <Route path="/createsale" element={<CreateSale />} />
+      <Route path="/sale" element={<LookSale />} />
+      <Route path="/loan" element={<LookLoan />} />
+      <Route path="/draw" element={<LookDraw />} />
       <Route path="/account" element={<Account />} />
     </Routes>
   </BrowserRouter>

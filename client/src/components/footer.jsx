@@ -13,17 +13,17 @@ export default function Footer() {
               <h3 className="text-lg font-semibold mb-3 text-[#73802A]">Links Úteis</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-gray-600 hover:text-[#73802A]">
+                  <a href="https://google.com" className="text-gray-600 hover:text-[#73802A]">
                     Termos e Condições
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-600 hover:text-[#73802A]">
+                  <a href="https://google.com" className="text-gray-600 hover:text-[#73802A]">
                     Política de Privacidade
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-600 hover:text-[#73802A]">
+                  <a href="https://google.com" className="text-gray-600 hover:text-[#73802A]">
                     FAQ
                   </a>
                 </li>
