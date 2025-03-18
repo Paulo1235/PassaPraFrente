@@ -158,4 +158,13 @@ export class UserRepository {
 
     return false
   }
+
+  static async getUserRole (id) {
+    const pool = await getConnection()
+    const user = await pool.request()
+      .input('id', sql.Int, id)
+      .query('Select TipoUtilizador From TipoUtilizador Join Utilizador on Utilizador.TipoUtilizador_ID = TipoUtilizador.TipoUtilizador_ID Where Utilizador.Utilizador_ID = @id')
+    await closeConnection(pool)
+    return user.recordset[0]
+  }
 }

@@ -29,7 +29,6 @@ export class UserController {
   static async getAllUsers (req, res) {
     try {
       const users = await UserRepository.getAllUsers()
-
       response(res, true, StatusCodes.OK, users)
     } catch (error) {
       console.error('Internal error: ', error.message)
