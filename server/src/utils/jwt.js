@@ -8,24 +8,36 @@ import {
   NODE_ENV
 } from '../../config.js'
 
-const tokenOptions = {
+export const tokenOptions = {
   secure: NODE_ENV === 'production',
   httpOnly: true,
   sameSite: 'strict'
 }
 
-export const sendToken = (user, statusCodes, res) => {
+export const generateAccessToken = (user) => {
   const accessToken = jwt.sign(
     { id: user.Utilizador_ID },
     ACCESS_TOKEN_SECRET_KEY,
     { expiresIn: ACCESS_TOKEN_EXPIRE * 60 }
   )
 
+  return accessToken
+}
+
+export const generateRefreshToken = (user) => {
   const refreshToken = jwt.sign(
     { id: user.Utilizador_ID },
     REFRESH_TOKEN_SECRET_KEY,
     { expiresIn: REFRESH_TOKEN_EXPIRE * 60 * 60 }
   )
+
+  return refreshToken
+}
+
+export const sendToken = (user, statusCodes, res) => {
+  const accessToken = generateAccessToken(user)
+
+  const refreshToken = generateRefreshToken(user)
 
   res.cookie('accessToken', accessToken, tokenOptions)
   res.cookie('refreshToken', refreshToken, tokenOptions)
@@ -36,3 +48,4 @@ export const sendToken = (user, statusCodes, res) => {
     accessToken
   })
 }
+
