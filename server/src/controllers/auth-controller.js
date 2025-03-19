@@ -168,4 +168,45 @@ export class AuthController {
       }
     }
   }
+
+  static async refreshAccessToken (req, res, next) {
+    try {
+      const refreshToken = req.cookies?.refreshToken
+
+      if (!refreshToken) {
+        throw new ErrorApplication('Não foi possível localizar a sessão. Faça login novamente.', StatusCodes.UNAUTHORIZED)
+      }
+
+      const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET_KEY)
+
+      if (!decoded) {
+        throw new ErrorApplication('Sem autorização', StatusCodes.UNAUTHORIZED)
+      }
+
+      if (!decoded) {
+        throw new ErrorApplication('Sessão expirada. Faça login novamente.', StatusCodes.UNAUTHORIZED)
+      }
+
+      const user = { id: decoded.id }
+
+      const accessToken = generateAccessToken(user)
+
+      const newRefreshToken = generateRefreshToken(user)
+
+      req.user = user
+
+      res.cookie(accessToken, tokenOptions)
+      res.cookie(newRefreshToken, tokenOptions)
+
+      response(res, true, StatusCodes.OK, 'Sessão renovada com sucesso.')
+    } catch (error) {
+      if (error instanceof ErrorApplication) {
+        response(res, false, error.statusCodes, error.message)
+      } else {
+        console.error('Erro ao refreshar o token: ', error.message)
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao renovar sua sessão. Tente novamente mais tarde.')
+      }
+    }
+  }
+
 }
