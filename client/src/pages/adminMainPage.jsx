@@ -43,32 +43,31 @@ const shopData = [
 
 const AdminMain = () => {
   return (
-    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col md:flex-row min-h-screen">
       <Helmet>
         <title>Loja</title>
       </Helmet>
       <div className="md:sticky md:top-0 md:h-screen">
         <SideBar />
       </div>
-      <div className="App w-full overflow-x-hidden flex flex-col">
-        {shopData.map((section, sectionIndex) => (
-          <div
-            key={`section-${sectionIndex}`}
-            className={`${sectionIndex === 0 ? "mt-5" : "mt-8 md:mt-10"} flex flex-col w-full px-4 md:px-6`}
-          >
-            <p className="text-[#73802A] text-2xl md:text-3xl ml-2 md:ml-10 mb-3 md:mb-5">{section.title}:</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8 px-2 md:px-4">
-              {section.items.map((item, itemIndex) => (
-                <AdminCard key={`card-${sectionIndex}-${itemIndex}`} name={item.name} size={item.size} value={item.value} />
-              ))}
+      <div className="App w-full overflow-x-auto flex flex-col">
+        <div className="flex flex-col md:flex-row px-4 md:px-6 flex-grow">
+          {shopData.map((section, sectionIndex) => (
+            <div key={`section-${sectionIndex}`} className="flex flex-col w-full md:w-1/3 px-2">
+              <p className="text-[#73802A] text-2xl md:text-3xl mb-3 md:mb-5 mt-10">{section.title}:</p>
+              <div className="flex flex-col gap-4 md:gap-6 lg:gap-8">
+                {section.items.map((item, itemIndex) => (
+                  <AdminCard key={`card-${sectionIndex}-${itemIndex}`} name={item.name} size={item.size} value={item.value} />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-        <Footer />
+          ))}
+        </div>
+        <Footer className="w-full mt-16"/>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminMain
+export default AdminMain;
 
