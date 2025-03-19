@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet"
+import { useState } from "react";
 import axios from 'axios'
 import { useEffect } from "react"
 import { useNavigate } from 'react-router-dom'
@@ -13,6 +14,7 @@ import "../index.css"
 import SideBar from "../components/sideBar"
 import Card from "../components/card"
 import Footer from "../components/footer"
+import Review from "../components/review"
 
 //? Icons
 import AccLogo from "../images/conta-logo.png"
@@ -27,9 +29,16 @@ const Account = () => {
   const navigate = useNavigate();
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  
+  // Estado para controlar o modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // Ao renderizar a pagina, vai buscar os dados sobre a conta atual
   if (!isAuthenticated) {
     navigate("/");
+  }
+  const openModal = () => {
+    setIsModalOpen(true);
   }
 
   useEffect(() => {
@@ -64,7 +73,7 @@ const Account = () => {
                 <p className="md:ml-2 lg:ml-5 text-sm md:text-base">EMAIL</p>
               </div>
 
-              <div className="rating mt-4 md:mt-0 md:ml-6 lg:ml-20 xl:ml-60 flex flex-row items-center justify-center md:justify-start gap-1 md:gap-2">
+              <div className="rating mt-4 md:mt-0 md:ml-6 lg:ml-20 xl:ml-60 flex flex-row items-center justify-center md:justify-start gap-1 md:gap-2" onClick={openModal}>
                 <img
                   src={Star1}
                   className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-[29px] xl:h-[29px]"
@@ -132,6 +141,7 @@ const Account = () => {
         {/* colocar o footer melhor */}
         <Footer />        
       </div>
+      {isModalOpen && <Review closeModal={() => setIsModalOpen(false)} />}
     </div>
   )
 }

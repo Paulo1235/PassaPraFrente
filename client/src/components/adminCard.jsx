@@ -6,12 +6,12 @@ const AdminCard = (props) => {
   const notify = () => toast("Card Aberto!");
   return (
     <div className="w-[300px] h-[120px] rounded-lg bg-[#ffffff] shadow-xl flex items-center p-3" onClick={notify}>
-      <ToastContainer/>
+      <ToastContainer />
 
-      <img 
-      src={logoEmpresa} 
-      alt="" 
-      className="w-20 h-20 rounded-lg object-cover" />
+      <img
+        src={logoEmpresa}
+        alt=""
+        className="w-20 h-20 rounded-lg object-cover" />
 
       <div className="flex flex-col flex-grow ml-3">
         <span className="text-black font-semibold">{props.name}</span>

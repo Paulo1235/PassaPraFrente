@@ -63,7 +63,7 @@ const AdminMain = () => {
             </div>
           ))}
         </div>
-        <Footer className="w-full mt-16"/>
+        <Footer className="w-full mt-16" />
       </div>
     </div>
   );
