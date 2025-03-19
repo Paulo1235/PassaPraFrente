@@ -20,6 +20,9 @@ import Account from './pages/accountPage'
 import LookSale from './pages/lookSalePage';
 import LookLoan from './pages/lookLoanPage';
 import LookDraw from './pages/lookDrawPage';
+import CreateSale from './pages/createSale';
+import CreateLoan from './pages/createLoan';
+import CreateDraw from './pages/createDraw';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -31,6 +34,9 @@ root.render(
       <Route path="/newpassword" element={<NewPassword />} />
       <Route path="/sidebartest" element={<SideBar />} />
       <Route path="/index" element={<Main />} />
+      <Route path="/createsale" element={<CreateSale />} />
+      <Route path="/createloan" element={<CreateLoan />} />
+      <Route path="/createdraw" element={<CreateDraw />} />
       <Route path="/indexadmin" element={<AdminMain />} />
       <Route path="/sale" element={<LookSale />} />
       <Route path="/loan" element={<LookLoan />} />
