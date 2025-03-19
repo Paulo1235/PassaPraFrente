@@ -1,13 +1,14 @@
 import React from "react";
 import logoEmpresa from '../images/logoEmpresa.png';
 import { ToastContainer, toast } from 'react-toastify';
+import { Dna } from "lucide-react";
 
 const AdminCard = (props) => {
-  const notify = () => toast("Card Aberto!");
+  const accept = () => toast("Aceite!")
+  const deny = () => toast("Recusado!")
   return (
-    <div className="w-[300px] h-[120px] rounded-lg bg-[#ffffff] shadow-xl flex items-center p-3" onClick={notify}>
+    <div className="w-[300px] h-[120px] rounded-lg bg-[#ffffff] shadow-xl flex items-center p-3">
       <ToastContainer/>
-
       <img 
       src={logoEmpresa} 
       alt="" 
@@ -17,8 +18,8 @@ const AdminCard = (props) => {
         <span className="text-black font-semibold">{props.name}</span>
         <span className="text-gray-600 text-sm">Tamanho {props.size}</span>
         <div className="flex mt-2">
-          <button className="text-red-600 font-semibold mr-4">Eliminar</button>
-          <button className="text-green-600 font-semibold">Aprovar</button>
+          <button className="text-red-600 font-semibold mr-4" onClick={deny}>Eliminar</button>
+          <button className="text-green-600 font-semibold" onClick={accept}>Aprovar</button>
         </div>
       </div>
     </div>
