@@ -4,7 +4,6 @@
 
 /*Font*/
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap'); /*Raleway*/
 
 /*
  ? Cores do figma
@@ -23,31 +22,27 @@
 
 .App {
   background-color: var(--background);
+  height: 100vh; /* Ocupa 100% da altura da tela */
 
   font-family: "Jua", sans-serif;
-  font-family: "Raleway", sans-serif;
-  font-weight: 500;
 
-  /*height: 100vh;*/
   user-select: none;
 }
 
 .black-rectangle{
   background-color: var(--background-secondary);
-  /*border: solid 1px red;*/
   border-radius: 64px;
-
   width: 1423px;
   height: 721px;
 }
 
 .white-rectangle{
   background-color: var(--white);
-
-  height: 650px; /** mudei isto*/
-  width: 747px;
+  width: 500px;
+  height: 480px;
   border-radius: 64px;
 }
+
 
 .text{
   color: var(--button);
@@ -64,4 +59,10 @@
   border-radius: 64px;
   width: 335px;
   height: 61px;
+}
+
+.texbox{
+  background-color: rgba(217, 217, 217, 25%);
+  border-radius: 8px;
+  border: 2px solid var(--button);
 }
