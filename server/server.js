@@ -42,7 +42,7 @@ app.use(express.json())
 // app.use(cookieParser())
 app.use(limiter)
 app.use(helmet())
-app.use(compression({ threshold: 1024 }))
+app.use(compression())
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
 
