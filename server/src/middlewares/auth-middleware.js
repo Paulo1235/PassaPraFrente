@@ -8,12 +8,14 @@ import { ErrorApplication } from '../utils/error-handler.js'
 
 export class AuthMiddleware {
   static async isAuthenticated (req, res, next) {
-    const accessToken = req.cookies?.accessToken
-    //console.log(accessToken)
+    // const accessToken = req.cookies?.accessToken
+    const authorizationHeader = req.headers.authorization
     try {
-      if (!accessToken) {
+      if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
         throw new ErrorApplication('Não se encontra logado.', StatusCodes.UNAUTHORIZED)
       }
+
+      const accessToken = authorizationHeader.split(' ')[1]
 
       const payload = jwt.verify(accessToken, ACCESS_TOKEN_SECRET_KEY)
 
@@ -54,24 +56,17 @@ export class AuthMiddleware {
     next()
   }
 
-  // static async authorizedRoles (req, res, next, roles) {
-  //   const id = req.user.Utilizador_ID
-
-  //   const role = await UserRepository.getUserRole(id)
-  //   if (!roles.include(role)) {
-  //     response(res, true, StatusCodes.OK, 'Não tem acesso a esta rota')
-  //   }
-  //   next()
-  // }
-
   static authorizedRoles (roles) {
     return async (req, res, next) => {
       const id = req.user.Utilizador_ID
+
       const role = await UserRepository.getUserRole(id)
+
       if (!roles.includes(role)) {
-        response(res, true, StatusCodes.OK, 'Não tem acesso a esta rota')
+        response(res, true, StatusCodes.UNAUTHORIZED, 'Não tem acesso a esta rota')
         return
       }
+
       next()
     }
   }

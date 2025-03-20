@@ -4,7 +4,6 @@ import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import StatusCodes from 'http-status-codes'
-import cookieParser from 'cookie-parser'
 import compression from 'compression'
 import colors from 'colors'
 import swaggerUi from 'swagger-ui-express'
@@ -21,10 +20,9 @@ const app = express()
 const swaggerOutput = readJSON('docs/swagger-output.json')
 
 const corsOptions = {
-  origin: ['http://localhost:3000'], // mudar para 3000
-  methods: ['POST', 'GET', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type'],
-  credentials: true
+  origin: ['http://localhost:3000'],
+  methods: ['POST', 'GET', 'PUT', 'DELETE']
+  // credentials: true
 }
 
 const limiter = rateLimit({
@@ -41,7 +39,7 @@ NODE_ENV === 'development' ? app.use(morgan('dev')) : app.use(morgan('common'))
 app.use(cors(corsOptions))
 app.options('*', cors(corsOptions))
 app.use(express.json())
-app.use(cookieParser())
+// app.use(cookieParser())
 app.use(limiter)
 app.use(helmet())
 app.use(compression({ threshold: 1024 }))

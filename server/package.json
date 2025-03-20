@@ -7,8 +7,8 @@
   "private": true,
   "scripts": {
     "build": "node build",
-    "start": "node server.js",
-    "start:dev": "cross-env NODE_ENV=development node --watch server.js",
+    "start": "nodemon server.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon server.js",
     "start:debug": "node --inspect --watch server.js",
     "start:prod": "cross-env NODE_ENV=production node dist/main",
     "start:test": "cross-env NODE_ENV=testing jest",
@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
     "standard": "^17.1.2",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.1"

@@ -12,5 +12,7 @@ authRouter.post('/auth/register', validateSchema(authSchema, false), validateSch
 authRouter.post('/auth/login', validateSchema(authSchema, true), AuthController.loginUser)
 authRouter.post('/auth/logout', AuthController.logoutUser)
 
+authRouter.get('/auth/refresh-token', AuthController.refreshAccessToken)
+
 authRouter.post('/auth/send-activation-email', AuthMiddleware.isAuthenticated, AuthController.sendAccountActivationEmail)
 authRouter.post('/auth/activate-user', AuthMiddleware.isAuthenticated, AuthController.activateUser)

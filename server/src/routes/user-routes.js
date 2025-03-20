@@ -15,6 +15,6 @@ userRouter
 
 userRouter.get('/users', AuthMiddleware.isAuthenticated, AuthMiddleware.isVerified, AuthMiddleware.authorizedRoles(['admin']), UserController.getAllUsers)
 
-userRouter.get('/users/email/:email', UserController.getUserByEmail)
+userRouter.get('/users/email/:email', AuthMiddleware.isAuthenticated, UserController.getUserByEmail)
 
 userRouter.get('/users/me', AuthMiddleware.isAuthenticated, UserController.getUserInfo)

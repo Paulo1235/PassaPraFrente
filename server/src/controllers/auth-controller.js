@@ -7,9 +7,9 @@ import ejs from 'ejs'
 import { UserRepository } from '../repositories/user-repository.js'
 import { ErrorApplication } from '../utils/error-handler.js'
 import { comparePassword, hashPassword } from '../utils/bcrypt.js'
-import { sendToken } from '../utils/jwt.js'
+import { generateAccessToken, generateRefreshToken, sendToken } from '../utils/jwt.js'
 import { response } from '../utils/response.js'
-import { ACCESS_TOKEN_SECRET_KEY, DIRNAME, ACTIVATION_CODE_EXPIRE } from '../../config.js'
+import { ACCESS_TOKEN_SECRET_KEY, DIRNAME, ACTIVATION_CODE_EXPIRE, REFRESH_TOKEN_SECRET_KEY } from '../../config.js'
 import { sendEmail } from '../utils/send-email.js'
 
 export class AuthController {
@@ -62,7 +62,7 @@ export class AuthController {
 
     try {
       const user = await UserRepository.getUserByEmail(email)
-      
+
       if (!user) {
         throw new ErrorApplication('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
       }
@@ -88,8 +88,8 @@ export class AuthController {
 
   static async logoutUser (req, res) {
     try {
-      res.cookie('accessToken', '')
-      res.cookie('refreshToken', '')
+      // res.cookie('accessToken', '')
+      // res.cookie('refreshToken', '')
 
       response(res, true, StatusCodes.OK, 'Logged out successfully')
     } catch (error) {
@@ -170,11 +170,11 @@ export class AuthController {
   }
 
   static async refreshAccessToken (req, res, next) {
-    try {
-      const refreshToken = req.cookies?.refreshToken
+    const refreshToken = req.headers.refresh
 
+    try {
       if (!refreshToken) {
-        throw new ErrorApplication('Não foi possível localizar a sessão. Faça login novamente.', StatusCodes.UNAUTHORIZED)
+        throw new ErrorApplication('Não foi possível encontrar a sessão. Tente mais tarde', StatusCodes.UNAUTHORIZED)
       }
 
       const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET_KEY)
@@ -189,14 +189,14 @@ export class AuthController {
 
       const user = { id: decoded.id }
 
-      const accessToken = generateAccessToken(user)
+      const newAccessToken = generateAccessToken(user)
 
       const newRefreshToken = generateRefreshToken(user)
 
       req.user = user
 
-      res.cookie(accessToken, tokenOptions)
-      res.cookie(newRefreshToken, tokenOptions)
+      res.setHeader('Authorization', `Bearer ${newAccessToken}`)
+      res.setHeader('X-Refresh-Token', newRefreshToken)
 
       response(res, true, StatusCodes.OK, 'Sessão renovada com sucesso.')
     } catch (error) {
@@ -208,5 +208,4 @@ export class AuthController {
       }
     }
   }
-
 }
