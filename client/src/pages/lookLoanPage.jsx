@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet'
 import { Undo2 } from 'lucide-react'
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 //? Components
 import SideBar from '../components/sideBar'
@@ -14,6 +16,21 @@ import '../components/css/sidebar.css'
 import '../index.css'
 
 function CreateLoan() {
+
+    const { id, isAuthenticated } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+  
+    console.log("User State in Main:", id, isAuthenticated);
+  
+    useEffect(() => {
+      if (!isAuthenticated) {
+        navigate("/");
+        return;
+      }
+    }, [isAuthenticated, dispatch, navigate]);
+  
+    if (!isAuthenticated) return null;
 
     return (
         <div className='flex flex-row'>

@@ -14,6 +14,8 @@ import { userRouter } from './src/routes/user-routes.js'
 import { response } from './src/utils/response.js'
 import { checkDatabaseConnection } from './src/database/connection.js'
 import { authRouter } from './src/routes/auth-routes.js'
+import { AuthMiddleware } from './src/middlewares/auth-middleware.js'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -21,8 +23,8 @@ const swaggerOutput = readJSON('docs/swagger-output.json')
 
 const corsOptions = {
   origin: ['http://localhost:3000'],
-  methods: ['POST', 'GET', 'PUT', 'DELETE']
-  // credentials: true
+  methods: ['POST', 'GET', 'PUT', 'DELETE'],
+  credentials: true
 }
 
 const limiter = rateLimit({
@@ -39,7 +41,7 @@ NODE_ENV === 'development' ? app.use(morgan('dev')) : app.use(morgan('common'))
 app.use(cors(corsOptions))
 app.options('*', cors(corsOptions))
 app.use(express.json())
-// app.use(cookieParser())
+app.use(cookieParser())
 app.use(limiter)
 app.use(helmet())
 app.use(compression())
@@ -51,6 +53,12 @@ app.use('/api', userRouter, authRouter)
 app.get('/', (req, res) => {
   response(res, true, StatusCodes.OK, 'Hello World')
 })
+
+//* colocar um protectedroute rota
+app.get('/api/protected-route', AuthMiddleware.isAuthenticated, (req, res) => {
+  res.status(200).json(
+      {});
+});
 
 app.all('*', (req, res) => {
   response(res, false, StatusCodes.NOT_FOUND, `Rota ${req.method} ${req.originalUrl} não encontrada!`)

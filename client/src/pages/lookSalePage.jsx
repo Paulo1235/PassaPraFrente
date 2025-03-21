@@ -1,19 +1,35 @@
-import React from 'react'
-import { Helmet } from 'react-helmet'
-import { Undo2 } from 'lucide-react'
+import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
+import { Undo2 } from 'lucide-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 //? Components
-import SideBar from '../components/sideBar'
-import Footer from '../components/footer'
+import SideBar from '../components/sideBar';
+import Footer from '../components/footer';
 
 //? Logo
-import logo from '../images/logoEmpresa.png'
+import logo from '../images/logoEmpresa.png';
 
 //? CSS
-import '../components/css/sidebar.css'
-import '../index.css'
+import '../components/css/sidebar.css';
+import '../index.css';
 
 function CreateSale() {
+    const { userId, isAuthenticated } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+  
+    console.log("User State in Main:", userId, isAuthenticated);
+  
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate("/");
+            return;
+        }
+    }, [isAuthenticated, dispatch, navigate]);
+  
+    if (!isAuthenticated) return null;
 
     return (
         <div className='flex flex-row'>
@@ -80,9 +96,8 @@ function CreateSale() {
                 </div>
                 <Footer />
             </div>
-            {/* <Footer/> */}
         </div>
-    )
+    );
 }
 
-export default CreateSale
+export default CreateSale;

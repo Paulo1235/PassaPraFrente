@@ -1,15 +1,20 @@
-import { Helmet } from "react-helmet"
+// Main.jsx
+import { Helmet } from "react-helmet";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout, fetchProtectedData } from "../lib/authSlice";
+import { fetchUserInfo } from "../lib/authSlice"; // Import the action
 
 //? CSS
-import "../components/css/sidebar.css"
-import "../index.css"
+import "../components/css/sidebar.css";
+import "../index.css";
 
 //? Components
-import SideBar from "../components/sideBar"
-import Card from "../components/card"
-import Footer from "../components/footer"
+import SideBar from "../components/sideBar";
+import Card from "../components/card";
+import Footer from "../components/footer";
 
-// Sample data structure - replace with your actual data source
 const shopData = [
   {
     title: "Vendas",
@@ -38,10 +43,24 @@ const shopData = [
       { name: "Camisola vermelha", size: "M", value: "15,00" },
       { name: "Camisola azul", size: "XL", value: "17,40" },
     ],
-  }
-]
+  },
+];
 
 const Main = () => {
+
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+      return;
+    }
+  }, [isAuthenticated, dispatch, navigate]);
+
+  if (!isAuthenticated) return null;
+
   return (
     <div className="flex flex-col md:flex-row">
       <Helmet>
@@ -54,13 +73,22 @@ const Main = () => {
         {shopData.map((section, sectionIndex) => (
           <div
             key={`section-${sectionIndex}`}
-            className={`${sectionIndex === 0 ? "mt-5" : "mt-8 md:mt-10"} flex flex-col w-full px-4 md:px-6`}
+            className={`$ {
+              sectionIndex === 0 ? "mt-5" : "mt-8 md:mt-10"
+            } flex flex-col w-full px-4 md:px-6`}
           >
-            <p className="text-[#73802A] text-2xl md:text-3xl ml-2 md:ml-10 mb-3 md:mb-5">{section.title}:</p>
+            <p className="text-[#73802A] text-2xl md:text-3xl ml-2 md:ml-10 mb-3 md:mb-5">
+              {section.title}:
+            </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8 px-2 md:px-4">
-              {/* fazer com que ao clicar no card vai ter ao /sale ou /loan ou /draw */}
               {section.items.map((item, itemIndex) => (
-                <Card key={`card-${sectionIndex}-${itemIndex}`} name={item.name} size={item.size} value={item.value} category={section.title} />
+                <Card
+                  key={`card-${sectionIndex}-${itemIndex}`}
+                  name={item.name}
+                  size={item.size}
+                  value={item.value}
+                  category={section.title}
+                />
               ))}
             </div>
           </div>
@@ -68,8 +96,7 @@ const Main = () => {
         <Footer />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Main
-
+export default Main;

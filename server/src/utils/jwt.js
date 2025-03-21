@@ -10,7 +10,7 @@ import {
 
 export const tokenOptions = {
   secure: NODE_ENV === 'production',
-  httpOnly: true,
+  httpOnly: false, // permite acede as cookies no frontend
   sameSite: 'strict'
 }
 
