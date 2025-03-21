@@ -29,6 +29,7 @@ import CreateSale from './pages/createSale';
 import CreateLoan from './pages/createLoan';
 import CreateDraw from './pages/createDraw';
 import { Provider } from 'react-redux';
+import AdminProtectedRoute from './adminProtectedRoute';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -46,13 +47,14 @@ root.render(
         {/* <Route path="/createloan" element={<CreateLoan />} /> */}
         {/* <Route path="/createdraw" element={<CreateDraw />} /> */}
 
-        {/* <Route path="/indexadmin" element={<AdminMain />} /> */}
+        <Route path="/indexadmin" element={<AdminProtectedRoute element={<AdminMain />} />} />
 
         <Route path="/index" element={<ProtectedRoute element={<Main />} />} />
         <Route path="/sale" element={<ProtectedRoute element={<LookSale />} />} />
         <Route path="/loan" element={<ProtectedRoute element={<LookLoan />} />} />
         <Route path="/draw" element={<ProtectedRoute element={<LookDraw />} />} />
         <Route path="/account" element={<ProtectedRoute element={<Account />} />} />
+        
       </Routes>
     </Router>
   </Provider>

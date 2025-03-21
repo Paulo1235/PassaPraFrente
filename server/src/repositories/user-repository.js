@@ -9,9 +9,10 @@ export class UserRepository {
     const user = await pool.request()
       .input('id', sql.Int, id)
       .query(`
-        SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail, Password
+        SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, Email, ConfirmarEmail, Password, TipoUtilizador.TipoUtilizador
         FROM Utilizador 
         JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID 
+        JOIN TipoUtilizador ON TipoUtilizador.TipoUtilizador_ID = Utilizador.TipoUtilizador_ID
         WHERE Utilizador.Utilizador_ID = @id
         `)
 

@@ -42,6 +42,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cloudinary": "^2.6.0",
     "colors": "^1.4.0",
     "compression": "^1.8.0",
     "config": "^3.3.12",

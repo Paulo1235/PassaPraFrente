@@ -30,5 +30,10 @@
     "ACCESS_TOKEN_EXPIRE": "",
     "REFRESH_TOKEN_EXPIRE": "",
     "ACTIVATION_CODE_EXPIRE": ""
+  },
+  "CLOUDINARY": {
+    "NAME": "",
+    "API_KEY": "",
+    "API_SECRET": ""
   }
 }

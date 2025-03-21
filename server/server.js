@@ -7,8 +7,9 @@ import StatusCodes from 'http-status-codes'
 import compression from 'compression'
 import colors from 'colors'
 import swaggerUi from 'swagger-ui-express'
+import { v2 as cloudinary } from 'cloudinary'
 
-import { PORT, NODE_ENV, NAME, MAX, WINDOWMS } from './config.js'
+import { PORT, NODE_ENV, NAME, MAX, WINDOWMS, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_NAME } from './config.js'
 import { readJSON } from './src/utils/file-helper.js'
 import { userRouter } from './src/routes/user-routes.js'
 import { response } from './src/utils/response.js'
@@ -31,6 +32,12 @@ const limiter = rateLimit({
   max: MAX,
   windowMs: WINDOWMS,
   message: 'Too many requests from this IP. Try again later.'
+})
+
+cloudinary.config({
+  cloud_name: CLOUDINARY_NAME,
+  api_key: CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_API_SECRET
 })
 
 colors.enable()
@@ -56,9 +63,8 @@ app.get('/', (req, res) => {
 
 //* colocar um protectedroute rota
 app.get('/api/protected-route', AuthMiddleware.isAuthenticated, (req, res) => {
-  res.status(200).json(
-      {});
-});
+  response(res, true, StatusCodes.OK, 'Protected route reached')
+})
 
 app.all('*', (req, res) => {
   response(res, false, StatusCodes.NOT_FOUND, `Rota ${req.method} ${req.originalUrl} não encontrada!`)
