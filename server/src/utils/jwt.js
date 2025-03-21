@@ -4,14 +4,15 @@ import {
   ACCESS_TOKEN_EXPIRE,
   ACCESS_TOKEN_SECRET_KEY,
   REFRESH_TOKEN_EXPIRE,
-  REFRESH_TOKEN_SECRET_KEY
+  REFRESH_TOKEN_SECRET_KEY,
+  NODE_ENV
 } from '../../config.js'
 
-// export const tokenOptions = {
-//   secure: NODE_ENV === 'production',
-//   httpOnly: true,
-//   sameSite: 'strict'
-// }
+export const tokenOptions = {
+  secure: NODE_ENV === 'production',
+  httpOnly: true,
+  sameSite: 'strict'
+}
 
 export const generateAccessToken = (user) => {
   const accessToken = jwt.sign(
@@ -38,14 +39,15 @@ export const sendToken = (user, statusCodes, res) => {
 
   const refreshToken = generateRefreshToken(user)
 
-  res.setHeader('authorization', `Bearer ${accessToken}`)
-  res.setHeader('refresh', refreshToken)
+  // res.setHeader('authorization', `Bearer ${accessToken}`)
+  // res.setHeader('refresh', refreshToken)
 
-  // res.cookie('accessToken', accessToken, tokenOptions)
-  // res.cookie('refreshToken', refreshToken, tokenOptions)
+  res.cookie('accessToken', accessToken, tokenOptions)
+  res.cookie('refreshToken', refreshToken, tokenOptions)
 
   return res.status(statusCodes).json({
     success: true,
-    user
+    user,
+    accessToken
   })
 }

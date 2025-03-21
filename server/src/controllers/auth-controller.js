@@ -88,8 +88,8 @@ export class AuthController {
 
   static async logoutUser (req, res) {
     try {
-      // res.cookie('accessToken', '')
-      // res.cookie('refreshToken', '')
+      res.cookie('accessToken', '')
+      res.cookie('refreshToken', '')
 
       response(res, true, StatusCodes.OK, 'Logged out successfully')
     } catch (error) {
