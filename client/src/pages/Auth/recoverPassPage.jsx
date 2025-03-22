@@ -1,7 +1,7 @@
 //? CSS
-import '../index.css'
+import '../../index.css'
 //? Logo
-import logo from '../images/logoEmpresa.png'
+import logo from '../../images/logoEmpresa.png'
 
 import { Formik } from 'formik';
 

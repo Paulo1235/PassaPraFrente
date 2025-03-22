@@ -1,33 +1,32 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet'
-import { Undo2 } from 'lucide-react'
+import { Helmet } from 'react-helmet';
+import { Undo2 } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 //? Components
-import SideBar from '../components/sideBar'
-import Footer from '../components/footer'
+import SideBar from '../../components/sideBar';
+import Footer from '../../components/footer';
 
 //? Logo
-import logo from '../images/logoEmpresa.png'
+import logo from '../../images/logoEmpresa.png';
 
 //? CSS
-import '../components/css/sidebar.css'
-import '../index.css'
+import '../../components/css/sidebar.css';
+import '../../index.css';
 
-function CreateLoan() {
-
-    const { id, isAuthenticated } = useSelector((state) => state.auth);
+function CreateSale() {
+    const { userId, isAuthenticated } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
   
-    console.log("User State in Main:", id, isAuthenticated);
+    console.log("User State in Main:", userId, isAuthenticated);
   
     useEffect(() => {
-      if (!isAuthenticated) {
-        navigate("/");
-        return;
-      }
+        if (!isAuthenticated) {
+            navigate("/");
+            return;
+        }
     }, [isAuthenticated, dispatch, navigate]);
   
     if (!isAuthenticated) return null;
@@ -35,7 +34,7 @@ function CreateLoan() {
     return (
         <div className='flex flex-row'>
             <Helmet>
-                <title>Criar Emprestimo</title>
+                <title>Criar Venda</title>
             </Helmet>
             <SideBar />
             <div className='App w-screen flex flex-col'>
@@ -64,7 +63,7 @@ function CreateLoan() {
                             alt=""
                         />
                     </div>
-                    <section className='flex flex-row mt-20 gap-10'>
+                    <section className='flex flex-row mt-20'>
                         <div className="left flex flex-col ml-48">
                             <p className='text-3xl text '>Titulo: <span className='text-lg text-black'>Camisola Quentinha Tigresa - XS</span></p>
                             <div className='flex flex-col'>
@@ -82,19 +81,9 @@ function CreateLoan() {
                                 </div>
                             </div>
                         </div>
-                        <div className="middle">
-                            <div className='flex flex-col'>
-                                <p className='text-3xl text '>Data Inicio:</p>
-                                <span className='text-lg text-black'>28-03-2025 12h:30 mim</span>
-                            </div>
-                            <div className='flex flex-col'>
-                                <p className='text-3xl text '>Data Fim:</p>
-                                <span className='text-lg text-black'>28-03-2025 12h:30 mim</span>
-                            </div>
-                        </div>
-                        <div className="right flex flex-col gap-10 ml-20">
+                        <div className="right flex flex-col gap-10 mx-auto">
                             <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center space-x-2">
-                                <span className="text-xl text-white">Pedir Agora</span>
+                                <span className="text-xl text-white">Comprar Agora</span>
                             </button>
                             <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center space-x-2">
                                 <span className="text-xl text-white">Fazer proposta</span>
@@ -107,9 +96,8 @@ function CreateLoan() {
                 </div>
                 <Footer />
             </div>
-            {/* <Footer/> */}
         </div>
-    )
+    );
 }
 
-export default CreateLoan
+export default CreateSale;

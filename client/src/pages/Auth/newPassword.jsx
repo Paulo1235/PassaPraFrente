@@ -1,9 +1,9 @@
 //? CSS
 import '../index.css'
 //? Logo
-import logo from '../images/logoEmpresa.png'
+import logo from '../../images/logoEmpresa.png'
 //? Icons
-import eyeIco from '../images/eyeIco.svg'
+import eyeIco from '../../images/eyeIco.svg'
 
 import { Formik } from 'formik';
 import { useState } from 'react';

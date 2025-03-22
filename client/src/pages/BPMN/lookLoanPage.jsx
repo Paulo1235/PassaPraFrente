@@ -5,17 +5,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 //? Components
-import SideBar from '../components/sideBar'
-import Footer from '../components/footer'
+import SideBar from '../../components/sideBar'
+import Footer from '../../components/footer'
 
 //? Logo
-import logo from '../images/logoEmpresa.png'
+import logo from '../../images/logoEmpresa.png'
 
 //? CSS
-import '../components/css/sidebar.css'
-import '../index.css'
+import '../../components/css/sidebar.css'
+import '../../index.css'
 
-function CreateDraw() {
+function CreateLoan() {
 
     const { id, isAuthenticated } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
@@ -35,7 +35,7 @@ function CreateDraw() {
     return (
         <div className='flex flex-row'>
             <Helmet>
-                <title>Criar Sorteio</title>
+                <title>Criar Emprestimo</title>
             </Helmet>
             <SideBar />
             <div className='App w-screen flex flex-col'>
@@ -94,7 +94,10 @@ function CreateDraw() {
                         </div>
                         <div className="right flex flex-col gap-10 ml-20">
                             <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center space-x-2">
-                                <span className="text-xl text-white">Entrar Sorteio</span>
+                                <span className="text-xl text-white">Pedir Agora</span>
+                            </button>
+                            <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center space-x-2">
+                                <span className="text-xl text-white">Fazer proposta</span>
                             </button>
                             <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center space-x-2">
                                 <span className="text-xl text-white">+351 930 213 123</span>
@@ -104,8 +107,9 @@ function CreateDraw() {
                 </div>
                 <Footer />
             </div>
+            {/* <Footer/> */}
         </div>
     )
 }
 
-export default CreateDraw
+export default CreateLoan

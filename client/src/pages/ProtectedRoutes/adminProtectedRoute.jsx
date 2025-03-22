@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { fetchUserInfo } from "./lib/authSlice";
+import { fetchUserInfo } from "../../lib/authSlice";
 
 const AdminProtectedRoute = ({ element }) => {
   const dispatch = useDispatch();
