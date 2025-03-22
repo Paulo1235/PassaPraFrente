@@ -1,3 +1,4 @@
+import crypto from 'node:crypto'
 import bcrypt from 'bcrypt'
 import StatusCodes from 'http-status-codes'
 
@@ -24,4 +25,16 @@ export const comparePassword = async (password, hashedPassword) => {
     console.error('Error while comparing password:', error.message)
     throw new ErrorApplication('Error in password comparison', StatusCodes.INTERNAL_SERVER_ERROR)
   }
+}
+
+export const generatePassword = (length = 8) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?'
+  let password = ''
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = crypto.randomInt(0, characters.length)
+    password += characters[randomIndex]
+  }
+
+  return password
 }

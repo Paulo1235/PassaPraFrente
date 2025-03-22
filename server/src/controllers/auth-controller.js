@@ -1,16 +1,14 @@
 import crypto from 'node:crypto'
-import path from 'node:path'
 import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
-import ejs from 'ejs'
 
 import { UserRepository } from '../repositories/user-repository.js'
 import { ErrorApplication } from '../utils/error-handler.js'
-import { comparePassword, hashPassword } from '../utils/bcrypt.js'
+import { comparePassword, hashPassword } from '../utils/password.js'
 import { generateAccessToken, generateRefreshToken, sendToken } from '../utils/jwt.js'
 import { response } from '../utils/response.js'
-import { ACCESS_TOKEN_SECRET_KEY, DIRNAME, ACTIVATION_CODE_EXPIRE, REFRESH_TOKEN_SECRET_KEY } from '../../config.js'
-import { sendEmail } from '../utils/send-email.js'
+import { ACCESS_TOKEN_SECRET_KEY, ACTIVATION_CODE_EXPIRE, REFRESH_TOKEN_SECRET_KEY } from '../../config.js'
+import { EmailService } from '../services/email-service.js'
 
 export class AuthController {
   static async createUser (req, res) {
@@ -21,8 +19,6 @@ export class AuthController {
     }
 
     try {
-      // const existingUser = await UserRepository.getUserByEmail(email)
-
       const existingUser = await UserRepository.existsUserByEmail(email)
 
       if (existingUser) {
@@ -117,16 +113,16 @@ export class AuthController {
 
     const activationCode = activationToken.activationCode
 
-    const data = { user, activationCode }
+    const emailData = { user, activationCode }
 
     try {
-      await ejs.renderFile(path.join(DIRNAME, 'src/mails/activation-mail.ejs'), data)
+      await EmailService.prepareEmailContent('activation-email.ejs', emailData)
 
-      await sendEmail({
+      await EmailService.sendEmail({
         email: user.Email,
         subject: 'Ativação de conta',
         template: 'activation-mail.ejs',
-        data
+        emailData
       })
 
       return res.status(StatusCodes.OK).json({

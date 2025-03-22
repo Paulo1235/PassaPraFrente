@@ -7,24 +7,24 @@ import StatusCodes from 'http-status-codes'
 import compression from 'compression'
 import colors from 'colors'
 import swaggerUi from 'swagger-ui-express'
+import cookieParser from 'cookie-parser'
 import { v2 as cloudinary } from 'cloudinary'
 
 import { PORT, NODE_ENV, NAME, MAX, WINDOWMS, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_NAME } from './config.js'
-import { readJSON } from './src/utils/file-helper.js'
 import { userRouter } from './src/routes/user-routes.js'
 import { response } from './src/utils/response.js'
 import { checkDatabaseConnection } from './src/database/connection.js'
 import { authRouter } from './src/routes/auth-routes.js'
 import { AuthMiddleware } from './src/middlewares/auth-middleware.js'
-import cookieParser from 'cookie-parser'
+import { FileService } from './src/services/file-service.js'
 
 const app = express()
 
-const swaggerOutput = readJSON('docs/swagger-output.json')
+const swaggerOutput = FileService.readJSON('docs/swagger-output.json')
 
 const corsOptions = {
   origin: ['http://localhost:3000'],
-  methods: ['POST', 'GET', 'PUT', 'DELETE'],
+  methods: ['POST', 'GET', 'PUT', 'DELETE', 'PATCH'],
   credentials: true
 }
 

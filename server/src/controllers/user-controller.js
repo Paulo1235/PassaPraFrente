@@ -3,6 +3,9 @@ import StatusCodes from 'http-status-codes'
 import { UserRepository } from '../repositories/user-repository.js'
 import { ErrorApplication } from '../utils/error-handler.js'
 import { response } from '../utils/response.js'
+import { hashPassword } from '../utils/password.js'
+import { PasswordService } from '../services/password-service.js'
+import { EmailService } from '../services/email-service.js'
 
 export class UserController {
   static async getUserById (req, res) {
@@ -110,6 +113,48 @@ export class UserController {
     } catch (error) {
       console.error('Erro ao obter utilizador: ', error.message)
       response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao obter o utilizador.')
+    }
+  }
+
+  static async updateUserProfile (req, res) {
+    const id = req.user.Utilizador_ID
+    const { newPassword } = req.body
+
+    try {
+      const hashedPassword = await hashPassword(newPassword)
+
+      await UserRepository.updateUserPassword(id, hashedPassword)
+
+      response(res, true, StatusCodes.OK, 'Palavra-passe atualizada com sucesso.')
+    } catch (error) {
+      console.error('Erro ao atualizar a palavra-passe: ', error.message)
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar a palavra-passe')
+    }
+  }
+
+  static async sendNewPasswordEmail (req, res) {
+    const { email } = req.body
+
+    try {
+      const user = await UserRepository.getUserByEmail(email)
+
+      const newPassword = await PasswordService.generateAndStoreNewPassword(user.Utilizador_ID)
+
+      const emailData = { user, newPassword }
+
+      await EmailService.prepareEmailContent('new-password.ejs', emailData)
+
+      await EmailService.sendEmail({
+        email: user.Email,
+        subject: 'Nova palavra-passe',
+        template: 'new-password.ejs',
+        emailData
+      })
+
+      response(res, true, StatusCodes.OK, 'Verifique o seu email para verificar a sua nova palavra-passe.')
+    } catch (error) {
+      console.error('Erro ao enviar o email:', error.message)
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao enviar o email para a sua conta.')
     }
   }
 }

@@ -75,6 +75,7 @@ export class UserRepository {
 
   static async createUser (input) {
     const pool = await getConnection()
+
     const transaction = pool.transaction()
 
     try {
@@ -162,10 +163,35 @@ export class UserRepository {
 
   static async getUserRole (id) {
     const pool = await getConnection()
+
     const user = await pool.request()
       .input('id', sql.Int, id)
-      .query('Select TipoUtilizador From TipoUtilizador Join Utilizador on Utilizador.TipoUtilizador_ID = TipoUtilizador.TipoUtilizador_ID Where Utilizador.Utilizador_ID = @id')
+      .query(`
+        SELECT TipoUtilizador 
+        FROM TipoUtilizador 
+        JOIN Utilizador ON Utilizador.TipoUtilizador_ID = TipoUtilizador.TipoUtilizador_ID 
+        WHERE Utilizador.Utilizador_ID = @id
+      `)
+
     await closeConnection(pool)
+
     return user.recordset[0]
+  }
+
+  static async updateUserPassword (id, password) {
+    const pool = await getConnection()
+
+    const updatedUser = await pool.request()
+      .input('id', sql.Int, id)
+      .input('password', sql.VarChar, password)
+      .query(`
+        UPDATE Autenticacao 
+        SET Password = @password 
+        WHERE Utilizador_ID = @id
+      `)
+
+    await closeConnection(pool)
+
+    return updatedUser.recordset
   }
 }
