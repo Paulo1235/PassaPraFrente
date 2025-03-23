@@ -15,7 +15,7 @@ import Login from './pages/Auth/login';
 // import Stepper from './pages/Auth/MultiStepForm/stepper';
 import SignIn from './pages/Auth/signIn'
 import RecoverPass from './pages/Auth/recoverPassPage'
-import NewPassword from './pages/newPasswordPage'
+import NewPassword from './pages/Auth/newPasswordPage'
 
 import Main from './pages/mainPage'
 import AdminMain from './pages/adminMainPage'
