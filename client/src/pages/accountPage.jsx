@@ -26,15 +26,16 @@ import LogoutIco from "../images/logout.svg"
 
 const Account = () => {
   // Estado para controlar o modal
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const openModal = () => {
-    setIsModalOpen(true)
-  }
 
   const { user, isAuthenticated } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen)
+  }
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -44,6 +45,7 @@ const Account = () => {
 
     dispatch(fetchUserInfo()) // Fetch user info on page load
   }, [isAuthenticated, dispatch, navigate])
+
 
   const handleLogout = async () => {
     try {
@@ -116,7 +118,7 @@ const Account = () => {
                     alt=""
                   />
                 </div>
-                <button onClick={openModal} className="text-xs md:text-sm mt-1 hover:underline cursor-pointer">
+                <button onClick={toggleModal} className="text-xs md:text-sm mt-1 hover:underline cursor-pointer">
                   X avaliações
                 </button>
               </div>
@@ -160,8 +162,8 @@ const Account = () => {
         <div className="mt-auto w-full">
           <Footer />
         </div>
+        {isModalOpen && <Review closeModal={toggleModal} />}
       </div>
-      {isModalOpen && <Review closeModal={() => setIsModalOpen(false)} />}
     </div>
   )
 }
