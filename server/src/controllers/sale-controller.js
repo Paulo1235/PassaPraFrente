@@ -7,7 +7,6 @@ import { SaleRepository } from '../repositories/sale-repository.js'
 export class SaleController {
   static async createSale (req, res) {
     const data = req.body
-
     try {
       const sale = await SaleRepository.createSale(data)
 
@@ -28,7 +27,6 @@ export class SaleController {
 
   static async getSaleById (req, res) {
     const { id } = req.params
-
     try {
       const sale = await SaleRepository.getSaleById(id)
 
@@ -51,10 +49,6 @@ export class SaleController {
     try {
       const sale = await SaleRepository.getAllSales()
 
-      if (!sale) {
-        throw new ErrorApplication('Não foi possível obter as vendas', StatusCodes.NOT_FOUND)
-      }
-
       response(res, true, StatusCodes.OK, sale)
     } catch (error) {
       if (error instanceof ErrorApplication) {
@@ -70,10 +64,6 @@ export class SaleController {
     try {
       const sale = await SaleRepository.getAvailableSales()
 
-      if (!sale) {
-        throw new ErrorApplication('Não foi possível obter as vendas disponiveis', StatusCodes.NOT_FOUND)
-      }
-
       response(res, true, StatusCodes.OK, sale)
     } catch (error) {
       if (error instanceof ErrorApplication) {
@@ -86,8 +76,8 @@ export class SaleController {
   }
 
   static async updateSale (req, res) {
+    const data = req.body
     try {
-      const data = req.body
       const sale = await SaleRepository.updateSale(data)
 
       if (!sale) {
@@ -106,8 +96,8 @@ export class SaleController {
   }
 
   static async getUserSales (req, res) {
+    const id = req.user.Utilizador_ID
     try {
-      const { id } = req.params
       const sale = await SaleRepository.getUserSales(id)
 
       if (!sale) {
