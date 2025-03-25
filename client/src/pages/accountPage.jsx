@@ -1,10 +1,9 @@
-"use client"
-
 import { Helmet } from "react-helmet"
 import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { fetchUserInfo, logout } from "../lib/authSlice" // Import the action
+
 
 //? CSS
 import "../components/css/sidebar.css"
@@ -45,6 +44,11 @@ const Account = () => {
 
     dispatch(fetchUserInfo()) // Fetch user info on page load
   }, [isAuthenticated, dispatch, navigate])
+
+
+const gotootherpage= async () => {
+  navigate("/newpassword");
+}
 
 
   const handleLogout = async () => {
@@ -148,6 +152,14 @@ const Account = () => {
                   />
                   <span className="ml-2 text-sm md:text-base">Sair</span>
                 </div>
+
+                <div onClick={gotootherpage} className="logout flex flex-row items-center cursor-pointer">
+                  <span className="ml-2 text-sm md:text-base">Alterar Passe</span>
+                </div>
+
+
+
+
               </div>
             </div>
           </div>
