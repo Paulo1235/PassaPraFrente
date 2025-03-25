@@ -9,6 +9,8 @@ module.exports = {
         bgp: '#E0E5B6', // Example custom color
         bgs: '#24251D', // Another custom color
         btnp: '#73802A',
+        txtp: '#73802A',
+        txts: '#ADADAD',
         btns: '#CAAD7E'
       },
       fontFamily: {
