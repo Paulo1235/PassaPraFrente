@@ -116,9 +116,13 @@ export class UserController {
     }
   }
 
-  static async updateUserProfile (req, res) {
+  static async updateUserPassword (req, res) {
     const id = req.user.Utilizador_ID
-    const { newPassword } = req.body
+    const { newPassword, confirmPassword } = req.body
+
+    if (newPassword !== confirmPassword) {
+      response(res, false, StatusCodes.BAD_REQUEST, 'Palavra-passe incorreta!')
+    }
 
     try {
       const hashedPassword = await hashPassword(newPassword)

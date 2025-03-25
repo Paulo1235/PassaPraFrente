@@ -19,6 +19,6 @@ userRouter.get('/users/email/:email', AuthMiddleware.isAuthenticated, UserContro
 
 userRouter.get('/users/me', AuthMiddleware.isAuthenticated, UserController.getUserInfo)
 
-userRouter.patch('/users/update-password', AuthMiddleware.isAuthenticated, UserController.updateUserProfile)
+userRouter.patch('/users/update-password', AuthMiddleware.isAuthenticated, UserController.updateUserPassword)
 
 userRouter.post('/users/send-email-password', UserController.sendNewPasswordEmail)
