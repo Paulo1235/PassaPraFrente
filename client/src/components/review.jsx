@@ -1,12 +1,29 @@
 import { useState } from "react";
-import { Star } from "lucide-react";
+import { Star, X } from "lucide-react";
 
 const Modal = ({ closeModal }) => {
-  const [rating, setRating] = useState(4);
+  const [rating, setRating] = useState(1);
+
+  const submitAvaliation = () => {
+    console.log("Avaliação submetida com nota:", rating);
+  };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
+    <div 
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+      onClick={closeModal} 
+    >
+      <div 
+        className="bg-white p-6 rounded-lg shadow-lg w-96 text-center relative"
+        onClick={(e) => e.stopPropagation()} 
+      >
+        <button 
+          onClick={closeModal} 
+          className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+        >
+          <X size={24} />
+        </button>
+
         <h2 className="text-xl font-bold mb-2">Fazer Avaliação</h2>
         <p className="text-gray-600 mb-4">Dê a sua avaliação abaixo:</p>
 
@@ -23,10 +40,10 @@ const Modal = ({ closeModal }) => {
         </div>
 
         <button
-          onClick={closeModal}
+          onClick={submitAvaliation}
           className="mt-4 bg-[#CAAD7E] text-white px-4 py-2 rounded hover:bg-[#887455]"
         >
-          Fechar
+          Enviar
         </button>
       </div>
     </div>

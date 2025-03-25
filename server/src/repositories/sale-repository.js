@@ -28,7 +28,16 @@ export class SaleRepository {
   }
 
   static async getSaleById (id) {
-
+    const pool = await getConnection(dbConfig)
+    const userSales = await pool.request()
+      .input('id', sql.Int, id)
+      .query(`
+        Select * 
+        FROM Venda
+        Where Venda.Venda_ID = @id
+      `)
+    await closeConnection(pool)
+    return userSales.recordset
   }
 
   static async getAllSales () {
@@ -47,15 +56,50 @@ export class SaleRepository {
   }
 
   static async getAvailableSales () {
-
+    const pool = await getConnection(dbConfig)
+    const availableSales = await pool
+      .request()
+      .query(`
+        Select * 
+        FROM Venda
+        Join Estado on Estado.Estado_ID = Venda.Estado_ID
+        Where Estado = 'Disponivel'
+      `)
+    await closeConnection(pool)
+    return availableSales.recordset
   }
 
   static async updateSale (data) {
-
+    const pool = await getConnection(dbConfig)
+    const updateSale = await pool.request()
+      .input('titulo', sql.VarChar, data.title)
+      .input('descricao', sql.VarChar, data.description)
+      .input('valor', sql.Real, data.value)
+      .input('idVenda', sql.Int, data.idsale)
+      .query(`
+        UPDATE Venda
+        SET 
+            Titulo = @titulo,
+            Descricao = @descricao,
+            Valor = @valor,
+            Aprovado = 0
+        WHERE Venda_ID = 1; 
+      `)
+    await closeConnection(pool)
+    return updateSale.recordset
   }
 
   static async getUserSales (userId) {
-
+    const pool = await getConnection(dbConfig)
+    const userSales = await pool.request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        Select * 
+        FROM Venda
+        Where Venda.Utilizador_ID = @userId
+      `)
+    await closeConnection(pool)
+    return userSales.recordset
   }
 
   static async updateSalePictures () {

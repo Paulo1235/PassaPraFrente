@@ -135,7 +135,7 @@ export class UserRepository {
       .input('imagemURL', sql.VarChar, imagemURL)
       .input('contacto', sql.VarChar, contacto)
       .input('id', sql.Int, id)
-      .query('update Utilizador set  Nome =@ nome, DataNasc = @dataNasc, Imagem_URL = @imagemURL, Contacto = @contacto where Utilizador_ID = @id')
+      .query('update Utilizador set  Nome = @nome, DataNasc = @dataNasc, Imagem_URL = @imagemURL, Contacto = @contacto where Utilizador_ID = @id')
 
     await closeConnection(pool)
 
