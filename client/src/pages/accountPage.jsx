@@ -1,40 +1,52 @@
-import { Helmet } from "react-helmet"
-import { useState, useEffect } from "react"
-import { useSelector, useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import { fetchUserInfo, logout } from "../lib/authSlice" // Import the action
-
+import { Helmet } from "react-helmet";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchUserInfo, logout } from "../lib/authSlice"; // Import the action
 
 //? CSS
-import "../components/css/sidebar.css"
-import "../index.css"
+import "../components/css/sidebar.css";
+import "../index.css";
 
 //? Components
-import SideBar from "../components/sideBar"
-import Card from "../components/card"
-import Footer from "../components/footer"
-import Review from "../components/review"
+import SideBar from "../components/sideBar";
+import Footer from "../components/footer";
+import Review from "../components/review";
+import ContentAccount from "../components/contentAccount";
 
 //? Icons
-import AccLogo from "../images/conta-logo.png"
-import Star1 from "../images/star1.svg"
-import Star2 from "../images/star2.svg"
-import EditIco from "../images/edit-account.svg"
-import ProposalsIco from "../images/proposals.svg"
-import LogoutIco from "../images/logout.svg"
+import AccLogo from "../images/conta-logo.png";
+import Star1 from "../images/star1.svg";
+import Star2 from "../images/star2.svg";
+import EditIco from "../images/edit-account.svg";
+import ProposalsIco from "../images/proposals.svg";
+import LogoutIco from "../images/logout.svg";
 
 const Account = () => {
-  // Estado para controlar o modal
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { user, isAuthenticated } = useSelector((state) => state.auth)
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  
   const toggleModal = () => {
-    setIsModalOpen(!isModalOpen)
-  }
+    setIsModalOpen(!isModalOpen);
+  };
+  //! Pedir estes dados do backend
+  const items = [
+    { name: "Cadeira Gamer", size: "Grande", value: "140,00" },
+    { name: "Mesa de Escritório", size: "Médio", value: "84,00" },
+    { name: "Abajur Moderno", size: "Pequeno", value: "22,40" },
+    { name: "Estante de Livros", size: "Grande", value: "224,00" },
+    { name: "Poltrona Confortável", size: "Médio", value: "112,00" },
+    { name: "Tapete Decorativo", size: "Grande", value: "56,00" },
+    { name: "Cama Box Casal", size: "Grande", value: "280,00" },
+    { name: "Armário de Cozinha", size: "Grande", value: "373,00" },
+    { name: "Mesa de Centro", size: "Médio", value: "65,00" },
+    { name: "Cadeira Dobrável", size: "Pequeno", value: "15,00" },
+    { name: "Espelho Decorativo", size: "Médio", value: "37,00" },
+    { name: "Rack para TV", size: "Grande", value: "168,00" },
+  ];
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -45,29 +57,23 @@ const Account = () => {
     dispatch(fetchUserInfo()) // Fetch user info on page load
   }, [isAuthenticated, dispatch, navigate])
 
-
-const gotootherpage= async () => {
-  navigate("/newpassword");
-}
-
-
   const handleLogout = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/auth/logout", {
         method: "POST",
         credentials: "include", // Ensures cookies are sent and removed
-      })
+      });
 
       if (response.ok) {
-        dispatch(logout()) // Log the user out in Redux store
-        navigate("/") // Redirect to the home page
+        dispatch(logout()); // Log the user out in Redux store
+        navigate("/"); // Redirect to the home page
       } else {
-        console.error("Failed to log out")
+        console.error("Failed to log out");
       }
     } catch (error) {
-      console.error("Logout error:", error)
+      console.error("Logout error:", error);
     }
-  }
+  };
 
   if (!isAuthenticated) return null
 
@@ -90,8 +96,12 @@ const gotootherpage= async () => {
                 alt="account-logo"
               />
               <div className="info mt-4 md:mt-0 md:ml-4 lg:ml-10 flex flex-col justify-center text-center md:text-left">
-                <p className="text-xl md:text-2xl lg:text-3xl text-[#73802A]">{user?.message.Nome}</p>
-                <p className="md:ml-2 lg:ml-5 text-sm md:text-base">{user?.message.Email}</p>
+                <p className="text-xl md:text-2xl lg:text-3xl text-[#73802A]">
+                  {user?.message.Nome}
+                </p>
+                <p className="md:ml-2 lg:ml-5 text-sm md:text-base">
+                  {user?.message.Email}
+                </p>
               </div>
 
               <div className="rating mt-4 md:mt-0 md:ml-6 lg:ml-20 xl:ml-60 flex flex-col items-center md:items-start">
@@ -122,7 +132,10 @@ const gotootherpage= async () => {
                     alt=""
                   />
                 </div>
-                <button onClick={toggleModal} className="text-xs md:text-sm mt-1 hover:underline cursor-pointer">
+                <button
+                  onClick={toggleModal}
+                  className="text-xs md:text-sm mt-1 hover:underline cursor-pointer"
+                >
                   X avaliações
                 </button>
               </div>
@@ -144,7 +157,10 @@ const gotootherpage= async () => {
                   />
                   <span className="ml-2 text-sm md:text-base">Propostas</span>
                 </div>
-                <div onClick={handleLogout} className="logout flex flex-row items-center cursor-pointer">
+                <div
+                  onClick={handleLogout}
+                  className="logout flex flex-row items-center cursor-pointer"
+                >
                   <img
                     src={LogoutIco || "/placeholder.svg"}
                     className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]"
@@ -152,33 +168,28 @@ const gotootherpage= async () => {
                   />
                   <span className="ml-2 text-sm md:text-base">Sair</span>
                 </div>
-
-                <div onClick={gotootherpage} className="logout flex flex-row items-center cursor-pointer">
-                  <span className="ml-2 text-sm md:text-base">Alterar Passe</span>
+                {/*//! Apenas para testar  */}
+                <div
+                  onClick={() => navigate("/newpassword")}
+                  className="logout flex flex-row items-center cursor-pointer"
+                >
+                  <span className="ml-2 text-sm md:text-base">
+                    Alterar Passe
+                  </span>
                 </div>
-
-
-
-
+                {/*//! */}
               </div>
             </div>
           </div>
         </div>
-        <div className="content mt-10 md:mt-20 px-4 md:px-6 lg:px-10 xl:px-20 text-[#73802A] flex-grow">
-          <p className="text-xl md:text-2xl">O que tem para o vizinho:</p>
-          <div className="items mt-4 md:mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-10">
-            <Card name="Camisola dourada" size="S" value="10,50" />
-            <Card name="Camisola vermelha" size="M" value="15,00" />
-          </div>
-        </div>
+        <ContentAccount items={items} />
         <div className="mt-auto w-full">
           <Footer />
         </div>
         {isModalOpen && <Review closeModal={toggleModal} />}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Account
-
+export default Account;

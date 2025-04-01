@@ -49,11 +49,18 @@ root.render(
         <Route path="/" element={<Login />} />
 
         {/* Autenticacao e Registo */}
-        <Route path="/signin" element={<SignIn />} />
-        {/* <Route path="/signin" element={<Stepper />} /> */}
-        {/* <Route path="/signinnext" element={<SignInNext />} /> */}
-        <Route path="/recoverpass" element={<RecoverPass />} />
-        <Route path="/newpassword" element={<NewPassword />} />
+        <Route 
+          path="/signin" 
+          element={<SignIn />} 
+        />
+        <Route 
+          path="/recoverpass" 
+          element={<RecoverPass />} 
+        />
+        <Route 
+          path="/newpassword" 
+          element={<NewPassword />} 
+        />
 
         <Route path="/testedraw" element={<EditDraw />} />
         <Route path="/testesale" element={<EditSale />} />
@@ -70,7 +77,10 @@ root.render(
         />
 
         {/* Paginas principais */}
-        <Route path="/index" element={<ProtectedRoute element={<Main />} />} />
+        <Route 
+          path="/index" 
+          element={<ProtectedRoute element={<Main />} />} 
+        />
         <Route
           path="/sale"
           element={<ProtectedRoute element={<LookSale />} />}
@@ -87,8 +97,14 @@ root.render(
           path="/account"
           element={<ProtectedRoute element={<Account />} />}
         />
-        <Route path="/notfound" element={<NotFound />} />
-        <Route path="*" element={<Navigate replace to="/notfound" />} />
+        <Route 
+          path="/notfound" 
+          element={<NotFound />} 
+        />
+        <Route 
+          path="*" 
+          element={<Navigate replace to="/notfound" />} 
+        />
       </Routes>
     </Router>
   </Provider>
