@@ -31,7 +31,7 @@ export class SaleController {
       const sale = await SaleRepository.getSaleById(id)
 
       if (!sale) {
-        throw new ErrorApplication('Sale not found', StatusCodes.NOT_FOUND)
+        throw new ErrorApplication('Venda não encontrada.', StatusCodes.NOT_FOUND)
       }
 
       response(res, true, StatusCodes.OK, sale)
@@ -39,24 +39,20 @@ export class SaleController {
       if (error instanceof ErrorApplication) {
         response(res, false, error.statusCodes, error.message)
       } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while finding an user')
+        console.error('Erro ao obter venda: ', error.message)
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar uma venda.')
       }
     }
   }
 
   static async getAllSales (req, res) {
     try {
-      const sale = await SaleRepository.getAllSales()
+      const sales = await SaleRepository.getAllSales()
 
-      response(res, true, StatusCodes.OK, sale)
+      response(res, true, StatusCodes.OK, sales)
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while finding an user')
-      }
+      console.error('Erro ao obter vendas: ', error.message)
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar as vendas.')
     }
   }
 
@@ -66,12 +62,8 @@ export class SaleController {
 
       response(res, true, StatusCodes.OK, sale)
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while finding an user')
-      }
+      console.error('Erro ao obter vendas disponíveis: ', error.message)
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao obter das vendas disponíveis.')
     }
   }
 
@@ -89,8 +81,8 @@ export class SaleController {
       if (error instanceof ErrorApplication) {
         response(res, false, error.statusCodes, error.message)
       } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while finding an user')
+        console.error('Erro ao atualizar a venda: ', error.message)
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar a venda.')
       }
     }
   }
@@ -98,19 +90,35 @@ export class SaleController {
   static async getUserSales (req, res) {
     const id = req.user.Utilizador_ID
     try {
-      const sale = await SaleRepository.getUserSales(id)
+      const sales = await SaleRepository.getUserSales(id)
+
+      response(res, true, StatusCodes.OK, sales)
+    } catch (error) {
+      console.error('Erro ao obter vendas do utilizador:', error.message)
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro a obter as suas vendas. Tente novamente mais tarde.')
+    }
+  }
+
+  static async updateSaleStatus (req, res) {
+    const { status } = req.body
+    const { id } = req.params
+
+    try {
+      const sale = await SaleRepository.getSaleById(id)
 
       if (!sale) {
-        throw new ErrorApplication('Não foi possível obter as vendas do utilizador', StatusCodes.NOT_FOUND)
+        throw new ErrorApplication('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
       }
 
-      response(res, true, StatusCodes.OK, sale)
+      await SaleRepository.updateSaleStatus(id, status)
+
+      response(res, true, StatusCodes.OK, 'Estado da venda atualizado.')
     } catch (error) {
       if (error instanceof ErrorApplication) {
         response(res, false, error.statusCodes, error.message)
       } else {
         console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while finding an user')
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar o estado a venda. Tente novamente mais tarde.')
       }
     }
   }

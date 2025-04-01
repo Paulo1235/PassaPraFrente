@@ -22,7 +22,6 @@ export class AuthMiddleware {
       // const accessToken = authorizationHeader.split(' ')[1]
 
       const payload = jwt.verify(accessToken, ACCESS_TOKEN_SECRET_KEY)
-      console.log(payload);
 
       if (!payload) {
         throw new ErrorApplication('Acesso inválido.', StatusCodes.UNAUTHORIZED)

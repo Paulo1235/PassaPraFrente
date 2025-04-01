@@ -29,15 +29,17 @@ export class SaleRepository {
 
   static async getSaleById (id) {
     const pool = await getConnection(dbConfig)
-    const userSales = await pool.request()
+
+    const sale = await pool.request()
       .input('id', sql.Int, id)
       .query(`
-        Select * 
+        SELECT * 
         FROM Venda
-        Where Venda.Venda_ID = @id
+        WHERE Venda.Venda_ID = @id
       `)
     await closeConnection(pool)
-    return userSales.recordset
+
+    return sale.recordset
   }
 
   static async getAllSales () {
@@ -57,20 +59,23 @@ export class SaleRepository {
 
   static async getAvailableSales () {
     const pool = await getConnection(dbConfig)
+
     const availableSales = await pool
       .request()
       .query(`
-        Select * 
+        SELECT * 
         FROM Venda
-        Join Estado on Estado.Estado_ID = Venda.Estado_ID
-        Where Estado = 'Disponivel'
+        JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
+        WHERE Estado = 'Disponivel'
       `)
     await closeConnection(pool)
+
     return availableSales.recordset
   }
 
   static async updateSale (data) {
     const pool = await getConnection(dbConfig)
+
     const updateSale = await pool.request()
       .input('titulo', sql.VarChar, data.title)
       .input('descricao', sql.VarChar, data.description)
@@ -86,23 +91,44 @@ export class SaleRepository {
         WHERE Venda_ID = 1; 
       `)
     await closeConnection(pool)
+
     return updateSale.recordset
   }
 
   static async getUserSales (userId) {
     const pool = await getConnection(dbConfig)
+
     const userSales = await pool.request()
       .input('userId', sql.Int, userId)
       .query(`
-        Select * 
+        SELECT * 
         FROM Venda
-        Where Venda.Utilizador_ID = @userId
+        WHERE Venda.Utilizador_ID = @userId
       `)
+
     await closeConnection(pool)
+
     return userSales.recordset
   }
 
   static async updateSalePictures () {
 
+  }
+
+  static async updateSaleStatus (id, status) {
+    const pool = await getConnection()
+
+    const updatedSale = pool.request()
+      .input('id', sql.Int, id)
+      .input('status', sql.TinyInt, status)
+      .query(`
+        UPDATE Venda
+        SET Aprovado = @status
+        WHERE Venda_ID = @id
+      `)
+
+    await closeConnection(pool)
+
+    return updatedSale.recordset
   }
 }
