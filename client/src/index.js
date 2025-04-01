@@ -35,6 +35,9 @@ import LookDraw from "./pages/BPMN/lookDrawPage";
 import CreateSale from "./pages/BPMN/createSale";
 import CreateLoan from "./pages/BPMN/createLoan";
 import CreateDraw from "./pages/BPMN/createDraw";
+import EditDraw from "./pages/BPMN/editDraw";
+import EditLoan from "./pages/BPMN/editLoan";
+import EditSale from "./pages/BPMN/editSale";
 
 import AdminProtectedRoute from "./pages/ProtectedRoutes/adminProtectedRoute";
 
@@ -51,6 +54,10 @@ root.render(
         {/* <Route path="/signinnext" element={<SignInNext />} /> */}
         <Route path="/recoverpass" element={<RecoverPass />} />
         <Route path="/newpassword" element={<NewPassword />} />
+
+        <Route path="/testedraw" element={<EditDraw />} />
+        <Route path="/testesale" element={<EditSale />} />
+        <Route path="/testeloan" element={<EditLoan />} />
 
         {/* <Route path="/createsale" element={<CreateSale />} /> */}
         {/* <Route path="/createloan" element={<CreateLoan />} /> */}

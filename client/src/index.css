@@ -23,7 +23,7 @@
 
 .App {
   background-color: var(--background);
-  height: 100vh; /* Ocupa 100% da altura da tela */
+  /* height: 100vh; /*Ocupa 100% da altura da tela */
 
   font-family: "Jua", sans-serif;
 

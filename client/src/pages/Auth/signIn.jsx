@@ -43,8 +43,8 @@ export default function MultiStepForm() {
         step === 2
           ? Yup.string()
               .matches(
-                /^\+351\d{9}$/,
-                "O número de telefone deve começar com +351 e ter 9 dígitos após isso"
+                /^\+351(91|92|93|96)\d{7}$/,
+                "O número de telefone deve começar com +351 e ser português"
               )
               .required("Número de telefone é obrigatório")
           : Yup.string(),
@@ -105,7 +105,7 @@ export default function MultiStepForm() {
           <h2 className="text-2xl font-medium text-[#73802A] mb-6">
             {step === 1
               ? "Novo por Aqui? Crie conta agora!"
-              : "Complete seu cadastro"}
+              : "Complete o seu registo"}
           </h2>
 
           <form onSubmit={formik.handleSubmit}>
