@@ -78,7 +78,7 @@ const Sidebar = () => {
           </button>
         </nav>
 
-        <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 mt-4 mb-20 flex items-center space-x-2">
+        <button className="bg-btns hover:bg-[#c4a884] rounded-lg px-4 py-2 mt-4 mb-20 flex items-center space-x-2">
           <Plus className="w-6 h-6 mr-3 text-white" />
           <span className="text-xl text-white">Adicionar</span>
         </button>

@@ -38,6 +38,7 @@ import CreateDraw from "./pages/BPMN/createDraw";
 import EditDraw from "./pages/BPMN/editDraw";
 import EditLoan from "./pages/BPMN/editLoan";
 import EditSale from "./pages/BPMN/editSale";
+import EditAccountPage from "./pages/editAccountPage";
 
 import AdminProtectedRoute from "./pages/ProtectedRoutes/adminProtectedRoute";
 
@@ -65,6 +66,9 @@ root.render(
         <Route path="/testedraw" element={<EditDraw />} />
         <Route path="/testesale" element={<EditSale />} />
         <Route path="/testeloan" element={<EditLoan />} />
+        
+        <Route path="/testeeditarconta" element={<EditAccountPage />} />
+
 
         {/* <Route path="/createsale" element={<CreateSale />} /> */}
         {/* <Route path="/createloan" element={<CreateLoan />} /> */}
