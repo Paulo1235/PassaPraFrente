@@ -1,4 +1,5 @@
 import StatusCodes from 'http-status-codes'
+import cloudinary from 'cloudinary'
 
 import { UserRepository } from '../repositories/user-repository.js'
 import { ErrorApplication } from '../utils/error-handler.js'
@@ -159,6 +160,57 @@ export class UserController {
     } catch (error) {
       console.error('Erro ao enviar o email:', error.message)
       response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao enviar o email para a sua conta.')
+    }
+  }
+
+  static async uploadUserAvatar (req, res) {
+    const id = req.user.Utilizador_ID
+    const { thumbnail } = req.body
+
+    try {
+      const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
+        folder: 'users'
+      })
+
+      const updateSuccess = await UserRepository.uploadUserAvatar(id, myCloud.public_id, myCloud.url)
+
+      if (updateSuccess) {
+        response(res, true, StatusCodes.OK, 'Imagem inserida.')
+      }
+
+      response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao inserir a imagem.')
+    } catch (error) {
+      console.error('Erro ao inserir imagem:', error.message)
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao inserir a sua imagem. Tente mais tarde.')
+    }
+  }
+
+  static async updateUserAvatar (req, res) {
+    const id = req.user.Utilizador_ID
+    const { avatar } = req.body
+
+    try {
+      const userAvatar = await UserRepository.getUserAvatar(id)
+
+      if (userAvatar.public_id) {
+        await cloudinary.v2.uploader.destroy(userAvatar.public_id)
+
+        const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+          folder: 'users',
+          width: 150
+        })
+
+        const updateSuccess = await UserRepository.updateUserAvatar(id, myCloud.public_id, myCloud.secure_url)
+
+        if (updateSuccess) {
+          response(res, true, StatusCodes.OK, 'Imagem de perfil atualizada.')
+        }
+
+        response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao atualizar a imagem.')
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar imagem:', error.message)
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar a sua imagem. Tente mais tarde.')
     }
   }
 }

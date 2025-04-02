@@ -194,4 +194,58 @@ export class UserRepository {
 
     return updatedUser.recordset
   }
+
+  static async uploadUserAvatar (id, publicId, url) {
+    const pool = await getConnection()
+
+    const user = await pool
+      .request()
+      .input('id', sql.Int, id)
+      .input('publicId', sql.VarChar, publicId)
+      .input('url', sql.VarChar, url)
+      .query(`
+        INSERT INTO ImagemUtilizador (Utilizador_ID, Public_ID, Url)
+        VALUES (@id, @publicId, @url)
+    `)
+
+    await closeConnection(pool)
+
+    return user.rowsAffected[0] > 0
+  }
+
+  static async getUserAvatar (id) {
+    const pool = await getConnection()
+
+    const avatar = await pool
+      .request()
+      .input('id', sql.Int, id)
+      .query(`
+        SELECT PublicID, Url
+        FROM ImagemUtilizador
+        WHERE Utilizador_ID = @id
+      `)
+
+    await closeConnection(pool)
+
+    return avatar.recordset
+  }
+
+  static async updateUserAvatar (id, publicId, url) {
+    const pool = await getConnection()
+
+    const updatedAvatar = await pool
+      .request()
+      .input('id', sql.Int, id)
+      .input('publicId', sql.VarChar, publicId)
+      .input('url', sql.VarChar, url)
+      .query(`
+        UPDATE ImagemUtilizador
+        SET PublicID = @publicId, Url = @url
+        WHERE Utilizador_ID = @id
+      `)
+
+    await closeConnection(pool)
+
+    return updatedAvatar.rowsAffected[0] > 0
+  }
 }
