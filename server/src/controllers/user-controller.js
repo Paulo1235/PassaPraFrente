@@ -16,7 +16,7 @@ export class UserController {
       const user = await UserRepository.getUserById(id)
 
       if (!user) {
-        throw new ErrorApplication('User not found', StatusCodes.NOT_FOUND)
+        throw new ErrorApplication('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
       }
 
       response(res, true, StatusCodes.OK, user)
@@ -25,7 +25,7 @@ export class UserController {
         response(res, false, error.statusCodes, error.message)
       } else {
         console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while finding an user')
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Um erro ocorreu ao procurar o utilizador.')
       }
     }
   }
@@ -36,7 +36,7 @@ export class UserController {
       response(res, true, StatusCodes.OK, users)
     } catch (error) {
       console.error('Internal error: ', error.message)
-      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while finding all users')
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Um erro ocorreu ao procurar todos os utilizadores.')
     }
   }
 
@@ -47,7 +47,7 @@ export class UserController {
       const result = await UserRepository.deleteUser(id)
 
       if (!result) {
-        throw new ErrorApplication('User not found', StatusCodes.NOT_FOUND)
+        throw new ErrorApplication('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
       }
 
       response(res, true, StatusCodes.OK, 'User deleted')
@@ -69,16 +69,16 @@ export class UserController {
       const result = await UserRepository.updateUser({ id, data })
 
       if (!result) {
-        throw new ErrorApplication('User could not be found', StatusCodes.NOT_FOUND)
+        throw new ErrorApplication('Utilizador não pode ser encontrado.', StatusCodes.NOT_FOUND)
       }
 
-      response(res, true, StatusCodes.OK, 'User updated')
+      response(res, true, StatusCodes.OK, 'Utilizador atualizado')
     } catch (error) {
       if (error instanceof ErrorApplication) {
         response(res, false, error.statusCodes, error.message)
       } else {
         console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while creating an user')
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Um erro ocorreu ao atualizar o utilizador.')
       }
     }
   }
@@ -90,7 +90,7 @@ export class UserController {
       const user = await UserRepository.getUserByEmail(email)
 
       if (!user) {
-        throw new ErrorApplication('User not found', StatusCodes.NOT_FOUND)
+        throw new ErrorApplication('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
       }
 
       response(res, true, StatusCodes.OK, user)

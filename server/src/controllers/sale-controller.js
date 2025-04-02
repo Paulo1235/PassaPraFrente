@@ -11,7 +11,7 @@ export class SaleController {
       const sale = await SaleRepository.createSale(data)
 
       if (!sale) {
-        throw new ErrorApplication('Não foi possível criar venda.', StatusCodes.NOT_FOUND)
+        throw new ErrorApplication('Não foi possível criar venda.', StatusCodes.BAD_REQUEST)
       }
 
       response(res, true, StatusCodes.OK, sale)
@@ -20,7 +20,7 @@ export class SaleController {
         response(res, false, error.statusCodes, error.message)
       } else {
         console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'An error occurred while finding an user')
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar uma venda.')
       }
     }
   }
@@ -73,7 +73,7 @@ export class SaleController {
       const sale = await SaleRepository.updateSale(data)
 
       if (!sale) {
-        throw new ErrorApplication('Não foi possível atualizar a venda', StatusCodes.NOT_FOUND)
+        throw new ErrorApplication('Não foi possível atualizar a venda', StatusCodes.BAD_REQUEST)
       }
 
       response(res, true, StatusCodes.OK, sale)
