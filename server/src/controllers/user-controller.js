@@ -172,9 +172,9 @@ export class UserController {
         folder: 'users'
       })
 
-      const updateSuccess = await UserRepository.uploadUserAvatar(id, myCloud.public_id, myCloud.url)
+      const uploadSuccess = await UserRepository.uploadUserAvatar(id, myCloud.public_id, myCloud.url)
 
-      if (updateSuccess) {
+      if (uploadSuccess) {
         response(res, true, StatusCodes.OK, 'Imagem inserida.')
       }
 

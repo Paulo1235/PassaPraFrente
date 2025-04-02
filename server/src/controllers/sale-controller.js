@@ -20,7 +20,7 @@ export class SaleController {
         response(res, false, error.statusCodes, error.message)
       } else {
         console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar uma venda.')
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao criar a venda.')
       }
     }
   }
