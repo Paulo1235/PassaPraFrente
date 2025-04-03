@@ -84,12 +84,11 @@ export class UserRepository {
       const user = await transaction.request()
         .input('nome', sql.VarChar, input.name)
         .input('dataNasc', sql.Date, input.birthDate)
-        .input('imagemURL', sql.VarChar, input.imageUrl)
         .input('contacto', sql.VarChar, input.contact)
         .query(`
-          INSERT INTO Utilizador (Nome, DataNasc, ImagemURL, Contacto)
+          INSERT INTO Utilizador (Nome, DataNasc, Contacto, TipoUtilizador_ID)
           OUTPUT INSERTED.Utilizador_ID
-          VALUES (@nome, @dataNasc, @imagemURL, @contacto)
+          VALUES (@nome, @dataNasc, @contacto, 1)
         `)
 
       const userId = user.recordset[0].Utilizador_ID

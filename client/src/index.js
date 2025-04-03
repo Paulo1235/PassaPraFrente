@@ -98,10 +98,10 @@ root.render(
           path="/account"
           element={<ProtectedRoute element={<Account />} />}
         />
-        {/* <Route
+        <Route
           path="/editaccount"
           element={<ProtectedRoute element={<EditAccountPage />} />}
-        /> */}
+        />
         <Route path="/notfound" element={<NotFound />} />
         <Route path="*" element={<Navigate replace to="/notfound" />} />
       </Routes>
