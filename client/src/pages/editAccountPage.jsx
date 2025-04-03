@@ -38,7 +38,7 @@ const EditAccountPage = () => {
 
   return (
     <div className="flex h-screen bg-bgp">
-      <Sidebar />
+      <Sidebar canAdd = {true} />
 
       <div className="flex-1 p-10">
         <div className="flex justify-between items-center mb-12">
@@ -85,7 +85,6 @@ const EditAccountPage = () => {
                       ? "border-red-500 focus:ring-red-500"
                       : "border-txtp focus:ring-txtp"
                   }`}
-                  
               />
               {formik.touched.name && formik.errors.name && (
                 <p className="text-red-500 text-sm">{formik.errors.name}</p>

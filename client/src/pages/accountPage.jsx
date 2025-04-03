@@ -57,6 +57,8 @@ const Account = () => {
     dispatch(fetchUserInfo()) // Fetch user info on page load
   }, [isAuthenticated, dispatch, navigate])
 
+  if (!isAuthenticated) return null
+
   const handleLogout = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/auth/logout", {
@@ -75,15 +77,13 @@ const Account = () => {
     }
   };
 
-  if (!isAuthenticated) return null
-
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       <Helmet>
         <title>Conta</title>
       </Helmet>
       <div className="md:sticky md:top-0 md:h-screen">
-        <SideBar />
+        <SideBar canAdd = {true} />
       </div>
       <div className="App w-full overflow-x-hidden flex flex-col flex-grow">
         <div className="left mx-2 md:ml-10 lg:ml-20 mt-6 md:mt-10 flex flex-col px-4 md:px-6">
@@ -141,7 +141,7 @@ const Account = () => {
               </div>
 
               <div className="icons mt-6 md:mt-0 md:ml-6 lg:ml-10 xl:ml-20 flex flex-row md:flex-col justify-center gap-4 md:gap-3">
-                <div className="edit flex flex-row items-center cursor-pointer">
+                <div onClick={() => {navigate("/editaccount")} } className="edit flex flex-row items-center cursor-pointer">
                   <img
                     src={EditIco || "/placeholder.svg"}
                     className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]"

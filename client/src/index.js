@@ -14,9 +14,6 @@ import "./index.css";
 
 //? Pages
 import Login from "./pages/Auth/login";
-// import SignIn from './pages/Auth/MultiStepForm/signIn'
-// import SignInNext from './pages/Auth/MultiStepForm/signInNext'
-// import Stepper from './pages/Auth/MultiStepForm/stepper';
 import SignIn from "./pages/Auth/signIn";
 import RecoverPass from "./pages/Auth/recoverPassPage";
 import NewPassword from "./pages/Auth/newPasswordPage";
@@ -41,6 +38,7 @@ import EditSale from "./pages/BPMN/editSale";
 import EditAccountPage from "./pages/editAccountPage";
 
 import AdminProtectedRoute from "./pages/ProtectedRoutes/adminProtectedRoute";
+import LoginPage from "./pages/loginPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -50,29 +48,31 @@ root.render(
         <Route path="/" element={<Login />} />
 
         {/* Autenticacao e Registo */}
-        <Route 
-          path="/signin" 
-          element={<SignIn />} 
-        />
-        <Route 
-          path="/recoverpass" 
-          element={<RecoverPass />} 
-        />
-        <Route 
-          path="/newpassword" 
-          element={<NewPassword />} 
-        />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/recoverpass" element={<RecoverPass />} />
+        <Route path="/newpassword" element={<NewPassword />} />
 
-        <Route path="/testedraw" element={<EditDraw />} />
+        <Route path="/testedraw" element={<LookSale />} />
         <Route path="/testesale" element={<EditSale />} />
         <Route path="/testeloan" element={<EditLoan />} />
-        
+
         <Route path="/testeeditarconta" element={<EditAccountPage />} />
+        <Route path="/testelogin" element={<LoginPage />} />
 
 
-        {/* <Route path="/createsale" element={<CreateSale />} /> */}
-        {/* <Route path="/createloan" element={<CreateLoan />} /> */}
-        {/* <Route path="/createdraw" element={<CreateDraw />} /> */}
+        
+        <Route
+          path="/createsale"
+          element={<ProtectedRoute element={<CreateSale />} />}
+        />
+        <Route
+          path="/createloan"
+          element={<ProtectedRoute element={<CreateLoan />} />}
+        />
+        <Route
+          path="/createdraw"
+          element={<ProtectedRoute element={<CreateDraw />} />}
+        />
 
         {/* Admin */}
         <Route
@@ -81,10 +81,7 @@ root.render(
         />
 
         {/* Paginas principais */}
-        <Route 
-          path="/index" 
-          element={<ProtectedRoute element={<Main />} />} 
-        />
+        <Route path="/index" element={<ProtectedRoute element={<Main />} />} />
         <Route
           path="/sale"
           element={<ProtectedRoute element={<LookSale />} />}
@@ -101,14 +98,12 @@ root.render(
           path="/account"
           element={<ProtectedRoute element={<Account />} />}
         />
-        <Route 
-          path="/notfound" 
-          element={<NotFound />} 
-        />
-        <Route 
-          path="*" 
-          element={<Navigate replace to="/notfound" />} 
-        />
+        {/* <Route
+          path="/editaccount"
+          element={<ProtectedRoute element={<EditAccountPage />} />}
+        /> */}
+        <Route path="/notfound" element={<NotFound />} />
+        <Route path="*" element={<Navigate replace to="/notfound" />} />
       </Routes>
     </Router>
   </Provider>

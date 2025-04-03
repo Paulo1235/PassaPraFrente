@@ -1,12 +1,17 @@
-import { useState, useEffect } from "react"
-import { Menu, X, Home, User, Plus } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import { Menu, X, Home, User, ChevronDown } from "lucide-react"
 
 // You can still use your logo image
-import logo from '../images/logoEmpresa.png' // Replace with actual logo path
+import logo from "../images/logoEmpresa.png" // Replace with actual logo path
+import { useNavigate } from "react-router-dom"
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  const navigate = useNavigate();
 
   // Check if we're on mobile when component mounts and when window resizes
   useEffect(() => {
@@ -24,8 +29,37 @@ const Sidebar = () => {
     return () => window.removeEventListener("resize", checkIfMobile)
   }, [])
 
+  // Handle clicks outside of dropdown to close it
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false)
+      }
+    }
+
+    // Only add the event listener if the dropdown is open
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [dropdownOpen])
+
   const toggleSidebar = () => {
     setIsOpen(!isOpen)
+  }
+
+  const handleAddButtonClick = (e) => {
+    e.preventDefault()
+    setDropdownOpen(!dropdownOpen)
+  }
+
+  const handleOptionSelect = (path) => {
+    navigate(path)
+    setDropdownOpen(false)
+    // Add your logic for handling the selected option here
   }
 
   // Sidebar classes based on state
@@ -78,10 +112,44 @@ const Sidebar = () => {
           </button>
         </nav>
 
-        <button className="bg-btns hover:bg-[#c4a884] rounded-lg px-4 py-2 mt-4 mb-20 flex items-center space-x-2">
-          <Plus className="w-6 h-6 mr-3 text-white" />
-          <span className="text-xl text-white">Adicionar</span>
-        </button>
+        {props.canAdd && (
+          <div className="relative mb-48" ref={dropdownRef}>
+            <button
+              onClick={handleAddButtonClick}
+              className="bg-btns hover:bg-[#c4a884] rounded-lg px-4 py-2 mt-4 flex items-center"
+            >
+              <span className="text-xl text-white">Adicionar</span>
+              <ChevronDown
+                className={`w-5 h-5 ml-2 text-white transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {dropdownOpen && (
+              <div className="absolute left-0 right-0 mt-2 bg-white rounded-lg shadow-lg z-50 border border-[#FFFAEE]">
+                <div className="py-1">
+                  <button
+                    onClick={() => handleOptionSelect("/createsale")}
+                    className="block w-full text-left px-4 py-2 text-[#ADADAD] hover:bg-[#FFFAEE] text-lg"
+                  >
+                    Venda
+                  </button>
+                  <button
+                    onClick={() => handleOptionSelect("/createloan")}
+                    className="block w-full text-left px-4 py-2 text-[#ADADAD] hover:bg-[#FFFAEE] text-lg"
+                  >
+                    Emprestimo
+                  </button>
+                  <button
+                    onClick={() => handleOptionSelect("/createdraw")}
+                    className="block w-full text-left px-4 py-2 text-[#ADADAD] hover:bg-[#FFFAEE] text-lg"
+                  >
+                    Sorteio
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </aside>
 
       {/* Main content wrapper - pushes content to the right when sidebar is open on desktop */}

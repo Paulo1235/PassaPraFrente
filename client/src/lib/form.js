@@ -12,16 +12,12 @@ const loginSchema = yup.object().shape({
         .required('Obrigatorio'),
 });
 
-
-
 const SendEmailSchema = yup.object().shape({
     email: yup
         .string()
         .email('Email Invalido')
         .required('Obrigatorio'),
 });
-
-
 
 
 const UpdatePasswordSchema = yup.object().shape({
@@ -35,4 +31,10 @@ const UpdatePasswordSchema = yup.object().shape({
         .required('Obrigatorio'),
 });
 
-export { SendEmailSchema, loginSchema,UpdatePasswordSchema };
+const EditAccountSchema = yup.object().shape({
+    name: yup.string().required('O nome é obrigatório'),
+    phone: yup.string().required('O telefone é obrigatório'),
+    address: yup.string().required('A morada é obrigatória'),
+});
+
+export { SendEmailSchema, loginSchema,UpdatePasswordSchema, EditAccountSchema };

@@ -1,35 +1,10 @@
-import axios from 'axios';
-import useAuthStore from '../stores/offstore';
 import '../index.css';
 import logo from '../images/logoEmpresa.png';
-import eyeIco from '../images/eyeIco.svg';
 import { Formik } from 'formik';
 import { useState } from 'react';
-import { Helmet } from 'react-helmet';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
-const ToastNotification = () => (
-  <ToastContainer
-    position="top-right"
-    autoClose={5000}
-    hideProgressBar={false}
-    newestOnTop={false}
-    closeOnClick={false}
-    rtl={false}
-    pauseOnFocusLoss
-    draggable
-    pauseOnHover
-    theme="light"
-  />
-);
-
-const Logo = () => (
-  <div className='left ml-20 flex flex-col items-start justify-center'>
-    <img src={logo} alt="logo" />
-    <span className='text'>Entre vizinhos, tudo se <span className='flex flex-col items-center'>Aproveita!</span></span>
-  </div>
-);
+import LoginForm from '../components/form';
 
 const PasswordInput = ({ showPassword, togglePasswordVisibility, ...props }) => (
   <div className='relative'>
@@ -38,116 +13,43 @@ const PasswordInput = ({ showPassword, togglePasswordVisibility, ...props }) => 
       type={showPassword ? 'text' : 'password'}
       {...props}
     />
-    <img
-      src={eyeIco}
-      alt="eye icon"
-      className='absolute right-3 top-5 cursor-pointer'
-      onClick={togglePasswordVisibility}
-    />
+    <button type='button' onClick={togglePasswordVisibility} className='absolute right-2 top-2'>👁️</button>
   </div>
 );
 
-const LoginForm = ({ fields, initialValues, validationSchema, onSubmit }) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
-  
-  return (
-    <Formik
-      initialValues={initialValues}
-      validate={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
-        <form onSubmit={handleSubmit} className='mx-20 mt-5 flex flex-col'>
-          {fields.map(({ name, type, label, placeholder }) => (
-            <div key={name}>
-              <label className='text pt-4' htmlFor={name}>{label}:</label>
-              {type === 'password' ? (
-                <PasswordInput
-                  id={name}
-                  name={name}
-                  placeholder={placeholder}
-                  showPassword={showPassword}
-                  togglePasswordVisibility={togglePasswordVisibility}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values[name]}
-                />
-              ) : (
-                <input
-                  className='mt-2 p-2 border border-gray-300 rounded'
-                  type={type}
-                  id={name}
-                  name={name}
-                  placeholder={placeholder}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values[name]}
-                />
-              )}
-              <span className='text-lg text-error'>{errors[name] && touched[name] && errors[name]}</span>
-            </div>
-          ))}
-          <div className='pt-10 flex flex-col self-center justify-center'>
-            <button type='submit' className='btn-login' disabled={isSubmitting}>Entrar</button>
-          </div>
-        </form>
-      )}
-    </Formik>
-  );
-};
-
-function Login() {
-  const { login } = useAuthStore((state) => state);
+const LoginPage = () => {
   const navigate = useNavigate();
 
-  const notify = (msg) => toast.error(msg);
-
-  const fields = [
-    { name: 'email', type: 'text', label: 'Email', placeholder: 'teste@gmail.com' },
-    { name: 'password', type: 'password', label: 'Palavra-Passe', placeholder: '*******' }
-  ];
-
   const initialValues = { email: '', password: '' };
-
-  const validationSchema = (values) => {
+  const validationSchema = values => {
     const errors = {};
-    if (!values.email) {
-      errors.email = 'Obrigatorio';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-      errors.email = 'Insira um email valido';
-    }
-    if (!values.password) {
-      errors.password = 'Obrigatorio';
-    } else if (values.password.length < 6) {
-      errors.password = 'A palavra-passe deve ter pelo menos 6 caracteres';
-    }
+    if (!values.email) errors.email = 'Insira um email válido';
+    if (!values.password) errors.password = 'Obrigatório';
+    else if (values.password.length < 6) errors.password = 'A palavra-passe deve ter pelo menos 6 caracteres';
     return errors;
   };
-
+  
   const handleSubmit = (values, { setSubmitting }) => {
-    login(values.email, values.password);
-    navigate("/index");
+    console.log('Form submitted:', values);
     setSubmitting(false);
+    navigate('/index');
   };
 
   return (
-    <div className='App h-[100vh] flex justify-center items-center'>
-      <ToastNotification />
-      <Helmet>
-        <title>Bem-Vindo!</title>
-      </Helmet>
-      <div className='black-rectangle flex pl-10 text-3xl'>
-        <Logo />
-        <div className='right ml-20 flex flex-col justify-center'>
-          <div className='white-rectangle flex flex-col'>
-            <span className='text text-4xl pt-20 pl-10'>Bem-Vindo, entre agora!</span>
-            <LoginForm fields={fields} initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} />
-          </div>
+    <div className='flex flex-col sm:flex-row justify-center items-center min-h-screen bg-bgp p-4 sm:p-8'>
+      <ToastContainer />
+      <div className='w-full max-w-4xl bg-bgs rounded-3xl shadow-xl overflow-hidden flex flex-col sm:flex-row p-4 sm:p-6'>
+        <div className='flex sm:hidden w-full bg-bgs flex-col items-center justify-center p-8'>
+          <img src={logo} alt='logo' className='w-48 h-48' />
+          <p className='text-txtp text-center text-lg'>Entre vizinhos, tudo se Aproveita!</p>
+        </div>
+        <div className='w-full sm:w-1/2 bg-white rounded-2xl px-6 py-6 sm:px-8 sm:py-8'>
+          <h2 className='text-2xl font-medium text-txtp mb-6'>Bem-vindo de volta!</h2>
+          <LoginForm />
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default Login;
+export default LoginPage;

@@ -44,7 +44,7 @@ export default function MultiStepForm() {
           ? Yup.string()
               .matches(
                 /^\+351(91|92|93|96)\d{7}$/,
-                "O número de telefone deve começar com +351 e ser português"
+                "O número de telefone deve começar com +351 e ser portugues oh burro"
               )
               .required("Número de telefone é obrigatório")
           : Yup.string(),
@@ -260,7 +260,7 @@ export default function MultiStepForm() {
                       id="contact"
                       name="contact"
                       type="tel"
-                      placeholder="(00) 00000-0000"
+                      placeholder="+351912345678"
                       value={formik.values.contact}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
