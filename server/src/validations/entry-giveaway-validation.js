@@ -1,5 +1,5 @@
-import { zod } from 'zod'
+import { z } from 'zod'
 
-export const entryGiveawaySchema = zod.object({
-  dataInscricao: zod.date()
+export const entryGiveawaySchema = z.object({
+  dataInscricao: z.date()
 })

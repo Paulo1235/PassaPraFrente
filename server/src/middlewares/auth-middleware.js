@@ -50,11 +50,11 @@ export class AuthMiddleware {
     const user = req.user
 
     if (!user) {
-      throw new ErrorApplication('Utilizador não encontrado', StatusCodes.NOT_FOUND)
+      response(res, false, StatusCodes.NOT_FOUND, 'Utilizador não encontrado.')
     }
 
     if (user.ConfirmarEmail !== 1) {
-      throw new ErrorApplication('A sua conta não está verificada', StatusCodes.BAD_REQUEST)
+      response(res, false, StatusCodes.UNAUTHORIZED, 'A sua conta não está verificada.')
     }
 
     next()

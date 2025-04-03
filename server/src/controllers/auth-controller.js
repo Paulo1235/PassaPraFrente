@@ -12,10 +12,10 @@ import { EmailService } from '../services/email-service.js'
 
 export class AuthController {
   static async createUser (req, res) {
-    const { name, birthDate, imageUrl, contact, email, password, confirmPassword } = req.body
+    const { name, birthDate, contact, email, password, confirmPassword } = req.body
 
     if (password !== confirmPassword) {
-      response(res, false, StatusCodes.BAD_REQUEST, 'Incorrect password')
+      response(res, false, StatusCodes.BAD_REQUEST, 'As palavras-passe são diferentes!')
     }
 
     try {
@@ -30,7 +30,6 @@ export class AuthController {
       const user = {
         name,
         birthDate,
-        imageUrl,
         contact,
         email,
         password: hashedPassword
@@ -116,7 +115,7 @@ export class AuthController {
     const emailData = { user, activationCode }
 
     try {
-      await EmailService.prepareEmailContent('activation-email.ejs', emailData)
+      await EmailService.prepareEmailContent('activation-mail.ejs', emailData)
 
       await EmailService.sendEmail({
         email: user.Email,

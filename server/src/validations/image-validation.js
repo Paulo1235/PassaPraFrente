@@ -1,5 +1,5 @@
-import { zod } from 'zod'
+import { z } from 'zod'
 
-export const imageSchema = zod.object({
-  url: zod.url()
+export const imageSchema = z.object({
+  url: z.url()
 })

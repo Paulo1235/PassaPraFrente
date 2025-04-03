@@ -1,22 +1,24 @@
 import sql from 'mssql'
 
-import { closeConnection, dbConfig, getConnection } from '../database/db-config'
-import { IdService } from '../services/id-service'
+import { closeConnection, dbConfig, getConnection } from '../database/db-config.js'
+import { IdService } from '../services/id-service.js'
 
 export class ItemRepository {
-  static async createItem ({ condition, category }) {
+  static async createItem (condition, category) {
     const pool = await getConnection(dbConfig)
 
-    const condicaoId = await IdService.getConditionById(condition.Condicao)
+    const condicaoId = await IdService.getConditionById(condition)
 
-    const categoriaId = await IdService.getCategoryById(category.NomeCategoria)
+    const categoriaId = await IdService.getCategoryById(category)
 
     const item = await pool
       .request()
       .input('categoriaId', sql.Int, categoriaId)
       .input('condicaoId', sql.Int, condicaoId)
       .query(`
-        INSERT INTO Item (Categoria_ID, Condicao_ID) VALUES (@categoriaId, @condicaoId)
+        INSERT INTO Artigo (Categoria_ID, Condicao_ID)
+        OUTPUT Inserted.Artigo_ID
+        VALUES (@categoriaId, @condicaoId)
       `)
 
     return item.recordset[0]
@@ -46,7 +48,7 @@ export class ItemRepository {
       .query(`
         SELECT * 
         FROM Artigo
-        WHERE Artigo.
+        WHERE Artigo = @id
       `)
 
     await closeConnection(pool)

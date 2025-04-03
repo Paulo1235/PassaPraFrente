@@ -14,7 +14,7 @@ saleRouter
 
 saleRouter.get('/sales', SaleController.getAllSales)
 saleRouter.get('/sales/available', SaleController.getAvailableSales)
-saleRouter.post('/sales/create', SaleController.createSale)
+saleRouter.post('/sales/create', AuthMiddleware.isAuthenticated, AuthMiddleware.isVerified, SaleController.createSale)
 saleRouter.put('/sales/user', SaleController.getUserSales)
 
 saleRouter.patch(

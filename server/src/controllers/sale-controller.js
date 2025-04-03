@@ -6,22 +6,21 @@ import { SaleRepository } from '../repositories/sale-repository.js'
 
 export class SaleController {
   static async createSale (req, res) {
-    const data = req.body
+    const userId = req.user.Utilizador_ID
+    const saleData = req.body
+
+    const fullData = {
+      saleData,
+      userId
+    }
+
     try {
-      const sale = await SaleRepository.createSale(data)
+      await SaleRepository.createSale(fullData)
 
-      if (!sale) {
-        throw new ErrorApplication('Não foi possível criar venda.', StatusCodes.BAD_REQUEST)
-      }
-
-      response(res, true, StatusCodes.OK, sale)
+      response(res, true, StatusCodes.OK, 'Venda criada com sucesso')
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao criar a venda.')
-      }
+      console.error('Internal error: ', error.message)
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao criar a venda.')
     }
   }
 

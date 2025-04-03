@@ -1,6 +1,6 @@
-import { zod } from 'zod'
+import { z } from 'zod'
 
-export const proposalSaleSchema = zod.object({
-  novoValor: zod.number().trim().gte(1),
-  aceite: zod.boolean()
+export const proposalSaleSchema = z.object({
+  novoValor: z.number().trim().gte(1),
+  aceite: z.boolean()
 })

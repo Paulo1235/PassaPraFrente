@@ -2,7 +2,6 @@ import StatusCodes from 'http-status-codes'
 
 import { ErrorApplication } from '../utils/error-handler.js'
 import { response } from '../utils/response.js'
-import { ProposalRepository } from '../repositories/proposal-repository.js'
 import { SaleRepository } from '../repositories/sale-repository.js'
 import { ProposalSaleRepository } from '../repositories/proposal-sale-repository.js'
 
@@ -10,7 +9,7 @@ export class ProposalSaleController {
   static async createProposalSale (req, res) {
     const data = req.body
     try {
-      const proposal = await ProposalRepository.createSale(data)
+      const proposal = await ProposalSaleRepository.createSale(data)
 
       if (!proposal) {
         throw new ErrorApplication('Não foi possível criar a proposta.', StatusCodes.BAD_REQUEST)
@@ -29,7 +28,7 @@ export class ProposalSaleController {
 
   static async getAllSaleProposals (req, res) {
     try {
-      const proposals = await ProposalRepository.getAllSaleProposals()
+      const proposals = await ProposalSaleRepository.getAllSaleProposals()
 
       response(res, true, StatusCodes.OK, proposals)
     } catch (error) {
@@ -45,7 +44,7 @@ export class ProposalSaleController {
   static async getSaleProposalById (req, res) {
     const { id } = req.params
     try {
-      const proposal = await ProposalRepository.getSaleProposalById(id)
+      const proposal = await ProposalSaleRepository.getSaleProposalById(id)
 
       if (!proposal) {
         throw new ErrorApplication('Proposta não encontrada.', StatusCodes.NOT_FOUND)

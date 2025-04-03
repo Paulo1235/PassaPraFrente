@@ -1,8 +1,8 @@
-import { zod } from 'zod'
+import { z } from 'zod'
 
-export const proposalLoanSchema = zod.object({
-  novoValorFinal: zod.number().trim().gte(1),
-  NovaDataInicioFinal: zod.date(),
-  NovaDataFimFinal: zod.date(),
-  aceite: zod.boolean()
+export const proposalLoanSchema = z.object({
+  novoValorFinal: z.number().trim().gte(1),
+  NovaDataInicioFinal: z.date(),
+  NovaDataFimFinal: z.date(),
+  aceite: z.boolean()
 })

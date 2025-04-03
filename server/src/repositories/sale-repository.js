@@ -4,8 +4,10 @@ import { closeConnection, dbConfig, getConnection } from '../database/db-config.
 import { ItemRepository } from './item-repository.js'
 
 export class SaleRepository {
-  static async createSale (data) {
+  static async createSale (fullData) {
     const pool = await getConnection(dbConfig)
+
+    const data = fullData.saleData
 
     const item = await ItemRepository.createItem(data.condition, data.category)
 
@@ -14,17 +16,17 @@ export class SaleRepository {
       .input('titulo', sql.VarChar, data.titulo)
       .input('descricao', sql.VarChar, data.descricao)
       .input('valor', sql.Int, data.valor)
-      .input('userId', sql.Int, data.userId)
+      .input('userId', sql.Int, fullData.userId)
       .input('itemId', sql.Int, item.Artigo_ID)
       .query(`
         INSERT INTO 
-        Venda(Titulo, Descricao, Valor, Utilizador_ID, Artigo_ID, Estado_ID) 
+        Venda (Titulo, Descricao, Valor, Utilizador_ID, Artigo_ID, Estado_ID)
         VALUES (@titulo, @descricao, @valor, @userId, @itemId, 1)
       `)
 
     await closeConnection(pool)
 
-    return sale.recordset[0]
+    return sale.rowsAffected[0] > 0
   }
 
   static async getSaleById (id) {

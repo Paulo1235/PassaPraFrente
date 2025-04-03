@@ -1,39 +1,35 @@
 import sql from 'mssql'
 
-import { closeConnection, dbConfig, getConnection } from '../database/db-config'
+import { dbConfig, getConnection } from '../database/db-config.js'
 
 export class IdService {
-  static async getConditionById (name) {
+  static async getConditionById (condition) {
     const pool = await getConnection(dbConfig)
 
-    const condition = await pool
+    const conditionId = await pool
       .request()
-      .input('name', sql.Int, name)
+      .input('condition', sql.VarChar, condition)
       .query(`
         SELECT Condicao_ID
         FROM Condicao
-        WHERE NomeCategoria = @name
+        WHERE Condicao = @condition
       `)
 
-    await closeConnection(pool)
-
-    return condition.recordset[0]
+    return conditionId.recordset[0]?.Condicao_ID
   }
 
-  static async getCategoryById (name) {
+  static async getCategoryById (category) {
     const pool = await getConnection(dbConfig)
 
-    const category = await pool
+    const categoryId = await pool
       .request()
-      .input('name', sql.Int, name)
+      .input('category', sql.VarChar, category)
       .query(`
         SELECT Categoria_ID
         FROM Categoria
-        WHERE NomeCategoria = @name
+        WHERE NomeCategoria = @category
       `)
 
-    await closeConnection(pool)
-
-    return category.recordset[0]
+    return categoryId.recordset[0]?.Categoria_ID
   }
 }

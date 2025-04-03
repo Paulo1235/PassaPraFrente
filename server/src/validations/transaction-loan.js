@@ -1,8 +1,8 @@
-import { zod } from 'zod'
+import { z } from 'zod'
 
-export const transactionLoanSchema = zod.object({
-  valorFinal: zod.number().trim().gte(1),
-  dataInicioFinal: zod.date(),
-  dataFimFinal: zod.date(),
-  nota: zod.coerce.int().number().lte(5).gte(1)
+export const transactionLoanSchema = z.object({
+  valorFinal: z.number().trim().gte(1),
+  dataInicioFinal: z.date(),
+  dataFimFinal: z.date(),
+  nota: z.coerce.int().number().lte(5).gte(1)
 })

@@ -1,7 +1,7 @@
-import { zod } from 'zod'
+import { z } from 'zod'
 
-export const saleSchema = zod.object({
-  titulo: zod.string().max(50).min(1).trim(),
-  descricao: zod.string().min(10).max(255),
-  valor: zod.number().trim().gte(1)
+export const saleSchema = z.object({
+  titulo: z.string().max(50).min(1).trim(),
+  descricao: z.string().min(10).max(255),
+  valor: z.number().gte(1)
 })

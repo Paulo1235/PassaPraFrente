@@ -1,8 +1,8 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { SaleRepository } from '../repositories/sale-repository'
-import { ErrorApplication } from '../utils/error-handler'
-import { response } from '../utils/response'
+import { SaleRepository } from '../repositories/sale-repository.js'
+import { ErrorApplication } from '../utils/error-handler.js'
+import { response } from '../utils/response.js'
 
 export class ProposalMiddleware {
   static async isOwnerSale (req, res, next) {

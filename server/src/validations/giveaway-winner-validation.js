@@ -1,5 +1,5 @@
-import { zod } from 'zod'
+import { z } from 'zod'
 
-export const giveawayWinnerSchema = zod.object({
-  nota: zod.coerce.int().number().lte(5).gte(1)
+export const giveawayWinnerSchema = z.object({
+  nota: z.coerce.int().number().lte(5).gte(1)
 })
