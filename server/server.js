@@ -11,12 +11,18 @@ import cookieParser from 'cookie-parser'
 import { v2 as cloudinary } from 'cloudinary'
 
 import { PORT, NODE_ENV, NAME, MAX, WINDOWMS, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_NAME } from './config.js'
-import { userRouter } from './src/routes/user-routes.js'
+
 import { response } from './src/utils/response.js'
 import { checkDatabaseConnection } from './src/database/connection.js'
-import { authRouter } from './src/routes/auth-routes.js'
+
 import { AuthMiddleware } from './src/middlewares/auth-middleware.js'
 import { FileService } from './src/services/file-service.js'
+
+import { userRouter } from './src/routes/user-routes.js'
+import { authRouter } from './src/routes/auth-routes.js'
+import { saleRouter } from './src/routes/sale-routes.js'
+import { proposalSaleRouter } from './src/routes/proposal-sale-routes.js'
+import { initSocketServer } from './src/utils/socket-server.js'
 
 const app = express()
 
@@ -55,7 +61,7 @@ app.use(compression())
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
 
-app.use('/api', userRouter, authRouter)
+app.use('/api', userRouter, authRouter, proposalSaleRouter, saleRouter)
 
 app.get('/', (req, res) => {
   response(res, true, StatusCodes.OK, 'Hello World')
@@ -69,6 +75,8 @@ app.get('/api/protected-route', AuthMiddleware.isAuthenticated, (req, res) => {
 app.all('*', (req, res) => {
   response(res, false, StatusCodes.NOT_FOUND, `Rota ${req.method} ${req.originalUrl} não encontrada!`)
 })
+
+initSocketServer(app)
 
 app.listen(PORT, async () => {
   console.log(

@@ -46,4 +46,22 @@ export class ProposalSaleRepository {
 
     return proposal.recordset
   }
+
+  static async updateProposalSaleStatus (userId, saleId, status) {
+    const pool = await getConnection()
+
+    const updatedProposal = pool.request()
+      .input('vendaId', sql.Int, saleId)
+      .input('userId', sql.Int, userId)
+      .input('status', sql.TinyInt, status)
+      .query(`
+        UPDATE PropostaVenda
+        SET Aceite = @status
+        WHERE Venda_ID = @vendaId AND Utilizador_ID = @userId
+      `)
+
+    await closeConnection(pool)
+
+    return updatedProposal.recordset
+  }
 }

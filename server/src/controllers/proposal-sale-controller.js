@@ -3,6 +3,8 @@ import StatusCodes from 'http-status-codes'
 import { ErrorApplication } from '../utils/error-handler.js'
 import { response } from '../utils/response.js'
 import { ProposalRepository } from '../repositories/proposal-repository.js'
+import { SaleRepository } from '../repositories/sale-repository.js'
+import { ProposalSaleRepository } from '../repositories/proposal-sale-repository.js'
 
 export class ProposalSaleController {
   static async createProposalSale (req, res) {
@@ -56,6 +58,31 @@ export class ProposalSaleController {
       } else {
         console.error('Erro ao obter proposta: ', error.message)
         response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar uma proposta.')
+      }
+    }
+  }
+
+  static async updateProposalSaleStatus (req, res) {
+    const userId = req.user.Utilizador_ID
+    const { status } = req.body
+    const { id } = req.params
+
+    try {
+      const sale = await SaleRepository.getSaleById(id)
+
+      if (!sale) {
+        throw new ErrorApplication('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
+      }
+
+      await ProposalSaleRepository.updateProposalSaleStatus(userId, id, status)
+
+      response(res, true, StatusCodes.OK, 'Estado da proposta atualizado.')
+    } catch (error) {
+      if (error instanceof ErrorApplication) {
+        response(res, false, error.statusCodes, error.message)
+      } else {
+        console.error('Internal error: ', error.message)
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao avaliar a proposta. Tente novamente mais tarde.')
       }
     }
   }
