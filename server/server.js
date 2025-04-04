@@ -23,6 +23,7 @@ import { authRouter } from './src/routes/auth-routes.js'
 import { saleRouter } from './src/routes/sale-routes.js'
 import { proposalSaleRouter } from './src/routes/proposal-sale-routes.js'
 import { initSocketServer } from './src/utils/socket-server.js'
+import { transactionSaleRouter } from './src/routes/transation-sale-routes.js'
 
 const app = express()
 
@@ -61,7 +62,7 @@ app.use(compression())
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
 
-app.use('/api', userRouter, authRouter, proposalSaleRouter, saleRouter)
+app.use('/api', userRouter, authRouter, proposalSaleRouter, saleRouter, transactionSaleRouter)
 
 app.get('/', (req, res) => {
   response(res, true, StatusCodes.OK, 'Hello World')

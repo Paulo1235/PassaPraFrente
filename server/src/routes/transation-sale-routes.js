@@ -3,11 +3,29 @@ import express from 'express'
 import { TrasactionSaleController } from '../controllers/transaction-sale-controller.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import { transactionSaleSchema } from '../validations/transaction-sale-schema.js'
+import { AuthMiddleware } from '../middlewares/auth-middleware.js'
 
 export const transactionSaleRouter = express.Router()
 
-authRouter.post('/transaction-sale/create', TrasactionSaleController.createTransationSale)
+transactionSaleRouter.post(
+  '/transaction-sale/create',
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  validateSchema(transactionSaleSchema),
+  TrasactionSaleController.createTransationSale
+)
 
-authRouter.get('/transaction-sale/get-all', TrasactionSaleController.getAllTransationSales)
-authRouter.get('/transaction-sale/getby:id', TrasactionSaleController.getSaleProposalById)
+transactionSaleRouter.get(
+  '/transaction-sale/get-all',
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  AuthMiddleware.authorizedRoles(['admin']),
+  TrasactionSaleController.getAllTransationSales
+)
 
+transactionSaleRouter.get(
+  '/transaction-sale/getby:id',
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  TrasactionSaleController.getSaleProposalById
+)
