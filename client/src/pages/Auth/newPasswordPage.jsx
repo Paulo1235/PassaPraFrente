@@ -117,9 +117,9 @@ export default function PasswordReset() {
                   </label>
                   <div className="relative">
                     <input
-                      id="confirm-password" 
+                      id="confirm-password"
                       name="confirmPassword"
-                      type={showConfirmPassword ? "text" : "password"} 
+                      type={showConfirmPassword ? "text" : "password"}
                       value={formik.values.confirmPassword}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -148,9 +148,9 @@ export default function PasswordReset() {
                   Enviar
                 </button>
 
-                <div className="mt-4 text-center">
-                  <a href="/account" className="text-[#73802A] hover:underline">
-                    Clique Aqui!
+                <div className="mt-4 text-center flex justify-center">
+                  <a href="/account" className="text-txts hover:underline">
+                    Voltar
                   </a>
                 </div>
               </div>

@@ -6,7 +6,7 @@ export default function Footer() {
             <div>
               <h3 className="text-lg font-semibold mb-3 text-[#73802A]">Sobre Nós</h3>
               <p className="text-gray-600">
-                Somos uma loja especializada em roupas de alta qualidade com os melhores preços do mercado.
+                Somos uma plataforma dedicada a ajudar os vizinhos, seja para comprar, vender, emprestar ou sortear. Facilitamos a conexão entre vizinhos e promover um ambiente seguro e confiável.
               </p>
             </div>
             <div>
@@ -32,15 +32,15 @@ export default function Footer() {
             <div>
               <h3 className="text-lg font-semibold mb-3 text-[#73802A]">Contato</h3>
               <address className="not-italic text-gray-600">
-                <p>Rua Exemplo, 123</p>
-                <p>Cidade, Estado</p>
-                <p>Email: contato@exemplo.com</p>
-                <p>Telefone: (00) 1234-5678</p>
+                <p>IPCA CAMPUS, 4750-810</p>
+                <p>Barcelos, Braga</p>
+                <p>Email: geral@ipca.pt</p>
+                <p>Telefone: 253 802 190</p>
               </address>
             </div>
           </div>
           <div className="mt-8 pt-6 border-t border-gray-200 text-center text-gray-500">
-            <p>&copy; {new Date().getFullYear()} Loja. Todos os direitos reservados.</p>
+            <p>&copy; {new Date().getFullYear()} PassaPraFrente. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
