@@ -3,6 +3,7 @@ import StatusCodes from 'http-status-codes'
 import { ErrorApplication } from '../utils/error-handler.js'
 import { response } from '../utils/response.js'
 import { SaleRepository } from '../repositories/sale-repository.js'
+import { IdService } from '../services/id-service.js'
 
 export class SaleController {
   static async createSale (req, res) {
@@ -57,9 +58,9 @@ export class SaleController {
 
   static async getAvailableSales (req, res) {
     try {
-      const sale = await SaleRepository.getAvailableSales()
+      const sales = await SaleRepository.getAvailableSales()
 
-      response(res, true, StatusCodes.OK, sale)
+      response(res, true, StatusCodes.OK, sales)
     } catch (error) {
       console.error('Erro ao obter vendas disponíveis: ', error.message)
       response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao obter das vendas disponíveis.')
@@ -67,15 +68,25 @@ export class SaleController {
   }
 
   static async updateSale (req, res) {
+    const { id } = req.params
     const data = req.body
-    try {
-      const sale = await SaleRepository.updateSale(data)
 
-      if (!sale) {
-        throw new ErrorApplication('Não foi possível atualizar a venda', StatusCodes.BAD_REQUEST)
+    try {
+      const existingSale = await SaleRepository.getSaleById(id)
+
+      if (!existingSale) {
+        throw new ErrorApplication('Venda não encontrada.', StatusCodes.NOT_FOUND)
       }
 
-      response(res, true, StatusCodes.OK, sale)
+      const updatedData = {
+        title: data.title || existingSale.Titulo,
+        description: data.description || existingSale.Descricao,
+        value: data.value || existingSale.Valor
+      }
+
+      await SaleRepository.updateSale(updatedData, id)
+
+      response(res, true, StatusCodes.OK, 'Venda atualizada com sucesso.')
     } catch (error) {
       if (error instanceof ErrorApplication) {
         response(res, false, error.statusCodes, error.message)
@@ -109,7 +120,12 @@ export class SaleController {
         throw new ErrorApplication('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
       }
 
-      await SaleRepository.updateSaleStatus(id, status)
+      const stateId = await IdService.getStateById(status)
+      if (!stateId) {
+        throw new ErrorApplication('Estado inválido.', StatusCodes.BAD_REQUEST)
+      }
+
+      await SaleRepository.updateSaleStatus(id, stateId)
 
       response(res, true, StatusCodes.OK, 'Estado da venda atualizado.')
     } catch (error) {
