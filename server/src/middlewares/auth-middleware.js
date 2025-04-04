@@ -9,17 +9,11 @@ import { ErrorApplication } from '../utils/error-handler.js'
 export class AuthMiddleware {
   static async isAuthenticated (req, res, next) {
     const accessToken = req.cookies?.accessToken
-    // const authorizationHeader = req.headers.authorization
-    try {
-      // if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-      //   throw new ErrorApplication('Não se encontra logado.', StatusCodes.UNAUTHORIZED)
-      // }
 
+    try {
       if (!accessToken) {
         throw new ErrorApplication('Não se encontra logado!', StatusCodes.UNAUTHORIZED)
       }
-
-      // const accessToken = authorizationHeader.split(' ')[1]
 
       const payload = jwt.verify(accessToken, ACCESS_TOKEN_SECRET_KEY)
 

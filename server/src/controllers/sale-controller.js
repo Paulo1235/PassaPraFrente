@@ -8,12 +8,14 @@ import { IdService } from '../services/id-service.js'
 export class SaleController {
   static async createSale (req, res) {
     const userId = req.user.Utilizador_ID
-    const saleData = req.body
+    const data = req.body
 
     const fullData = {
-      saleData,
+      data,
       userId
     }
+
+    console.log(fullData)
 
     try {
       await SaleRepository.createSale(fullData)

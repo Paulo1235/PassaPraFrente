@@ -7,15 +7,15 @@ export class SaleRepository {
   static async createSale (fullData) {
     const pool = await getConnection(dbConfig)
 
-    const data = fullData.saleData
+    const data = fullData.data
 
     const item = await ItemRepository.createItem(data.condition, data.category)
 
     const sale = await pool
       .request()
-      .input('titulo', sql.VarChar, data.titulo)
-      .input('descricao', sql.VarChar, data.descricao)
-      .input('valor', sql.Int, data.valor)
+      .input('titulo', sql.VarChar, data.title)
+      .input('descricao', sql.VarChar, data.description)
+      .input('valor', sql.Int, data.price)
       .input('userId', sql.Int, fullData.userId)
       .input('itemId', sql.Int, item.Artigo_ID)
       .query(`
