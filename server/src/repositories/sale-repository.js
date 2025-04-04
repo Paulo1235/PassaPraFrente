@@ -41,7 +41,7 @@ export class SaleRepository {
       `)
     await closeConnection(pool)
 
-    return sale.recordset
+    return sale.recordset[0]
   }
 
   static async getAllSales () {
@@ -68,33 +68,33 @@ export class SaleRepository {
         SELECT * 
         FROM Venda
         JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
-        WHERE Estado = 'Disponivel'
+        WHERE Estado = 'Disponível'
       `)
     await closeConnection(pool)
 
     return availableSales.recordset
   }
 
-  static async updateSale (data) {
+  static async updateSale (data, id) {
     const pool = await getConnection(dbConfig)
 
     const updateSale = await pool.request()
       .input('titulo', sql.VarChar, data.title)
       .input('descricao', sql.VarChar, data.description)
-      .input('valor', sql.Real, data.value)
-      .input('idVenda', sql.Int, data.idsale)
+      .input('valor', sql.Float, data.value)
+      .input('idVenda', sql.Int, id)
       .query(`
         UPDATE Venda
         SET 
             Titulo = @titulo,
             Descricao = @descricao,
-            Valor = @valor,
-            Aprovado = 0
-        WHERE Venda_ID = 1; 
+            Valor = @valor
+        WHERE Venda_ID = @idVenda
       `)
+
     await closeConnection(pool)
 
-    return updateSale.recordset
+    return updateSale.rowsAffected[0] > 0
   }
 
   static async getUserSales (userId) {
@@ -117,20 +117,19 @@ export class SaleRepository {
 
   }
 
-  static async updateSaleStatus (id, status) {
+  static async updateSaleStatus (saleId, stateId) {
     const pool = await getConnection()
 
-    const updatedSale = pool.request()
-      .input('id', sql.Int, id)
-      .input('status', sql.TinyInt, status)
+    const updatedSale = await pool
+      .request()
+      .input('saleId', sql.Int, saleId)
+      .input('stateId', sql.Int, stateId)
       .query(`
         UPDATE Venda
-        SET Aprovado = @status
-        WHERE Venda_ID = @id
+        SET Estado_ID = @stateId
+        WHERE Venda_ID = @saleId
       `)
 
-    await closeConnection(pool)
-
-    return updatedSale.recordset
+    return updatedSale.rowsAffected[0] > 0
   }
 }

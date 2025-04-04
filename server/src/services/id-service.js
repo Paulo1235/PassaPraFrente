@@ -32,4 +32,19 @@ export class IdService {
 
     return categoryId.recordset[0]?.Categoria_ID
   }
+
+  static async getStateById (state) {
+    const pool = await getConnection(dbConfig)
+
+    const stateId = await pool
+      .request()
+      .input('state', sql.VarChar, state)
+      .query(`
+        SELECT Estado_ID
+        FROM Estado
+        WHERE Estado = @state
+      `)
+
+    return stateId.recordset[0]?.Estado_ID
+  }
 }
