@@ -1,8 +1,8 @@
 import express from 'express'
 
-import { TrasactionSaleController } from '../controllers/transaction-sale-controller.js'
+import { TransactionSaleController } from '../controllers/transaction-sale-controller.js'
 import { validateSchema } from '../utils/validate-schema.js'
-import { transactionSaleSchema } from '../validations/transaction-sale-schema.js'
+import { transactionSaleSchema } from '../validations/transaction-sale.js'
 import { AuthMiddleware } from '../middlewares/auth-middleware.js'
 
 export const transactionSaleRouter = express.Router()
@@ -12,7 +12,7 @@ transactionSaleRouter.post(
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   validateSchema(transactionSaleSchema),
-  TrasactionSaleController.createTransationSale
+  TransactionSaleController.createTransactionSale
 )
 
 transactionSaleRouter.get(
@@ -20,12 +20,12 @@ transactionSaleRouter.get(
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.authorizedRoles(['admin']),
-  TrasactionSaleController.getAllTransationSales
+  TransactionSaleController.getAllSaleTransactions
 )
 
 transactionSaleRouter.get(
   '/transaction-sale/getby:id',
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  TrasactionSaleController.getSaleProposalById
+  TransactionSaleController.getSaleTransactionById
 )
