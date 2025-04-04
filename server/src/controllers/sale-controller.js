@@ -42,7 +42,7 @@ export class SaleController {
         response(res, false, error.statusCodes, error.message)
       } else {
         console.error('Erro ao obter venda: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar uma venda.')
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar a venda.')
       }
     }
   }
@@ -65,7 +65,7 @@ export class SaleController {
       response(res, true, StatusCodes.OK, sales)
     } catch (error) {
       console.error('Erro ao obter vendas disponíveis: ', error.message)
-      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao obter das vendas disponíveis.')
+      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao obter as vendas disponíveis.')
     }
   }
 
@@ -135,7 +135,7 @@ export class SaleController {
         response(res, false, error.statusCodes, error.message)
       } else {
         console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar o estado a venda. Tente novamente mais tarde.')
+        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar o estado da venda. Tente novamente mais tarde.')
       }
     }
   }
