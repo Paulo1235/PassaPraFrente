@@ -66,7 +66,7 @@ const Main = () => {
         <title>Loja</title>
       </Helmet>
       <div className="md:sticky md:top-0 md:h-screen">
-        <SideBar canAdd={true} />
+        <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
       </div>
       <Shop shopData={shopData} />
     </div>
