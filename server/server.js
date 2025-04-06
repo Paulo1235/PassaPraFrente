@@ -73,18 +73,19 @@ app.get('/api/protected-route', AuthMiddleware.isAuthenticated, (req, res) => {
   response(res, true, StatusCodes.OK, 'Protected route reached')
 })
 
-app.all('*', (req, res) => {
+app.get('*', (req, res) => {
   response(res, false, StatusCodes.NOT_FOUND, `Rota ${req.method} ${req.originalUrl} não encontrada!`)
 })
 
 initSocketServer(app)
 
-app.listen(PORT, async () => {
-  console.log(
-    `\nApp '${NAME}' está a correr.`.bold.green + '\nativo em: ' + `http://localhost:${PORT}`.underline.blue
-  )
-
-  await checkDatabaseConnection()
-})
+if (NODE_ENV !== 'testing') {
+  app.listen(PORT, async () => {
+    console.log(
+      `\nApp '${NAME}' está a correr.`.bold.green + '\nativo em: ' + `http://localhost:${PORT}`.underline.blue
+    )
+    await checkDatabaseConnection()
+  })
+}
 
 export default app

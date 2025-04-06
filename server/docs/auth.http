@@ -1,0 +1,39 @@
+### Efetuar login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "",
+  "password": ""
+}
+
+### Efetuar logout
+POST http://localhost:5000/api/auth/logout
+
+### Registar um novo utilizador
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "",
+  "birthDate": "",
+  "contact": "",
+  "email": "",
+  "password": "",
+  "confirmPassword": "",
+}
+
+### Atualizar o token de acesso
+GET http://localhost:5000/api/auth/refresh-token
+
+### Enviar e-mail de ativação
+POST http://localhost:5000/api/auth/send-activation-email
+
+### Ativar utilizador
+POST http://localhost:5000/api/auth/activate-user
+Content-Type: application/json
+
+{
+  "activationCode": "",
+  "activationToken": ""
+}

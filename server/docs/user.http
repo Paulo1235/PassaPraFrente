@@ -1,0 +1,34 @@
+### Obter informações do utilizador por ID
+GET http://localhost:5000/api/users/id/123
+
+### Atualizar informações do utilizador
+PUT http://localhost:5000/api/users/id/123
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "",
+  "contact": ""
+}
+
+### Obter todos os utilizadores (apenas admin)
+GET http://localhost:5000/api/users
+
+### Obter utilizador por email
+GET http://localhost:5000/api/users/email/aqui@gmail.com
+
+### Obter informações do utilizador autenticado
+GET http://localhost:5000/api/users/me
+
+### Atualizar a palavra-passe do utilizador
+PATCH http://localhost:5000/api/users/update-password
+Content-Type: application/json
+
+{
+  "newPassword": "",
+  "confirmPassword": ""
+}
+
+### Enviar e-mail para o utilizador com nova palavra-passe
+POST http://localhost:5000/api/users/send-email-password
+Content-Type: application/json

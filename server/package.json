@@ -7,16 +7,15 @@
   "private": true,
   "scripts": {
     "build": "node build",
-    "test": "jest --passWithNoTests",
     "start:dev": "cross-env NODE_ENV=development nodemon server.js",
     "start:debug": "node --inspect --watch server.js",
     "start:prod": "cross-env NODE_ENV=production node dist/main",
-    "start:test": "cross-env NODE_ENV=testing npx jest",
+    "start:test": "cross-env NODE_ENV=development vitest",
     "doc": "node ./src/services/swagger-service.js",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage"
+    "test:watch": "vitest --watch",
+    "test:cov": "vitest --coverage"
   },
   "keywords": [
     "node",
@@ -68,7 +67,8 @@
     "standard": "^17.1.2",
     "supertest": "^7.1.0",
     "swagger-autogen": "^2.23.7",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "vitest": "^3.1.1"
   },
   "eslintConfig": {
     "extends": "standard"
