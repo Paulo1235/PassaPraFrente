@@ -1,6 +1,6 @@
 import sql from 'mssql'
 
-import { closeConnection, dbConfig, getConnection } from '../database/db-config.js'
+import { dbConfig, getConnection } from '../database/db-config.js'
 import ItemRepository from './item-repository.js'
 
 class LoanRepository {
@@ -24,8 +24,6 @@ class LoanRepository {
         VALUES (@titulo, @descricao, @valor, @dataInicio, @dataFim, @userId, @itemId, 1)
       `)
 
-    await closeConnection(pool)
-
     return loan.rowsAffected[0] > 0
   }
 
@@ -39,7 +37,6 @@ class LoanRepository {
         FROM Emprestimo
         WHERE Emprestimo_ID = @id
       `)
-    await closeConnection(pool)
 
     return loan.recordset[0]
   }
@@ -53,8 +50,6 @@ class LoanRepository {
         SELECT * 
         FROM Emprestimo
       `)
-
-    await closeConnection(pool)
 
     return loans.recordset
   }
@@ -70,7 +65,6 @@ class LoanRepository {
         JOIN Estado ON Estado.Estado_ID = Emprestimo.Estado_ID
         WHERE Estado = 'Disponível'
       `)
-    await closeConnection(pool)
 
     return availableLoans.recordset
   }
@@ -96,8 +90,6 @@ class LoanRepository {
         WHERE Emprestimo_ID = @idEmprestimo
       `)
 
-    await closeConnection(pool)
-
     return updatedLoan.rowsAffected[0] > 0
   }
 
@@ -111,8 +103,6 @@ class LoanRepository {
         FROM Emprestimo
         WHERE Utilizador_ID = @userId
       `)
-
-    await closeConnection(pool)
 
     return userLoans.recordset
   }

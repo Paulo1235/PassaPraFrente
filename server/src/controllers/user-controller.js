@@ -53,16 +53,19 @@ class UserController {
 
   static async updateUser (req, res) {
     const data = req.body
-    const { id } = req.params
+    const id = req.user.Utilizador_ID
 
     try {
-      const result = await UserRepository.updateUser({ id, data })
+      const existingUser = await UserRepository.getUserById(id)
 
-      if (!result) {
-        throw new HttpException('Utilizador não pode ser encontrado.', StatusCodes.NOT_FOUND)
+      const updatedData = {
+        name: data.name || existingUser.Nome,
+        contact: data.contact || existingUser.Contacto
       }
 
-      return response(res, true, StatusCodes.OK, 'Utilizador atualizado')
+      await UserRepository.updateUser(updatedData, id)
+
+      return response(res, true, StatusCodes.OK, 'Utilizador atualizado som sucesso.')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao atualizar o utilizador.')
     }

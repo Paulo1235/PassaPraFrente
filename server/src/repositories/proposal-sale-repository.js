@@ -1,6 +1,6 @@
 import sql from 'mssql'
 
-import { getConnection, closeConnection } from '../database/db-config.js'
+import { getConnection } from '../database/db-config.js'
 
 class ProposalSaleRepository {
   static async createProposalSale (novoValor) {
@@ -12,8 +12,6 @@ class ProposalSaleRepository {
       .query(`
         INSERT INTO PropostaVenda(NovoValor) VALUES (@novoValor)
     `)
-
-    await closeConnection(pool)
 
     return proposal.recordset[0]
   }
@@ -59,8 +57,6 @@ class ProposalSaleRepository {
         SET Aceite = @status
         WHERE Venda_ID = @vendaId AND Utilizador_ID = @userId
       `)
-
-    await closeConnection(pool)
 
     return updatedProposal.recordset
   }

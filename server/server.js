@@ -25,6 +25,7 @@ import proposalSaleRouter from './src/routes/proposal-sale-routes.js'
 import transactionSaleRouter from './src/routes/transation-sale-routes.js'
 
 import { initSocketServer } from './src/utils/socket-server.js'
+import { getConnection } from './src/database/db-config.js'
 
 const app = express()
 
@@ -86,5 +87,21 @@ if (NODE_ENV !== 'testing') {
     await checkDatabaseConnection()
   })
 }
+
+process.on('SIGINT', async () => {
+  const pool = await getConnection()
+
+  await pool.close()
+
+  process.exit(0)
+})
+
+process.on('SIGTERM', async () => {
+  const pool = await getConnection()
+
+  await pool.close()
+
+  process.exit(0)
+})
 
 export default app

@@ -1,6 +1,6 @@
 import sql from 'mssql'
 
-import { closeConnection, dbConfig, getConnection } from '../database/db-config.js'
+import { dbConfig, getConnection } from '../database/db-config.js'
 import ItemRepository from './item-repository.js'
 
 class SaleRepository {
@@ -22,8 +22,6 @@ class SaleRepository {
         VALUES (@titulo, @descricao, @valor, @userId, @itemId, 1)
       `)
 
-    await closeConnection(pool)
-
     return sale.rowsAffected[0] > 0
   }
 
@@ -37,7 +35,6 @@ class SaleRepository {
         FROM Venda
         WHERE Venda.Venda_ID = @id
       `)
-    await closeConnection(pool)
 
     return sale.recordset[0]
   }
@@ -51,8 +48,6 @@ class SaleRepository {
         SELECT * 
         FROM Venda
       `)
-
-    await closeConnection(pool)
 
     return sales.recordset
   }
@@ -68,7 +63,6 @@ class SaleRepository {
         JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
         WHERE Estado = 'Disponível'
       `)
-    await closeConnection(pool)
 
     return availableSales.recordset
   }
@@ -90,8 +84,6 @@ class SaleRepository {
         WHERE Venda_ID = @idVenda
       `)
 
-    await closeConnection(pool)
-
     return updateSale.rowsAffected[0] > 0
   }
 
@@ -105,8 +97,6 @@ class SaleRepository {
         FROM Venda
         WHERE Venda.Utilizador_ID = @userId
       `)
-
-    await closeConnection(pool)
 
     return userSales.recordset
   }

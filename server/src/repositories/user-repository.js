@@ -1,6 +1,6 @@
 import sql from 'mssql'
 
-import { closeConnection, getConnection } from '../database/db-config.js'
+import { getConnection } from '../database/db-config.js'
 
 class UserRepository {
   static async getUserById (id) {
@@ -15,8 +15,6 @@ class UserRepository {
         JOIN TipoUtilizador ON TipoUtilizador.TipoUtilizador_ID = Utilizador.TipoUtilizador_ID
         WHERE Utilizador.Utilizador_ID = @id
         `)
-
-    await closeConnection(pool)
 
     return user.recordset[0]
   }
@@ -33,8 +31,6 @@ class UserRepository {
          WHERE email = @email
       `)
 
-    await closeConnection(pool)
-
     return user.recordset[0]
   }
 
@@ -49,13 +45,7 @@ class UserRepository {
          WHERE email = @email
       `)
 
-    await closeConnection(pool)
-
-    if (user.rowsAffected[0] > 0) {
-      return true
-    }
-
-    return false
+    return user.rowsAffected[0] > 0
   }
 
   static async getAllUsers () {
@@ -67,8 +57,6 @@ class UserRepository {
         FROM Utilizador 
         JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID
       `)
-
-    await closeConnection(pool)
 
     return users.recordset
   }
@@ -108,8 +96,6 @@ class UserRepository {
     } catch (error) {
       await transaction.rollback()
       console.error('Internal error: ', error.message)
-    } finally {
-      await closeConnection(pool)
     }
   }
 
@@ -120,23 +106,22 @@ class UserRepository {
       .input('id', sql.Int, id)
       .query('DELETE FROM Utilizador WHERE Utilizador_ID = @id')
 
-    await closeConnection(pool)
-
     return true
   }
 
-  static async updateUser ({ id, nome, dataNasc, imagemURL, contacto }) {
+  static async updateUser (data, id) {
     const pool = await getConnection()
 
     const user = await pool.request()
-      .input('nome', sql.VarChar, nome)
-      .input('dataNasc', sql.Date, dataNasc)
-      .input('imagemURL', sql.VarChar, imagemURL)
-      .input('contacto', sql.VarChar, contacto)
+      .input('name', sql.VarChar, data.name)
+      .input('contact', sql.VarChar, data.contact)
       .input('id', sql.Int, id)
-      .query('update Utilizador set  Nome = @nome, DataNasc = @dataNasc, Imagem_URL = @imagemURL, Contacto = @contacto where Utilizador_ID = @id')
-
-    await closeConnection(pool)
+      .query(`
+        UPDATE Utilizador 
+        SET 
+          Nome = @name, 
+          Contacto = @contact 
+        WHERE Utilizador_ID = @id`)
 
     return user.recordset
   }
@@ -150,8 +135,6 @@ class UserRepository {
       .input('id', sql.Int, id)
       .input('confirmarEmail', sql.Int, confirmEmailValue)
       .query('UPDATE Autenticacao SET ConfirmarEmail = @confirmarEmail WHERE Utilizador_ID = @id')
-
-    await closeConnection(pool)
 
     return updatedUser.rowsAffected[0] > 0
   }
@@ -168,8 +151,6 @@ class UserRepository {
         WHERE Utilizador.Utilizador_ID = @id
       `)
 
-    await closeConnection(pool)
-
     return user.recordset[0]
   }
 
@@ -184,8 +165,6 @@ class UserRepository {
         SET Password = @password 
         WHERE Utilizador_ID = @id
       `)
-
-    await closeConnection(pool)
 
     return updatedUser.recordset
   }
@@ -203,8 +182,6 @@ class UserRepository {
         VALUES (@id, @publicId, @url)
     `)
 
-    await closeConnection(pool)
-
     return user.rowsAffected[0] > 0
   }
 
@@ -219,8 +196,6 @@ class UserRepository {
         FROM ImagemUtilizador
         WHERE Utilizador_ID = @id
       `)
-
-    await closeConnection(pool)
 
     return avatar.recordset
   }
@@ -238,8 +213,6 @@ class UserRepository {
         SET PublicID = @publicId, Url = @url
         WHERE Utilizador_ID = @id
       `)
-
-    await closeConnection(pool)
 
     return updatedAvatar.rowsAffected[0] > 0
   }

@@ -8,20 +8,21 @@ import AuthController from '../controllers/auth-controller.js'
 
 const userRouter = express.Router()
 
-userRouter
-  .route('/users/id/:id')
-  .get(
-    AuthController.refreshAccessToken,
-    AuthMiddleware.isAuthenticated,
-    AuthMiddleware.isVerified,
-    UserController.getUserById
-  )
-  .put(
-    AuthController.refreshAccessToken,
-    AuthMiddleware.isAuthenticated,
-    AuthMiddleware.isVerified,
-    validateSchema(userSchema, true),
-    UserController.updateUser)
+userRouter.get('/users/id/:id',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  UserController.getUserById
+)
+
+userRouter.put(
+  '/users/update',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  validateSchema(userSchema, true),
+  UserController.updateUser
+)
 
 userRouter.get(
   '/users',

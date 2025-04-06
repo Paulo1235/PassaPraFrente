@@ -36,18 +36,13 @@ export const generateRefreshToken = (user) => {
   return refreshToken
 }
 
-export const sendToken = (user, statusCodes, res) => {
+export const sendToken = (user, res) => {
   const accessToken = generateAccessToken(user)
 
   const refreshToken = generateRefreshToken(user)
 
   res.cookie('accessToken', accessToken, tokenOptions)
   res.cookie('refreshToken', refreshToken, tokenOptions)
-
-  return res.status(statusCodes).json({
-    success: true,
-    user
-  })
 }
 
 export const createActivationToken = (user) => {

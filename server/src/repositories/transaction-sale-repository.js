@@ -1,6 +1,6 @@
 import sql from 'mssql'
 
-import { getConnection, closeConnection } from '../database/db-config.js'
+import { getConnection } from '../database/db-config.js'
 
 class TransactionSaleRepository {
   static async createTransactionSale (valorFinal, nota) {
@@ -14,8 +14,6 @@ class TransactionSaleRepository {
         INSERT INTO TransacaoVenda (NovoValor, Nota) VALUES (@valorFinal, @nota)
     `)
 
-    await closeConnection(pool)
-
     return transaction.recordset[0]
   }
 
@@ -28,8 +26,6 @@ class TransactionSaleRepository {
         SELECT *
         FROM TransacaoVenda
     `)
-
-    await closeConnection(pool)
 
     return transactions.recordset
   }
@@ -45,8 +41,6 @@ class TransactionSaleRepository {
         FROM TransacaoVenda
         WHERE TransacaoVenda_ID = @id
       `)
-
-    await closeConnection(pool)
 
     return transaction.recordset[0]
   }

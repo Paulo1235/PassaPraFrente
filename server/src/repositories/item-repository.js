@@ -1,6 +1,6 @@
 import sql from 'mssql'
 
-import { closeConnection, dbConfig, getConnection } from '../database/db-config.js'
+import { dbConfig, getConnection } from '../database/db-config.js'
 import IdService from '../services/id-service.js'
 
 class ItemRepository {
@@ -34,8 +34,6 @@ class ItemRepository {
         FROM Artigo
       `)
 
-    await closeConnection(pool)
-
     return items.recordset
   }
 
@@ -50,8 +48,6 @@ class ItemRepository {
         FROM Artigo
         WHERE Artigo = @id
       `)
-
-    await closeConnection(pool)
 
     return item.recordset[0]
   }
@@ -75,7 +71,6 @@ class ItemRepository {
             Condicao_ID = @condicaoId,
         WHERE Artigo_ID = @id; 
       `)
-    await closeConnection(pool)
 
     return updateItem.recordset
   }
@@ -91,8 +86,6 @@ class ItemRepository {
         VALUES (@url,@publicId, @id)
     `)
 
-    await closeConnection(pool)
-
     return item.rowsAffected[0] > 0
   }
 
@@ -107,8 +100,6 @@ class ItemRepository {
         FROM Imagem
         WHERE Artigo_ID = @id
       `)
-
-    await closeConnection(pool)
 
     return avatar.recordset
   }
@@ -126,8 +117,6 @@ class ItemRepository {
         SET PublicID = @publicId, Url = @url
         WHERE Artigo_ID = @id
       `)
-
-    await closeConnection(pool)
 
     return updatedAvatar.rowsAffected[0] > 0
   }

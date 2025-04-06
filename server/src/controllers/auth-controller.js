@@ -55,7 +55,7 @@ class AuthController {
 
       return response(res, true, StatusCodes.CREATED, createdUser)
     } catch (error) {
-      handleError(error, res, 'Ocorreu um erro ao criar a conta. Tente novamente mais tarde.')
+      handleError(res, error, 'Ocorreu um erro ao criar a conta. Tente novamente mais tarde.')
     }
   }
 
@@ -68,8 +68,8 @@ class AuthController {
     const { email, password } = req.body
 
     try {
-      // Verifica se o utilizador da base de dados pelo email
-      const user = await UserRepository.existsUserByEmail(email)
+      // Obtém o utilizador da base de dados pelo email
+      const user = await UserRepository.getUserByEmail(email)
 
       if (!user) {
         throw new HttpException('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
@@ -85,9 +85,11 @@ class AuthController {
       const { Password: _, ...publicUser } = user
 
       // Envia os tokens criados
-      sendToken(publicUser, StatusCodes.OK, res)
+      sendToken(publicUser, res)
+
+      return response(res, true, StatusCodes.OK, publicUser)
     } catch (error) {
-      handleError(error, res, 'Ocorreu um erro ao fazer login. Tente novamente mais tarde.')
+      handleError(res, error, 'Ocorreu um erro ao fazer login. Tente novamente mais tarde.')
     }
   }
 
@@ -104,7 +106,7 @@ class AuthController {
 
       return response(res, true, StatusCodes.OK, 'Logout realizado com sucesso.')
     } catch (error) {
-      handleError(error, res, 'Ocorreu um erro ao fazer logout. Tente novamente mais tarde.')
+      handleError(res, error, 'Ocorreu um erro ao fazer logout. Tente novamente mais tarde.')
     }
   }
 
@@ -172,7 +174,7 @@ class AuthController {
 
       return response(res, true, StatusCodes.OK, 'Conta ativada com sucesso.')
     } catch (error) {
-      handleError(error, res, 'Ocorreu um erro ao ativar a conta. Tente novamente mais tarde.')
+      handleError(res, error, 'Ocorreu um erro ao ativar a conta. Tente novamente mais tarde.')
     }
   }
 
@@ -182,8 +184,10 @@ class AuthController {
    * @param {Object} res - O objeto de resposta utilizado para enviar a resposta.
    * @param {Function} next - Função de middleware para a próxima ação.
    */
-  static async refreshAccessToken (req, res) {
-    const refreshToken = req.headers.refresh
+  static async refreshAccessToken (req, res, next) {
+    const refreshToken = req.cookies?.refreshToken
+
+    console.log(refreshToken)
 
     try {
       // Verifica se o refresh token existe
@@ -192,19 +196,29 @@ class AuthController {
       }
 
       // Verifica se o refresh token ainda é válido
-      const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET_KEY)
+      const payload = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET_KEY)
 
       // Verifica a expiração ou outros problemas com a sessão
-      if (!decoded) {
+      if (!payload) {
         throw new HttpException('Sessão expirada. Faça login novamente.', StatusCodes.UNAUTHORIZED)
       }
 
-      const user = { id: decoded.id }
+      const user = await UserRepository.getUserById(payload.id)
+
+      console.log(user)
+
+      if (!user) {
+        throw new HttpException('Utilizador não encontrado', StatusCodes.NOT_FOUND)
+      }
+
+      req.user = user
 
       // Gera novos tokens de acesso e refresh
-      sendToken(user, StatusCodes.OK, res)
+      sendToken(user, res)
+
+      next()
     } catch (error) {
-      handleError(error, res, 'Ocorreu um erro ao renovar sua sessão. Tente novamente mais tarde.')
+      handleError(res, error, 'Ocorreu um erro ao renovar sua sessão. Tente novamente mais tarde.')
     }
   }
 }
