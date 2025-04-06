@@ -1,25 +1,31 @@
 import express from 'express'
 
-import { AuthMiddleware } from '../middlewares/auth-middleware.js'
-import { ProposalSaleController } from '../controllers/proposal-sale-controller.js'
-import { ProposalMiddleware } from '../middlewares/proposal-middleware.js'
+import AuthMiddleware from '../middlewares/auth-middleware.js'
+import ProposalSaleController from '../controllers/proposal-sale-controller.js'
+import AuthController from '../controllers/auth-controller.js'
+import { validateSchema } from '../utils/validate-schema.js'
+import { proposalSaleSchema } from '../validations/proposal-sale-validation.js'
 
-export const proposalSaleRouter = express.Router()
+const proposalSaleRouter = express.Router()
 
 proposalSaleRouter
   .route('/proposal-sales/:id')
   .get(
+    AuthController.refreshAccessToken,
     AuthMiddleware.isAuthenticated,
     AuthMiddleware.isVerified,
     ProposalSaleController.getSaleProposalById
   )
   .patch(
+    AuthController.refreshAccessToken,
     AuthMiddleware.isAuthenticated,
-    AuthMiddleware.isVerified, ProposalMiddleware.isOwnerSale,
+    AuthMiddleware.isVerified,
+    validateSchema(proposalSaleSchema, true),
     ProposalSaleController.updateProposalSaleStatus)
 
 proposalSaleRouter.get(
   '/proposal-sales',
+  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.authorizedRoles(['admin']),
@@ -27,6 +33,11 @@ proposalSaleRouter.get(
 )
 proposalSaleRouter.post(
   '/proposal-sales/create',
+  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  ProposalSaleController.createProposalSale)
+  validateSchema(proposalSaleSchema, false),
+  ProposalSaleController.createProposalSale
+)
+
+export default proposalSaleRouter

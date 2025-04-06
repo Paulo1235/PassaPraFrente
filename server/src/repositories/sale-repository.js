@@ -1,13 +1,11 @@
 import sql from 'mssql'
 
 import { closeConnection, dbConfig, getConnection } from '../database/db-config.js'
-import { ItemRepository } from './item-repository.js'
+import ItemRepository from './item-repository.js'
 
-export class SaleRepository {
-  static async createSale (fullData) {
+class SaleRepository {
+  static async createSale ({ data, userId }) {
     const pool = await getConnection(dbConfig)
-
-    const data = fullData.data
 
     const item = await ItemRepository.createItem(data.condition, data.category)
 
@@ -16,7 +14,7 @@ export class SaleRepository {
       .input('titulo', sql.VarChar, data.title)
       .input('descricao', sql.VarChar, data.description)
       .input('valor', sql.Int, data.price)
-      .input('userId', sql.Int, fullData.userId)
+      .input('userId', sql.Int, userId)
       .input('itemId', sql.Int, item.Artigo_ID)
       .query(`
         INSERT INTO 
@@ -133,3 +131,5 @@ export class SaleRepository {
     return updatedSale.rowsAffected[0] > 0
   }
 }
+
+export default SaleRepository

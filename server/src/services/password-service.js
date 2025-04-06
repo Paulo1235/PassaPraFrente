@@ -1,7 +1,7 @@
-import { UserRepository } from '../repositories/user-repository.js'
+import UserRepository from '../repositories/user-repository.js'
 import { generatePassword, hashPassword } from '../utils/password.js'
 
-export class PasswordService {
+class PasswordService {
   static async generateAndStoreNewPassword (id) {
     const newPassword = generatePassword()
 
@@ -12,3 +12,5 @@ export class PasswordService {
     return newPassword
   }
 }
+
+export default PasswordService

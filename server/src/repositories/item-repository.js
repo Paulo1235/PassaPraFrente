@@ -1,9 +1,9 @@
 import sql from 'mssql'
 
 import { closeConnection, dbConfig, getConnection } from '../database/db-config.js'
-import { IdService } from '../services/id-service.js'
+import IdService from '../services/id-service.js'
 
-export class ItemRepository {
+class ItemRepository {
   static async createItem (condition, category) {
     const pool = await getConnection(dbConfig)
 
@@ -132,3 +132,5 @@ export class ItemRepository {
     return updatedAvatar.rowsAffected[0] > 0
   }
 }
+
+export default ItemRepository

@@ -1,13 +1,11 @@
 import sql from 'mssql'
 
 import { closeConnection, dbConfig, getConnection } from '../database/db-config.js'
-import { ItemRepository } from './item-repository.js'
+import ItemRepository from './item-repository.js'
 
-export class LoanRepository {
-  static async createLoan (fullData) {
+class LoanRepository {
+  static async createLoan ({ data, userId }) {
     const pool = await getConnection(dbConfig)
-
-    const data = fullData.loanData
 
     const item = await ItemRepository.createItem(data.condition, data.category)
 
@@ -18,7 +16,7 @@ export class LoanRepository {
       .input('valor', sql.Int, data.valor)
       .input('dataInicio', sql.DateTime, data.dataInicio)
       .input('dataFim', sql.DateTime, data.dataFim)
-      .input('userId', sql.Int, fullData.userId)
+      .input('userId', sql.Int, userId)
       .input('itemId', sql.Int, item.Artigo_ID)
       .query(`
         INSERT INTO 
@@ -139,3 +137,5 @@ export class LoanRepository {
     return updatedLoan.rowsAffected[0] > 0
   }
 }
+
+export default LoanRepository

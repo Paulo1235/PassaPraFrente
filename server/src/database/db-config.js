@@ -1,4 +1,5 @@
 import sql from 'mssql'
+import chalk from 'chalk'
 
 import { USER, DATABASE, INSTANCENAME, PASSWORD, PORTDB, SERVER_NAME } from '../../config.js'
 
@@ -22,7 +23,7 @@ export const getConnection = async (req, res) => {
 
     return pool
   } catch (error) {
-    console.error('Internal error: ', error.message)
+    console.log(chalk.red.bold('Erro interno: '), chalk.yellow(error.message))
   }
 }
 
@@ -30,8 +31,8 @@ export const closeConnection = async (pool) => {
   try {
     await pool?.close()
 
-    console.log('Database connection closed')
+    console.log('Conexão fechada com sucesso.')
   } catch (error) {
-    console.error('Internal error: ', error.message)
+    console.log(chalk.red.bold('Erro interno: '), chalk.yellow(error.message))
   }
 }

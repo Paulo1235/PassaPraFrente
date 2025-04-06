@@ -2,7 +2,7 @@ import sql from 'mssql'
 
 import { dbConfig, getConnection } from '../database/db-config.js'
 
-export class IdService {
+class IdService {
   static async getConditionById (condition) {
     const pool = await getConnection(dbConfig)
 
@@ -48,3 +48,5 @@ export class IdService {
     return stateId.recordset[0]?.Estado_ID
   }
 }
+
+export default IdService

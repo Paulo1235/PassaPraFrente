@@ -1,22 +1,25 @@
 import express from 'express'
 
-import { TransactionSaleController } from '../controllers/transaction-sale-controller.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import { transactionSaleSchema } from '../validations/transaction-sale.js'
-import { AuthMiddleware } from '../middlewares/auth-middleware.js'
+import AuthMiddleware from '../middlewares/auth-middleware.js'
+import TransactionSaleController from '../controllers/transaction-sale-controller.js'
+import AuthController from '../controllers/auth-controller.js'
 
-export const transactionSaleRouter = express.Router()
+const transactionSaleRouter = express.Router()
 
 transactionSaleRouter.post(
-  '/transaction-sale/create',
+  '/transaction-sales/create',
+  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  validateSchema(transactionSaleSchema),
+  validateSchema(transactionSaleSchema, false),
   TransactionSaleController.createTransactionSale
 )
 
 transactionSaleRouter.get(
-  '/transaction-sale/get-all',
+  '/transaction-sales',
+  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.authorizedRoles(['admin']),
@@ -24,8 +27,11 @@ transactionSaleRouter.get(
 )
 
 transactionSaleRouter.get(
-  '/transaction-sale/getby:id',
+  '/transaction-sales/:id',
+  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   TransactionSaleController.getSaleTransactionById
 )
+
+export default transactionSaleRouter

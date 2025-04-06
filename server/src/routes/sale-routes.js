@@ -1,25 +1,28 @@
 import express from 'express'
 
-import { SaleController } from '../controllers/sale-controller.js'
-import { AuthMiddleware } from '../middlewares/auth-middleware.js'
+import SaleController from '../controllers/sale-controller.js'
+import AuthMiddleware from '../middlewares/auth-middleware.js'
 import { saleSchema } from '../validations/sale-validation.js'
 import { validateSchema } from '../utils/validate-schema.js'
-import { ProposalMiddleware } from '../middlewares/proposal-middleware.js'
+import ProposalMiddleware from '../middlewares/proposal-middleware.js'
+import AuthController from '../controllers/auth-controller.js'
 
-export const saleRouter = express.Router()
+const saleRouter = express.Router()
 
 saleRouter
   .route('/sales/id/:id')
   .get(AuthMiddleware.isAuthenticated, SaleController.getSaleById)
   .put(
-    validateSchema(saleSchema, true),
+    AuthController.refreshAccessToken,
     AuthMiddleware.isAuthenticated,
     AuthMiddleware.isVerified,
     ProposalMiddleware.isOwnerSale,
+    validateSchema(saleSchema, true),
     SaleController.updateSale)
 
 saleRouter.get(
   '/sales',
+  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.authorizedRoles(['admin']),
@@ -27,16 +30,33 @@ saleRouter.get(
 )
 saleRouter.get(
   '/sales/available',
+  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   SaleController.getAvailableSales
 )
-saleRouter.post('/sales/create', AuthMiddleware.isAuthenticated, AuthMiddleware.isVerified, SaleController.createSale)
-saleRouter.put('/sales/user', AuthMiddleware.isAuthenticated, SaleController.getUserSales)
+saleRouter.post(
+  '/sales/create',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  validateSchema(saleSchema, false),
+  SaleController.createSale
+)
+saleRouter.get(
+  '/sales/user',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  SaleController.getUserSales
+)
 
 saleRouter.patch(
   '/sales/update-status/:id',
+  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  AuthMiddleware.authorizedRoles(['admin']),
+  ProposalMiddleware.isOwnerSale,
+  validateSchema(saleSchema, true),
   SaleController.updateSaleStatus
 )
+
+export default saleRouter

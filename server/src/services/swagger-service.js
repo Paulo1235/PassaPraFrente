@@ -2,7 +2,7 @@ import swaggerAutogen from 'swagger-autogen'
 
 import { PORT } from '../../config.js'
 
-export class SwaggerService {
+class SwaggerService {
   static generateDocs () {
     const doc = {
       info: {
@@ -20,3 +20,5 @@ export class SwaggerService {
 }
 
 SwaggerService.generateDocs()
+
+export default SwaggerService

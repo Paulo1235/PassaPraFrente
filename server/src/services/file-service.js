@@ -5,7 +5,7 @@ import { createRequire } from 'node:module'
 
 const require = createRequire(import.meta.url)
 
-export class FileService {
+class FileService {
   static readJSON = (filePath) => {
     const absolutePath = path.resolve(filePath)
 
@@ -18,3 +18,5 @@ export class FileService {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8')
   }
 }
+
+export default FileService

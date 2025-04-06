@@ -1,9 +1,7 @@
-import colors from 'colors'
+import chalk from 'chalk'
 import sql from 'mssql'
 
 import { dbConfig } from './db-config.js'
-
-colors.enable()
 
 export const checkDatabaseConnection = async () => {
   try {
@@ -12,18 +10,18 @@ export const checkDatabaseConnection = async () => {
       const database = dbConfig.database
 
       console.info(
-        colors.underline(colors.bold(colors.green('Base de dados conectada com sucesso'))) +
-          ' | ' + colors.bold(colors.yellow('Servidor: ')) +
-          colors.underline(colors.bold(colors.yellow(`${server}`))) +
+        chalk.green.bold.underline('Base de dados conectada com sucesso') +
+          ' | ' + chalk.yellow.bold('Servidor: ') +
+          chalk.yellow.underline.bold(server) +
           ' | ' +
-          colors.bold(colors.blue('Base de dados: ')) +
-          colors.underline(colors.bold(colors.blue(`${database}`)))
+          chalk.blue.bold('Base de dados: ') +
+          chalk.blue.underline.bold(database)
       )
     })
   } catch (error) {
     console.error(
-      colors.bold(colors.red('Ocorreu um erro ao conectar à base de dados: ')) +
-        colors.underline(colors.bold(colors.red(`${error.message}`)))
+      chalk.red.bold('Ocorreu um erro ao conectar à base de dados: ') +
+        chalk.red.underline.bold(error.message)
     )
 
     setTimeout(checkDatabaseConnection, 5000)

@@ -1,29 +1,21 @@
-import StatusCodes from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
 
-import { ErrorApplication } from '../utils/error-handler.js'
-import { response } from '../utils/response.js'
-import { SaleRepository } from '../repositories/sale-repository.js'
-import { IdService } from '../services/id-service.js'
+import { handleError, HttpException } from '../utils/error-handler.js'
+import response from '../utils/response.js'
+import SaleRepository from '../repositories/sale-repository.js'
+import IdService from '../services/id-service.js'
 
-export class SaleController {
+class SaleController {
   static async createSale (req, res) {
     const userId = req.user.Utilizador_ID
     const data = req.body
 
-    const fullData = {
-      data,
-      userId
-    }
-
-    console.log(fullData)
-
     try {
-      await SaleRepository.createSale(fullData)
+      await SaleRepository.createSale({ data, userId })
 
       response(res, true, StatusCodes.OK, 'Venda criada com sucesso')
     } catch (error) {
-      console.error('Internal error: ', error.message)
-      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao criar a venda.')
+      handleError(res, error, 'Ocorreu um erro ao criar a venda.')
     }
   }
 
@@ -33,17 +25,12 @@ export class SaleController {
       const sale = await SaleRepository.getSaleById(id)
 
       if (!sale) {
-        throw new ErrorApplication('Venda não encontrada.', StatusCodes.NOT_FOUND)
+        throw new HttpException('Venda não encontrada.', StatusCodes.NOT_FOUND)
       }
 
-      response(res, true, StatusCodes.OK, sale)
+      return response(res, true, StatusCodes.OK, sale)
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Erro ao obter venda: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar a venda.')
-      }
+      handleError(res, error, 'Ocorreu um erro ao encontrar a venda.')
     }
   }
 
@@ -51,10 +38,9 @@ export class SaleController {
     try {
       const sales = await SaleRepository.getAllSales()
 
-      response(res, true, StatusCodes.OK, sales)
+      return response(res, true, StatusCodes.OK, sales)
     } catch (error) {
-      console.error('Erro ao obter vendas: ', error.message)
-      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar as vendas.')
+      handleError(res, error, 'Ocorreu um erro ao encontrar as vendas.')
     }
   }
 
@@ -62,10 +48,9 @@ export class SaleController {
     try {
       const sales = await SaleRepository.getAvailableSales()
 
-      response(res, true, StatusCodes.OK, sales)
+      return response(res, true, StatusCodes.OK, sales)
     } catch (error) {
-      console.error('Erro ao obter vendas disponíveis: ', error.message)
-      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao obter as vendas disponíveis.')
+      handleError(res, error, 'Ocorreu um erro ao encontrar as vendas disponíveis.')
     }
   }
 
@@ -77,7 +62,7 @@ export class SaleController {
       const existingSale = await SaleRepository.getSaleById(id)
 
       if (!existingSale) {
-        throw new ErrorApplication('Venda não encontrada.', StatusCodes.NOT_FOUND)
+        throw new HttpException('Venda não encontrada.', StatusCodes.NOT_FOUND)
       }
 
       const updatedData = {
@@ -88,26 +73,21 @@ export class SaleController {
 
       await SaleRepository.updateSale(updatedData, id)
 
-      response(res, true, StatusCodes.OK, 'Venda atualizada com sucesso.')
+      return response(res, true, StatusCodes.OK, 'Venda atualizada com sucesso.')
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Erro ao atualizar a venda: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar a venda.')
-      }
+      handleError(res, error, 'Ocorreu um erro ao atualizar a venda.')
     }
   }
 
   static async getUserSales (req, res) {
     const id = req.user.Utilizador_ID
+
     try {
       const sales = await SaleRepository.getUserSales(id)
 
       response(res, true, StatusCodes.OK, sales)
     } catch (error) {
-      console.error('Erro ao obter vendas do utilizador:', error.message)
-      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro a obter as suas vendas. Tente novamente mais tarde.')
+      handleError(res, error, 'Ocorreu um erro ao encontrar as vendas do utilizador.')
     }
   }
 
@@ -119,24 +99,22 @@ export class SaleController {
       const sale = await SaleRepository.getSaleById(id)
 
       if (!sale) {
-        throw new ErrorApplication('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
+        throw new HttpException('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
       }
 
       const stateId = await IdService.getStateById(status)
+
       if (!stateId) {
-        throw new ErrorApplication('Estado inválido.', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Estado inválido.', StatusCodes.BAD_REQUEST)
       }
 
       await SaleRepository.updateSaleStatus(id, stateId)
 
-      response(res, true, StatusCodes.OK, 'Estado da venda atualizado.')
+      return response(res, true, StatusCodes.OK, 'Estado da venda atualizado.')
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar o estado da venda. Tente novamente mais tarde.')
-      }
+      handleError(res, error, 'Ocorreu um erro ao atualizar o estado da venda.')
     }
   }
 }
+
+export default SaleController

@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer'
 
 import { DIRNAME, SMTP_HOST, SMTP_MAIL, SMTP_PASSWORD, SMTP_PORT, SMTP_SERVICE } from '../../config.js'
 
-export class EmailService {
+class EmailService {
   static async sendEmail (options) {
     const transporter = nodemailer.createTransport({
       host: SMTP_HOST,
@@ -38,3 +38,5 @@ export class EmailService {
     return await ejs.renderFile(path.join(DIRNAME, `src/mails/${template}`), data)
   }
 }
+
+export default EmailService

@@ -2,7 +2,7 @@ import sql from 'mssql'
 
 import { closeConnection, getConnection } from '../database/db-config.js'
 
-export class UserRepository {
+class UserRepository {
   static async getUserById (id) {
     const pool = await getConnection()
 
@@ -153,11 +153,7 @@ export class UserRepository {
 
     await closeConnection(pool)
 
-    if (updatedUser.rowsAffected[0] > 0) {
-      return true
-    }
-
-    return false
+    return updatedUser.rowsAffected[0] > 0
   }
 
   static async getUserRole (id) {
@@ -248,3 +244,5 @@ export class UserRepository {
     return updatedAvatar.rowsAffected[0] > 0
   }
 }
+
+export default UserRepository

@@ -1,6 +1,8 @@
-export function response (res, success, statusCodes, message) {
-  return res.status(statusCodes).json({
+function response (res, success, statusCodes, message) {
+  res.status(statusCodes).json({
     success,
     message
   })
 }
+
+export default response

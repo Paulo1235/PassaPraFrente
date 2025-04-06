@@ -1,28 +1,24 @@
-import StatusCodes from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
 
-import { ErrorApplication } from '../utils/error-handler.js'
-import { response } from '../utils/response.js'
-import { SaleRepository } from '../repositories/sale-repository.js'
-import { ProposalSaleRepository } from '../repositories/proposal-sale-repository.js'
+import { handleError, HttpException } from '../utils/error-handler.js'
+import response from '../utils/response.js'
+import ProposalSaleRepository from '../repositories/proposal-sale-repository.js'
+import SaleRepository from '../repositories/sale-repository.js'
 
-export class ProposalSaleController {
+class ProposalSaleController {
   static async createProposalSale (req, res) {
     const data = req.body
+
     try {
       const proposal = await ProposalSaleRepository.createSale(data)
 
       if (!proposal) {
-        throw new ErrorApplication('Não foi possível criar a proposta.', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Não foi possível criar a proposta.', StatusCodes.BAD_REQUEST)
       }
 
-      response(res, true, StatusCodes.OK, proposal)
+      return response(res, true, StatusCodes.OK, proposal)
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao criar proposta.')
-      }
+      handleError(res, error, 'Ocorreu um erro ao criar proposta.')
     }
   }
 
@@ -30,34 +26,25 @@ export class ProposalSaleController {
     try {
       const proposals = await ProposalSaleRepository.getAllSaleProposals()
 
-      response(res, true, StatusCodes.OK, proposals)
+      return response(res, true, StatusCodes.OK, proposals)
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Erro ao obter propostas: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar propostas.')
-      }
+      handleError(res, error, 'Ocorreu um erro ao encontrar as propostas.')
     }
   }
 
   static async getSaleProposalById (req, res) {
     const { id } = req.params
+
     try {
       const proposal = await ProposalSaleRepository.getSaleProposalById(id)
 
       if (!proposal) {
-        throw new ErrorApplication('Proposta não encontrada.', StatusCodes.NOT_FOUND)
+        throw new HttpException('Proposta não encontrada.', StatusCodes.NOT_FOUND)
       }
 
-      response(res, true, StatusCodes.OK, proposal)
+      return response(res, true, StatusCodes.OK, proposal)
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Erro ao obter proposta: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar uma proposta.')
-      }
+      handleError(res, error, 'Ocorreu um erro ao encontrar a proposta.')
     }
   }
 
@@ -70,19 +57,16 @@ export class ProposalSaleController {
       const sale = await SaleRepository.getSaleById(id)
 
       if (!sale) {
-        throw new ErrorApplication('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
+        throw new HttpException('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
       }
 
       await ProposalSaleRepository.updateProposalSaleStatus(userId, id, status)
 
-      response(res, true, StatusCodes.OK, 'Estado da proposta atualizado.')
+      return response(res, true, StatusCodes.OK, 'Estado da proposta atualizado.')
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao avaliar a proposta. Tente novamente mais tarde.')
-      }
+      handleError(res, error, 'Ocorreu um erro ao atualizar o estado da proposta.')
     }
   }
 }
+
+export default ProposalSaleController

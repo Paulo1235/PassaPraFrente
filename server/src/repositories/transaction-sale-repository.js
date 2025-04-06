@@ -2,7 +2,7 @@ import sql from 'mssql'
 
 import { getConnection, closeConnection } from '../database/db-config.js'
 
-export class TransactionSaleRepository {
+class TransactionSaleRepository {
   static async createTransactionSale (valorFinal, nota) {
     const pool = await getConnection()
 
@@ -51,3 +51,5 @@ export class TransactionSaleRepository {
     return transaction.recordset[0]
   }
 }
+
+export default TransactionSaleRepository

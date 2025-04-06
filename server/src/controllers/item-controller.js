@@ -1,48 +1,41 @@
-import StatusCodes from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
 
-import { ErrorApplication } from '../utils/error-handler.js'
-import { response } from '../utils/response.js'
-import { ItemRepository } from '../repositories/item-repository.js'
 import cloudinary from 'cloudinary'
 
-export class ItemController {
+import response from '../utils/response.js'
+import { ItemRepository } from '../repositories/item-repository.js'
+import { handleError, HttpException } from '../utils/error-handler.js'
+
+class ItemController {
   static async createItem (req, res) {
     const data = req.body
+
     try {
       const item = await ItemRepository.createItem(data)
 
       if (!item) {
-        throw new ErrorApplication('Não foi possível criar artigo.', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Não foi possível criar artigo.', StatusCodes.BAD_REQUEST)
       }
 
-      response(res, true, StatusCodes.OK, item)
+      return response(res, true, StatusCodes.OK, item)
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Internal error: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao criar o artigo.')
-      }
+      handleError(res, error, 'Ocorreu um erro ao criar o artigo.')
     }
   }
 
   static async updateSale (req, res) {
     const data = req.body
+
     try {
       const sale = await ItemRepository.updateSale(data)
 
       if (!sale) {
-        throw new ErrorApplication('Não foi possível atualizar a venda', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Não foi possível atualizar a venda', StatusCodes.BAD_REQUEST)
       }
 
-      response(res, true, StatusCodes.OK, sale)
+      return response(res, true, StatusCodes.OK, sale)
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Erro ao atualizar a venda: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar a venda.')
-      }
+      handleError(res, error, 'Ocorreu um erro ao atualizar a venda.')
     }
   }
 
@@ -50,30 +43,25 @@ export class ItemController {
     try {
       const items = await ItemRepository.getAllItems()
 
-      response(res, true, StatusCodes.OK, items)
+      return response(res, true, StatusCodes.OK, items)
     } catch (error) {
-      console.error('Erro ao obter vendas: ', error.message)
-      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar os items.')
+      handleError(res, error, 'Ocorreu um erro ao encontrar os artigos.')
     }
   }
 
   static async getItemById (req, res) {
     const { id } = req.params
+
     try {
       const item = await ItemRepository.getItemById(id)
 
       if (!item) {
-        throw new ErrorApplication('Artigo não encontrado.', StatusCodes.NOT_FOUND)
+        throw new HttpException('Artigo não encontrado.', StatusCodes.NOT_FOUND)
       }
 
-      response(res, true, StatusCodes.OK, item)
+      return response(res, true, StatusCodes.OK, item)
     } catch (error) {
-      if (error instanceof ErrorApplication) {
-        response(res, false, error.statusCodes, error.message)
-      } else {
-        console.error('Erro ao obter artigo: ', error.message)
-        response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao encontrar o item.')
-      }
+      handleError(res, error, 'Ocorreu um erro ao encontrar o artigo.')
     }
   }
 
@@ -89,13 +77,12 @@ export class ItemController {
       const uploadSuccess = await ItemRepository.uploadItemPhoto(id, myCloud.public_id, myCloud.url)
 
       if (uploadSuccess) {
-        response(res, true, StatusCodes.OK, 'Imagem inserida.')
+        return response(res, true, StatusCodes.OK, 'Imagem inserida.')
       }
 
-      response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao inserir a imagem.')
+      return response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao inserir a imagem.')
     } catch (error) {
-      console.error('Erro ao inserir imagem:', error.message)
-      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao inserir a sua imagem. Tente mais tarde.')
+      handleError(res, error, 'Ocorreu um erro ao fazer upload da imagem.')
     }
   }
 
@@ -117,14 +104,15 @@ export class ItemController {
         const updateSuccess = await ItemRepository.updateItemPhoto(id, myCloud.public_id, myCloud.secure_url)
 
         if (updateSuccess) {
-          response(res, true, StatusCodes.OK, 'Imagem do artigo atualizada.')
+          return response(res, true, StatusCodes.OK, 'Imagem do artigo atualizada.')
         }
 
-        response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao atualizar a imagem.')
+        return response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao atualizar a imagem.')
       }
     } catch (error) {
-      console.error('Erro ao atualizar imagem:', error.message)
-      response(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar a sua imagem. Tente mais tarde.')
+      handleError(res, error, 'Ocorreu um erro ao atualizar a imagem.')
     }
   }
 }
+
+export default ItemController
