@@ -30,7 +30,7 @@ class ItemController {
       const sale = await ItemRepository.updateSale(data)
 
       if (!sale) {
-        throw new HttpException('Não foi possível atualizar a venda', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Não foi possível atualizar a venda.', StatusCodes.BAD_REQUEST)
       }
 
       return response(res, true, StatusCodes.OK, sale)

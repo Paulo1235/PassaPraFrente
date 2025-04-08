@@ -71,15 +71,15 @@ class AuthController {
       // Obtém o utilizador da base de dados pelo email
       const user = await UserRepository.getUserByEmail(email)
 
-      if (!user) {
-        throw new HttpException('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
+      let isMatch = false
+
+      if (user) {
+        // Compara a palavra-passe fornecida com a palavra-passe armazenada
+        isMatch = await comparePassword(password, user.Password)
       }
 
-      // Compara a palavra-passe fornecida com a palavra-passe armazenada
-      const isMatch = await comparePassword(password, user.Password)
-
-      if (!isMatch) {
-        throw new HttpException('Palavra-passe incorreta', StatusCodes.BAD_REQUEST)
+      if (!user || !isMatch) {
+        throw new HttpException('Email ou palavra-passe inválidos.', StatusCodes.UNAUTHORIZED)
       }
 
       const { Password: _, ...publicUser } = user
@@ -157,6 +157,12 @@ class AuthController {
     const { activationToken, activationCode } = req.body
 
     try {
+      const user = await UserRepository.getUserById(id)
+
+      if (user.ConfirmarEmail === 1) {
+        throw new HttpException('Conta já ativada.', StatusCodes.BAD_REQUEST)
+      }
+
       // Verifica se o token ainda é válido
       const token = jwt.verify(activationToken, ACCESS_TOKEN_SECRET_KEY)
 
@@ -166,11 +172,7 @@ class AuthController {
       }
 
       // Ativa a conta do utilizador na base de dados
-      const user = await UserRepository.activateUser(id)
-
-      if (!user) {
-        throw new HttpException('Ocorreu erro ao ativar conta.', StatusCodes.BAD_REQUEST)
-      }
+      await UserRepository.activateUser(id)
 
       return response(res, true, StatusCodes.OK, 'Conta ativada com sucesso.')
     } catch (error) {
@@ -187,8 +189,6 @@ class AuthController {
   static async refreshAccessToken (req, res, next) {
     const refreshToken = req.cookies?.refreshToken
 
-    console.log(refreshToken)
-
     try {
       // Verifica se o refresh token existe
       if (!refreshToken) {
@@ -204,12 +204,6 @@ class AuthController {
       }
 
       const user = await UserRepository.getUserById(payload.id)
-
-      console.log(user)
-
-      if (!user) {
-        throw new HttpException('Utilizador não encontrado', StatusCodes.NOT_FOUND)
-      }
 
       req.user = user
 

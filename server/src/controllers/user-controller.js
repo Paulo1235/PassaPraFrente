@@ -16,7 +16,7 @@ class UserController {
       const user = await UserRepository.getUserById(id)
 
       if (!user) {
-        throw new HttpException('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
+        return response(res, true, StatusCodes.OK, {})
       }
 
       return response(res, true, StatusCodes.OK, user)
@@ -78,7 +78,7 @@ class UserController {
       const user = await UserRepository.getUserByEmail(email)
 
       if (!user) {
-        throw new HttpException('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
+        return response(res, true, StatusCodes.OK, {})
       }
 
       return response(res, true, StatusCodes.OK, user)
@@ -104,7 +104,7 @@ class UserController {
     const { newPassword, confirmPassword } = req.body
 
     if (newPassword !== confirmPassword) {
-      return response(res, false, StatusCodes.BAD_REQUEST, 'Palavra-passe incorreta!')
+      return response(res, false, StatusCodes.BAD_REQUEST, 'As palavra-passe são diferentes!')
     }
 
     try {
@@ -125,7 +125,7 @@ class UserController {
       const user = await UserRepository.getUserByEmail(email)
 
       if (!user) {
-        throw new HttpException('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
+        throw new HttpException('Email inválido.', StatusCodes.NOT_FOUND)
       }
 
       const newPassword = await PasswordService.generateAndStoreNewPassword(user.Utilizador_ID)

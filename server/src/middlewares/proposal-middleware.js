@@ -3,6 +3,8 @@ import { StatusCodes } from 'http-status-codes'
 import { handleError, HttpException } from '../utils/error-handler.js'
 import SaleRepository from '../repositories/sale-repository.js'
 import LoanRepository from '../repositories/loan-repository.js'
+import UserRepository from '../repositories/user-repository.js'
+import { response } from 'express'
 
 class ProposalMiddleware {
   static async isOwnerSale (req, res, next) {
@@ -40,6 +42,33 @@ class ProposalMiddleware {
       next()
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao verificar se é o dono do empréstimo.')
+    }
+  }
+
+  static async isAdult (req, res, next) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const user = await UserRepository.getUserById(userId)
+
+      const currentDate = new Date()
+      const birthDate = new Date(user.DataNasc)
+
+      let age = currentDate.getFullYear() - birthDate.getFullYear()
+      const monthDifference = currentDate.getMonth() - birthDate.getMonth()
+      const dayDifference = currentDate.getDate() - birthDate.getDate()
+
+      if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+        age--
+      }
+
+      if (age < 18) {
+        return response(res, false, StatusCodes.UNAUTHORIZED, 'Não tem idade suficiente para realizar esta tarefa!')
+      }
+
+      next()
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao verificar se é maior de idade.')
     }
   }
 }
