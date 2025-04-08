@@ -13,7 +13,7 @@ class SaleController {
     try {
       await SaleRepository.createSale({ data, userId })
 
-      response(res, true, StatusCodes.OK, 'Venda criada com sucesso')
+      response(res, true, StatusCodes.CREATED, 'Venda criada com sucesso')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao criar a venda.')
     }

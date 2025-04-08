@@ -7,16 +7,30 @@ import SaleRepository from '../repositories/sale-repository.js'
 
 class ProposalSaleController {
   static async createProposalSale (req, res) {
-    const novoValor = req.body.novoValor ?? 0
+    const newValue = req.body.newValue ?? 0
+    const userId = req.user.Utilizador_ID
+    const { id } = req.params
+
+    const data = {
+      newValue,
+      userId,
+      saleId: id
+    }
 
     try {
-      const proposal = await ProposalSaleRepository.createProposalSale(novoValor)
+      const sale = await SaleRepository.getSaleById(id)
+
+      if (!sale) {
+        throw new HttpException('Venda não encontrada.', StatusCodes.NOT_FOUND)
+      }
+
+      const proposal = await ProposalSaleRepository.createProposalSale(data)
 
       if (!proposal) {
         throw new HttpException('Não foi possível criar a proposta.', StatusCodes.BAD_REQUEST)
       }
 
-      return response(res, true, StatusCodes.OK, proposal)
+      return response(res, true, StatusCodes.CREATED, proposal)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao criar proposta.')
     }

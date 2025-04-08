@@ -10,7 +10,7 @@
     "start:dev": "cross-env NODE_ENV=development nodemon server.js",
     "start:debug": "node --inspect --watch server.js",
     "start:prod": "cross-env NODE_ENV=production node dist/main",
-    "start:test": "cross-env NODE_ENV=development vitest",
+    "start:test": "cross-env NODE_ENV=testing vitest",
     "doc": "node ./src/services/swagger-service.js",
     "lint": "standard",
     "lint:fix": "standard --fix",

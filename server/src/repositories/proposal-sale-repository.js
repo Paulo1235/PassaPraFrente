@@ -3,17 +3,21 @@ import sql from 'mssql'
 import { getConnection } from '../database/db-config.js'
 
 class ProposalSaleRepository {
-  static async createProposalSale (novoValor) {
+  static async createProposalSale (data) {
     const pool = await getConnection()
 
     const proposal = await pool
       .request()
-      .input('novoValor', sql.Float, novoValor)
+      .input('novoValor', sql.Float, data.newValue)
+      .input('userId', sql.Int, data.userId)
+      .input('saleId', sql.Int, data.saleId)
       .query(`
-        INSERT INTO PropostaVenda(NovoValor) VALUES (@novoValor)
+        INSERT INTO 
+        PropostaVenda (Utilizador_ID, Venda_ID, NovoValor, Aceite) 
+        VALUES (@userId, @saleId, @novoValor, 0)
     `)
 
-    return proposal.recordset[0]
+    return proposal.recordset
   }
 
   static async getAllSaleProposals () {

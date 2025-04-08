@@ -32,7 +32,7 @@ proposalSaleRouter.get(
   ProposalSaleController.getAllSaleProposals
 )
 proposalSaleRouter.post(
-  '/proposal-sales/create',
+  '/proposal-sales/create/:id',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
