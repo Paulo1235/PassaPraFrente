@@ -4,7 +4,7 @@ import { login } from "../../lib/authSlice";
 import { useNavigate } from "react-router-dom";
 import logo from "../../images/logoEmpresa.png";
 import { useFormik } from "formik";
-import { loginSchema } from "../../lib/form";
+import { loginSchema } from "../../lib/schemas";
 import { toast, ToastContainer } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 

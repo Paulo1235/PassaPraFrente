@@ -37,4 +37,30 @@ const EditAccountSchema = yup.object().shape({
     address: yup.string().required('A morada é obrigatória'),
 });
 
-export { SendEmailSchema, loginSchema,UpdatePasswordSchema, EditAccountSchema };
+const CreateSaleSchema = yup.object().shape({
+    title: yup.string()
+      .required("Título é obrigatório")
+      .min(5, "Título deve ter pelo menos 5 caracteres")
+      .max(100, "Título deve ter no máximo 100 caracteres"),
+  
+    description: yup.string()
+      .required("Descrição é obrigatória")
+      .min(10, "Descrição deve ter pelo menos 10 caracteres"),
+  
+    price: yup.number()
+      .typeError("Valor deve ser um número")
+      .positive("Valor deve ser positivo")
+      .required("Valor é obrigatório"),
+  
+    condition: yup.string()
+      .required("Condição é obrigatória"),
+  
+    category: yup.string()
+      .required("Categoria é obrigatória"),
+  
+    // photos: yup.array()
+    //   .min(1, "Pelo menos 1 foto é obrigatória")
+    //   .max(3, "Máximo de 3 fotos permitido"),
+  });
+
+export { SendEmailSchema, loginSchema,UpdatePasswordSchema, EditAccountSchema, CreateSaleSchema };

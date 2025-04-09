@@ -2,7 +2,7 @@ import { useState } from "react";
 import logo from "../../images/logoEmpresa.png";
 import { Eye, EyeOff } from "lucide-react";
 import { useFormik } from "formik";
-import { UpdatePasswordSchema } from "../../lib/form";
+import { UpdatePasswordSchema } from "../../lib/schemas";
 
 const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";

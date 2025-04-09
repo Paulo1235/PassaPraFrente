@@ -2,61 +2,11 @@ import { useEffect, useRef } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Undo2, Plus, X } from "lucide-react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import { CreateSaleSchema } from "../../lib/schemas";
 import { fetchUserInfo } from "../../lib/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// Custom validation function for Formik
-const validateForm = (values) => {
-  const errors = {};
-
-  // Title validation
-  if (!values.title) {
-    errors.title = "Título é obrigatório";
-  } else if (values.title.length < 5) {
-    errors.title = "Título deve ter pelo menos 5 caracteres";
-  } else if (values.title.length > 100) {
-    errors.title = "Título deve ter no máximo 100 caracteres";
-  }
-
-  // Description validation
-  if (!values.description) {
-    errors.description = "Descrição é obrigatória";
-  } else if (values.description.length < 10) {
-    errors.description = "Descrição deve ter pelo menos 10 caracteres";
-  }
-
-  // Price validation
-  if (!values.price) {
-    errors.price = "Valor é obrigatório";
-  } else {
-    const priceNumber = Number.parseFloat(values.price);
-    if (isNaN(priceNumber)) {
-      errors.price = "Valor deve ser um número";
-    } else if (priceNumber <= 0) {
-      errors.price = "Valor deve ser positivo";
-    }
-  }
-
-  // Condition validation
-  if (!values.condition) {
-    errors.condition = "Condição é obrigatória";
-  }
-
-  // Category validation
-  if (!values.category) {
-    errors.category = "Categoria é obrigatória";
-  }
-
-  // Photos validation
-//   if (!values.photos || values.photos.length === 0) {
-//     errors.photos = "Pelo menos 1 foto é obrigatória";
-//   } else if (values.photos.length > 3) {
-//     errors.photos = "Máximo de 3 fotos permitido";
-//   }
-
-  return errors;
-};
 
 export default function CreateSale() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -75,7 +25,7 @@ export default function CreateSale() {
     // photos: [],
   };
 
-  const handleSubmit = async (values, { setSubmitting }) => {  
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const formData = new FormData();
       formData.append("title", values.title);
@@ -83,40 +33,34 @@ export default function CreateSale() {
       formData.append("price", values.price);
       formData.append("condition", values.condition);
       formData.append("category", values.category);
-          
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
-      }
 
-      console.log(values)
-    
       const response = await fetch("http://localhost:5000/api/sales/create", {
         method: "POST",
         body: JSON.stringify(values),
         headers: {
           "Content-Type": "application/json",
         },
-        // body: formData,
         credentials: "include",
       });
-  
+
       if (!response.ok) {
-        throw new Error("Erro ao criar a venda.");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro ao criar a venda.");
       }
-  
+
       toast.success("Venda criada com sucesso.");
-      navigate('/index');
+      navigate("/index");
     } catch (error) {
+      toast.error(error.message || "Erro desconhecido.");
       console.error("Erro ao enviar os dados:", error);
-      toast.error(error.response.data.message || "Erro desconhecido.");
     } finally {
       setSubmitting(false);
     }
   };
-  
 
   return (
     <div className="flex flex-row">
+      <ToastContainer />
       <div className="App w-screen flex flex-col">
         <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex flex-col items-end">
@@ -134,7 +78,7 @@ export default function CreateSale() {
 
           <Formik
             initialValues={initialValues}
-            validate={validateForm}
+            validationSchema={CreateSaleSchema}
             onSubmit={handleSubmit}
           >
             {({ values, errors, touched, setFieldValue }) => (
