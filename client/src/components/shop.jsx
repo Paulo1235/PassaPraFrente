@@ -1,7 +1,6 @@
 import Card from "./card";
 import Footer from "./footer";
 
-
 const ShopSection = ({ title, items }) => {
     return (
       <div className={`mt-8 md:mt-10 flex flex-col w-full px-4 md:px-6`}>
@@ -16,6 +15,9 @@ const ShopSection = ({ title, items }) => {
               size={item.size}
               value={item.value}
               category={title}
+              idVenda={item.idVenda}
+              idEmprestimo={item.idEmprestimo}
+              idSorteio={item.idSorteio}
             />
           ))}
         </div>
@@ -26,7 +28,7 @@ const ShopSection = ({ title, items }) => {
   const Shop = ({ shopData }) => {
     return (
       <div className="App w-full overflow-x-hidden flex flex-col">
-        {shopData.map((section, index) => (
+        {Object.values(shopData).map((section, index) => (
           <ShopSection key={`section-${index}`} title={section.title} items={section.items} />
         ))}
         <Footer />

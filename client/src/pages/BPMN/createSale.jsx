@@ -34,6 +34,11 @@ export default function CreateSale() {
       formData.append("condition", values.condition);
       formData.append("category", values.category);
 
+      // Log the contents of formData
+      // for (let [key, value] of formData.entries()) {
+      //   console.log(`${key}: ${value}`);
+      // }
+
       const response = await fetch("http://localhost:5000/api/sales/create", {
         method: "POST",
         body: JSON.stringify(values),
@@ -61,7 +66,7 @@ export default function CreateSale() {
   return (
     <div className="flex flex-row">
       <ToastContainer />
-      <div className="App w-screen flex flex-col">
+      <div className="App w-screen h-screen flex flex-col">
         <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex flex-col items-end">
             <a href="/index">
@@ -222,7 +227,7 @@ export default function CreateSale() {
                         <Field
                           id="price"
                           name="price"
-                          type="text"
+                          type="number"
                           className={`w-full p-2 border ${
                             errors.price && touched.price
                               ? "border-red-500"

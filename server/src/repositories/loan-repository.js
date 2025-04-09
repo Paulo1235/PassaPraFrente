@@ -60,10 +60,10 @@ class LoanRepository {
     const availableLoans = await pool
       .request()
       .query(`
-        SELECT * 
+        SELECT Emprestimo_ID, Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, ArtigoArtigo_ID, Estado
         FROM Emprestimo
-        JOIN Estado ON Estado.Estado_ID = Emprestimo.Estado_ID
-        WHERE Estado = 'Disponível'
+        JOIN Estado ON Estado.Estado_ID = Emprestimo.EstadoEstado_ID
+        WHERE Estado.Estado = 'Disponível'
       `)
 
     return availableLoans.recordset

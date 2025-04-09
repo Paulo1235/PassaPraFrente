@@ -38,7 +38,6 @@ import EditSale from "./pages/BPMN/editSale";
 import EditAccountPage from "./pages/editAccountPage";
 
 import AdminProtectedRoute from "./pages/ProtectedRoutes/adminProtectedRoute";
-import LoginPage from "./pages/loginPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -57,10 +56,7 @@ root.render(
         <Route path="/testeloan" element={<EditLoan />} />
 
         <Route path="/testeeditarconta" element={<EditAccountPage />} />
-        <Route path="/testelogin" element={<LoginPage />} />
 
-
-        
         <Route
           path="/createsale"
           element={<ProtectedRoute element={<CreateSale />} />}
@@ -82,16 +78,17 @@ root.render(
 
         {/* Paginas principais */}
         <Route path="/index" element={<ProtectedRoute element={<Main />} />} />
+
         <Route
-          path="/sale"
+          path="/sale/:id"
           element={<ProtectedRoute element={<LookSale />} />}
         />
         <Route
-          path="/loan"
+          path="/loan/:id"
           element={<ProtectedRoute element={<LookLoan />} />}
         />
         <Route
-          path="/draw"
+          path="/draw/:id"
           element={<ProtectedRoute element={<LookDraw />} />}
         />
         <Route
@@ -102,6 +99,7 @@ root.render(
           path="/editaccount"
           element={<ProtectedRoute element={<EditAccountPage />} />}
         />
+
         <Route path="/notfound" element={<NotFound />} />
         <Route path="*" element={<Navigate replace to="/notfound" />} />
       </Routes>

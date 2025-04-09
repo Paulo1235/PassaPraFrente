@@ -3,62 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Undo2, Plus, X } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
-// Custom validation function for Formik
-const validateForm = (values) => {
-  const errors = {};
-
-  // Title validation
-  if (!values.title) {
-    errors.title = "Título é obrigatório";
-  } else if (values.title.length < 5) {
-    errors.title = "Título deve ter pelo menos 5 caracteres";
-  } else if (values.title.length > 100) {
-    errors.title = "Título deve ter no máximo 100 caracteres";
-  }
-
-  // Description validation
-  if (!values.description) {
-    errors.description = "Descrição é obrigatória";
-  } else if (values.description.length < 10) {
-    errors.description = "Descrição deve ter pelo menos 10 caracteres";
-  }
-
-  // Condition validation
-  if (!values.condition) {
-    errors.condition = "Condição é obrigatória";
-  }
-
-  // Category validation
-  if (!values.category) {
-    errors.category = "Categoria é obrigatória";
-  }
-
-  // Start date validation
-  if (!values.startDate) {
-    errors.startDate = "Data de início é obrigatória";
-  }
-
-  // End date validation
-  if (!values.endDate) {
-    errors.endDate = "Data de fim é obrigatória";
-  } else if (
-    values.startDate &&
-    values.endDate &&
-    new Date(values.endDate) <= new Date(values.startDate)
-  ) {
-    errors.endDate = "Data de fim deve ser posterior à data de início";
-  }
-
-  // Photos validation
-  // if (!values.photos || values.photos.length === 0) {
-  //     errors.photos = "Pelo menos 1 foto é obrigatória";
-  // } else if (values.photos.length > 3) {
-  //     errors.photos = "Máximo de 3 fotos permitido";
-  // }
-
-  return errors;
-};
+import { CreateDrawSchema } from "../../lib/schemas";
 
 export default function CreateDraw() {
   const fileInputRef = useRef(null);
@@ -136,7 +81,7 @@ export default function CreateDraw() {
 
           <Formik
             initialValues={initialValues}
-            validate={validateForm}
+            validate={CreateDrawSchema}
             onSubmit={handleSubmit}
           >
             {({ values, errors, touched, setFieldValue }) => (

@@ -2,6 +2,7 @@ import { useState } from "react";
 import logo from "../../images/logoEmpresa.png";
 import { useFormik } from "formik";
 import { SendEmailSchema } from "../../lib/schemas";
+import { toast, ToastContainer } from "react-toastify";
 
 const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
@@ -47,6 +48,8 @@ export default function PasswordReset() {
 
         const data = await response.json();
 
+        toast.success("Email enviado com sucesso!");
+
         if (!response.ok) {
           throw new Error(data.message || "Send Email failed");
         }
@@ -54,6 +57,7 @@ export default function PasswordReset() {
         // Show success notification
       } catch (err) {
         setError(err instanceof Error ? err.message : "Send Email failed");
+        toast.error("Erro ao enviar o email!");
       } finally {
         setIsLoading(false);
       }
@@ -62,6 +66,7 @@ export default function PasswordReset() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#E0E5B6]">
+      <ToastContainer />
       <div className="w-full max-w-4xl bg-[#24251D] rounded-3xl shadow-xl overflow-hidden flex">
         {/* Left Side (Logo & Message) */}
         <div className="hidden md:flex md:w-1/2 bg-[#24251D] flex-col items-center justify-center p-8">

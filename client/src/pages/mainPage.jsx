@@ -3,8 +3,6 @@ import { Helmet } from "react-helmet";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout, fetchProtectedData } from "../lib/authSlice";
-import { fetchUserInfo } from "../lib/authSlice"; // Import the action
 
 //? CSS
 import "../components/css/sidebar.css";
@@ -13,45 +11,85 @@ import "../index.css";
 //? Components
 import SideBar from "../components/sideBar";
 import Shop from "../components/shop";
-
-const shopData = [
-  {
-    title: "Vendas",
-    items: [
-      { name: "Camisola dourada", size: "S", value: "10,50" },
-      { name: "Camisola vermelha", size: "M", value: "15,00" },
-      { name: "Camisola azul", size: "XL", value: "17,40" },
-      { name: "Camisola rosa", size: "XXL", value: "20,00" },
-      { name: "Camisola amarela", size: "3XL", value: "25,00" },
-    ],
-  },
-  {
-    title: "Emprestimos",
-    items: [
-      { name: "Camisola dourada", size: "S", value: "10,50" },
-      { name: "Camisola vermelha", size: "M", value: "15,00" },
-      { name: "Camisola azul", size: "XL", value: "17,40" },
-      { name: "Camisola rosa", size: "XXL", value: "20,00" },
-      { name: "Camisola amarela", size: "3XL", value: "25,00" },
-    ],
-  },
-  {
-    title: "Sorteios",
-    items: [
-      { name: "Camisola dourada", size: "S", value: "10,50" },
-      { name: "Camisola vermelha", size: "M", value: "15,00" },
-      { name: "Camisola azul", size: "XL", value: "17,40" },
-      { name: "Camisola rosa", size: "XL", value: "17,40" },
-    ],
-  },
-];
+import { useState } from "react";
 
 const Main = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const [shopData, setShopData] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchShopData = async () => {
+      try {
+        const responseSales = await fetch("http://localhost:5000/api/sales/available", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+    
+        const responseLoans = await fetch("http://localhost:5000/api/loans/available", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+    
+        const responseGiveaways = await fetch("http://localhost:5000/api/giveaways/available", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+    
+        if (!responseSales.ok || !responseGiveaways.ok || !responseLoans.ok) {
+          throw new Error("Failed to fetch shop data");
+        }
+    
+        const dataSales = await responseSales.json();
+        const dataLoans = await responseLoans.json();
+        const dataGiveaways = await responseGiveaways.json();
+        console.log(dataGiveaways)
+        const transformItems = (items, category) => {
+          return items.message.map((item) => ({
+            name: item.Titulo || item.title || "Sem título",
+            size: item.Descricao || item.description || "Sem descrição",
+            value: item.Valor || item.Valor || "N/A",
+            idVenda: item.Venda_ID || "ID",
+            idEmprestimo: item.Emprestimo_ID || "ID",
+            idSorteio: item.Sorteio_ID || "ID",
+            category,
+          }));
+        };
+
+        const shopData = {
+          sales: {
+            title: "Vendas",
+            items: transformItems(dataSales, "Vendas"),
+          },
+          loans: {
+            title: "Emprestimos",
+            items: transformItems(dataLoans, "Emprestimos"),
+          },
+          giveaways: {
+            title: "Sorteios",
+            items: transformItems(dataGiveaways, "Sorteios"),
+          },
+        };
+        console.log(shopData)
+        setShopData(shopData);
+      } catch (error) {
+        console.error("Error fetching shop data:", error);
+      }
+    };
+    
+
+    fetchShopData();
+
     if (!isAuthenticated) {
       navigate("/");
       return;

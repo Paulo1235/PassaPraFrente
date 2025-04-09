@@ -3,74 +3,74 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Undo2, Plus, X, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-
+import { CreateLoanSchema } from "../../lib/schemas";
 // Define the form values type
-const validateForm = (values) => {
-    const errors = {};
+// const validateForm = (values) => {
+//     const errors = {};
 
-    // Title validation
-    if (!values.title) {
-        errors.title = "Título é obrigatório";
-    } else if (values.title.length < 5) {
-        errors.title = "Título deve ter pelo menos 5 caracteres";
-    } else if (values.title.length > 100) {
-        errors.title = "Título deve ter no máximo 100 caracteres";
-    }
+//     // Title validation
+//     if (!values.title) {
+//         errors.title = "Título é obrigatório";
+//     } else if (values.title.length < 5) {
+//         errors.title = "Título deve ter pelo menos 5 caracteres";
+//     } else if (values.title.length > 100) {
+//         errors.title = "Título deve ter no máximo 100 caracteres";
+//     }
 
-    // Description validation
-    if (!values.description) {
-        errors.description = "Descrição é obrigatória";
-    } else if (values.description.length < 10) {
-        errors.description = "Descrição deve ter pelo menos 10 caracteres";
-    }
+//     // Description validation
+//     if (!values.description) {
+//         errors.description = "Descrição é obrigatória";
+//     } else if (values.description.length < 10) {
+//         errors.description = "Descrição deve ter pelo menos 10 caracteres";
+//     }
 
-    // Price validation
-    if (!values.price) {
-        errors.price = "Valor é obrigatório";
-    } else {
-        const priceNumber = parseFloat(values.price);
-        if (isNaN(priceNumber)) {
-            errors.price = "Valor deve ser um número";
-        } else if (priceNumber <= 0) {
-            errors.price = "Valor deve ser positivo";
-        }
-    }
+//     // Price validation
+//     if (!values.price) {
+//         errors.price = "Valor é obrigatório";
+//     } else {
+//         const priceNumber = parseFloat(values.price);
+//         if (isNaN(priceNumber)) {
+//             errors.price = "Valor deve ser um número";
+//         } else if (priceNumber <= 0) {
+//             errors.price = "Valor deve ser positivo";
+//         }
+//     }
 
-    // Condition validation
-    if (!values.condition) {
-        errors.condition = "Condição é obrigatória";
-    }
+//     // Condition validation
+//     if (!values.condition) {
+//         errors.condition = "Condição é obrigatória";
+//     }
 
-    // Category validation
-    if (!values.category) {
-        errors.category = "Categoria é obrigatória";
-    }
+//     // Category validation
+//     if (!values.category) {
+//         errors.category = "Categoria é obrigatória";
+//     }
 
-    // Start date validation
-    if (!values.startDate) {
-        errors.startDate = "Data de início é obrigatória";
-    }
+//     // Start date validation
+//     if (!values.startDate) {
+//         errors.startDate = "Data de início é obrigatória";
+//     }
 
-    // End date validation
-    if (!values.endDate) {
-        errors.endDate = "Data de fim é obrigatória";
-    } else if (
-        values.startDate &&
-        values.endDate &&
-        new Date(values.endDate) <= new Date(values.startDate)
-    ) {
-        errors.endDate = "Data de fim deve ser posterior à data de início";
-    }
+//     // End date validation
+//     if (!values.endDate) {
+//         errors.endDate = "Data de fim é obrigatória";
+//     } else if (
+//         values.startDate &&
+//         values.endDate &&
+//         new Date(values.endDate) <= new Date(values.startDate)
+//     ) {
+//         errors.endDate = "Data de fim deve ser posterior à data de início";
+//     }
 
-    // Photos validation
-    // if (!values.photos || values.photos.length === 0) {
-    //     errors.photos = "Pelo menos 1 foto é obrigatória";
-    // } else if (values.photos.length > 3) {
-    //     errors.photos = "Máximo de 3 fotos permitido";
-    // }
+//     // Photos validation
+//     // if (!values.photos || values.photos.length === 0) {
+//     //     errors.photos = "Pelo menos 1 foto é obrigatória";
+//     // } else if (values.photos.length > 3) {
+//     //     errors.photos = "Máximo de 3 fotos permitido";
+//     // }
 
-    return errors;
-};
+//     return errors;
+// };
 
 export default function CreateLoan() {
     const fileInputRef = useRef(null);
@@ -148,7 +148,7 @@ export default function CreateLoan() {
 
                     <Formik
                         initialValues={initialValues}
-                        validate={validateForm}
+                        validate={CreateLoanSchema}
                         onSubmit={handleSubmit}
                     >
                         {({ values, errors, touched, setFieldValue }) => (

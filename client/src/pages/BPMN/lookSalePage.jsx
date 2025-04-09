@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Undo2 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 //? Components
 import SideBar from "../../components/sideBar";
@@ -15,26 +15,46 @@ import logo from "../../images/logoEmpresa.png";
 import "../../components/css/sidebar.css";
 import "../../index.css";
 
-function CreateSale() {
+function LookSale() {
+  const { id } = useParams();
   const { userId, isAuthenticated } = useSelector((state) => state.auth);
+  const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log("User State in Main:", userId, isAuthenticated);
-
   useEffect(() => {
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/sales/id/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        const data = await response.json();
+        console.log(data.message);
+        setData(data.message);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+  
+    fetchData();
+
     if (!isAuthenticated) {
       navigate("/");
       return;
     }
-  }, [isAuthenticated, dispatch, navigate]);
+  }, [isAuthenticated, dispatch, navigate, id]);
 
   if (!isAuthenticated) return null;
 
   return (
     <div className="flex flex-row h-screen overflow-y-auto">
       <Helmet>
-        <title>Criar Venda</title>
+        <title>Venda</title>
       </Helmet>
       <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
       <div className="App w-full flex flex-col">
@@ -64,23 +84,23 @@ function CreateSale() {
               <p className="text-2xl mb-2">
                 Titulo:{" "}
                 <span className="text-lg text-black">
-                  Camisola Quentinha Tigresa - XS
+                  {data.Titulo}
                 </span>
               </p>
               <div className="flex flex-col mb-4">
                 <p className="text-2xl">Descricao:</p>
                 <span className="text-lg text-black">
-                  Quentinha, usada poucas vezes Tamanho XS Cor castanho
+                  {data.Descricao}
                 </span>
               </div>
               <div className="flex flex-wrap gap-10">
                 <div className="flex flex-col">
                   <p className="text-2xl">Valor:</p>
-                  <span className="text-lg text-black">10.50$</span>
+                  <span className="text-lg text-black">{data.Valor}€</span>
                 </div>
                 <div className="flex flex-col">
                   <p className="text-2xl">Condicao:</p>
-                  <span className="text-lg text-black">Como novo</span>
+                  <span className="text-lg text-black">{data.Condicao}</span>
                 </div>
               </div>
             </div>
@@ -92,7 +112,7 @@ function CreateSale() {
                 <span className="text-xl text-white">Fazer proposta</span>
               </button>
               <button className="border border-txtp rounded-lg px-4 py-2 flex items-center justify-center">
-                <span className="text-xl text-txtp">+351 930 213 123</span>
+                <span className="text-xl text-txtp">{data.Contacto}</span>
               </button>
             </div>
           </section>
@@ -103,4 +123,4 @@ function CreateSale() {
   );
 }
 
-export default CreateSale;
+export default LookSale;
