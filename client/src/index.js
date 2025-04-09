@@ -35,6 +35,7 @@ import CreateDraw from "./pages/BPMN/createDraw";
 import EditDraw from "./pages/BPMN/editDraw";
 import EditLoan from "./pages/BPMN/editLoan";
 import EditSale from "./pages/BPMN/editSale";
+import ConfirmAccount from "./pages/BPMN/confirmAccount";
 import EditAccountPage from "./pages/editAccountPage";
 
 import AdminProtectedRoute from "./pages/ProtectedRoutes/adminProtectedRoute";
@@ -98,6 +99,10 @@ root.render(
         <Route
           path="/editaccount"
           element={<ProtectedRoute element={<EditAccountPage />} />}
+        />
+        <Route
+          path="/confirm-account"
+          element={<ProtectedRoute element={<ConfirmAccount />} />}
         />
 
         <Route path="/notfound" element={<NotFound />} />

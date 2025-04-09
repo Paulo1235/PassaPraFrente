@@ -168,6 +168,15 @@ const EditAccountPage = () => {
                 Guardar
               </button>
             </div>
+            <div>
+            <button
+                type="button"
+                className="w-1/2 px-6 py-2 text-l text-[#73802A] border border-[#73802A] rounded-md bg-bgp hover:bg-[#e8ecc9]"
+                onClick={() => navigate("/confirm-account")}
+              >
+                Confirmar Conta
+              </button>
+            </div>
           </form>
         </div>
       </div>
