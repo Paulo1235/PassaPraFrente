@@ -28,6 +28,7 @@ import giveawayRouter from './src/routes/giveaway-routes.js'
 import { initSocketServer } from './src/utils/socket-server.js'
 import { getConnection } from './src/database/db-config.js'
 import { configureCloudinary } from './src/services/cloudinary-service.js'
+import notificationRouter from './src/routes/notification-routes.js'
 
 const app = express()
 
@@ -67,7 +68,8 @@ app.use('/api',
   saleRouter,
   transactionSaleRouter,
   loanRouter,
-  giveawayRouter
+  giveawayRouter,
+  notificationRouter
 )
 
 app.get('/', (req, res) => {
