@@ -71,8 +71,6 @@ class GiveawayRepository {
   static async updateGiveaway (id, giveaway) {
     const pool = await getConnection()
 
-    console.log('giveaway', giveaway)
-
     const updatedGiveaway = await pool
       .request()
       .input('id', sql.Int, id)
@@ -92,6 +90,21 @@ class GiveawayRepository {
       `)
 
     return updatedGiveaway.rowsAffected[0] > 0
+  }
+
+  static async getUserGiveaways (userId) {
+    const pool = await getConnection()
+
+    const giveaways = await pool
+      .request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        SELECT * 
+        FROM Sorteio
+        WHERE Utilizador_ID = @userId
+      `)
+
+    return giveaways.recordset
   }
 }
 

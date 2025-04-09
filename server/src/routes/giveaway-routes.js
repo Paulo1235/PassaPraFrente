@@ -52,4 +52,12 @@ giveawayRouter.put(
   GiveawayController.updateGiveaway
 )
 
+giveawayRouter.get(
+  '/giveaways/user',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  GiveawayController.getUserGiveaways
+)
+
 export default giveawayRouter

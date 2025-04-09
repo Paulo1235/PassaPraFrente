@@ -83,6 +83,18 @@ class GiveawayController {
       handleError(res, error, 'Ocorreu um erro ao atualizar o giveaway.')
     }
   }
+
+  static async getUserGiveaways (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const giveaways = await GiveawayRepository.getUserGiveaways(userId)
+
+      return response(res, true, StatusCodes.OK, giveaways)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar os giveaways do utilizador.')
+    }
+  }
 }
 
 export default GiveawayController
