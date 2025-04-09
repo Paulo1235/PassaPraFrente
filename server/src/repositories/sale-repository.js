@@ -31,9 +31,13 @@ class SaleRepository {
     const sale = await pool.request()
       .input('id', sql.Int, id)
       .query(`
-        SELECT * 
+        SELECT Venda_ID, Titulo, Descricao, Valor, NomeCategoria, Condicao, Contacto
         FROM Venda
-        WHERE Venda.Venda_ID = @id
+        JOIN Utilizador ON Utilizador.Utilizador_ID = Venda.Utilizador_ID
+        JOIN Artigo ON Artigo.Artigo_ID = Venda.Artigo_ID
+        JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
+        JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
+        WHERE Venda_ID = @id
       `)
 
     return sale.recordset[0]

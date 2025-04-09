@@ -25,6 +25,10 @@ class LoanController {
     try {
       const loan = await LoanRepository.getLoanById(id)
 
+      if (!loan) {
+        throw new HttpException('Empréstimo não encontrado.', StatusCodes.NOT_FOUND)
+      }
+
       return response(res, true, StatusCodes.OK, loan)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar o empréstimo.')
