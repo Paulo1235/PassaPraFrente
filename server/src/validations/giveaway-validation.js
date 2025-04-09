@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
 export const giveawaySchema = z.object({
-  title: z.string().max(50).min(1).trim(),
-  description: z.string().min(10).max(255),
-  startDate: z.date(),
-  endDate: z.date()
+  startDate: z.string().transform((val) => new Date(val)),
+  endDate: z.string().transform((val) => new Date(val)),
+  title: z.string(),
+  description: z.string()
 })

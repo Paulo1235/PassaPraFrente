@@ -10,13 +10,8 @@ class GiveawayController {
     const userId = req.user.Utilizador_ID
     const data = req.body
 
-    const updatedData = {
-      data,
-      userId
-    }
-
     try {
-      const giveaway = await GiveawayRepository.createGiveaway(updatedData)
+      const giveaway = await GiveawayRepository.createGiveaway({ data, userId })
 
       return response(res, true, StatusCodes.CREATED, giveaway)
     } catch (error) {

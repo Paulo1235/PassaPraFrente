@@ -4,7 +4,7 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import SaleRepository from '../repositories/sale-repository.js'
 import LoanRepository from '../repositories/loan-repository.js'
 import UserRepository from '../repositories/user-repository.js'
-import { response } from 'express'
+import response from '../utils/response.js'
 import GiveawayRepository from '../repositories/giveaway-repository.js'
 
 class ProposalMiddleware {
@@ -75,6 +75,7 @@ class ProposalMiddleware {
       const birthDate = new Date(user.DataNasc)
 
       let age = currentDate.getFullYear() - birthDate.getFullYear()
+
       const monthDifference = currentDate.getMonth() - birthDate.getMonth()
       const dayDifference = currentDate.getDate() - birthDate.getDate()
 
