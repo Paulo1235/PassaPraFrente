@@ -85,7 +85,7 @@ app.get('*', (req, res) => {
 
 initSocketServer(app)
 
-if (NODE_ENV !== 'testing') {
+if (NODE_ENV !== 'test') {
   app.listen(PORT, async () => {
     console.log(
       chalk.green.bold(`\nApp '${NAME}' está a correr.`) + '\n' + chalk.blue.underline(`Ativo em: http://localhost:${PORT}`)
