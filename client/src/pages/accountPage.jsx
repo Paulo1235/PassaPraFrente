@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchUserInfo, logout } from "../lib/authSlice"; // Import the action
+import { fetchUserInfo } from "../lib/authSlice"; // Import the action
 
 //? CSS
 import "../components/css/sidebar.css";
@@ -15,7 +15,7 @@ import Review from "../components/review";
 import ContentAccount from "../components/contentAccount";
 
 //? Icons
-import AccLogo from "../images/conta-logo.png";
+import ProfilePicture from "../images/default-avatar.jpg";
 import Star1 from "../images/star1.svg";
 import Star2 from "../images/star2.svg";
 import EditIco from "../images/edit-account.svg";
@@ -53,8 +53,6 @@ const Account = () => {
       return;
     }
 
-    console.log(user)
-
     dispatch(fetchUserInfo());
   }, [isAuthenticated, dispatch, navigate]);
 
@@ -74,7 +72,7 @@ const Account = () => {
           <div className="flex flex-col md:flex-row md:items-center">
             <div className="account mt-6 md:mt-10 flex flex-col md:flex-row">
               <img
-                src={user?.message.Url || AccLogo}
+                src={user?.message.Url || ProfilePicture}
                 className="rounded-full w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 xl:w-[182px] xl:h-[182px] object-cover mx-auto md:mx-0"
                 alt="account-logo"
               />
