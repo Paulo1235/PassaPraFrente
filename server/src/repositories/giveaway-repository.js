@@ -19,11 +19,11 @@ class GiveawayRepository {
       .input('userId', sql.Int, userId)
       .input('estadoId', sql.Int, 1)
       .query(`
-        INSERT INTO Giveaway (DataInicio, DataFim, Titulo, Descricao, Artigo_ID, Utilizador_ID, Estado_ID)
+        INSERT INTO Sorteio (DataInicio, DataFim, Titulo, Descricao, ArtigoArtigo_ID, Utilizador_ID, Estado_ID)
         VALUES (@dataInicio, @dataFim, @titulo, @descricao, @itemId, @userId, @estadoId)
       `)
 
-    return giveaway.recordset[0]
+    return giveaway.rowsAffected[0] > 0
   }
 
   static async getGiveawayById (id) {
@@ -34,8 +34,8 @@ class GiveawayRepository {
       .input('id', sql.Int, id)
       .query(`
         SELECT * 
-        FROM Giveaway
-        WHERE Giveaway.Giveaway_ID = @id
+        FROM Sorteio
+        WHERE Sorteio_ID = @id
       `)
 
     return giveaway.recordset[0]
@@ -48,7 +48,7 @@ class GiveawayRepository {
       .request()
       .query(`
         SELECT * 
-        FROM Giveaway
+        FROM Sorteio
       `)
 
     return giveaways.recordset
@@ -61,8 +61,8 @@ class GiveawayRepository {
       .request()
       .query(`
         SELECT * 
-        FROM Giveaway
-        WHERE Giveaway.Estado_ID = 1
+        FROM Sorteio
+        WHERE Estado_ID = 1
       `)
 
     return availableGiveaways.recordset
@@ -71,6 +71,8 @@ class GiveawayRepository {
   static async updateGiveaway (id, giveaway) {
     const pool = await getConnection()
 
+    console.log('giveaway', giveaway)
+
     const updatedGiveaway = await pool
       .request()
       .input('id', sql.Int, id)
@@ -78,18 +80,18 @@ class GiveawayRepository {
       .input('dataFim', sql.DateTime, giveaway.endDate)
       .input('titulo', sql.VarChar, giveaway.title)
       .input('descricao', sql.VarChar, giveaway.description)
-      .input('estado', sql.Int, giveaway.date)
+      .input('estado', sql.Int, giveaway.state)
       .query(`
-        UPDATE Giveaway
-        SET Data_Inicio = @dataInicio,
-            Data_Fim = @dataFim,
+        UPDATE Sorteio
+        SET DataInicio = @dataInicio,
+            DataFim = @dataFim,
             Titulo = @titulo,
-            Descricao = @descricao
+            Descricao = @descricao,
             Estado_ID = @estado
-        WHERE Giveaway_ID = @id
+        WHERE Sorteio_ID = @id
       `)
 
-    return updatedGiveaway.recordset[0]
+    return updatedGiveaway.rowsAffected[0] > 0
   }
 }
 

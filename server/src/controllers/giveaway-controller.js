@@ -11,9 +11,9 @@ class GiveawayController {
     const data = req.body
 
     try {
-      const giveaway = await GiveawayRepository.createGiveaway({ data, userId })
+      await GiveawayRepository.createGiveaway({ data, userId })
 
-      return response(res, true, StatusCodes.CREATED, giveaway)
+      return response(res, true, StatusCodes.CREATED, 'Giveaway criado com sucesso.')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao criar o giveaway. Tente novamente mais tarde.')
     }
@@ -28,6 +28,8 @@ class GiveawayController {
       if (!giveaway) {
         throw new HttpException('Giveaway não encontrado.', StatusCodes.NOT_FOUND)
       }
+
+      return response(res, true, StatusCodes.OK, giveaway)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar o giveaway.')
     }
@@ -65,10 +67,6 @@ class GiveawayController {
       }
 
       const stateId = await IdService.getStateById(data.state)
-
-      if (!stateId) {
-        throw new HttpException('Estado inválido.', StatusCodes.NOT_FOUND)
-      }
 
       const updatedData = {
         startDate: data.startDate || existingGiveaway.DataInicio,

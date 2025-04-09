@@ -20,7 +20,7 @@ giveawayRouter.post(
 )
 
 giveawayRouter.get(
-  '/giveaways/:id',
+  '/giveaways/id/:id',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   GiveawayController.getGiveawayById
@@ -43,11 +43,10 @@ giveawayRouter.get(
 )
 
 giveawayRouter.put(
-  '/giveaways/:id',
+  '/giveaways/id/:id',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  ProposalMiddleware.isAdult,
   ProposalMiddleware.isOwnerGiveaway,
   validateSchema(giveawaySchema, true),
   GiveawayController.updateGiveaway
