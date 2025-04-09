@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchUserInfo } from "../../lib/authSlice";
+import { Undo2 } from "lucide-react";
 
 const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
@@ -14,72 +15,93 @@ export default function PasswordReset() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setIsLoading] = useState(false);
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!email) {
-      setError("O email é obrigatório!");
-    } else {
-      setError("");
-      // Aqui você pode adicionar a lógica para enviar o formulário
-    }
-  };
+  const [showCodeForm, setShowCodeForm] = useState(false);
+  const [activationToken, setActivationToken] = useState("");
 
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      activationCode: "",
     },
-    validationSchema: SendEmailSchema,
+    // validationSchema: SendEmailSchema,
     onSubmit: async (values) => {
-      const { email } = values;
+      console.log("Enviando valores do form:", values);
+      const activationCode = values.activationCode;
 
       setError("");
       setIsLoading(true);
 
       try {
-        const response = await fetch(
-          `${BACKEND_URL}/api/users/activate-user`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email }),
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`${BACKEND_URL}/api/auth/activate-user`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-activation-token": activationToken, // <- token enviado no header
+          },
+          body: JSON.stringify({ activationCode }),
+          credentials: "include",
+        });
 
         const data = await response.json();
 
-        toast.success("Email enviado com sucesso!");
-
         if (!response.ok) {
-          throw new Error(data.message || "Send Email failed");
+          throw new Error(data.message || "Código inválido");
         }
 
-        // Show success notification
+        toast.success("Conta verificada com sucesso!");
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Send Email failed");
-        toast.error("Erro ao enviar o email!");
+        setError(err instanceof Error ? err.message : "Erro na verificação");
+        toast.error("Erro ao verificar o código!");
       } finally {
         setIsLoading(false);
       }
     },
   });
 
+  const handleSendEmail = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/auth/send-activation-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: user.message.Email }),
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Falha ao enviar o email");
+      }
+
+      toast.success("Email enviado com sucesso!");
+      setActivationToken(data.activationToken); // <- token recebido e guardado
+      setShowCodeForm(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao enviar o email");
+      toast.error("Erro ao enviar o email!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/");
       return;
     }
-    console.log();
-    dispatch(fetchUserInfo()); // Fetch user info on page load
+    dispatch(fetchUserInfo());
   }, [isAuthenticated, dispatch, navigate]);
 
   if (!isAuthenticated) return null;
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#E0E5B6]">
       <ToastContainer />
@@ -98,61 +120,80 @@ export default function PasswordReset() {
         {/* Right Side (Form) */}
         <div className="w-full md:w-1/2 bg-white rounded-2xl m-4 p-6">
           <h2 className="text-2xl font-medium text-[#73802A] mb-6 text-center">
-            Confirmar Conta
+            Verificar Conta
           </h2>
           <p className="text-center mb-8 text-gray-800">
-           O codigo de verificação foi enviado para:
+            O código de verificação foi enviado para:
             <br />
-             {user.message.Email} 
+            {user.message.Email}
             <br />
-            
           </p>
 
-          <form onSubmit={formik.handleSubmit}>
-            <div>
+          {!showCodeForm && (
+            <div className="mt-12 space-y-4">
+              <button
+                type="button"
+                onClick={handleSendEmail}
+                className="w-full text-white py-2 px-4 bg-[#CAAD7E] hover:bg-[#c2a478] text-black font-medium rounded-md transition duration-200"
+              >
+                Enviar Email
+              </button>
+            </div>
+          )}
+
+          {showCodeForm && (
+            <form onSubmit={formik.handleSubmit}>
               <div className="space-y-4">
                 <div className="space-y-2">
                   <label
-                    htmlFor="email"
+                    htmlFor="activationCode"
                     className="block text-sm font-medium text-[#73802A]"
                   >
-                    Introduza o Código aqui:
+                    Código:
                   </label>
                   <input
-                    type="number"
-                    id="number"
-                    value={formik.values.code}
+                    type="text"
+                    id="activationCode"
+                    name="activationCode"
+                    value={formik.values.activationCode}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     className={`w-full px-3 py-2 border ${
-                      formik.touched.code && formik.errors.code
+                      formik.touched.activationCode && formik.errors.activationCode
                         ? "border-red-500"
                         : "border-[#73802A]"
                     } rounded-md focus:outline-none focus:ring-1 focus:ring-[#73802A]`}
                   />
-                  {formik.touched.code && formik.errors.code && (
+                  {formik.touched.activationCode && formik.errors.activationCode && (
                     <p className="text-red-500 text-sm">
-                      {formik.errors.code}
+                      {formik.errors.activationCode}
                     </p>
                   )}
                 </div>
               </div>
 
-              <div className="mt-12 space-y-4">
+              <div className="mt-12 space-y-4 flex flex-col items-center">
                 <button
                   type="submit"
+                  disabled={loading}
+                    onClick={() => console.log("Botão clicado")}
+
                   className="w-full text-white py-2 px-4 bg-[#CAAD7E] hover:bg-[#c2a478] text-black font-medium rounded-md transition duration-200"
                 >
-                  Enviar
+                  {loading ? "Enviando..." : "Enviar"}
                 </button>
-                <p className="text-center text-sm">
-                  <a href="/editaccount" className="text-[#73802A] hover:underline">
-                    Voltar 
-                  </a>
-                </p>
               </div>
-            </div>
-          </form>
+            </form>
+          )}
+
+          <button
+            type="button"
+            className="flex items-center text-txts mt-6"
+            onClick={() => navigate("/editaccount")}
+          >
+            <Undo2 className="mr-2" />
+            <span>Voltar</span>
+          </button>
         </div>
       </div>
     </div>

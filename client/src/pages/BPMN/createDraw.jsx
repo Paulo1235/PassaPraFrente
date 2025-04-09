@@ -81,7 +81,7 @@ export default function CreateDraw() {
 
           <Formik
             initialValues={initialValues}
-            validate={CreateDrawSchema}
+            validationSchema={CreateDrawSchema}
             onSubmit={handleSubmit}
           >
             {({ values, errors, touched, setFieldValue }) => (

@@ -148,7 +148,7 @@ export default function CreateLoan() {
 
                     <Formik
                         initialValues={initialValues}
-                        validate={CreateLoanSchema}
+                        validationSchema={CreateLoanSchema}
                         onSubmit={handleSubmit}
                     >
                         {({ values, errors, touched, setFieldValue }) => (
