@@ -1,25 +1,27 @@
+import sql from 'mssql'
+
 import { getConnection } from '../database/db-config.js'
 import ItemRepository from './item-repository.js'
 
 class GiveawayRepository {
-  static async createGiveaway(giveaway) {
-    const pool = await getConnection();
+  static async createGiveaway (data) {
+    const pool = await getConnection()
 
-    const item = await ItemRepository.createItem(giveaway.condicao, giveaway.categoria)
+    const item = await ItemRepository.createItem(data.condition, data.category)
 
     const giveaway = await pool
       .request()
-      .input('dataInicio', sql.DateTime, giveaway.dataInicio)
-      .input('dataFim', sql.DateTime, giveaway.dataFim)
-      .input('titulo', sql.VarChar, giveaway.titulo)
-      .input('descricao', sql.VarChar, giveaway.descricao)
+      .input('dataInicio', sql.DateTime, data.startDate)
+      .input('dataFim', sql.DateTime, data.endDate)
+      .input('titulo', sql.VarChar, data.title)
+      .input('descricao', sql.VarChar, data.description)
       .input('itemId', sql.Int, item.Artigo_ID)
       .input('estadoId', sql.Int, 1)
 
     return giveaway.recordset[0]
   }
 
-  static async getGiveawayById(id) {
+  static async getGiveawayById (id) {
     const pool = await getConnection()
 
     const giveaway = await pool
@@ -34,7 +36,7 @@ class GiveawayRepository {
     return giveaway.recordset[0]
   }
 
-  static async getAllGiveaways() {
+  static async getAllGiveaways () {
     const pool = await getConnection()
 
     const giveaways = await pool
@@ -43,11 +45,11 @@ class GiveawayRepository {
         SELECT * 
         FROM Giveaway
       `)
-    
-      return giveaways.recordset
+
+    return giveaways.recordset
   }
 
-  static async getAvailableGiveaways() {
+  static async getAvailableGiveaways () {
     const pool = await getConnection()
 
     const availableGiveaways = await pool
@@ -61,17 +63,17 @@ class GiveawayRepository {
     return availableGiveaways.recordset
   }
 
-  static async updateGiveaway(id, giveaway) {
+  static async updateGiveaway (id, giveaway) {
     const pool = await getConnection()
 
     const updatedGiveaway = await pool
       .request()
       .input('id', sql.Int, id)
-      .input('dataInicio', sql.DateTime, giveaway.dataInicio)
-      .input('dataFim', sql.DateTime, giveaway.dataFim)
-      .input('titulo', sql.VarChar, giveaway.titulo)
-      .input('descricao', sql.VarChar, giveaway.descricao)
-      .input('estado', sql.Int, giveaway.estado)
+      .input('dataInicio', sql.DateTime, giveaway.startDate)
+      .input('dataFim', sql.DateTime, giveaway.endDate)
+      .input('titulo', sql.VarChar, giveaway.title)
+      .input('descricao', sql.VarChar, giveaway.description)
+      .input('estado', sql.Int, giveaway.date)
       .query(`
         UPDATE Giveaway
         SET Data_Inicio = @dataInicio,
