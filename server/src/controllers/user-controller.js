@@ -94,7 +94,11 @@ class UserController {
     const id = req.user.Utilizador_ID
 
     try {
-      const user = await UserRepository.getUserById(id)
+      let user = await UserRepository.getUserWithAvatar(id)
+
+      if (!user.PublicID || !user.Url) {
+        user = await UserRepository.getUserById(id)
+      }
 
       return response(res, true, StatusCodes.OK, user)
     } catch (error) {
@@ -173,15 +177,15 @@ class UserController {
 
   static async updateUserAvatar (req, res) {
     const id = req.user.Utilizador_ID
-    const { avatar } = req.body
+    const { thumbnail } = req.body
 
     try {
       const userAvatar = await UserRepository.getUserAvatar(id)
 
-      if (userAvatar.public_id) {
-        await cloudinary.v2.uploader.destroy(userAvatar.public_id)
+      if (userAvatar.PublicID) {
+        await cloudinary.v2.uploader.destroy(userAvatar.PublicID)
 
-        const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+        const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: 'users',
           width: 150
         })

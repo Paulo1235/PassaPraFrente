@@ -182,7 +182,7 @@ class UserRepository {
       .input('publicId', sql.VarChar, publicId)
       .input('url', sql.VarChar, url)
       .query(`
-        INSERT INTO ImagemUtilizador (Utilizador_ID, Public_ID, Url)
+        INSERT INTO ImagemUtilizador (Utilizador_ID, PublicID, Url)
         VALUES (@id, @publicId, @url)
     `)
 
@@ -201,7 +201,7 @@ class UserRepository {
         WHERE Utilizador_ID = @id
       `)
 
-    return avatar.recordset
+    return avatar.recordset[0]
   }
 
   static async updateUserAvatar (id, publicId, url) {
@@ -219,6 +219,22 @@ class UserRepository {
       `)
 
     return updatedAvatar.rowsAffected[0] > 0
+  }
+
+  static async getUserWithAvatar (id) {
+    const pool = await getConnection()
+
+    const user = await pool.request()
+      .input('id', sql.Int, id)
+      .query(`
+        SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail, PublicID, Url
+        FROM Utilizador 
+        JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID 
+        LEFT JOIN ImagemUtilizador ON ImagemUtilizador.Utilizador_ID = Utilizador.Utilizador_ID
+        WHERE Utilizador.Utilizador_ID = @id
+      `)
+
+    return user.recordset[0]
   }
 }
 

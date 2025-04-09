@@ -5,6 +5,7 @@ import { userSchema } from '../validations/user-validation.js'
 import UserController from '../controllers/user-controller.js'
 import AuthMiddleware from '../middlewares/auth-middleware.js'
 import AuthController from '../controllers/auth-controller.js'
+import { imageSchema } from '../validations/image-validation.js'
 
 const userRouter = express.Router()
 
@@ -59,6 +60,22 @@ userRouter.patch(
 userRouter.post(
   '/users/send-email-password',
   UserController.sendNewPasswordEmail
+)
+
+userRouter.post(
+  '/users/upload-avatar',
+  // AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  validateSchema(imageSchema, false),
+  UserController.uploadUserAvatar
+)
+
+userRouter.patch(
+  '/users/update-avatar',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  validateSchema(imageSchema, false),
+  UserController.updateUserAvatar
 )
 
 export default userRouter
