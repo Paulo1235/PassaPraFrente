@@ -1,98 +1,147 @@
 import React, { useRef } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Undo2, Plus, X } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 // Custom validation function for Formik
 const validateForm = (values) => {
-    const errors = {};
+  const errors = {};
 
-    // Title validation
-    if (!values.title) {
-        errors.title = "Título é obrigatório";
-    } else if (values.title.length < 5) {
-        errors.title = "Título deve ter pelo menos 5 caracteres";
-    } else if (values.title.length > 100) {
-        errors.title = "Título deve ter no máximo 100 caracteres";
-    }
+  // Title validation
+  if (!values.title) {
+    errors.title = "Título é obrigatório";
+  } else if (values.title.length < 5) {
+    errors.title = "Título deve ter pelo menos 5 caracteres";
+  } else if (values.title.length > 100) {
+    errors.title = "Título deve ter no máximo 100 caracteres";
+  }
 
-    // Description validation
-    if (!values.description) {
-        errors.description = "Descrição é obrigatória";
-    } else if (values.description.length < 10) {
-        errors.description = "Descrição deve ter pelo menos 10 caracteres";
-    }
+  // Description validation
+  if (!values.description) {
+    errors.description = "Descrição é obrigatória";
+  } else if (values.description.length < 10) {
+    errors.description = "Descrição deve ter pelo menos 10 caracteres";
+  }
 
-    // Condition validation
-    if (!values.condition) {
-        errors.condition = "Condição é obrigatória";
-    }
+  // Condition validation
+  if (!values.condition) {
+    errors.condition = "Condição é obrigatória";
+  }
 
-    // Category validation
-    if (!values.category) {
-        errors.category = "Categoria é obrigatória";
-    }
+  // Category validation
+  if (!values.category) {
+    errors.category = "Categoria é obrigatória";
+  }
 
-    // Start date validation
-    if (!values.startDate) {
-        errors.startDate = "Data de início é obrigatória";
-    }
+  // Start date validation
+  if (!values.startDate) {
+    errors.startDate = "Data de início é obrigatória";
+  }
 
-    // End date validation
-    if (!values.endDate) {
-        errors.endDate = "Data de fim é obrigatória";
-    } else if (values.startDate && values.endDate && new Date(values.endDate) <= new Date(values.startDate)) {
-        errors.endDate = "Data de fim deve ser posterior à data de início";
-    }
+  // End date validation
+  if (!values.endDate) {
+    errors.endDate = "Data de fim é obrigatória";
+  } else if (
+    values.startDate &&
+    values.endDate &&
+    new Date(values.endDate) <= new Date(values.startDate)
+  ) {
+    errors.endDate = "Data de fim deve ser posterior à data de início";
+  }
 
-    // Photos validation
-    if (!values.photos || values.photos.length === 0) {
-        errors.photos = "Pelo menos 1 foto é obrigatória";
-    } else if (values.photos.length > 3) {
-        errors.photos = "Máximo de 3 fotos permitido";
-    }
+  // Photos validation
+  // if (!values.photos || values.photos.length === 0) {
+  //     errors.photos = "Pelo menos 1 foto é obrigatória";
+  // } else if (values.photos.length > 3) {
+  //     errors.photos = "Máximo de 3 fotos permitido";
+  // }
 
-    return errors;
+  return errors;
 };
 
 export default function CreateDraw() {
-    const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null);
 
-    // Initial form values
-    const initialValues = {
-        title: "Camisola Quentinha Tigresa - XS",
-        description: "Quentinha, usada poucas vezes",
-        condition: "Bom Estado",
-        category: "Roupa",
-        startDate: "2025-03-28T12:30",
-        endDate: "2025-03-28T14:30",
-        photos: [],
-    };
+  const navigate = useNavigate();
 
-    // Handle form submission
-    const handleSubmit = (values) => {
-        console.log("Form submitted with values:", values);
-        alert("Sorteio publicado com sucesso!");
-    };
+  // Initial form values
+  const initialValues = {
+    title: "Camisola Quentinha Tigresa - XS",
+    description: "Quentinha, usada poucas vezes",
+    condition: "Quase novo",
+    category: "Roupas",
+    startDate: "2025-03-28T12:30",
+    endDate: "2025-03-28T14:30",
+    // photos: [],
+  };
 
-    return (
-        <div className="flex flex-row">
-            <div className="App w-screen flex flex-col">
-                <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
-                    <div className="button-back flex flex-col items-end">
-                        <a href="/index">
-                            <button className="flex flex-row gap-2 items-center hover:underline">
-                                <Undo2 className="h-5 w-5" />
-                                <span>Voltar</span>
-                            </button>
-                        </a>
-                    </div>
+  // Handle form submission
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("description", values.description);
+      formData.append("startDate", values.startDate);
+      formData.append("endDate", values.endDate);
+      formData.append("condition", values.condition);
+      formData.append("category", values.category);
 
-                    <h1 className="text-3xl font-medium text-[#CAAD7E] text-center my-6">Adicionar Sorteio</h1>
+      const response = await fetch(
+        "http://localhost:5000/api/giveaways/create",
+        {
+          method: "POST",
+          body: JSON.stringify(values),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
-                    <Formik initialValues={initialValues} validate={validateForm} onSubmit={handleSubmit}>
-                        {({ values, errors, touched, setFieldValue }) => (
-                            <Form className="w-full">
-                                <p className="text-center text-sm text-gray-500 mb-2">
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro ao criar o sorteio.");
+      }
+
+      toast.success("Sorteio criado com sucesso.");
+      setTimeout(() => {
+        navigate("/index");
+      }, 2000);
+    } catch (error) {
+      toast.error(error.message || "Erro desconhecido.");
+      console.error("Erro ao enviar os dados:", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-row">
+      <div className="App w-screen flex flex-col">
+        <ToastContainer />
+        <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
+          <div className="button-back flex flex-col items-end">
+            <a href="/index">
+              <button className="flex flex-row gap-2 items-center hover:underline">
+                <Undo2 className="h-5 w-5" />
+                <span>Voltar</span>
+              </button>
+            </a>
+          </div>
+
+          <h1 className="text-3xl font-medium text-[#CAAD7E] text-center my-6">
+            Adicionar Sorteio
+          </h1>
+
+          <Formik
+            initialValues={initialValues}
+            validate={validateForm}
+            onSubmit={handleSubmit}
+          >
+            {({ values, errors, touched, setFieldValue }) => (
+              <Form className="w-full">
+                {/*<p className="text-center text-sm text-gray-500 mb-2">
                                     Mínimo 1 Foto, Máximo 3{values.photos.length > 0 && ` (${values.photos.length}/3)`}
                                 </p>
 
@@ -159,128 +208,181 @@ export default function CreateDraw() {
                                             }
                                         }}
                                     />
-                                </div>
+                                </div> */}
 
-                                <div className="form-container space-y-6 max-w-3xl mx-auto w-full">
-                                    <div className="form-group">
-                                        <label htmlFor="title" className="block text-sm font-medium mb-2">
-                                            Título:
-                                        </label>
-                                        <Field
-                                            id="title"
-                                            name="title"
-                                            type="text"
-                                            className={`w-full p-2 border ${
-                                                errors.title && touched.title ? "border-red-500" : "border-gray-300"
-                                            } rounded-md`}
-                                        />
-                                        <ErrorMessage name="title" component="div" className="text-red-500 text-sm mt-1" />
-                                    </div>
+                <div className="form-container space-y-6 max-w-3xl mx-auto w-full">
+                  <div className="form-group">
+                    <label
+                      htmlFor="title"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      Título:
+                    </label>
+                    <Field
+                      id="title"
+                      name="title"
+                      type="text"
+                      className={`w-full p-2 border ${
+                        errors.title && touched.title
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      } rounded-md`}
+                    />
+                    <ErrorMessage
+                      name="title"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                  </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="description" className="block text-sm font-medium mb-2">
-                                            Descrição:
-                                        </label>
-                                        <Field
-                                            as="textarea"
-                                            id="description"
-                                            name="description"
-                                            className={`w-full p-2 border ${
-                                                errors.description && touched.description ? "border-red-500" : "border-gray-300"
-                                            } rounded-md min-h-[100px]`}
-                                        />
-                                        <ErrorMessage name="description" component="div" className="text-red-500 text-sm mt-1" />
-                                    </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="description"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      Descrição:
+                    </label>
+                    <Field
+                      as="textarea"
+                      id="description"
+                      name="description"
+                      className={`w-full p-2 border ${
+                        errors.description && touched.description
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      } rounded-md min-h-[100px]`}
+                    />
+                    <ErrorMessage
+                      name="description"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                  </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="startDate" className="block text-sm font-medium mb-2">
-                                            Data Início:
-                                        </label>
-                                        <Field
-                                            id="startDate"
-                                            name="startDate"
-                                            type="datetime-local"
-                                            className={`w-full p-2 border ${
-                                                errors.startDate && touched.startDate ? "border-red-500" : "border-gray-300"
-                                            } rounded-md`}
-                                        />
-                                        <ErrorMessage name="startDate" component="div" className="text-red-500 text-sm mt-1" />
-                                    </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="startDate"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      Data Início:
+                    </label>
+                    <Field
+                      id="startDate"
+                      name="startDate"
+                      type="datetime-local"
+                      className={`w-full p-2 border ${
+                        errors.startDate && touched.startDate
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      } rounded-md`}
+                    />
+                    <ErrorMessage
+                      name="startDate"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                  </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="endDate" className="block text-sm font-medium mb-2">
-                                            Data Fim:
-                                        </label>
-                                        <Field
-                                            id="endDate"
-                                            name="endDate"
-                                            type="datetime-local"
-                                            className={`w-full p-2 border ${
-                                                errors.endDate && touched.endDate ? "border-red-500" : "border-gray-300"
-                                            } rounded-md`}
-                                        />
-                                        <ErrorMessage name="endDate" component="div" className="text-red-500 text-sm mt-1" />
-                                    </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="endDate"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      Data Fim:
+                    </label>
+                    <Field
+                      id="endDate"
+                      name="endDate"
+                      type="datetime-local"
+                      className={`w-full p-2 border ${
+                        errors.endDate && touched.endDate
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      } rounded-md`}
+                    />
+                    <ErrorMessage
+                      name="endDate"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                  </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="form-group">
-                                            <label htmlFor="category" className="block text-sm font-medium mb-2">
-                                                Categoria:
-                                            </label>
-                                            <Field
-                                                as="select"
-                                                id="category"
-                                                name="category"
-                                                className={`w-full p-2 border ${
-                                                    errors.category && touched.category ? "border-red-500" : "border-gray-300"
-                                                } rounded-md appearance-none bg-white`}
-                                            >
-                                                <option value="Roupa">Roupa</option>
-                                                <option value="Calçado">Calçado</option>
-                                                <option value="Acessórios">Acessórios</option>
-                                                <option value="Eletrônicos">Eletrônicos</option>
-                                                <option value="Livros">Livros</option>
-                                                <option value="Outros">Outros</option>
-                                            </Field>
-                                            <ErrorMessage name="category" component="div" className="text-red-500 text-sm mt-1" />
-                                        </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="form-group">
+                      <label
+                        htmlFor="category"
+                        className="block text-sm font-medium mb-2"
+                      >
+                        Categoria:
+                      </label>
+                      <Field
+                        as="select"
+                        id="category"
+                        name="category"
+                        className={`w-full p-2 border ${
+                          errors.category && touched.category
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        } rounded-md appearance-none bg-white`}
+                      >
+                        <option value="Roupa">Roupas</option>
+                        <option value="Acessórios">Acessórios</option>
+                        <option value="Eletrônicos">Eletrônicos</option>
+                        <option value="Livros">Livros</option>
+                        <option value="Outros">Outros</option>
+                      </Field>
+                      <ErrorMessage
+                        name="category"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+                    </div>
 
-                                        <div className="form-group">
-                                            <label htmlFor="condition" className="block text-sm font-medium mb-2">
-                                                Condição:
-                                            </label>
-                                            <Field
-                                                as="select"
-                                                id="condition"
-                                                name="condition"
-                                                className={`w-full p-2 border ${
-                                                    errors.condition && touched.condition ? "border-red-500" : "border-gray-300"
-                                                } rounded-md appearance-none bg-white`}
-                                            >
-                                                <option value="Como novo">Como novo</option>
-                                                <option value="Bom Estado">Bom Estado</option>
-                                                <option value="Usado">Usado</option>
-                                                <option value="Bastante Usado">Bastante Usado</option>
-                                                <option value="Com defeito">Com defeito</option>
-                                            </Field>
-                                            <ErrorMessage name="condition" component="div" className="text-red-500 text-sm mt-1" />
-                                        </div>
-                                    </div>
+                    <div className="form-group">
+                      <label
+                        htmlFor="condition"
+                        className="block text-sm font-medium mb-2"
+                      >
+                        Condição:
+                      </label>
+                      <Field
+                        as="select"
+                        id="condition"
+                        name="condition"
+                        className={`w-full p-2 border ${
+                          errors.condition && touched.condition
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        } rounded-md appearance-none bg-white`}
+                      >
+                        <option value="Quase novo">Quase Novo</option>
+                        <option value="Novo">Novo</option>
+                        <option value="Usado">Usado</option>
+                        <option value="Bastante Usado">Bastante Usado</option>
+                        <option value="Com defeito">Com defeito</option>
+                      </Field>
+                      <ErrorMessage
+                        name="condition"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+                    </div>
+                  </div>
 
-                                    <div className="flex justify-center mt-10">
-                                        <button
-                                            type="submit"
-                                            className="bg-[#CAAD7E] rounded-lg px-8 py-3 text-white font-medium hover:bg-[#b99c6f] transition-colors"
-                                        >
-                                            Publicar
-                                        </button>
-                                    </div>
-                                </div>
-                            </Form>
-                        )}
-                    </Formik>
+                  <div className="flex justify-center mt-10">
+                    <button
+                      type="submit"
+                      className="bg-[#CAAD7E] rounded-lg px-8 py-3 text-white font-medium hover:bg-[#b99c6f] transition-colors"
+                    >
+                      Publicar
+                    </button>
+                  </div>
                 </div>
-            </div>
+              </Form>
+            )}
+          </Formik>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
