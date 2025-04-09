@@ -48,14 +48,18 @@ class UserRepository {
     return user.rowsAffected[0] > 0
   }
 
-  static async getAllUsers () {
+  static async getAllUsers (page, pageSize) {
     const pool = await getConnection()
+
+    const offset = (page - 1) * pageSize
 
     const users = await pool.request()
       .query(`
         SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail
         FROM Utilizador 
         JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID
+        ORDER BY Utilizador.Utilizador_ID  -- Garantir uma ordenação consistente
+        OFFSET ${offset} ROWS FETCH NEXT ${pageSize} ROWS ONLY
       `)
 
     return users.recordset

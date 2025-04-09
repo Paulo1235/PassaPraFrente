@@ -26,8 +26,11 @@ class UserController {
   }
 
   static async getAllUsers (req, res) {
+    const page = parseInt(req.query.page) || 1
+    const pageSize = parseInt(req.query.pageSize) || 2
+
     try {
-      const users = await UserRepository.getAllUsers()
+      const users = await UserRepository.getAllUsers(page, pageSize)
 
       return response(res, true, StatusCodes.OK, users)
     } catch (error) {

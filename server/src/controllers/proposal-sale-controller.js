@@ -11,12 +11,6 @@ class ProposalSaleController {
     const userId = req.user.Utilizador_ID
     const { id } = req.params
 
-    const data = {
-      newValue,
-      userId,
-      saleId: id
-    }
-
     try {
       const sale = await SaleRepository.getSaleById(id)
 
@@ -24,11 +18,13 @@ class ProposalSaleController {
         throw new HttpException('Venda não encontrada.', StatusCodes.NOT_FOUND)
       }
 
-      const proposal = await ProposalSaleRepository.createProposalSale(data)
+      const proposal = await ProposalSaleRepository.getSaleProposalById(userId, id)
 
-      if (!proposal) {
-        throw new HttpException('Não foi possível criar a proposta.', StatusCodes.BAD_REQUEST)
+      if (proposal) {
+        throw new HttpException('Já fez uma proposta para esta venda.', StatusCodes.BAD_REQUEST)
       }
+
+      await ProposalSaleRepository.createProposalSale(newValue, userId, id)
 
       return response(res, true, StatusCodes.CREATED, proposal)
     } catch (error) {

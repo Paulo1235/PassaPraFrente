@@ -17,8 +17,8 @@ test('Deve criar uma proposta de venda com sucesso', async () => {
   })
 
   const response = await request(app)
-    .post('/proposal-sales/create/1')
-    .send({ newValue: 100 })
+    .post('/proposal-sales/create/4')
+    .send({ newValue: 100, userId: 7, saleId: 6 })
 
   expect(response.status).toBe(201)
 })

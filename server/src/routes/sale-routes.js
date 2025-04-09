@@ -6,6 +6,7 @@ import { saleSchema } from '../validations/sale-validation.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import ProposalMiddleware from '../middlewares/proposal-middleware.js'
 import AuthController from '../controllers/auth-controller.js'
+import { itemSchema } from '../validations/item-schema.js'
 
 const saleRouter = express.Router()
 
@@ -40,6 +41,7 @@ saleRouter.post(
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   validateSchema(saleSchema, false),
+  validateSchema(itemSchema, false),
   SaleController.createSale
 )
 saleRouter.get(
