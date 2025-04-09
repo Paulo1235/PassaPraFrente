@@ -7,15 +7,17 @@
   "private": true,
   "scripts": {
     "build": "node build",
+    "test": "vitest",
     "start:dev": "cross-env NODE_ENV=development nodemon server.js",
     "start:debug": "node --inspect --watch server.js",
     "start:prod": "cross-env NODE_ENV=production node dist/main",
-    "start:test": "cross-env NODE_ENV=testing vitest",
+    "start:test": "cross-env NODE_ENV=test vitest",
     "doc": "node ./src/services/swagger-service.js",
     "lint": "standard",
     "lint:fix": "standard --fix",
     "test:watch": "vitest --watch",
-    "test:cov": "vitest --coverage"
+    "test:cov": "vitest --coverage",
+    "test:debug": "vitest --debug"
   },
   "keywords": [
     "node",

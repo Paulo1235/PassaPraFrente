@@ -8,9 +8,8 @@ import compression from 'compression'
 import chalk from 'chalk'
 import swaggerUi from 'swagger-ui-express'
 import cookieParser from 'cookie-parser'
-import { v2 as cloudinary } from 'cloudinary'
 
-import { PORT, NODE_ENV, NAME, MAX, WINDOWMS, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_NAME } from './config.js'
+import { PORT, NODE_ENV, NAME, MAX, WINDOWMS } from './config.js'
 
 import response from './src/utils/response.js'
 import { checkDatabaseConnection } from './src/database/connection.js'
@@ -28,6 +27,7 @@ import giveawayRouter from './src/routes/giveaway-routes.js'
 
 import { initSocketServer } from './src/utils/socket-server.js'
 import { getConnection } from './src/database/db-config.js'
+import { configureCloudinary } from './src/services/cloudinary-service.js'
 
 const app = express()
 
@@ -45,11 +45,7 @@ const limiter = rateLimit({
   message: 'Demasiados pedidos, tente novamente mais tarde!'
 })
 
-cloudinary.config({
-  cloud_name: CLOUDINARY_NAME,
-  api_key: CLOUDINARY_API_KEY,
-  api_secret: CLOUDINARY_API_SECRET
-})
+configureCloudinary()
 
 // Middlewares
 NODE_ENV === 'development' ? app.use(morgan('dev')) : app.use(morgan('common'))
