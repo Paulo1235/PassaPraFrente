@@ -16,7 +16,12 @@ class GiveawayRepository {
       .input('titulo', sql.VarChar, data.title)
       .input('descricao', sql.VarChar, data.description)
       .input('itemId', sql.Int, item.Artigo_ID)
+      .input('userId', sql.Int, data.userId)
       .input('estadoId', sql.Int, 1)
+      .query(`
+        INSERT INTO Giveaway (DataInicio, DataFim, Titulo, Descricao, Artigo_ID, Utilizador_ID, Estado_ID)
+        VALUES (@dataInicio, @dataFim, @titulo, @descricao, @itemId, @userId, @estadoId)
+      `)
 
     return giveaway.recordset[0]
   }

@@ -7,10 +7,16 @@ import IdService from '../services/id-service.js'
 
 class GiveawayController {
   static async createGiveaway (req, res) {
+    const userId = req.user.Utilizador_ID
     const data = req.body
 
+    const updatedData = {
+      data,
+      userId
+    }
+
     try {
-      const giveaway = await GiveawayRepository.createGiveaway(data)
+      const giveaway = await GiveawayRepository.createGiveaway(updatedData)
 
       return response(res, true, StatusCodes.CREATED, giveaway)
     } catch (error) {

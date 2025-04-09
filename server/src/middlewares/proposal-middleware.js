@@ -5,6 +5,7 @@ import SaleRepository from '../repositories/sale-repository.js'
 import LoanRepository from '../repositories/loan-repository.js'
 import UserRepository from '../repositories/user-repository.js'
 import { response } from 'express'
+import GiveawayRepository from '../repositories/giveaway-repository.js'
 
 class ProposalMiddleware {
   static async isOwnerSale (req, res, next) {
@@ -42,6 +43,25 @@ class ProposalMiddleware {
       next()
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao verificar se é o dono do empréstimo.')
+    }
+  }
+
+  static async isOwnerGiveaway (req, res, next) {
+    const userId = req.user.Utilizador_ID
+    const { id } = req.params
+
+    try {
+      const giveaway = await GiveawayRepository.getGiveawayById(id)
+
+      const ownerId = giveaway.Utilizador_ID
+
+      if (userId !== ownerId) {
+        throw new HttpException('Não é o dono deste giveaway!', StatusCodes.UNAUTHORIZED)
+      }
+
+      next()
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao verificar se é o dono do giveaway.')
     }
   }
 

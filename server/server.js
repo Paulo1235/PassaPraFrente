@@ -23,6 +23,8 @@ import authRouter from './src/routes/auth-routes.js'
 import saleRouter from './src/routes/sale-routes.js'
 import proposalSaleRouter from './src/routes/proposal-sale-routes.js'
 import transactionSaleRouter from './src/routes/transation-sale-routes.js'
+import loanRouter from './src/routes/loan-routes.js'
+import giveawayRouter from './src/routes/giveaway-routes.js'
 
 import { initSocketServer } from './src/utils/socket-server.js'
 import { getConnection } from './src/database/db-config.js'
@@ -62,7 +64,15 @@ app.use(compression())
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
 
-app.use('/api', userRouter, authRouter, proposalSaleRouter, saleRouter, transactionSaleRouter)
+app.use('/api',
+  userRouter,
+  authRouter,
+  proposalSaleRouter,
+  saleRouter,
+  transactionSaleRouter,
+  loanRouter,
+  giveawayRouter
+)
 
 app.get('/', (req, res) => {
   return response(res, true, StatusCodes.OK, 'Hello World')
