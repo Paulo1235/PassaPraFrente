@@ -11,16 +11,16 @@ class LoanRepository {
 
     const loan = await pool
       .request()
-      .input('titulo', sql.VarChar, data.titulo)
-      .input('descricao', sql.VarChar, data.descricao)
-      .input('valor', sql.Int, data.valor)
-      .input('dataInicio', sql.DateTime, data.dataInicio)
-      .input('dataFim', sql.DateTime, data.dataFim)
+      .input('titulo', sql.VarChar, data.title)
+      .input('descricao', sql.VarChar, data.description)
+      .input('valor', sql.Int, data.price)
+      .input('dataInicio', sql.DateTime, data.startDate)
+      .input('dataFim', sql.DateTime, data.endDate)
       .input('userId', sql.Int, userId)
       .input('itemId', sql.Int, item.Artigo_ID)
       .query(`
         INSERT INTO 
-        Emprestimo (Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, Artigo_ID, Estado_ID)
+        Emprestimo (Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, ArtigoArtigo_ID, EstadoEstado_ID)
         VALUES (@titulo, @descricao, @valor, @dataInicio, @dataFim, @userId, @itemId, 1)
       `)
 

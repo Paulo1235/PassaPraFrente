@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Undo2, Plus, X, Calendar } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 // Define the form values type
 const validateForm = (values) => {
@@ -61,17 +63,19 @@ const validateForm = (values) => {
     }
 
     // Photos validation
-    if (!values.photos || values.photos.length === 0) {
-        errors.photos = "Pelo menos 1 foto é obrigatória";
-    } else if (values.photos.length > 3) {
-        errors.photos = "Máximo de 3 fotos permitido";
-    }
+    // if (!values.photos || values.photos.length === 0) {
+    //     errors.photos = "Pelo menos 1 foto é obrigatória";
+    // } else if (values.photos.length > 3) {
+    //     errors.photos = "Máximo de 3 fotos permitido";
+    // }
 
     return errors;
 };
 
 export default function CreateLoan() {
     const fileInputRef = useRef(null);
+
+    const navigate = useNavigate();
 
     // Initial form values
     const initialValues = {
@@ -83,18 +87,53 @@ export default function CreateLoan() {
         category: "Ferramentas",
         startDate: "2025-03-28T12:30",
         endDate: "2025-03-28T14:30",
-        photos: [],
+        // photos: [],
     };
 
     // Handle form submission
-    const handleSubmit = (values) => {
-        console.log("Form submitted with values:", values);
-        alert("Empréstimo publicado com sucesso!");
-    };
+    const handleSubmit = async (values, { setSubmitting }) => {
+        try {
+          const formData = new FormData();
+          formData.append("title", values.title);
+          formData.append("description", values.description);
+          formData.append("startDate", values.startDate);
+          formData.append("endDate", values.endDate);
+          formData.append("condition", values.condition);
+          formData.append("category", values.category);
+    
+          const response = await fetch(
+            "http://localhost:5000/api/loans/create",
+            {
+              method: "POST",
+              body: JSON.stringify(values),
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+            }
+          );
+    
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Erro ao criar o empréstimo.");
+          }
+    
+          toast.success("Empréstimo criado com sucesso.");
+          setTimeout(() => {
+            navigate("/index");
+          }, 2000);
+        } catch (error) {
+          toast.error(error.message || "Erro desconhecido.");
+          console.error("Erro ao enviar os dados:", error.message);
+        } finally {
+          setSubmitting(false);
+        }
+      };
 
     return (
         <div className="flex flex-row">
             <div className="App w-screen flex flex-col">
+                <ToastContainer />
                 <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
                     <div className="button-back flex flex-col items-end">
                         <button className="flex flex-row gap-2 items-center hover:underline">
@@ -114,7 +153,7 @@ export default function CreateLoan() {
                     >
                         {({ values, errors, touched, setFieldValue }) => (
                             <Form className="w-full">
-                                <p className="text-center text-sm text-gray-500 mb-2">
+                                {/* <p className="text-center text-sm text-gray-500 mb-2">
                                     Mínimo 1 Foto, Máximo 3{" "}
                                     {values.photos.length > 0 &&
                                         ` (${values.photos.length}/3)`}
@@ -185,7 +224,7 @@ export default function CreateLoan() {
                                             }
                                         }}
                                     />
-                                </div>
+                                </div> */}
 
                                 <div className="form-container space-y-6 max-w-3xl mx-auto w-full">
                                     <div className="form-group">
@@ -246,7 +285,7 @@ export default function CreateLoan() {
                                                 <Field
                                                     id="price"
                                                     name="price"
-                                                    type="text"
+                                                    type="number"
                                                     className={`w-full p-2 border ${errors.price && touched.price
                                                             ? "border-red-500"
                                                             : "border-gray-300"
@@ -277,8 +316,8 @@ export default function CreateLoan() {
                                                         : "border-gray-300"
                                                     } rounded-md appearance-none bg-white`}
                                             >
-                                                <option value="Como novo">Como novo</option>
-                                                <option value="Bom Estado">Bom Estado</option>
+                                                <option value="Quase novo">Quase novo</option>
+                                                <option value="Novo">Novo</option>
                                                 <option value="Usado">Usado</option>
                                                 <option value="Bastante Usado">Bastante Usado</option>
                                                 <option value="Com defeito">Com defeito</option>
