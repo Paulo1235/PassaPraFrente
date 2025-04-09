@@ -136,7 +136,7 @@ class AuthController {
         emailData
       })
 
-      res.setHeader("x-activation-token", activationToken)
+      res.setHeader('x-activation-token', activationToken)
 
       return res.status(StatusCodes.OK).json({
         success: true,
@@ -154,30 +154,29 @@ class AuthController {
    * @param {Object} res - O objeto de resposta utilizado para enviar a resposta.
    */
   static async activateUser (req, res) {
-    const id = req.user.Utilizador_ID;
-  
-    const activationToken = req.headers['x-activation-token']; // <- VEM DO HEADER
-    const { activationCode } = req.body;
-    console.log(activationToken)
+    const id = req.user.Utilizador_ID
+
+    const activationToken = req.headers['x-activation-token']
+    const { activationCode } = req.body
+
     try {
-      const user = await UserRepository.getUserById(id);
-  
+      const user = await UserRepository.getUserById(id)
+
       if (user.ConfirmarEmail === 1) {
-        throw new HttpException('Conta já ativada.', StatusCodes.BAD_REQUEST);
+        throw new HttpException('Conta já ativada.', StatusCodes.BAD_REQUEST)
       }
-  
-      // Verifica o token
-      const token = jwt.verify(activationToken, ACCESS_TOKEN_SECRET_KEY);
-      console.log(token.activationCode)
+
+      const token = jwt.verify(activationToken, ACCESS_TOKEN_SECRET_KEY)
+
       if (token.activationCode !== activationCode) {
-        throw new HttpException('Código de ativação incorreto.', StatusCodes.BAD_REQUEST);
+        throw new HttpException('Código de ativação incorreto.', StatusCodes.BAD_REQUEST)
       }
-  
-      await UserRepository.activateUser(id);
-  
-      return response(res, true, StatusCodes.OK, 'Conta ativada com sucesso.');
+
+      await UserRepository.activateUser(id)
+
+      return response(res, true, StatusCodes.OK, 'Conta ativada com sucesso.')
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao ativar a conta. Tente novamente mais tarde.');
+      handleError(res, error, 'Ocorreu um erro ao ativar a conta. Tente novamente mais tarde.')
     }
   }
 

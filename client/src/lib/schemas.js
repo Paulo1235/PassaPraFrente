@@ -16,11 +16,11 @@ const SendEmailSchema = yup.object().shape({
 const UpdatePasswordSchema = yup.object().shape({
   newPassword: yup
     .string()
-    .min(3, "A palavra-passe tem de ser maior que 3")
+    .min(6, "A palavra-passe tem de ser maior que 6")
     .required("Obrigatorio"),
   confirmPassword: yup
     .string()
-    .min(3, "A palavra-passe tem de ser maior que 3")
+    .min(6, "A palavra-passe tem de ser maior que 6")
     .required("Obrigatorio"),
 });
 

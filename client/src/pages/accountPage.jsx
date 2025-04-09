@@ -53,7 +53,9 @@ const Account = () => {
       return;
     }
 
-    dispatch(fetchUserInfo()); // Fetch user info on page load
+    console.log(user)
+
+    dispatch(fetchUserInfo());
   }, [isAuthenticated, dispatch, navigate]);
 
   if (!isAuthenticated) return null;
@@ -72,7 +74,7 @@ const Account = () => {
           <div className="flex flex-col md:flex-row md:items-center">
             <div className="account mt-6 md:mt-10 flex flex-col md:flex-row">
               <img
-                src={AccLogo || "/placeholder.svg"}
+                src={user?.message.Url || AccLogo}
                 className="rounded-full w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 xl:w-[182px] xl:h-[182px] object-cover mx-auto md:mx-0"
                 alt="account-logo"
               />
