@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { validateSchema } from '../utils/validate-schema.js'
-import { transactionSaleSchema } from '../validations/transaction-sale.js'
+import { transactionSaleSchema } from '../validations/transaction-sale-schema.js'
 import AuthMiddleware from '../middlewares/auth-middleware.js'
 import TransactionSaleController from '../controllers/transaction-sale-controller.js'
 import AuthController from '../controllers/auth-controller.js'

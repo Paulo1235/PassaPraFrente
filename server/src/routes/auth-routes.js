@@ -2,7 +2,7 @@ import express from 'express'
 
 import { validateSchema } from '../utils/validate-schema.js'
 import { authSchema } from '../validations/auth-schema.js'
-import { userSchema } from '../validations/user-validation.js'
+import { userSchema } from '../validations/user-schema.js'
 import AuthController from '../controllers/auth-controller.js'
 import AuthMiddleware from '../middlewares/auth-middleware.js'
 

@@ -4,7 +4,7 @@ import AuthMiddleware from '../middlewares/auth-middleware.js'
 import ProposalLoanController from '../controllers/proposal-loan-controller.js'
 import AuthController from '../controllers/auth-controller.js'
 import { validateSchema } from '../utils/validate-schema.js'
-import { proposalLoanSchema } from '../validations/proposal-loan-validation.js'
+import { proposalLoanSchema } from '../validations/proposal-loan-schema.js'
 
 const proposalLoanRouter = express.Router()
 

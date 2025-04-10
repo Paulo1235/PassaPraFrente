@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { loanSchema } from '../validations/loan-validation.js'
+import { loanSchema } from '../validations/loan-schemas.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import LoanController from '../controllers/loan-controller.js'
 import AuthMiddleware from '../middlewares/auth-middleware.js'

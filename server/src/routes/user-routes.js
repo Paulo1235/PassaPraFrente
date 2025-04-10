@@ -1,11 +1,11 @@
 import express from 'express'
 
 import { validateSchema } from '../utils/validate-schema.js'
-import { userSchema } from '../validations/user-validation.js'
+import { userSchema } from '../validations/user-schema.js'
 import UserController from '../controllers/user-controller.js'
 import AuthMiddleware from '../middlewares/auth-middleware.js'
 import AuthController from '../controllers/auth-controller.js'
-import { imageSchema } from '../validations/image-validation.js'
+import { imageSchema } from '../validations/image-schema.js'
 
 const userRouter = express.Router()
 
@@ -64,7 +64,7 @@ userRouter.post(
 
 userRouter.post(
   '/users/upload-avatar',
-  // AuthController.refreshAccessToken,
+  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   validateSchema(imageSchema, false),
   UserController.uploadUserAvatar

@@ -2,7 +2,7 @@ import express from 'express'
 
 import SaleController from '../controllers/sale-controller.js'
 import AuthMiddleware from '../middlewares/auth-middleware.js'
-import { saleSchema } from '../validations/sale-validation.js'
+import { saleSchema } from '../validations/sale-schema.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import ProposalMiddleware from '../middlewares/proposal-middleware.js'
 import AuthController from '../controllers/auth-controller.js'
