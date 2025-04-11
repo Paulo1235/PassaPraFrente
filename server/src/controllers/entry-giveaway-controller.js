@@ -3,13 +3,14 @@ import { StatusCodes } from 'http-status-codes'
 import response from '../utils/response.js'
 import { handleError } from '../utils/error-handler.js'
 import EntryGiveawayRepository from '../repositories/entry-giveaway-repository.js'
+import GiveawayRepository from '../repositories/giveaway-repository.js'
 
 class EntryGiveawayController {
   static async createEntryGiveaway (req, res) {
     const { giveawayId } = req.params
     const userId = req.user.Utilizador_ID
 
-    const entryDate = Date.now()
+    const entryDate = new Date().toISOString()
 
     const data = {
       giveawayId,
@@ -18,6 +19,20 @@ class EntryGiveawayController {
     }
 
     try {
+      const giveaway = await GiveawayRepository.getGiveawayById(giveawayId)
+
+      if (!giveaway) {
+        return response(res, false, StatusCodes.NOT_FOUND, 'Sorteio não encontrado.')
+      }
+
+      if (giveaway.DataInicio < new Date()) {
+        return response(res, false, StatusCodes.BAD_REQUEST, 'O sorteio já começou. Já não é possível inscrever-se.')
+      }
+
+      if (giveaway.DataFim < new Date()) {
+        return response(res, false, StatusCodes.BAD_REQUEST, 'O sorteio já terminou. Já não é possível inscrever-se.')
+      }
+
       const existingEntry = await EntryGiveawayRepository.getEntryGiveawayById(giveawayId, userId)
 
       if (existingEntry) {
