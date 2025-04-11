@@ -73,6 +73,21 @@ class LoanRepository {
     return availableLoans.recordset
   }
 
+  static async getPendingLoans () {
+    const pool = await getConnection(dbConfig)
+
+    const availableLoans = await pool
+      .request()
+      .query(`
+        SELECT Emprestimo_ID, Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, ArtigoArtigo_ID, Estado
+        FROM Emprestimo
+        JOIN Estado ON Estado.Estado_ID = Emprestimo.EstadoEstado_ID
+        WHERE Estado.Estado = 'Em análise'
+      `)
+
+    return availableLoans.recordset
+  }
+
   static async updateLoan (data, id) {
     const pool = await getConnection()
 

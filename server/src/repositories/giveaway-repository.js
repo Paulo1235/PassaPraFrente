@@ -73,6 +73,21 @@ class GiveawayRepository {
     return availableGiveaways.recordset
   }
 
+  static async getPendingGiveaways () {
+    const pool = await getConnection()
+
+    const pendingGiveaways = await pool
+      .request()
+      .query(`
+        SELECT * 
+        FROM Sorteio
+        JOIN Estado ON Estado.Estado_ID = Sorteio.Estado_ID
+        WHERE Estado = 'Em análise'
+      `)
+
+    return pendingGiveaways.recordset
+  }
+
   static async updateGiveaway (id, data) {
     const pool = await getConnection()
 

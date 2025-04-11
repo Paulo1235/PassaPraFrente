@@ -35,6 +35,12 @@ saleRouter.get(
   AuthMiddleware.isAuthenticated,
   SaleController.getAvailableSales
 )
+saleRouter.get(
+  '/sales/pending',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  SaleController.getPendingSales
+)
 saleRouter.post(
   '/sales/create',
   AuthController.refreshAccessToken,

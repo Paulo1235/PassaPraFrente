@@ -54,6 +54,16 @@ class SaleController {
     }
   }
 
+  static async getPendingSales (req, res) {
+    try {
+      const sales = await SaleRepository.getPendingSales()
+
+      return response(res, true, StatusCodes.OK, sales)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar as vendas em análise.')
+    }
+  }
+
   static async updateSale (req, res) {
     const { id } = req.params
     const data = req.body

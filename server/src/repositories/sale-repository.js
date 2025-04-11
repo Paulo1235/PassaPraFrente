@@ -71,6 +71,21 @@ class SaleRepository {
     return availableSales.recordset
   }
 
+  static async getPendingSales () {
+    const pool = await getConnection(dbConfig)
+
+    const pendingSales = await pool
+      .request()
+      .query(`
+        SELECT * 
+        FROM Venda
+        JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
+        WHERE Estado = 'Em análise'
+      `)
+
+    return pendingSales.recordset
+  }
+
   static async updateSale (data, id) {
     const pool = await getConnection()
 

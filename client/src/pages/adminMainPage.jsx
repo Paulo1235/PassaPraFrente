@@ -21,7 +21,7 @@ const AdminMain = () => {
   useEffect(() => {
     const fetchShopData = async () => {
       try {
-        const responseSales = await fetch("http://localhost:5000/api/sales", {
+        const responseSales = await fetch("http://localhost:5000/api/sales/pending", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -29,7 +29,7 @@ const AdminMain = () => {
           credentials: "include",
         });
 
-        const responseLoans = await fetch("http://localhost:5000/api/loans", {
+        const responseLoans = await fetch("http://localhost:5000/api/loans/pending", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -37,7 +37,7 @@ const AdminMain = () => {
           credentials: "include",
         });
 
-        const responseGiveaways = await fetch("http://localhost:5000/api/giveaways", {
+        const responseGiveaways = await fetch("http://localhost:5000/api/giveaways/pending", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

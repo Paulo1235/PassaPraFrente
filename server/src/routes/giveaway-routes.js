@@ -44,6 +44,13 @@ giveawayRouter.get(
   GiveawayController.getAvailableGiveaways
 )
 
+giveawayRouter.get(
+  '/giveaways/pending',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  GiveawayController.getPendingGiveaways
+)
+
 giveawayRouter.put(
   '/giveaways/id/:id',
   AuthController.refreshAccessToken,

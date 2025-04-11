@@ -30,6 +30,12 @@ loanRouter.get(
   AuthMiddleware.isAuthenticated,
   LoanController.getAvailableLoans
 )
+loanRouter.get(
+  '/loans/pending',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  LoanController.getPendingLoans
+)
 loanRouter.post(
   '/loans/create',
   AuthController.refreshAccessToken,

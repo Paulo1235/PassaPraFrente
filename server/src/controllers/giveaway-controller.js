@@ -59,6 +59,16 @@ class GiveawayController {
     }
   }
 
+  static async getPendingGiveaways (req, res) {
+    try {
+      const giveaways = await GiveawayRepository.getPendingGiveaways()
+
+      return response(res, true, StatusCodes.OK, giveaways)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar os giveaways em análise.')
+    }
+  }
+
   static async updateGiveaway (req, res) {
     const { id } = req.params
     const data = req.body

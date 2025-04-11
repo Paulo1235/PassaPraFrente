@@ -59,6 +59,16 @@ class LoanController {
     }
   }
 
+  static async getPendingLoans (req, res) {
+    try {
+      const loans = await LoanRepository.getPendingLoans()
+
+      return response(res, true, StatusCodes.OK, loans)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos em análise.')
+    }
+  }
+
   static async updateLoan (req, res) {
     const { id } = req.params
     const data = req.body
