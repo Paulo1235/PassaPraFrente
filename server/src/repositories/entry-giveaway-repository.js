@@ -50,7 +50,7 @@ class EntryGiveawayRepository {
     return entryGiveaways.recordset
   }
 
-  static async getAllEntryGiveawaysByGiveaway (giveawayId) {
+  static async getAllEntriesGiveaway (giveawayId) {
     const pool = await getConnection()
 
     const entryGiveaways = await pool

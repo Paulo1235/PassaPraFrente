@@ -7,12 +7,11 @@ class WinnerGiveawayRepository {
     const pool = await getConnection()
 
     const winnerGiveaway = await pool.request()
-      .input('stars', sql.Int, data.stars)
       .input('userId', sql.Int, data.userId)
       .input('giveawayId', sql.Int, data.giveawayId)
       .query(`
         INSERT INTO VencedorSorteio (Nota, InscricaoSorteioUtilizadorUtilizador_ID, InscricaoSorteioSorteioSorteio_ID) 
-        VALUES (@stars, @userId, @giveawayId)
+        VALUES (0, @userId, @giveawayId)
       `)
 
     return winnerGiveaway.rowsAffected[0] > 0
@@ -26,7 +25,7 @@ class WinnerGiveawayRepository {
       .query(`
         SELECT * 
         FROM VencedorSorteio 
-        WHERE InscricaoSorteioSorteio_Sorteio_ID = @giveawayId
+        WHERE InscricaoSorteioSorteioSorteio_ID = @giveawayId
       `)
 
     return winnerGiveaway.recordset[0]
