@@ -43,7 +43,7 @@ loanRouter.post(
   validateSchema(loanSchema, false),
   LoanController.createLoan
 )
-loanRouter.put(
+loanRouter.get(
   '/loans/user',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
