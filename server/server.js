@@ -24,6 +24,7 @@ import proposalSaleRouter from './src/routes/proposal-sale-routes.js'
 import transactionSaleRouter from './src/routes/transaction-sale-routes.js'
 import loanRouter from './src/routes/loan-routes.js'
 import giveawayRouter from './src/routes/giveaway-routes.js'
+import entryGiveawayRouter from './src/routes/entry-giveaway-routes.js'
 
 import { initSocketServer } from './src/utils/socket-server.js'
 import { getConnection } from './src/database/db-config.js'
@@ -69,7 +70,8 @@ app.use('/api',
   transactionSaleRouter,
   loanRouter,
   giveawayRouter,
-  notificationRouter
+  notificationRouter,
+  entryGiveawayRouter
 )
 
 app.get('/', (req, res) => {

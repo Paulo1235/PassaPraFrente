@@ -1,8 +1,8 @@
 import { StatusCodes } from 'http-status-codes'
 
-import response from '../utils/response'
-import { handleError } from '../utils/error-handler'
-import EntryGiveawayRepository from '../repositories/entry-giveaway-repository'
+import response from '../utils/response.js'
+import { handleError } from '../utils/error-handler.js'
+import EntryGiveawayRepository from '../repositories/entry-giveaway-repository.js'
 
 class EntryGiveawayController {
   static async createEntryGiveaway (req, res) {

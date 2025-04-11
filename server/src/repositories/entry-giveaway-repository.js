@@ -1,6 +1,6 @@
 import sql from 'mssql'
 
-import { getConnection } from '../database/db-config'
+import { getConnection } from '../database/db-config.js'
 
 class EntryGiveawayRepository {
   static async createEntryGiveaway (data) {
