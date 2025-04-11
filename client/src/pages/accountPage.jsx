@@ -135,7 +135,12 @@ const Account = () => {
                   />
                   <span className="ml-2 text-sm md:text-base">Editar</span>
                 </div>
-                <div className="proposals flex flex-row items-center cursor-pointer">
+                <div
+                  className="proposals flex flex-row items-center cursor-pointer"
+                  onClick={() => {
+                    navigate("/proposals");
+                  }}
+                >
                   <img
                     src={ProposalsIco || "/placeholder.svg"}
                     className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]"

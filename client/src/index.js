@@ -24,6 +24,7 @@ import Account from "./pages/accountPage";
 
 import ProtectedRoute from "./pages/ProtectedRoutes/protectedRoute";
 import NotFound from "./pages/notFound";
+import ProposalsPage from "./pages/proposalsPage";
 
 //? Business Processes
 import LookSale from "./pages/BPMN/lookSalePage";
@@ -103,6 +104,11 @@ root.render(
         <Route
           path="/confirm-account"
           element={<ProtectedRoute element={<ConfirmAccount />} />}
+        />
+
+        <Route
+          path="/proposals"
+          element={<ProtectedRoute element={<ProposalsPage />} />}
         />
 
         <Route path="/notfound" element={<NotFound />} />
