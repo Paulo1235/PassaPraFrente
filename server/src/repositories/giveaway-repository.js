@@ -29,7 +29,7 @@ class GiveawayRepository {
     const pool = await getConnection()
 
     const giveaway = await pool.request().input('id', sql.Int, id).query(`
-      SELECT Sorteio_ID, DataFim, DataInicio, Titulo, Descricao, NomeCategoria, Condicao, Contacto
+      SELECT Sorteio_ID, DataFim, DataInicio, Titulo, Descricao, NomeCategoria, Condicao, Contacto, Sorteio.Utilizador_ID
       FROM Sorteio
       JOIN Utilizador ON Utilizador.Utilizador_ID = Sorteio.Utilizador_ID
       JOIN Artigo ON Artigo.Artigo_ID = Sorteio.ArtigoArtigo_ID

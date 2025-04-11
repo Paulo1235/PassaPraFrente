@@ -59,6 +59,8 @@ class LoanController {
     const { id } = req.params
     const data = req.body
 
+    console.log(data)
+
     try {
       const existingLoan = await LoanRepository.getLoanById(id)
 

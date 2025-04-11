@@ -15,7 +15,11 @@ class ProposalMiddleware {
     try {
       const sale = await SaleRepository.getSaleById(id)
 
+      
       const ownerId = sale.Utilizador_ID
+
+      console.log(userId, ownerId)
+      console.log(sale)
 
       if (userId !== ownerId) {
         throw new HttpException('Não é o dono desta venda!', StatusCodes.UNAUTHORIZED)

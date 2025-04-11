@@ -57,7 +57,7 @@ class SaleController {
   static async updateSale (req, res) {
     const { id } = req.params
     const data = req.body
-
+    console.log(data)
     try {
       const existingSale = await SaleRepository.getSaleById(id)
 
@@ -70,6 +70,9 @@ class SaleController {
         description: data.description || existingSale.Descricao,
         value: data.value || existingSale.Valor
       }
+
+      console.log(existingSale)
+      console.log(updatedData)
 
       await SaleRepository.updateSale(updatedData, id)
 

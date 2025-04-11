@@ -1,79 +1,103 @@
-import { useRef } from "react"
-import { Formik, Form, Field, ErrorMessage } from "formik"
-import { Undo2, Plus, X } from "lucide-react"
-
-// Custom validation function for Formik
-const validateForm = (values) => {
-  const errors = {}
-
-  // Title validation
-  if (!values.title) {
-    errors.title = "Título é obrigatório"
-  } else if (values.title.length < 5) {
-    errors.title = "Título deve ter pelo menos 5 caracteres"
-  } else if (values.title.length > 100) {
-    errors.title = "Título deve ter no máximo 100 caracteres"
-  }
-
-  // Description validation
-  if (!values.description) {
-    errors.description = "Descrição é obrigatória"
-  } else if (values.description.length < 10) {
-    errors.description = "Descrição deve ter pelo menos 10 caracteres"
-  }
-
-  // Condition validation
-  if (!values.condition) {
-    errors.condition = "Condição é obrigatória"
-  }
-
-  // Category validation
-  if (!values.category) {
-    errors.category = "Categoria é obrigatória"
-  }
-
-  // Start date validation
-  if (!values.startDate) {
-    errors.startDate = "Data de início é obrigatória"
-  }
-
-  // End date validation
-  if (!values.endDate) {
-    errors.endDate = "Data de fim é obrigatória"
-  } else if (values.startDate && values.endDate && new Date(values.endDate) <= new Date(values.startDate)) {
-    errors.endDate = "Data de fim deve ser posterior à data de início"
-  }
-
-  // Photos validation
-  if (!values.photos || values.photos.length === 0) {
-    errors.photos = "Pelo menos 1 foto é obrigatória"
-  } else if (values.photos.length > 3) {
-    errors.photos = "Máximo de 3 fotos permitido"
-  }
-
-  return errors
-}
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Undo2, Plus, X, Calendar } from "lucide-react";
+import { CreateDrawSchema } from "../../lib/schemas";
+import { useEffect, useRef, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function EditDraw() {
-  const fileInputRef = useRef(null)
+  const { id } = useParams();
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const [data, setData] = useState(null);
+  const fileInputRef = useRef(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // Initial form values
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/giveaways/id/${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
+
+        const result = await response.json();
+        console.log(result.message);
+        setData(result.message); // Ajusta conforme estrutura do retorno
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+        setIsLoading(false);
+      }
+    };
+
+    if (!isAuthenticated) {
+      navigate("/");
+      return;
+    }
+
+    fetchData();
+  }, [isAuthenticated, navigate, id]);
+
+  const handleSubmit = async (values) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/loans/id/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          title: values.title,
+          description: values.description,
+          value: values.price,
+          Condicao: values.condition,
+          NomeCategoria: values.category,
+          DataInicio: values.startDate,
+          DataFim: values.endDate,
+          // Se fores lidar com imagens reais aqui, tens de adicionar lógica para upload
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar a venda.");
+      }
+
+      const result = await response.json();
+      console.log("Venda atualizada:", result);
+      alert("Venda atualizada com sucesso!");
+      navigate("/index");
+    } catch (error) {
+      console.error("Erro ao submeter dados:", error);
+      alert("Erro ao atualizar. Ver consola.");
+    }
+  };
+
+  if (isLoading)
+    return <p className="text-center mt-10">A carregar dados...</p>;
+
   const initialValues = {
-    //! buscar os dados do servidor
-    title: "Camisola Quentinha Tigresa - XS",
-    description: "Quentinha, usada poucas vezes",
-    condition: "Bom Estado",
-    category: "Roupa",
-    startDate: "2025-03-28T12:30",
-    endDate: "2025-03-28T14:30",
-    photos: [],
-  }
-
-  // Handle form submission
-  const handleSubmit = (values) => {
-    console.log("Form submitted with values:", values)
-    alert("Sorteio publicado com sucesso!")
-  }
+    title: data?.Titulo || "",
+    description: data?.Descricao || "",
+    price: data?.Valor || "",
+    condition: data?.Condicao || "Como novo",
+    category: data?.NomeCategoria || "Outros",
+    startDate: data?.DataInicio
+      ? new Date(data.DataInicio).toISOString().slice(0, 16)
+      : "", // formatar para datetime-local
+    endDate: data?.DataFim
+      ? new Date(data.DataFim).toISOString().slice(0, 16)
+      : "",
+    photos: [], // Ainda precisas tratar isto se estiveres a lidar com imagens reais
+  };
 
   return (
     <div className="flex flex-row min-h-screen bg-[#FFFAEE]">
@@ -90,7 +114,7 @@ export default function EditDraw() {
 
           <h1 className="text-3xl font-medium text-[#CAAD7E] text-center my-6">Editar Sorteio</h1>
 
-          <Formik initialValues={initialValues} validate={validateForm} onSubmit={handleSubmit}>
+          <Formik initialValues={initialValues} validationSchema={CreateDrawSchema} onSubmit={handleSubmit}>
             {({ values, errors, touched, setFieldValue }) => (
               <Form className="w-full">
                 <p className="text-center text-sm text-gray-500 mb-2">

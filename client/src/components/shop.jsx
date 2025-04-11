@@ -10,6 +10,7 @@ const ShopSection = ({ title, items }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8 px-2 md:px-4">
           {items.map((item, index) => (
             <Card
+              mainPage={true}
               key={`card-${title}-${index}`}
               name={item.name}
               size={item.size}

@@ -6,20 +6,43 @@ const Card = (props) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    if (props.category === "Vendas") {
-      navigate(`/sale/${props.idVenda}`);
-    } else if (props.category === "Emprestimos") {
-      navigate(`/loan/${props.idEmprestimo}`);
-    } else if (props.category === "Sorteios") {
-      navigate(`/draw/${props.idSorteio}`);
-    }
 
-    console.log("IDs recebidos:", {
-      idVenda: props.idVenda,
-      idEmprestimo: props.idEmprestimo,
-      idSorteio: props.idSorteio,
-      category: props.category,
-    });
+    console.log(props)
+
+    if(props.mainPage == true)
+    {
+      if (props.category === "Vendas") {
+        navigate(`/sale/${props.idVenda}`);
+        } else if (props.category === "Emprestimos") {
+          navigate(`/loan/${props.idEmprestimo}`);
+        } else if (props.category === "Sorteios") {
+          navigate(`/draw/${props.idSorteio}`);
+        }
+    
+        console.log("IDs recebidos:", {
+          idVenda: props.idVenda,
+          idEmprestimo: props.idEmprestimo,
+          idSorteio: props.idSorteio,
+          category: props.category,
+        });
+    }
+    else
+    {
+      if (props.category === "Vendas") {
+        navigate(`/editsale/${props.idVenda}`);
+        } else if (props.category === "Emprestimos") {
+          navigate(`/editloan/${props.idEmprestimo}`);
+        } else if (props.category === "Sorteios") {
+          navigate(`/editdraw/${props.idSorteio}`);
+        }
+    
+        console.log("IDs (BPMN) recebidos:", {
+          idVenda: props.idVenda,
+          idEmprestimo: props.idEmprestimo,
+          idSorteio: props.idSorteio,
+          category: props.category,
+        });
+    }
   };
 
   return (

@@ -48,6 +48,7 @@ saleRouter.get(
   '/sales/user',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
   SaleController.getUserSales
 )
 

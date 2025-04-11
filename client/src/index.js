@@ -52,24 +52,10 @@ root.render(
         <Route path="/recoverpass" element={<RecoverPass />} />
         <Route path="/newpassword" element={<NewPassword />} />
 
-        <Route path="/testedraw" element={<LookSale />} />
+        {/* Test Pages */}
         <Route path="/testesale" element={<EditSale />} />
         <Route path="/testeloan" element={<EditLoan />} />
-
-        <Route path="/testeeditarconta" element={<EditAccountPage />} />
-
-        <Route
-          path="/createsale"
-          element={<ProtectedRoute element={<CreateSale />} />}
-        />
-        <Route
-          path="/createloan"
-          element={<ProtectedRoute element={<CreateLoan />} />}
-        />
-        <Route
-          path="/createdraw"
-          element={<ProtectedRoute element={<CreateDraw />} />}
-        />
+        <Route path="/testedraw" element={<EditDraw />} />
 
         {/* Admin */}
         <Route
@@ -91,6 +77,34 @@ root.render(
         <Route
           path="/draw/:id"
           element={<ProtectedRoute element={<LookDraw />} />}
+        />
+
+        <Route
+          path="/createsale"
+          element={<ProtectedRoute element={<CreateSale />} />}
+        />
+
+        <Route
+          path="/createloan"
+          element={<ProtectedRoute element={<CreateLoan />} />}
+        />
+
+        <Route
+          path="/createdraw"
+          element={<ProtectedRoute element={<CreateDraw />} />}
+        />
+
+        <Route
+          path="/editsale/:id"
+          element={<ProtectedRoute element={<EditSale />} />}
+        />
+        <Route
+          path="/editloan/:id"
+          element={<ProtectedRoute element={<EditLoan />} />}
+        />
+        <Route
+          path="/editdraw/:id"
+          element={<ProtectedRoute element={<EditDraw />} />}
         />
         <Route
           path="/account"

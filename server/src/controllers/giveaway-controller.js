@@ -58,7 +58,7 @@ class GiveawayController {
   static async updateGiveaway (req, res) {
     const { id } = req.params
     const data = req.body
-
+    console.log(data)
     try {
       const existingGiveaway = await GiveawayRepository.getGiveawayById(id)
 
