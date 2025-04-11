@@ -57,7 +57,7 @@ class SaleController {
   static async updateSale (req, res) {
     const { id } = req.params
     const data = req.body
-    console.log(data)
+
     try {
       const existingSale = await SaleRepository.getSaleById(id)
 
@@ -68,11 +68,9 @@ class SaleController {
       const updatedData = {
         title: data.title || existingSale.Titulo,
         description: data.description || existingSale.Descricao,
-        value: data.value || existingSale.Valor
+        value: data.value || existingSale.Valor,
+        itemId: existingSale.Artigo_ID
       }
-
-      console.log(existingSale)
-      console.log(updatedData)
 
       await SaleRepository.updateSale(updatedData, id)
 
@@ -97,13 +95,16 @@ class SaleController {
   static async updateSaleStatus (req, res) {
     const { status } = req.body
     const { id } = req.params
+
     try {
       const sale = await SaleRepository.getSaleById(id)
 
       if (!sale) {
         throw new HttpException('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
       }
+
       const stateId = await IdService.getStateById(status)
+
       if (!stateId) {
         throw new HttpException('Estado inválido.', StatusCodes.BAD_REQUEST)
       }
