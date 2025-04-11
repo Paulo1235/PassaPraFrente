@@ -120,7 +120,7 @@ class LoanController {
 
       await LoanRepository.updateLoanStatus(id, stateId)
 
-      return response(res, true, StatusCodes.OK, 'Estado do empréstimoo atualizado.')
+      return response(res, true, StatusCodes.OK, 'Estado do empréstimo atualizado.')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao atualizar o estado do empréstimo.')
     }

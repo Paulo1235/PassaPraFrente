@@ -68,8 +68,7 @@ giveawayRouter.patch(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  ProposalMiddleware.isOwnerGiveaway,
-  validateSchema(giveawaySchema, true),
+  AuthMiddleware.authorizedRoles(['admin']),
   GiveawayController.updateGiveawayStatus
 )
 

@@ -57,8 +57,7 @@ saleRouter.patch(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  ProposalMiddleware.isOwnerSale,
-  validateSchema(saleSchema, true),
+  AuthMiddleware.authorizedRoles(['admin']),
   SaleController.updateSaleStatus
 )
 

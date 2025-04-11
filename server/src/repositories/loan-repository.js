@@ -136,7 +136,7 @@ class LoanRepository {
       .input('stateId', sql.Int, stateId)
       .query(`
         UPDATE Emprestimo
-        SET Estado_ID = @stateId
+        SET EstadoEstado_ID = @stateId
         WHERE Emprestimo_ID = @loanId
       `)
 

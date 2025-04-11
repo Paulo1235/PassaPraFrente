@@ -109,6 +109,7 @@ class GiveawayController {
       if (!giveaway) {
         throw new HttpException('Não foi possível encontrar o sorteio.', StatusCodes.NOT_FOUND)
       }
+
       const stateId = await IdService.getStateById(status)
       if (!stateId) {
         throw new HttpException('Estado inválido.', StatusCodes.BAD_REQUEST)

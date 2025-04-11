@@ -52,8 +52,7 @@ loanRouter.patch(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  ProposalMiddleware.isOwnerLoan,
-  validateSchema(loanSchema, true),
+  AuthMiddleware.authorizedRoles(['admin']),
   LoanController.updateLoanStatus
 )
 
