@@ -17,9 +17,6 @@ class ProposalMiddleware {
 
       const ownerId = sale.Utilizador_ID
 
-      console.log(userId, ownerId)
-      console.log(sale)
-
       if (userId !== ownerId) {
         throw new HttpException('Não é o dono desta venda!', StatusCodes.UNAUTHORIZED)
       }
@@ -36,6 +33,10 @@ class ProposalMiddleware {
 
     try {
       const loan = await LoanRepository.getLoanById(id)
+
+      if (!loan) {
+        throw new HttpException('Empréstimo não encontrado', StatusCodes.NOT_FOUND)
+      }
 
       const ownerId = loan.Utilizador_ID
 
@@ -55,8 +56,6 @@ class ProposalMiddleware {
 
     try {
       const giveaway = await GiveawayRepository.getGiveawayById(id)
-
-      console.log(giveaway)
 
       const ownerId = giveaway.Utilizador_ID
 

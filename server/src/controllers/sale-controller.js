@@ -69,7 +69,9 @@ class SaleController {
         title: data.title || existingSale.Titulo,
         description: data.description || existingSale.Descricao,
         value: data.value || existingSale.Valor,
-        itemId: existingSale.Artigo_ID
+        itemId: existingSale.Artigo_ID,
+        category: data.category || existingSale.NomeCategoria,
+        condition: data.condition || existingSale.Condicao
       }
 
       await SaleRepository.updateSale(updatedData, id)

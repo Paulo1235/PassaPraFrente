@@ -2,7 +2,7 @@ import express from 'express'
 
 import AuthController from '../controllers/auth-controller.js'
 import AuthMiddleware from '../middlewares/auth-middleware.js'
-import ProposalMiddleware from '../middlewares/proposal-middleware.js'
+import ProposalMiddleware from '../middlewares/owner-middleware.js'
 import { giveawaySchema } from '../validations/giveaway-schema.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import GiveawayController from '../controllers/giveaway-controller.js'

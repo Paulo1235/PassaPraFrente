@@ -63,8 +63,6 @@ class LoanController {
     const { id } = req.params
     const data = req.body
 
-    console.log(data)
-
     try {
       const existingLoan = await LoanRepository.getLoanById(id)
 
@@ -80,10 +78,10 @@ class LoanController {
         endDate: data.endDate || existingLoan.DataFim,
         category: data.category || existingLoan.NomeCategoria,
         condition: data.condition || existingLoan.Condicao,
-        itemId: existingLoan.Artigo_ID
+        itemId: existingLoan.ArtigoArtigo_ID
       }
 
-      await LoanRepository.updateSale(updatedData, id)
+      await LoanRepository.updateLoan(updatedData, id)
 
       return response(res, true, StatusCodes.OK, 'Empréstimo atualizado com sucesso.')
     } catch (error) {
@@ -95,9 +93,9 @@ class LoanController {
     const id = req.user.Utilizador_ID
 
     try {
-      const sales = await LoanRepository.getUserLoans(id)
+      const loans = await LoanRepository.getUserLoans(id)
 
-      return response(res, true, StatusCodes.OK, sales)
+      return response(res, true, StatusCodes.OK, loans)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos do utilizador.')
     }

@@ -31,7 +31,7 @@ class SaleRepository {
     const sale = await pool.request()
       .input('id', sql.Int, id)
       .query(`
-        SELECT Venda_ID, Titulo, Descricao, Valor, NomeCategoria, Condicao, Contacto, Venda.Utilizador_ID
+        SELECT Venda_ID, Titulo, Descricao, Valor, NomeCategoria, Condicao, Contacto, Venda.Utilizador_ID, Venda.Artigo_ID
         FROM Venda
         JOIN Utilizador ON Utilizador.Utilizador_ID = Venda.Utilizador_ID
         JOIN Artigo ON Artigo.Artigo_ID = Venda.Artigo_ID
@@ -86,12 +86,13 @@ class SaleRepository {
         .input('id', sql.Int, id)
         .input('titulo', sql.VarChar, data.title)
         .input('descricao', sql.VarChar, data.description)
-        .input('valor', sql.Float, data.value)
+        .input('valor', sql.Real, data.value)
         .query(`
           UPDATE Venda
-          SET Valor = @valor
+          SET 
               Titulo = @titulo,
-              Descricao = @descricao
+              Descricao = @descricao,
+              Valor = @valor
           WHERE Venda_ID = @id
         `)
 

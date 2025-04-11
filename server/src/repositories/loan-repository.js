@@ -33,7 +33,7 @@ class LoanRepository {
     const loan = await pool.request()
       .input('id', sql.Int, id)
       .query(`
-        SELECT Emprestimo_ID, Titulo, Descricao, DataInicio, DataFim, Valor, NomeCategoria, Condicao, Contacto, Emprestimo.Utilizador_ID
+        SELECT Emprestimo_ID, Titulo, Descricao, DataInicio, DataFim, Valor, NomeCategoria, Condicao, Contacto, Emprestimo.Utilizador_ID, Emprestimo.ArtigoArtigo_ID
         FROM Emprestimo
         JOIN Utilizador ON Utilizador.Utilizador_ID = Emprestimo.Utilizador_ID
         JOIN Artigo ON Artigo.Artigo_ID = Emprestimo.ArtigoArtigo_ID
@@ -90,7 +90,7 @@ class LoanRepository {
         .input('dataFim', sql.DateTime, data.endDate)
         .input('titulo', sql.VarChar, data.title)
         .input('descricao', sql.VarChar, data.description)
-        .input('valor', sql.Float, data.value)
+        .input('valor', sql.Real, data.value)
         .query(`
           UPDATE Emprestimo
           SET DataInicio = @dataInicio,
@@ -98,7 +98,7 @@ class LoanRepository {
               Titulo = @titulo,
               Descricao = @descricao,
               Valor = @valor
-          WHERE Emprestimo = @id
+          WHERE Emprestimo_ID = @id
         `)
 
       await transaction.commit()

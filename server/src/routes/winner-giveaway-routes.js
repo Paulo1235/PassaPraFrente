@@ -3,7 +3,7 @@ import express from 'express'
 import AuthController from '../controllers/auth-controller.js'
 import AuthMiddleware from '../middlewares/auth-middleware.js'
 import WinnerGiveawayController from '../controllers/winner-giveaway-controller.js'
-import ProposalMiddleware from '../middlewares/proposal-middleware.js'
+import ProposalMiddleware from '../middlewares/owner-middleware.js'
 
 const winnerGiveawayRouter = express.Router()
 
