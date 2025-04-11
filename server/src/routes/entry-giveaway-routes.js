@@ -7,7 +7,7 @@ import EntryGiveawayController from '../controllers/entry-giveaway-controller.js
 const entryGiveawayRouter = express.Router()
 
 entryGiveawayRouter.post(
-  '/entry-giveaway/create',
+  '/entry-giveaway/create/:giveawayId',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,

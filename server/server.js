@@ -25,11 +25,12 @@ import transactionSaleRouter from './src/routes/transaction-sale-routes.js'
 import loanRouter from './src/routes/loan-routes.js'
 import giveawayRouter from './src/routes/giveaway-routes.js'
 import entryGiveawayRouter from './src/routes/entry-giveaway-routes.js'
+import winnerGiveawayRouter from './src/routes/winner-giveaway-routes.js'
+import notificationRouter from './src/routes/notification-routes.js'
 
 import { initSocketServer } from './src/utils/socket-server.js'
 import { getConnection } from './src/database/db-config.js'
 import { configureCloudinary } from './src/services/cloudinary-service.js'
-import notificationRouter from './src/routes/notification-routes.js'
 
 const app = express()
 
@@ -71,7 +72,8 @@ app.use('/api',
   loanRouter,
   giveawayRouter,
   notificationRouter,
-  entryGiveawayRouter
+  entryGiveawayRouter,
+  winnerGiveawayRouter
 )
 
 app.get('/', (req, res) => {

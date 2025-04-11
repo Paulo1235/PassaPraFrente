@@ -52,10 +52,12 @@ class ProposalMiddleware {
 
   static async isOwnerGiveaway (req, res, next) {
     const userId = req.user.Utilizador_ID
-    const { id } = req.params
+    const { giveawayId } = req.params
 
     try {
-      const giveaway = await GiveawayRepository.getGiveawayById(id)
+      const giveaway = await GiveawayRepository.getGiveawayById(giveawayId)
+
+      console.log(giveaway)
 
       const ownerId = giveaway.Utilizador_ID
 

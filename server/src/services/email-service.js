@@ -29,8 +29,6 @@ class EmailService {
       html
     }
 
-    console.log(mailOptions)
-
     await transporter.sendMail(mailOptions)
   }
 

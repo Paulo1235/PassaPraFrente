@@ -17,7 +17,8 @@ class GiveawayRepository {
       .input('descricao', sql.VarChar, data.description)
       .input('itemId', sql.Int, item.Artigo_ID)
       .input('userId', sql.Int, userId)
-      .input('estadoId', sql.Int, 1).query(`
+      .input('estadoId', sql.Int, 1)
+      .query(`
         INSERT INTO Sorteio (DataInicio, DataFim, Titulo, Descricao, ArtigoArtigo_ID, Utilizador_ID, Estado_ID)
         VALUES (@dataInicio, @dataFim, @titulo, @descricao, @itemId, @userId, @estadoId)
       `)
@@ -29,7 +30,11 @@ class GiveawayRepository {
     const pool = await getConnection()
 
     const giveaway = await pool.request().input('id', sql.Int, id).query(`
+<<<<<<< HEAD
       SELECT Sorteio_ID, DataFim, DataInicio, Titulo, Descricao, NomeCategoria, Condicao, Contacto, Sorteio.Utilizador_ID
+=======
+      SELECT Sorteio_ID, Sorteio.Utilizador_ID, DataFim, DataInicio, Titulo, Descricao, NomeCategoria, Condicao, Contacto
+>>>>>>> 4b6891bf1758d5318299a17d098c481f0f8840f2
       FROM Sorteio
       JOIN Utilizador ON Utilizador.Utilizador_ID = Sorteio.Utilizador_ID
       JOIN Artigo ON Artigo.Artigo_ID = Sorteio.ArtigoArtigo_ID

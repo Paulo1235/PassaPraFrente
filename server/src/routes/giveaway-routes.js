@@ -6,6 +6,7 @@ import ProposalMiddleware from '../middlewares/proposal-middleware.js'
 import { giveawaySchema } from '../validations/giveaway-schema.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import GiveawayController from '../controllers/giveaway-controller.js'
+import { itemSchema } from '../validations/item-schema.js'
 
 const giveawayRouter = express.Router()
 
@@ -16,6 +17,7 @@ giveawayRouter.post(
   AuthMiddleware.isVerified,
   // ProposalMiddleware.isAdult,
   validateSchema(giveawaySchema, false),
+  validateSchema(itemSchema, false),
   GiveawayController.createGiveaway
 )
 
