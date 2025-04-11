@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
+
+
 export default function EditDraw() {
   const { id } = useParams();
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -104,7 +106,7 @@ export default function EditDraw() {
       <div className="App w-screen flex flex-col">
         <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex flex-col items-end">
-            <a href="/index">
+            <a href="/account">
               <button className="flex flex-row gap-2 items-center hover:underline">
                 <Undo2 className="h-5 w-5" />
                 <span>Voltar</span>

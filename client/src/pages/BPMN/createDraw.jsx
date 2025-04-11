@@ -300,11 +300,9 @@ export default function CreateDraw() {
                             : "border-gray-300"
                         } rounded-md appearance-none bg-white`}
                       >
-                        <option value="Quase novo">Quase Novo</option>
                         <option value="Novo">Novo</option>
+                        <option value="Quase Novo">Quase Novo</option>
                         <option value="Usado">Usado</option>
-                        <option value="Bastante Usado">Bastante Usado</option>
-                        <option value="Com defeito">Com defeito</option>
                       </Field>
                       <ErrorMessage
                         name="condition"

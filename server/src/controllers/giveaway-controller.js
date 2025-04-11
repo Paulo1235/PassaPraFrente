@@ -76,6 +76,9 @@ class GiveawayController {
         state: stateId || existingGiveaway.Estado_ID
       }
 
+      console.log(stateId)
+      console.log(updatedData)
+
       await GiveawayRepository.updateGiveaway(id, updatedData)
 
       return response(res, true, StatusCodes.OK, 'Giveaway atualizado com sucesso.')
