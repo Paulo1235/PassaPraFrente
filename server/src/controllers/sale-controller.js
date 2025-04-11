@@ -97,16 +97,13 @@ class SaleController {
   static async updateSaleStatus (req, res) {
     const { status } = req.body
     const { id } = req.params
-
     try {
       const sale = await SaleRepository.getSaleById(id)
 
       if (!sale) {
         throw new HttpException('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
       }
-
       const stateId = await IdService.getStateById(status)
-
       if (!stateId) {
         throw new HttpException('Estado inválido.', StatusCodes.BAD_REQUEST)
       }

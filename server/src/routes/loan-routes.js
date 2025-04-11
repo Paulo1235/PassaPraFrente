@@ -18,7 +18,7 @@ loanRouter
     AuthMiddleware.isAuthenticated,
     AuthMiddleware.isVerified,
     ProposalMiddleware.isOwnerLoan,
-    validateSchema(loanSchema, true), 
+    validateSchema(loanSchema, true),
     validateSchema(itemSchema, true),
     LoanController.updateLoan
   )
