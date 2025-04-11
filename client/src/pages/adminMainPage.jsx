@@ -21,7 +21,7 @@ const AdminMain = () => {
   useEffect(() => {
     const fetchShopData = async () => {
       try {
-        const responseSales = await fetch("http://localhost:5000/api/sales/available", {
+        const responseSales = await fetch("http://localhost:5000/api/sales", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -29,7 +29,7 @@ const AdminMain = () => {
           credentials: "include",
         });
 
-        const responseLoans = await fetch("http://localhost:5000/api/loans/available", {
+        const responseLoans = await fetch("http://localhost:5000/api/loans", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -37,7 +37,7 @@ const AdminMain = () => {
           credentials: "include",
         });
 
-        const responseGiveaways = await fetch("http://localhost:5000/api/giveaways/available", {
+        const responseGiveaways = await fetch("http://localhost:5000/api/giveaways", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -67,25 +67,25 @@ const AdminMain = () => {
 
         const formattedData = [
           {
-            title: "Vendas",
-            items: transformItems(dataSales, "Vendas"),
+            title: "Venda",
+            items: transformItems(dataSales, "Venda"),
           },
           {
-            title: "Emprestimos",
-            items: transformItems(dataLoans, "Emprestimos"),
+            title: "Emprestimo",
+            items: transformItems(dataLoans, "Emprestimo"),
           },
           {
-            title: "Sorteios",
-            items: transformItems(dataGiveaways, "Sorteios"),
+            title: "Sorteio",
+            items: transformItems(dataGiveaways, "Sorteio"),
           },
         ];
-
+console.log(formattedData)
         setShopData(formattedData);
       } catch (error) {
         console.error("Erro ao buscar dados do backend:", error);
       }
     };
-
+    
     fetchShopData();
 
     if (!isAuthenticated) {
@@ -115,7 +115,7 @@ const AdminMain = () => {
                   name={item.name}
                   size={item.size}
                   value={item.value}
-                  tipoAnuncio={"Venda"} // Vendas, Emprestimos ou Sorteios
+                  tipoAnuncio={section.title} // Vendas, Emprestimos ou Sorteios
                   idEmprestimo={item.idEmprestimo}
                   idVenda={item.idVenda}
                   idSorteio={item.idSorteio}

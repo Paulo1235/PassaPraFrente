@@ -66,7 +66,8 @@ class GiveawayRepository {
       .query(`
         SELECT * 
         FROM Sorteio
-        WHERE Estado_ID = 1
+        JOIN Estado ON Estado.Estado_ID = Sorteio.Estado_ID
+        WHERE Estado = 'Disponível'
       `)
 
     return availableGiveaways.recordset
@@ -117,6 +118,22 @@ class GiveawayRepository {
       `)
 
     return giveaways.recordset
+  }
+
+  static async updateGiveawayStatus (givewayId, stateId) {
+    const pool = await getConnection()
+
+    const updatedGiveaway = await pool
+      .request()
+      .input('givewayId', sql.Int, givewayId)
+      .input('stateId', sql.Int, stateId)
+      .query(`
+        UPDATE Sorteio
+        SET Estado_ID = @stateId
+        WHERE Sorteio_ID = @givewayId
+      `)
+
+    return updatedGiveaway.rowsAffected[0] > 0
   }
 }
 

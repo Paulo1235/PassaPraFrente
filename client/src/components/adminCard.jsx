@@ -6,10 +6,11 @@ import { Trash2, Check } from "lucide-react";
 const AdminCard = (props) => {
   const accept = async (id, values) => {
     toast("Aceite!");
+    console.log("ACCEPT CALLED", { id, values });
+    console.log("ACCEPT -> tipoAnuncio:", values.tipoAnuncio);
  if (values.tipoAnuncio === "Emprestimo")
  {
     return( 
-
       await fetch(`http://localhost:5000/api/loans/update-status/${id}`, {
       method: "PATCH",
       headers: {
@@ -40,7 +41,7 @@ const AdminCard = (props) => {
       {
          return( 
      
-           await fetch(`http://localhost:5000/api/sales/update-status/${id}`, {
+           await fetch(`http://localhost:5000/api/giveaways/update-status/${id}`, {
            method: "PATCH",
            headers: {
              "Content-Type": "application/json",
@@ -57,6 +58,7 @@ const AdminCard = (props) => {
 const deny = async (id, values) => {
   toast("Recusado!");
   console.log("DENY CALLED", { id, values });
+  console.log("DENY -> tipoAnuncio:", values.tipoAnuncio);
 if (values.tipoAnuncio === "Emprestimo")
 {
   return( 
@@ -122,17 +124,7 @@ if (values.tipoAnuncio === "Venda")
             <Trash2 className="text-red-600 mr-1" />
             <button className="text-red-600 font-semibold">Eliminar</button>
           </div>
-          <div className="flex items-center cursor-pointer" onClick={() => 
-          accept(
-              props.idEmprestimo || props.idVenda || props.idSorteio,
-              {
-                tipoAnuncio: props.tipoAnuncio,
-                loanId: props.idEmprestimo,
-                saleId: props.idVenda,
-                givewayId: props.idSorteio
-              }
-            )
-          }>
+          <div className="flex items-center cursor-pointer" onClick={() => accept(props.idVenda || props.idEmprestimo || props.idSorteio, props)}>
             <Check className="text-green-600 mr-1" />
             <button className="text-green-600 font-semibold">Aprovar</button>
           </div>

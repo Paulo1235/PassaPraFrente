@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import GiveawayRepository from '../repositories/giveaway-repository.js'
 import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
+import IdService from '../services/id-service.js'
 
 class GiveawayController {
   static async createGiveaway (req, res) {
@@ -98,6 +99,27 @@ class GiveawayController {
       handleError(res, error, 'Ocorreu um erro ao encontrar os giveaways do utilizador.')
     }
   }
-}
 
+  static async updateGiveawayStatus (req, res) {
+    const { status } = req.body
+    const { id } = req.params
+    try {
+      const giveaway = await GiveawayRepository.getGiveawayById(id)
+
+      if (!giveaway) {
+        throw new HttpException('Não foi possível encontrar o sorteio.', StatusCodes.NOT_FOUND)
+      }
+      const stateId = await IdService.getStateById(status)
+      if (!stateId) {
+        throw new HttpException('Estado inválido.', StatusCodes.BAD_REQUEST)
+      }
+
+      await GiveawayRepository.updateGiveawayStatus(id, stateId)
+
+      return response(res, true, StatusCodes.OK, 'Estado do sorteio atualizado.')
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao atualizar o estado do sorteio.')
+    }
+  }
+}
 export default GiveawayController

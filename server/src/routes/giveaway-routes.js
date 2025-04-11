@@ -63,4 +63,14 @@ giveawayRouter.get(
   GiveawayController.getUserGiveaways
 )
 
+giveawayRouter.patch(
+  '/giveaways/update-status/:id',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  ProposalMiddleware.isOwnerGiveaway,
+  validateSchema(giveawaySchema, true),
+  GiveawayController.updateGiveawayStatus
+)
+
 export default giveawayRouter
