@@ -9,6 +9,7 @@ import "../index.css";
 //? Components
 import SideBar from "../components/sideBar";
 import ProposalCard from "../components/proposalCard";
+import Footer from "../components/footer"; // 👈 Importando o Footer
 
 export default function ProposalsPage() {
   const navigate = useNavigate();
@@ -53,6 +54,11 @@ export default function ProposalsPage() {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-auto w-full">
+          <Footer />
         </div>
       </div>
     </div>
