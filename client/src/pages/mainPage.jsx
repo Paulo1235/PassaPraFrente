@@ -16,6 +16,7 @@ import { useState } from "react";
 const Main = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const [shopData, setShopData] = useState([]);
+  const [loading, setLoading] = useState(true); // Estado de carregamento
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,7 +30,7 @@ const Main = () => {
           },
           credentials: "include",
         });
-    
+
         const responseLoans = await fetch("http://localhost:5000/api/loans/available", {
           method: "GET",
           headers: {
@@ -37,7 +38,7 @@ const Main = () => {
           },
           credentials: "include",
         });
-    
+
         const responseGiveaways = await fetch("http://localhost:5000/api/giveaways/available", {
           method: "GET",
           headers: {
@@ -45,15 +46,15 @@ const Main = () => {
           },
           credentials: "include",
         });
-    
+
         if (!responseSales.ok || !responseGiveaways.ok || !responseLoans.ok) {
           throw new Error("Failed to fetch shop data");
         }
-    
+
         const dataSales = await responseSales.json();
         const dataLoans = await responseLoans.json();
         const dataGiveaways = await responseGiveaways.json();
-        console.log(dataGiveaways)
+        console.log(dataGiveaways);
         const transformItems = (items, category) => {
           return items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
@@ -80,13 +81,14 @@ const Main = () => {
             items: transformItems(dataGiveaways, "Sorteios"),
           },
         };
-        console.log(shopData)
+        console.log(shopData);
         setShopData(shopData);
       } catch (error) {
         console.error("Error fetching shop data:", error);
+      } finally {
+        setLoading(false); // Dados carregados, desativa o carregamento
       }
     };
-    
 
     fetchShopData();
 
@@ -97,6 +99,10 @@ const Main = () => {
   }, [isAuthenticated, dispatch, navigate]);
 
   if (!isAuthenticated) return null;
+
+  if (loading) {
+    return <div>Dados estão a ser carregados...</div>; // Exibe a mensagem de carregamento
+  }
 
   return (
     <div className="flex flex-col md:flex-row">

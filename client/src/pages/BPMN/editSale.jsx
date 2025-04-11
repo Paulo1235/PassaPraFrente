@@ -4,6 +4,7 @@ import { Undo2, Plus, X } from "lucide-react";
 import { CreateSaleSchema } from "../../lib/schemas";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 
 
@@ -62,9 +63,8 @@ export default function EditSale() {
           title: values.title,
           description: values.description,
           value: values.price,
-          Condicao: values.condition,
-          NomeCategoria: values.category,
-          // Adiciona lógica de imagens aqui se necessário
+          condition: values.condition,
+          category: values.category,
         }),
       });
   
@@ -74,12 +74,13 @@ export default function EditSale() {
   
       const result = await response.json();
       console.log("Venda atualizada:", result);
-      alert("Venda atualizada com sucesso!");
-      navigate("/index"); // ou para onde quiseres redirecionar
-  
+      toast.success("Venda atualizada com sucesso!")
+      setTimeout(() => {
+        navigate("/index");
+      }, 2000);
     } catch (error) {
       console.error("Erro ao submeter dados:", error);
-      alert("Erro ao atualizar. Ver consola.");
+      toast.error("Erro ao atualizar a venda.");
     }
   };
   
@@ -97,6 +98,7 @@ export default function EditSale() {
 
   return (
     <div className="flex flex-row">
+      <ToastContainer />
       <div className="App w-screen flex flex-col">
         <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex flex-col items-end">

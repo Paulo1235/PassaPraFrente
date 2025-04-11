@@ -9,7 +9,9 @@ import "../index.css";
 //? Components
 import SideBar from "../components/sideBar";
 import ProposalCard from "../components/proposalCard";
-import Footer from "../components/footer"; // 👈 Importando o Footer
+import Footer from "../components/footer";
+
+
 
 export default function ProposalsPage() {
   const navigate = useNavigate();

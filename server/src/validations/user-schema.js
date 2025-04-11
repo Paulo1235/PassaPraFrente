@@ -7,7 +7,7 @@ export const userSchema = z.object({
     .trim(),
 
   contact: z.string()
-    .length(22, { message: 'O número de contacto deve ter exatamente 22 caracteres.' })
+    .length(13, { message: 'O número de contacto deve ter exatamente 22 caracteres.' })
     .startsWith('+', { message: 'O número de contacto deve começar com ' + '.' }),
 
   birthDate: z.coerce.date()

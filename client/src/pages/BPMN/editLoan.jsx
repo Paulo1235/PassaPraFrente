@@ -4,6 +4,7 @@ import { CreateLoanSchema } from "../../lib/schemas";
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 
 
@@ -33,7 +34,8 @@ export default function EditLoan() {
 
         const result = await response.json();
         console.log(result.message);
-        setData(result.message); // Ajusta conforme estrutura do retorno
+
+        setData(result.message);
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
@@ -51,7 +53,7 @@ export default function EditLoan() {
 
   const handleSubmit = async (values) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/loans/id/${id}`, {
+      const response = await fetch(`http://localhost:5000/api/loans/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -61,25 +63,27 @@ export default function EditLoan() {
           title: values.title,
           description: values.description,
           value: values.price,
-          Condicao: values.condition,
-          NomeCategoria: values.category,
-          DataInicio: values.startDate,
-          DataFim: values.endDate,
-          // Se fores lidar com imagens reais aqui, tens de adicionar lógica para upload
+          condition: values.condition,
+          category: values.category,
+          startDate: values.startDate,
+          endDate: values.endDate,
+          
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao atualizar a venda.");
+        throw new Error("Erro ao atualizar o emprestimo.");
       }
 
       const result = await response.json();
       console.log("Venda atualizada:", result);
-      alert("Venda atualizada com sucesso!");
-      navigate("/index");
+      toast.success("Empréstimo atualizado com sucesso!")
+      setTimeout(() => {
+        navigate("/index");
+      }, 2000);
     } catch (error) {
       console.error("Erro ao submeter dados:", error);
-      alert("Erro ao atualizar. Ver consola.");
+      toast.error("Erro ao atualizar o empréstimo.");
     }
   };
 
@@ -103,6 +107,7 @@ export default function EditLoan() {
 
   return (
     <div className="flex flex-row">
+      <ToastContainer />
       <div className="App w-screen flex flex-col">
         <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex flex-col items-end">

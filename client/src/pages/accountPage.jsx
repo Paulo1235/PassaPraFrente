@@ -35,22 +35,6 @@ const Account = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  //! Pedir estes dados do backend
-  const items = [
-    { name: "Cadeira Gamer", size: "Grande", value: "140,00" },
-    { name: "Mesa de Escritório", size: "Médio", value: "84,00" },
-    { name: "Abajur Moderno", size: "Pequeno", value: "22,40" },
-    { name: "Estante de Livros", size: "Grande", value: "224,00" },
-    { name: "Poltrona Confortável", size: "Médio", value: "112,00" },
-    { name: "Tapete Decorativo", size: "Grande", value: "56,00" },
-    { name: "Cama Box Casal", size: "Grande", value: "280,00" },
-    { name: "Armário de Cozinha", size: "Grande", value: "373,00" },
-    { name: "Mesa de Centro", size: "Médio", value: "65,00" },
-    { name: "Cadeira Dobrável", size: "Pequeno", value: "15,00" },
-    { name: "Espelho Decorativo", size: "Médio", value: "37,00" },
-    { name: "Rack para TV", size: "Grande", value: "168,00" },
-  ];
-
   useEffect(() => {
     const fetchShopData = async () => {
       try {
@@ -98,6 +82,7 @@ const Account = () => {
         console.log(dataSales);
         console.log(dataLoans);
         console.log(dataGiveaways);
+        
         const transformItems = (items, category) => {
           return items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
@@ -127,6 +112,7 @@ const Account = () => {
 
         console.log(userData);
         setUserData(userData);
+
       } catch (error) {
         console.error("Error fetching shop data:", error);
       }

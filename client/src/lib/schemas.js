@@ -27,7 +27,7 @@ const UpdatePasswordSchema = yup.object().shape({
 const EditAccountSchema = yup.object().shape({
   name: yup.string().required("O nome é obrigatório"),
   phone: yup.string().required("O telefone é obrigatório"),
-  address: yup.string().required("A morada é obrigatória"),
+  // address: yup.string().required("A morada é obrigatória"),
 });
 
 const CreateSaleSchema = yup.object().shape({
@@ -123,6 +123,7 @@ const CreateDrawSchema = yup.object().shape({
   //   .min(1, "Pelo menos 1 foto é obrigatória")
   //   .max(3, "Máximo de 3 fotos permitido")
 });
+
 
 export {
   SendEmailSchema,

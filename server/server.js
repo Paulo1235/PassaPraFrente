@@ -55,11 +55,12 @@ NODE_ENV === 'development' ? app.use(morgan('dev')) : app.use(morgan('common'))
 
 app.use(cors(corsOptions))
 app.options('*', cors(corsOptions))
-app.use(express.json())
 app.use(cookieParser())
 app.use(limiter)
 app.use(helmet())
 app.use(compression())
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
 

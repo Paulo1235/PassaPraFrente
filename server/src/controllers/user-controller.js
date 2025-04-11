@@ -64,6 +64,7 @@ class UserController {
       const updatedData = {
         name: data.name || existingUser.Nome,
         contact: data.contact || existingUser.Contacto
+        //! meter morada?
       }
 
       await UserRepository.updateUser(updatedData, id)
@@ -175,33 +176,53 @@ class UserController {
     }
   }
 
-  static async updateUserAvatar (req, res) {
-    const id = req.user.Utilizador_ID
-    const { thumbnail } = req.body
-
+  static async updateUserAvatar(req, res) {
+    const id = req.user.Utilizador_ID;
+    const { thumbnail } = req.body; // A imagem em base64 será passada como 'thumbnail'
+    console.log(thumbnail);
+  
     try {
-      const userAvatar = await UserRepository.getUserAvatar(id)
-
-      if (userAvatar.PublicID) {
-        await cloudinary.v2.uploader.destroy(userAvatar.PublicID)
-
-        const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
-          folder: 'users',
-          width: 150
-        })
-
-        const updateSuccess = await UserRepository.updateUserAvatar(id, myCloud.public_id, myCloud.secure_url)
-
-        if (updateSuccess) {
-          return response(res, true, StatusCodes.OK, 'Imagem de perfil atualizada.')
-        }
-
-        return response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao atualizar a imagem.')
+      // Verifica se a imagem é válida em base64
+      if (!thumbnail || !thumbnail.startsWith("data:image")) {
+        return response(res, false, StatusCodes.BAD_REQUEST, 'Imagem inválida. Certifique-se de que é uma imagem em base64.');
       }
+  
+      const userAvatar = await UserRepository.getUserAvatar(id);
+      console.log(userAvatar);
+  
+      // Se já houver uma imagem, a destrói no Cloudinary
+      if (userAvatar?.PublicID) {
+        await cloudinary.v2.uploader.destroy(userAvatar.PublicID);
+      }
+  
+      // Envia a imagem para o Cloudinary
+      const uploadedImage = await cloudinary.v2.uploader.upload(thumbnail, {
+        folder: 'users', // A pasta onde a imagem será armazenada
+        width: 150, // Define a largura da imagem
+      });
+  
+      console.log(uploadedImage);
+  
+      const { public_id, secure_url } = uploadedImage;
+  
+      const success = userAvatar?.PublicID
+        ? await UserRepository.updateUserAvatar(id, public_id, secure_url)
+        : await UserRepository.uploadUserAvatar(id, public_id, secure_url);
+  
+      if (!success) {
+        return response(res, false, StatusCodes.BAD_REQUEST, 'Erro ao salvar imagem de perfil.');
+      }
+      return response(
+        res,
+        true,
+        StatusCodes.OK,
+        userAvatar?.PublicID ? 'Imagem de perfil atualizada.' : 'Imagem de perfil inserida.'
+      );
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao atualizar a imagem.')
+      handleError(res, error, 'Ocorreu um erro ao atualizar a imagem de perfil.');
     }
   }
+  
 }
 
 export default UserController
