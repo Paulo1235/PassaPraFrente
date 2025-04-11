@@ -8,6 +8,8 @@ import { fetchUserInfo } from "../../lib/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+
+
 export default function CreateSale() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
@@ -19,7 +21,7 @@ export default function CreateSale() {
   const initialValues = {
     title: "Camisola Quentinha Tigresa - XS",
     description: "Quentinha, usada poucas vezes\nTamanho XS\nCor castanho",
-    price: "10",
+    price: 10,
     condition: "Novo",
     category: "Roupas",
     // photos: [],

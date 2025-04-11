@@ -2,7 +2,8 @@ import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchUserInfo } from "../lib/authSlice"; // Import the action
+import { fetchUserInfo } from "../lib/authSlice"; // Import the action 
+
 
 //? CSS
 import "../components/css/sidebar.css";
@@ -20,6 +21,7 @@ import Star1 from "../images/star1.svg";
 import Star2 from "../images/star2.svg";
 import EditIco from "../images/edit-account.svg";
 import ProposalsIco from "../images/proposals.svg";
+import { Bell } from "lucide-react";
 
 const Account = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -206,11 +208,11 @@ const Account = () => {
               </div>
 
               <div className="icons mt-6 md:mt-0 md:ml-6 lg:ml-10 xl:ml-20 flex flex-row md:flex-col justify-center gap-4 md:gap-3">
-                <div
+              <div
                   onClick={() => {
                     navigate("/editaccount");
                   }}
-                  className="edit flex flex-row items-center cursor-pointer"
+                  className="edit flex flex-row items-center cursor-pointer text-txts"
                 >
                   <img
                     src={EditIco || "/placeholder.svg"}
@@ -220,7 +222,16 @@ const Account = () => {
                   <span className="ml-2 text-sm md:text-base">Editar</span>
                 </div>
                 <div
-                  className="proposals flex flex-row items-center cursor-pointer"
+                  onClick={() => {
+                    navigate("/notifications");
+                  }}
+                  className="edit flex flex-row items-center cursor-pointer text-txtp"
+                >
+                  <Bell className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]"/>
+                  <span className="ml-2 text-sm md:text-base">Notificações</span>
+                </div>
+                <div
+                  className="proposals flex flex-row items-center cursor-pointer text-txtp"
                   onClick={() => {
                     navigate("/proposals");
                   }}

@@ -25,6 +25,7 @@ import Account from "./pages/accountPage";
 import ProtectedRoute from "./pages/ProtectedRoutes/protectedRoute";
 import NotFound from "./pages/notFound";
 import ProposalsPage from "./pages/proposalsPage";
+import NotificationsPage from "./pages/notificationsPage";
 
 //? Business Processes
 import LookSale from "./pages/BPMN/lookSalePage";
@@ -123,6 +124,11 @@ root.render(
         <Route
           path="/proposals"
           element={<ProtectedRoute element={<ProposalsPage />} />}
+        />
+
+        <Route
+          path="/notifications"
+          element={<ProtectedRoute element={<NotificationsPage />} />}
         />
 
         <Route path="/notfound" element={<NotFound />} />
