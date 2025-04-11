@@ -43,6 +43,12 @@ class WinnerGiveawayController {
     const { giveawayId } = req.params
 
     try {
+      const giveaway = await GiveawayRepository.getGiveawayById(giveawayId)
+
+      if (!giveaway) {
+        return response(res, false, StatusCodes.NOT_FOUND, 'Giveaway não encontrado.')
+      }
+
       const winnerGiveaway = await WinnerGiveawayRepository.getWinnerGiveawayById(giveawayId)
 
       if (!winnerGiveaway) {

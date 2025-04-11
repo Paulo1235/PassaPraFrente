@@ -4,6 +4,7 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import ProposalSaleRepository from '../repositories/proposal-sale-repository.js'
 import SaleRepository from '../repositories/sale-repository.js'
+import IdService from '../services/id-service.js'
 
 class ProposalSaleController {
   static async createProposalSale (req, res) {
@@ -16,6 +17,16 @@ class ProposalSaleController {
 
       if (!sale) {
         throw new HttpException('Venda não encontrada.', StatusCodes.NOT_FOUND)
+      }
+
+      const state = await IdService.getStateById(sale.Estado_ID)
+
+      if (state.Estado === 'Concluído' || state.Estado === 'Cancelado' || state.Estado === 'Em progresso') {
+        throw new HttpException('Não é possível fazer uma proposta para esta venda.', StatusCodes.BAD_REQUEST)
+      }
+
+      if (sale.Utilizador_ID === userId) {
+        throw new HttpException('Não é possível fazer uma proposta para a sua própria venda.', StatusCodes.BAD_REQUEST)
       }
 
       const proposal = await ProposalSaleRepository.getSaleProposalById(userId, id)
