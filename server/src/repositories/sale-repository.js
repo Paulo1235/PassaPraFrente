@@ -72,23 +72,35 @@ class SaleRepository {
   }
 
   static async updateSale (data, id) {
-    const pool = await getConnection(dbConfig)
+    const pool = await getConnection()
 
-    const updateSale = await pool.request()
-      .input('titulo', sql.VarChar, data.title)
-      .input('descricao', sql.VarChar, data.description)
-      .input('valor', sql.Float, data.value)
-      .input('idVenda', sql.Int, id)
-      .query(`
-        UPDATE Venda
-        SET 
-            Titulo = @titulo,
-            Descricao = @descricao,
-            Valor = @valor
-        WHERE Venda_ID = @idVenda
-      `)
+    const transaction = pool.transaction()
 
-    return updateSale.rowsAffected[0] > 0
+    try {
+      await transaction.begin()
+
+      await ItemRepository.updateItem(data.category, data.condition, data.itemId, transaction)
+
+      await transaction
+        .request()
+        .input('id', sql.Int, id)
+        .input('titulo', sql.VarChar, data.title)
+        .input('descricao', sql.VarChar, data.description)
+        .input('valor', sql.Float, data.value)
+        .query(`
+          UPDATE Venda
+          SET Valor = @valor
+              Titulo = @titulo,
+              Descricao = @descricao
+          WHERE Venda_ID = @id
+        `)
+
+      await transaction.commit()
+
+      return true
+    } catch (error) {
+      await transaction.rollback()
+    }
   }
 
   static async getUserSales (userId) {

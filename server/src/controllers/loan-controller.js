@@ -11,6 +11,10 @@ class LoanController {
     const data = req.body
 
     try {
+      if (new Date(data.startDate) >= new Date(data.endDate)) {
+        throw new HttpException('A data de início deve ser anterior à data de fim.', StatusCodes.BAD_REQUEST)
+      }
+
       await LoanRepository.createLoan({ data, userId })
 
       return response(res, true, StatusCodes.OK, 'Empréstimo criado com sucesso')
@@ -71,7 +75,12 @@ class LoanController {
       const updatedData = {
         title: data.title || existingLoan.Titulo,
         description: data.description || existingLoan.Descricao,
-        value: data.value || existingLoan.Valor
+        value: data.value || existingLoan.Valor,
+        startDate: data.startDate || existingLoan.DataInicio,
+        endDate: data.endDate || existingLoan.DataFim,
+        category: data.category || existingLoan.NomeCategoria,
+        condition: data.condition || existingLoan.Condicao,
+        itemId: existingLoan.Artigo_ID
       }
 
       await LoanRepository.updateSale(updatedData, id)

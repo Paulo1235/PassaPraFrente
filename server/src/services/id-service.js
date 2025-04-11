@@ -1,10 +1,10 @@
 import sql from 'mssql'
 
-import { dbConfig, getConnection } from '../database/db-config.js'
+import { getConnection } from '../database/db-config.js'
 
 class IdService {
   static async getConditionById (condition) {
-    const pool = await getConnection(dbConfig)
+    const pool = await getConnection()
 
     const conditionId = await pool
       .request()
@@ -19,7 +19,7 @@ class IdService {
   }
 
   static async getCategoryById (category) {
-    const pool = await getConnection(dbConfig)
+    const pool = await getConnection()
 
     const categoryId = await pool
       .request()
@@ -34,7 +34,7 @@ class IdService {
   }
 
   static async getStateById (state) {
-    const pool = await getConnection(dbConfig)
+    const pool = await getConnection()
 
     const stateId = await pool
       .request()

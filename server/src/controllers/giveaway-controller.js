@@ -3,7 +3,6 @@ import { StatusCodes } from 'http-status-codes'
 import GiveawayRepository from '../repositories/giveaway-repository.js'
 import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
-import IdService from '../services/id-service.js'
 
 class GiveawayController {
   static async createGiveaway (req, res) {
@@ -11,6 +10,10 @@ class GiveawayController {
     const data = req.body
 
     try {
+      if (new Date(data.startDate) >= new Date(data.endDate)) {
+        throw new HttpException('A data de início deve ser anterior à data de fim.', StatusCodes.BAD_REQUEST)
+      }
+
       await GiveawayRepository.createGiveaway({ data, userId })
 
       return response(res, true, StatusCodes.CREATED, 'Giveaway criado com sucesso.')
@@ -58,7 +61,7 @@ class GiveawayController {
   static async updateGiveaway (req, res) {
     const { id } = req.params
     const data = req.body
-    console.log(data)
+
     try {
       const existingGiveaway = await GiveawayRepository.getGiveawayById(id)
 
@@ -66,14 +69,14 @@ class GiveawayController {
         throw new HttpException('Giveaway não encontrado.', StatusCodes.NOT_FOUND)
       }
 
-      const stateId = await IdService.getStateById(data.state)
-
       const updatedData = {
         startDate: data.startDate || existingGiveaway.DataInicio,
         endDate: data.endDate || existingGiveaway.DataFim,
         title: data.title || existingGiveaway.Titulo,
         description: data.description || existingGiveaway.Descricao,
-        state: stateId || existingGiveaway.Estado_ID
+        condition: data.condition || existingGiveaway.Condicao,
+        category: data.category || existingGiveaway.NomeCategoria,
+        itemId: existingGiveaway.Artigo_ID
       }
 
       await GiveawayRepository.updateGiveaway(id, updatedData)

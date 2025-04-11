@@ -51,6 +51,7 @@ giveawayRouter.put(
   AuthMiddleware.isVerified,
   ProposalMiddleware.isOwnerGiveaway,
   validateSchema(giveawaySchema, true),
+  validateSchema(itemSchema, true),
   GiveawayController.updateGiveaway
 )
 

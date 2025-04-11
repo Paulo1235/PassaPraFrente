@@ -24,7 +24,4 @@ export const loanSchema = z.object({
       message: 'Data de fim inválida'
     })
     .transform(val => new Date(val))
-}).refine(data => data.endDate > data.startDate, {
-  path: ['endDate'],
-  message: 'A data de fim deve ser posterior à data de início'
 })

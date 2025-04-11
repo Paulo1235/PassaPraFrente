@@ -23,22 +23,6 @@ class ItemController {
     }
   }
 
-  static async updateSale (req, res) {
-    const data = req.body
-
-    try {
-      const sale = await ItemRepository.updateSale(data)
-
-      if (!sale) {
-        throw new HttpException('Não foi possível atualizar a venda.', StatusCodes.BAD_REQUEST)
-      }
-
-      return response(res, true, StatusCodes.OK, sale)
-    } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao atualizar a venda.')
-    }
-  }
-
   static async getAllItems (req, res) {
     try {
       const items = await ItemRepository.getAllItems()

@@ -51,26 +51,25 @@ class ItemRepository {
     return item.recordset[0]
   }
 
-  static async updateItem ({ condition, category, id }) {
-    const pool = await getConnection(dbConfig)
+  static async updateItem (category, condition, id, transaction) {
+    const condicaoId = await IdService.getConditionById(condition)
 
-    const condicaoId = await IdService.getConditionById(condition.Condicao)
+    const categoriaId = await IdService.getCategoryById(category)
 
-    const categoriaId = await IdService.getCategoryById(category.NomeCategoria)
-
-    const updateItem = await pool
+    const updatedItem = await transaction
       .request()
       .input('id', sql.Int, id)
       .input('categoriaId', sql.Int, categoriaId)
-      .input('condicaoId', sql.Int, condicaoId).query(`
+      .input('condicaoId', sql.Int, condicaoId)
+      .query(`
         UPDATE Artigo
         SET 
             Categoria_ID = @categoriaId,
-            Condicao_ID = @condicaoId,
-        WHERE Artigo_ID = @id; 
+            Condicao_ID = @condicaoId
+        WHERE Artigo_ID = @id
       `)
 
-    return updateItem.recordset
+    return updatedItem.rowsAffected[0] > 0
   }
 
   static async uploadItemPhoto (id, publicId, url) {

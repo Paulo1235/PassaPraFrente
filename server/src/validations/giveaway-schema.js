@@ -11,7 +11,4 @@ export const giveawaySchema = z.object({
   endDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: 'Data de fim inválida'
   }).transform((val) => new Date(val))
-}).refine((data) => data.endDate > data.startDate, {
-  path: ['endDate'],
-  message: 'A data de fim deve ser posterior à data de início'
 })

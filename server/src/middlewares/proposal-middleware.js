@@ -15,7 +15,6 @@ class ProposalMiddleware {
     try {
       const sale = await SaleRepository.getSaleById(id)
 
-      
       const ownerId = sale.Utilizador_ID
 
       console.log(userId, ownerId)
@@ -52,10 +51,10 @@ class ProposalMiddleware {
 
   static async isOwnerGiveaway (req, res, next) {
     const userId = req.user.Utilizador_ID
-    const { giveawayId } = req.params
+    const { id } = req.params
 
     try {
-      const giveaway = await GiveawayRepository.getGiveawayById(giveawayId)
+      const giveaway = await GiveawayRepository.getGiveawayById(id)
 
       console.log(giveaway)
 

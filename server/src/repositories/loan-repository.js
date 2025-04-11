@@ -74,27 +74,39 @@ class LoanRepository {
   }
 
   static async updateLoan (data, id) {
-    const pool = await getConnection(dbConfig)
+    const pool = await getConnection()
 
-    const updatedLoan = await pool.request()
-      .input('titulo', sql.VarChar, data.title)
-      .input('descricao', sql.VarChar, data.description)
-      .input('valor', sql.Float, data.value)
-      .input('dataInicio', sql.DateTime, data.startDate)
-      .input('dataFim', sql.DateTime, data.endDate)
-      .input('idEmprestimo', sql.Int, id)
-      .query(`
-        UPDATE Emprestimo
-        SET 
-            Titulo = @titulo,
-            Descricao = @descricao,
-            Valor = @valor,
-            DataInicio = @dataInicio,
-            DataFim = @dataFim
-        WHERE Emprestimo_ID = @idEmprestimo
-      `)
+    const transaction = pool.transaction()
 
-    return updatedLoan.rowsAffected[0] > 0
+    try {
+      await transaction.begin()
+
+      await ItemRepository.updateItem(data.category, data.condition, data.itemId, transaction)
+
+      await transaction
+        .request()
+        .input('id', sql.Int, id)
+        .input('dataInicio', sql.DateTime, data.startDate)
+        .input('dataFim', sql.DateTime, data.endDate)
+        .input('titulo', sql.VarChar, data.title)
+        .input('descricao', sql.VarChar, data.description)
+        .input('valor', sql.Float, data.value)
+        .query(`
+          UPDATE Emprestimo
+          SET DataInicio = @dataInicio,
+              DataFim = @dataFim,
+              Titulo = @titulo,
+              Descricao = @descricao,
+              Valor = @valor
+          WHERE Emprestimo = @id
+        `)
+
+      await transaction.commit()
+
+      return true
+    } catch (error) {
+      await transaction.rollback()
+    }
   }
 
   static async getUserLoans (userId) {
