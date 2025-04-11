@@ -10,18 +10,11 @@ import AuthController from '../controllers/auth-controller.js'
 
 const loanRouter = express.Router()
 
-loanRouter
-  .route('/loans/id/:id')
-  .get(AuthMiddleware.isAuthenticated, LoanController.getLoanById)
-  .put(
-    AuthController.refreshAccessToken,
-    AuthMiddleware.isAuthenticated,
-    AuthMiddleware.isVerified,
-    ProposalMiddleware.isOwnerLoan,
-    validateSchema(loanSchema, true),
-    validateSchema(itemSchema, true),
-    LoanController.updateLoan
-  )
+loanRouter.get(
+  '/loans/id/:id',
+  AuthMiddleware.isAuthenticated,
+  LoanController.getLoanById
+)
 
 loanRouter.get(
   '/loans',
@@ -43,6 +36,7 @@ loanRouter.post(
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   validateSchema(loanSchema, false),
+  validateSchema(itemSchema, false),
   LoanController.createLoan
 )
 loanRouter.get(
