@@ -9,20 +9,21 @@ import ProposalMiddleware from '../middlewares/owner-middleware.js'
 
 const proposalSaleRouter = express.Router()
 
-proposalSaleRouter
-  .route('/proposal-sales/:id')
-  .get(
-    AuthController.refreshAccessToken,
-    AuthMiddleware.isAuthenticated,
-    AuthMiddleware.isVerified,
-    ProposalSaleController.getSaleProposalById
-  )
-  .patch(
-    AuthController.refreshAccessToken,
-    AuthMiddleware.isAuthenticated,
-    AuthMiddleware.isVerified,
-    validateSchema(proposalSaleSchema, true),
-    ProposalSaleController.updateProposalSaleStatus)
+proposalSaleRouter.get(
+  '/proposal-sales/:id',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  ProposalSaleController.getSaleProposalById
+)
+
+proposalSaleRouter.patch(
+  'proposal-sales/:id/user/:userId',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  ProposalSaleController.updateProposalSaleStatus
+)
 
 proposalSaleRouter.get(
   '/proposal-sales',

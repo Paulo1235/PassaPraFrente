@@ -9,20 +9,22 @@ import ProposalMiddleware from '../middlewares/owner-middleware.js'
 
 const proposalLoanRouter = express.Router()
 
-proposalLoanRouter
-  .route('/proposal-loans/:id')
-  .get(
-    AuthController.refreshAccessToken,
-    AuthMiddleware.isAuthenticated,
-    AuthMiddleware.isVerified,
-    ProposalLoanController.getLoanProposalById
-  )
-  .patch(
-    AuthController.refreshAccessToken,
-    AuthMiddleware.isAuthenticated,
-    AuthMiddleware.isVerified,
-    validateSchema(proposalLoanSchema, true),
-    ProposalLoanController.updateProposalLoanStatus)
+proposalLoanRouter.get(
+  '/proposal-loans/:id',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  ProposalLoanController.getLoanProposalById
+)
+
+proposalLoanRouter.patch(
+  '/proposal-loans/:id/user/:userId',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  ProposalMiddleware.isOwnerLoan,
+  ProposalLoanController.updateProposalLoanStatus
+)
 
 proposalLoanRouter.get(
   '/proposal-loans',

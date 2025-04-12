@@ -79,7 +79,12 @@ class ProposalSaleController {
         throw new HttpException('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
       }
 
-      NotificationRepository.createNotification(`A sua proposta para ${sale.Titulo} foi ${status} == 'Aceite' ? 'aceite' : 'recusada'`, userId)
+      const notificationData = {
+        message: `A sua proposta para ${sale.Titulo} foi ${status} == 'Aceite' ? 'aceite' : 'recusada'`,
+        userId
+      }
+
+      NotificationRepository.createNotification(notificationData)
 
       await ProposalSaleRepository.updateProposalSaleStatus(userId, id, status)
 

@@ -12,5 +12,11 @@
     "userId": 7,
     "read": false,
     "date": "2025-04-09T20:28:02.744Z"
+  },
+  {
+    "message": "A sua proposta para corta relva amarelo foi 1 == 'Aceite' ? 'aceite' : 'recusada'",
+    "userId": "6",
+    "read": false,
+    "date": "2025-04-12T20:49:11.821Z"
   }
 ]
