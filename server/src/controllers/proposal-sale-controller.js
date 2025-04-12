@@ -29,7 +29,7 @@ class ProposalSaleController {
 
       const proposal = await ProposalSaleRepository.getSaleProposalById(userId, id)
 
-      if (proposal.length > 0) {
+      if (proposal) {
         throw new HttpException('Já fez uma proposta para esta venda.', StatusCodes.BAD_REQUEST)
       }
 
@@ -109,7 +109,7 @@ class ProposalSaleController {
     try {
       const proposal = await ProposalSaleRepository.getAllProposalEntriesBySale(parseInt(saleId))
 
-      if (!proposal || proposal.length === 0) {
+      if (!proposal) {
         throw new HttpException('Não existem propostas.', StatusCodes.NOT_FOUND)
       }
 
