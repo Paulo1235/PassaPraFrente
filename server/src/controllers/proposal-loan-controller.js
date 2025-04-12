@@ -9,9 +9,8 @@ import NotificationRepository from '../repositories/notification-repository.js'
 class ProposalLoanController {
   static async createProposalLoan (req, res) {
     const data = req.body
-
-    const newValue = data.newValue ?? 0
-
+    const newValue = data.price ?? 0
+    console.log(data)
     const userId = req.user.Utilizador_ID
     const { id } = req.params
 
@@ -21,12 +20,14 @@ class ProposalLoanController {
       const newStartDate = data.newStartDate ?? loan.DataInicio
       const newEndDate = data.newEndDate ?? loan.DataFim
 
+      console.log(newStartDate, newEndDate)
+
       if (loan.Estado === 'Concluído' || loan.Estado === 'Cancelado' || loan.Estado === 'Em progresso') {
-        throw new HttpException('Não é possível fazer uma proposta para esta venda.', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Não é possível fazer uma proposta para este empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
       if (loan.Utilizador_ID === userId) {
-        throw new HttpException('Não é possível fazer uma proposta para a sua própria venda.', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Não é possível fazer uma proposta para o seu próprio empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
       const proposal = await ProposalLoanRepository.getLoanProposalById(userId, id)

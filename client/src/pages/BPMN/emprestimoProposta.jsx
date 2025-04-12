@@ -1,54 +1,138 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Formik, Form, Field, ErrorMessage } from "formik"
-import * as Yup from "yup"
-import { Undo2, ArrowRight, ShoppingBag, Image as ImageIcon } from "lucide-react"
-import { useSelector, useDispatch } from "react-redux"
-import { useNavigate, useParams } from "react-router-dom"
-import { ToastContainer } from "react-toastify"
+import { useEffect, useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import {
+  Undo2,
+  ArrowRight,
+  ShoppingBag,
+  Image as ImageIcon,
+} from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const CreateProposalSaleSchema = Yup.object().shape({
   price: Yup.number()
-    .required("O preço é obrigatório")
+    .optional("O preço é obrigatório")
     .positive("O preço deve ser positivo")
     .typeError("O preço deve ser um número"),
-  dataInicio: Yup.date().required("A data de início é obrigatória").typeError("Data inválida"),
-  dataFim: Yup.date()
-    .required("A data de fim é obrigatória")
-    .min(Yup.ref("dataInicio"), "A data de fim deve ser posterior à data de início")
+  dataInicio: Yup.date()
+    .optional("A data de início é obrigatória")
     .typeError("Data inválida"),
-})
+  dataFim: Yup.date()
+    .optional("A data de fim é obrigatória")
+    .min(
+      Yup.ref("dataInicio"),
+      "A data de fim deve ser posterior à data de início"
+    )
+    .typeError("Data inválida"),
+});
 
 export default function EmprestimoProposta() {
-  const { id } = useParams()
-  const { isAuthenticated } = useSelector((state) => state.auth)
-  const [data] = useState(null)
-  const productImage = data?.ImagemURL || null
-  useDispatch()
-  const navigate = useNavigate()
-  const [isLoading] = useState(false)
+  const { id } = useParams();
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const [data, setData] = useState(null);
+  const productImage = data?.ImagemURL || null;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isLoading] = useState(false);
 
   useEffect(() => {
-    // Lógica de fetch comentada
-  }, [isAuthenticated, navigate, id])
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/loans/id/${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        console.log(data);
+        setData(data.message);
+      } catch (error) {}
+    };
+
+    fetchData();
+
+    if (!isAuthenticated) {
+      navigate("/");
+      return;
+    }
+  }, [isAuthenticated, navigate, id, dispatch]);
 
   const handleSubmit = async (values) => {
-    console.log(values)
+    // setIsLoading(true);
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/proposal-loans/create/${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            price: values.price,
+            newStartDate: values.dataInicio,
+            newEndDate: values.dataFim,
+          }),
+        }
+      );
+      const data = await response.json();
+      console.log(data.message);
+
+      console.log(values)
+      
+      if (data.message === "Proposta de empréstimo criada com sucesso.") {
+        toast.success("Proposta enviada com sucesso!");
+        setTimeout(() => {
+          navigate("/index");
+        }, 5000); // Redireciona após 2 segundos
+      }else
+      {
+        toast.error(data.message);
+        setTimeout(() => {
+          navigate("/index");
+        }, 5000); // Redireciona após 2 segundos
+      }
+
+    } catch (error) {
+      console.error("Error submitting proposal:", error);
+    } finally {
+      // setIsLoading(false);
+    }
+  };
+
+  //? Função para formatar a data no formato "YYYY-MM-DDTHH:MM"
+  function formatDatetimeLocal(datetimeString) {
+    if (!datetimeString) return "";
+    const date = new Date(datetimeString);
+    const offset = date.getTimezoneOffset();
+    const localDate = new Date(date.getTime() - offset * 60000);
+    return localDate.toISOString().slice(0, 16); // Formato "YYYY-MM-DDTHH:MM"
   }
 
   const initialValues = {
     price: data?.Valor || 0,
-    dataInicio: "2025-04-12T10:30",
-    dataFim: "2025-04-19T10:30",
-  }
+    dataInicio: formatDatetimeLocal(data?.DataInicio) || "",
+    dataFim: formatDatetimeLocal(data?.DataFim) || "",
+  };
 
   if (isLoading)
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#FFF8E8]">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#CAAD7E]"></div>
       </div>
-    )
+    );
 
   return (
     <div className="min-h-screen bg-[#E0E5B6] py-8 px-4 font-sans">
@@ -80,7 +164,9 @@ export default function EmprestimoProposta() {
                 <div className="bg-[#FFFAEE] rounded-xl p-6 border border-gray-200">
                   <div className="flex items-center gap-3 mb-4 text-[#73802A] border-b border-[#24251D]">
                     <ShoppingBag className="h-6 w-6 mb-2" />
-                    <h2 className="text-xl font-semibold mb-2">Detalhes do Produto</h2>
+                    <h2 className="text-xl font-semibold mb-2">
+                      Detalhes do Produto
+                    </h2>
                   </div>
 
                   <div className="flex flex-col md:flex-row gap-6">
@@ -106,23 +192,33 @@ export default function EmprestimoProposta() {
                     {/* Detalhes do Produto */}
                     <div className="w-full md:w-2/3 space-y-4 text-[#4F4535]">
                       <div>
-                        <h3 className="text-sm font-bold text-[#73802A]">Título</h3>
-                        <p className="text-lg font-medium">{data?.Titulo || "teste"}</p>
+                        <h3 className="text-sm font-bold text-[#73802A]">
+                          Título
+                        </h3>
+                        <p className="text-lg font-medium">
+                          {data?.Titulo || "teste"}
+                        </p>
                       </div>
 
                       <div>
-                        <h3 className="text-sm font-bold text-[#73802A]">Descrição</h3>
+                        <h3 className="text-sm font-bold text-[#73802A]">
+                          Descrição
+                        </h3>
                         <p>{data?.Descricao || "teste"}</p>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <h3 className="text-sm font-bold text-[#73802A]">Condição</h3>
+                          <h3 className="text-sm font-bold text-[#73802A]">
+                            Condição
+                          </h3>
                           <p>{data?.Condicao || "teste"}</p>
                         </div>
 
                         <div>
-                          <h3 className="text-sm font-bold text-[#73802A]">Categoria</h3>
+                          <h3 className="text-sm font-bold text-[#73802A]">
+                            Categoria
+                          </h3>
                           <p>{data?.NomeCategoria || "teste"}</p>
                         </div>
                       </div>
@@ -137,13 +233,17 @@ export default function EmprestimoProposta() {
                   </h2>
 
                   <p className="text-gray-600 mb-6 italic">
-                    Ao enviar esta proposta, o comprador poderá aceitar ou recusar os termos oferecidos.
+                    Ao enviar esta proposta, o comprador poderá aceitar ou
+                    recusar os termos oferecidos.
                   </p>
 
                   <div className="space-y-6">
                     {/* Preço */}
                     <div className="form-group">
-                      <label htmlFor="price" className="block text-sm font-bold text-[#73802A] mb-2">
+                      <label
+                        htmlFor="price"
+                        className="block text-sm font-bold text-[#73802A] mb-2"
+                      >
                         Valor da Proposta:
                       </label>
                       <div className="relative">
@@ -152,18 +252,29 @@ export default function EmprestimoProposta() {
                           name="price"
                           type="number"
                           className={`w-full p-3 border ${
-                            errors.price && touched.price ? "border-red-500" : "border-[#73802A]"
+                            errors.price && touched.price
+                              ? "border-red-500"
+                              : "border-[#73802A]"
                           } rounded-lg pl-10 text-lg focus:ring focus:ring-[#CAAD7E]/50 focus:border-[#CAAD7E] outline-none transition duration-300`}
                         />
-                        <span className="absolute left-4 top-3.5 text-lg font-medium text-gray-500">€</span>
+                        <span className="absolute left-4 top-3.5 text-lg font-medium text-gray-500">
+                          €
+                        </span>
                       </div>
-                      <ErrorMessage name="price" component="div" className="text-red-500 text-sm mt-1" />
+                      <ErrorMessage
+                        name="price"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
                     </div>
 
                     {/* Datas */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="form-group">
-                        <label htmlFor="dataInicio" className="block text-sm font-bold text-[#73802A] mb-2">
+                        <label
+                          htmlFor="dataInicio"
+                          className="block text-sm font-bold text-[#73802A] mb-2"
+                        >
                           Data de Início:
                         </label>
                         <Field
@@ -171,14 +282,23 @@ export default function EmprestimoProposta() {
                           name="dataInicio"
                           type="datetime-local"
                           className={`w-full p-3 border ${
-                            errors.dataInicio && touched.dataInicio ? "border-red-500" : "border-[#73802A]"
+                            errors.dataInicio && touched.dataInicio
+                              ? "border-red-500"
+                              : "border-[#73802A]"
                           } rounded-lg focus:ring focus:ring-[#CAAD7E]/50 focus:border-[#CAAD7E] outline-none transition-all`}
                         />
-                        <ErrorMessage name="dataInicio" component="div" className="text-red-500 text-sm mt-1" />
+                        <ErrorMessage
+                          name="dataInicio"
+                          component="div"
+                          className="text-red-500 text-sm mt-1"
+                        />
                       </div>
 
                       <div className="form-group">
-                        <label htmlFor="dataFim" className="block text-sm font-bold text-[#73802A] mb-2">
+                        <label
+                          htmlFor="dataFim"
+                          className="block text-sm font-bold text-[#73802A] mb-2"
+                        >
                           Data de Fim:
                         </label>
                         <Field
@@ -186,10 +306,16 @@ export default function EmprestimoProposta() {
                           name="dataFim"
                           type="datetime-local"
                           className={`w-full p-3 border ${
-                            errors.dataFim && touched.dataFim ? "border-red-500" : "border-[#73802A]"
+                            errors.dataFim && touched.dataFim
+                              ? "border-red-500"
+                              : "border-[#73802A]"
                           } rounded-lg focus:ring focus:ring-[#CAAD7E]/50 focus:border-[#CAAD7E] outline-none transition-all`}
                         />
-                        <ErrorMessage name="dataFim" component="div" className="text-red-500 text-sm mt-1" />
+                        <ErrorMessage
+                          name="dataFim"
+                          component="div"
+                          className="text-red-500 text-sm mt-1"
+                        />
                       </div>
                     </div>
                   </div>
@@ -216,5 +342,5 @@ export default function EmprestimoProposta() {
         </p>
       </div>
     </div>
-  )
+  );
 }

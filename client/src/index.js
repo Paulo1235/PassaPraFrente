@@ -63,8 +63,8 @@ root.render(
         
         <Route path="/testedraw" element={<EditDraw />} /> */}
 
-        <Route path="/testevenda" element={<VendaProposta />} />
-        <Route path="/testeemprestimo" element={<EmprestimoProposta />} />
+        {/* <Route path="/testevenda" element={<VendaProposta />} />
+        <Route path="/testeemprestimo" element={<EmprestimoProposta />} /> */}
 
         {/* Admin */}
         <Route
@@ -79,10 +79,12 @@ root.render(
           path="/sale/:id"
           element={<ProtectedRoute element={<LookSale />} />}
         />
+
         <Route
           path="/loan/:id"
           element={<ProtectedRoute element={<LookLoan />} />}
         />
+
         <Route
           path="/draw/:id"
           element={<ProtectedRoute element={<LookDraw />} />}
@@ -107,14 +109,27 @@ root.render(
           path="/editsale/:id"
           element={<ProtectedRoute element={<EditSale />} />}
         />
+
         <Route
           path="/editloan/:id"
           element={<ProtectedRoute element={<EditLoan />} />}
         />
+
         <Route
           path="/editdraw/:id"
           element={<ProtectedRoute element={<EditDraw />} />}
         />
+
+        <Route
+          path="/saleproposal/:id"
+          element={<ProtectedRoute element={<VendaProposta />} />}
+        />
+
+        <Route
+          path="/loanproposal/:id"
+          element={<ProtectedRoute element={<EmprestimoProposta />} />}
+        />
+
         <Route
           path="/account"
           element={<ProtectedRoute element={<Account />} />}

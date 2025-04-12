@@ -8,13 +8,13 @@ import NotificationRepository from '../repositories/notification-repository.js'
 
 class ProposalSaleController {
   static async createProposalSale (req, res) {
-    const newValue = req.body.newValue ?? 0
+    const newValue = req.body.price ?? 0
     const userId = req.user.Utilizador_ID
     const { id } = req.params
 
     try {
       const sale = await SaleRepository.getSaleById(id)
-
+      
       if (!sale) {
         throw new HttpException('Venda não encontrada.', StatusCodes.NOT_FOUND)
       }

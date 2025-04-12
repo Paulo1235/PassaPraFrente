@@ -129,7 +129,7 @@ const CreateProposalSaleSchema = yup.object().shape({
   .number()
   .typeError("Valor deve ser um número")
   .positive("Valor deve ser positivo")
-  .required("Valor é obrigatório"),
+  .optional("Valor é obrigatório"),
 });
 
 export {

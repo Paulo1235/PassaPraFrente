@@ -109,7 +109,7 @@ function LookSale() {
                 <span className="text-xl text-white">Comprar Agora</span>
               </button>
               <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center justify-center">
-                <span className="text-xl text-white">Fazer proposta</span>
+                <span className="text-xl text-white" onClick={() => navigate(`/saleproposal/${data.Venda_ID}`)}>Fazer proposta</span>
               </button>
               <button className="border border-txtp rounded-lg px-4 py-2 flex items-center justify-center">
                 <span className="text-xl text-txtp">{data.Contacto}</span>

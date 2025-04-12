@@ -20,7 +20,8 @@ const AdminProtectedRoute = ({ element }) => {
     return <div>Loading...</div>;
   }
 
-  if (user?.message?.TipoUtilizador === "admin") {
+  if (user?.message?.TipoUtilizador === "admin") 
+  {
     return element;
   } else {
     return <Navigate to="/index" replace />;
