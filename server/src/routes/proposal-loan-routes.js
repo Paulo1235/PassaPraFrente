@@ -39,5 +39,21 @@ proposalLoanRouter.post(
   validateSchema(proposalLoanSchema, false),
   ProposalLoanController.createProposalLoan
 )
+proposalLoanRouter.get(
+  '/proposal-sales/user:id',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  AuthMiddleware.authorizedRoles(['admin']),
+  ProposalLoanController.getLoanProposalsByUser
+)
+proposalLoanRouter.get(
+  '/proposal-sales/sale:id',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  AuthMiddleware.authorizedRoles(['admin']),
+  ProposalLoanController.getAllProposalEntriesByloan
+)
 
 export default proposalLoanRouter
