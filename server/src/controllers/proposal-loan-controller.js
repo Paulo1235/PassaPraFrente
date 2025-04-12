@@ -82,7 +82,7 @@ class ProposalLoanController {
       }
 
       const notificationData = {
-        message: `A sua proposta para ${loan.Titulo} foi ${status} == 'Aceite' ? 'aceite' : 'recusada'`,
+        message: `A sua proposta para ${loan.Titulo} foi ${status === 1 ? 'aceite' : 'recusada'}`,
         userId
       }
 

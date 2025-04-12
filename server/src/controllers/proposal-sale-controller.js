@@ -80,7 +80,7 @@ class ProposalSaleController {
       }
 
       const notificationData = {
-        message: `A sua proposta para ${sale.Titulo} foi ${status} == 'Aceite' ? 'aceite' : 'recusada'`,
+        message: `A sua proposta para ${sale.Titulo} foi ${status === 1 ? 'aceite' : 'recusada'}`,
         userId
       }
 
