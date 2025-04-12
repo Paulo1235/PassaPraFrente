@@ -14,7 +14,7 @@ class ProposalSaleController {
 
     try {
       const sale = await SaleRepository.getSaleById(id)
-      
+
       if (!sale) {
         throw new HttpException('Venda não encontrada.', StatusCodes.NOT_FOUND)
       }

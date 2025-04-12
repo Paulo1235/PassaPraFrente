@@ -95,13 +95,9 @@ class ProposalLoanController {
     const userId = req.user.Utilizador_ID
 
     try {
-      const proposal = await ProposalLoanRepository.getLoanProposalsByUser(userId)
+      const proposals = await ProposalLoanRepository.getLoanProposalsByUser(userId)
 
-      if (!proposal || proposal.length === 0) {
-        throw new HttpException('Não existem propostas.', StatusCodes.NOT_FOUND)
-      }
-
-      return response(res, true, StatusCodes.OK, proposal)
+      return response(res, true, StatusCodes.OK, proposals)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as propostas.')
     }

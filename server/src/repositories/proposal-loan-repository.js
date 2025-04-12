@@ -70,7 +70,7 @@ class ProposalLoanRepository {
   static async getLoanProposalsByUser (userId) {
     const pool = await getConnection()
 
-    const proposal = await pool
+    const proposals = await pool
       .request()
       .input('userId', sql.Int, userId)
       .query(`
@@ -78,13 +78,14 @@ class ProposalLoanRepository {
         FROM PropostaEmprestimo
         WHERE Utilizador_ID = @userId
       `)
-    return proposal.recordset
+
+    return proposals.recordset
   }
 
   static async getAllProposalEntriesByLoan (loanId) {
     const pool = await getConnection()
 
-    const proposal = await pool
+    const proposals = await pool
       .request()
       .input('loanId', sql.Int, loanId)
       .query(`
@@ -93,7 +94,8 @@ class ProposalLoanRepository {
         WHERE Venda_ID = @loanId
         
       `)
-    return proposal.recordset
+
+    return proposals.recordset
   }
 }
 
