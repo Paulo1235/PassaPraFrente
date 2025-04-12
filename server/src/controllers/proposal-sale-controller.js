@@ -4,6 +4,7 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import ProposalSaleRepository from '../repositories/proposal-sale-repository.js'
 import SaleRepository from '../repositories/sale-repository.js'
+import NotificationRepository from '../repositories/notification-repository.js'
 
 class ProposalSaleController {
   static async createProposalSale (req, res) {
@@ -68,9 +69,8 @@ class ProposalSaleController {
   }
 
   static async updateProposalSaleStatus (req, res) {
-    const userId = req.user.Utilizador_ID
     const { status } = req.body
-    const { id } = req.params
+    const { id, userId } = req.params
 
     try {
       const sale = await SaleRepository.getSaleById(id)
@@ -78,6 +78,8 @@ class ProposalSaleController {
       if (!sale) {
         throw new HttpException('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
       }
+
+      NotificationRepository.createNotification(`A sua proposta para ${sale.Titulo} foi ${status} == 'Aceite' ? 'aceite' : 'recusada'`, userId)
 
       await ProposalSaleRepository.updateProposalSaleStatus(userId, id, status)
 

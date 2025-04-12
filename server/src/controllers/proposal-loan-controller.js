@@ -4,6 +4,7 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import ProposalLoanRepository from '../repositories/proposal-loan-repository.js'
 import LoanRepository from '../repositories/loan-repository.js'
+import NotificationRepository from '../repositories/notification-repository.js'
 
 class ProposalLoanController {
   static async createProposalLoan (req, res) {
@@ -69,9 +70,8 @@ class ProposalLoanController {
   }
 
   static async updateProposalLoanStatus (req, res) {
-    const userId = req.user.Utilizador_ID
     const { status } = req.body
-    const { id } = req.params
+    const { id, userId } = req.params
 
     try {
       const loan = await LoanRepository.getLoanById(id)
@@ -79,6 +79,8 @@ class ProposalLoanController {
       if (!loan) {
         throw new HttpException('Não foi possível encontrar o empréstimo.', StatusCodes.NOT_FOUND)
       }
+
+      NotificationRepository.createNotification(`A sua proposta para ${loan.Titulo} foi ${status} == 'Aceite' ? 'aceite' : 'recusada'`, userId)
 
       await ProposalLoanRepository.updateProposalLoanStatus(userId, id, status)
 
