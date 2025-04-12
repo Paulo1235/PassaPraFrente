@@ -46,7 +46,7 @@ class ProposalSaleRepository {
         WHERE Venda_ID = @saleId AND Utilizador_ID = @userId
       `)
 
-    return proposal.recordset
+    return proposal.recordset[0]
   }
 
   static async updateProposalSaleStatus (userId, saleId, status) {

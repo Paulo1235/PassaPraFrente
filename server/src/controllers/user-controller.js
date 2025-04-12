@@ -176,53 +176,43 @@ class UserController {
     }
   }
 
-  static async updateUserAvatar(req, res) {
-    const id = req.user.Utilizador_ID;
-    const { thumbnail } = req.body; // A imagem em base64 será passada como 'thumbnail'
-    console.log(thumbnail);
-  
+  static async updateUserAvatar (req, res) {
+    const id = req.user.Utilizador_ID
+    const { thumbnail } = req.body
+
     try {
-      // Verifica se a imagem é válida em base64
-      if (!thumbnail || !thumbnail.startsWith("data:image")) {
-        return response(res, false, StatusCodes.BAD_REQUEST, 'Imagem inválida. Certifique-se de que é uma imagem em base64.');
+      if (!thumbnail || !thumbnail.startsWith('data:image')) {
+        return response(res, false, StatusCodes.BAD_REQUEST, 'Imagem inválida. Certifique-se de que é uma imagem em base64.')
       }
-  
-      const userAvatar = await UserRepository.getUserAvatar(id);
-      console.log(userAvatar);
-  
-      // Se já houver uma imagem, a destrói no Cloudinary
+
+      const userAvatar = await UserRepository.getUserAvatar(id)
+      console.log(userAvatar)
+
       if (userAvatar?.PublicID) {
-        await cloudinary.v2.uploader.destroy(userAvatar.PublicID);
+        await cloudinary.v2.uploader.destroy(userAvatar.PublicID)
       }
-  
-      // Envia a imagem para o Cloudinary
+
       const uploadedImage = await cloudinary.v2.uploader.upload(thumbnail, {
-        folder: 'users', // A pasta onde a imagem será armazenada
-        width: 150, // Define a largura da imagem
-      });
-  
-      console.log(uploadedImage);
-  
-      const { public_id, secure_url } = uploadedImage;
-  
+        folder: 'users',
+        width: 150
+      })
+
+      console.log(uploadedImage)
+
+      const { public_id, secure_url } = uploadedImage
+
       const success = userAvatar?.PublicID
         ? await UserRepository.updateUserAvatar(id, public_id, secure_url)
-        : await UserRepository.uploadUserAvatar(id, public_id, secure_url);
-  
+        : await UserRepository.uploadUserAvatar(id, public_id, secure_url)
+
       if (!success) {
-        return response(res, false, StatusCodes.BAD_REQUEST, 'Erro ao salvar imagem de perfil.');
+        return response(res, false, StatusCodes.BAD_REQUEST, 'Erro ao salvar imagem de perfil.')
       }
-      return response(
-        res,
-        true,
-        StatusCodes.OK,
-        userAvatar?.PublicID ? 'Imagem de perfil atualizada.' : 'Imagem de perfil inserida.'
-      );
+      return response(res, true, StatusCodes.OK, userAvatar?.PublicID ? 'Imagem de perfil atualizada.' : 'Imagem de perfil inserida.')
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao atualizar a imagem de perfil.');
+      handleError(res, error, 'Ocorreu um erro ao atualizar a imagem de perfil.')
     }
   }
-  
 }
 
 export default UserController

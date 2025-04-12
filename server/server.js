@@ -59,8 +59,8 @@ app.use(cookieParser())
 app.use(limiter)
 app.use(helmet())
 app.use(compression())
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: '50mb' }))
+app.use(express.urlencoded({ limit: '50mb', extended: true }))
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
 
