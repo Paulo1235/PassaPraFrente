@@ -64,6 +64,35 @@ class ProposalSaleRepository {
 
     return updatedProposal.recordset
   }
+
+  static async getSaleProposalsByUser (userId) {
+    const pool = await getConnection()
+
+    const proposal = await pool
+      .request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        SELECT *
+        FROM PropostaVenda
+        WHERE Utilizador_ID = @userId
+      `)
+    return proposal.recordset
+  }
+
+  static async getAllProposalEntriesBySale (saleId) {
+    const pool = await getConnection()
+
+    const proposal = await pool
+      .request()
+      .input('saleId', sql.Int, saleId)
+      .query(`
+        SELECT *
+        FROM PropostaVenda
+        WHERE Venda_ID = @saleId
+        
+      `)
+    return proposal.recordset
+  }
 }
 
 export default ProposalSaleRepository

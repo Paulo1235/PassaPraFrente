@@ -39,5 +39,21 @@ proposalSaleRouter.post(
   validateSchema(proposalSaleSchema, false),
   ProposalSaleController.createProposalSale
 )
+proposalSaleRouter.get(
+  '/proposal-sales/user:id',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  AuthMiddleware.authorizedRoles(['admin']),
+  ProposalSaleController.getSaleProposalsByUser
+)
+proposalSaleRouter.get(
+  '/proposal-sales/sale:id',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  AuthMiddleware.authorizedRoles(['admin']),
+  ProposalSaleController.getAllProposalEntriesBySale
+)
 
 export default proposalSaleRouter

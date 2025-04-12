@@ -29,7 +29,7 @@ class ProposalSaleController {
 
       const proposal = await ProposalSaleRepository.getSaleProposalById(userId, id)
 
-      if (proposal) {
+      if (proposal.length > 0) {
         throw new HttpException('Já fez uma proposta para esta venda.', StatusCodes.BAD_REQUEST)
       }
 
@@ -52,10 +52,10 @@ class ProposalSaleController {
   }
 
   static async getSaleProposalById (req, res) {
-    const { id } = req.params
+    const { userId, saleId } = req.params
 
     try {
-      const proposal = await ProposalSaleRepository.getSaleProposalById(id)
+      const proposal = await ProposalSaleRepository.getSaleProposalById(parseInt(userId), parseInt(saleId))
 
       if (!proposal) {
         throw new HttpException('Proposta não encontrada.', StatusCodes.NOT_FOUND)
@@ -84,6 +84,38 @@ class ProposalSaleController {
       return response(res, true, StatusCodes.OK, 'Estado da proposta atualizado.')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao atualizar o estado da proposta.')
+    }
+  }
+
+  static async getSaleProposalsByUser (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const proposal = await ProposalSaleRepository.getSaleProposalsByUser(userId)
+
+      if (!proposal || proposal.length === 0) {
+        throw new HttpException('Não existem propostas.', StatusCodes.NOT_FOUND)
+      }
+
+      return response(res, true, StatusCodes.OK, proposal)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar as propostas.')
+    }
+  }
+
+  static async getAllProposalEntriesBySale (req, res) {
+    const { saleId } = req.params
+
+    try {
+      const proposal = await ProposalSaleRepository.getAllProposalEntriesBySale(parseInt(saleId))
+
+      if (!proposal || proposal.length === 0) {
+        throw new HttpException('Não existem propostas.', StatusCodes.NOT_FOUND)
+      }
+
+      return response(res, true, StatusCodes.OK, proposal)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar as propostas.')
     }
   }
 }
