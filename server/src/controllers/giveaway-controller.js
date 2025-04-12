@@ -4,6 +4,7 @@ import GiveawayRepository from '../repositories/giveaway-repository.js'
 import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import IdService from '../services/id-service.js'
+import ItemController from './item-controller.js'
 
 class GiveawayController {
   static async createGiveaway (req, res) {
@@ -15,7 +16,11 @@ class GiveawayController {
         throw new HttpException('A data de início deve ser anterior à data de fim.', StatusCodes.BAD_REQUEST)
       }
 
-      await GiveawayRepository.createGiveaway({ data, userId })
+      const item = ItemController.createItem(data)
+
+      if (item) {
+        await GiveawayRepository.createGiveaway(item, data, userId)
+      }
 
       return response(res, true, StatusCodes.CREATED, 'Giveaway criado com sucesso.')
     } catch (error) {

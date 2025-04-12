@@ -4,10 +4,8 @@ import { dbConfig, getConnection } from '../database/db-config.js'
 import ItemRepository from './item-repository.js'
 
 class LoanRepository {
-  static async createLoan ({ data, userId }) {
+  static async createLoan (item, data, userId) {
     const pool = await getConnection(dbConfig)
-
-    const item = await ItemRepository.createItem(data.condition, data.category)
 
     const loan = await pool
       .request()

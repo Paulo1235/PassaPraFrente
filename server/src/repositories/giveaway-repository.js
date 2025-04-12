@@ -4,10 +4,8 @@ import { getConnection } from '../database/db-config.js'
 import ItemRepository from './item-repository.js'
 
 class GiveawayRepository {
-  static async createGiveaway ({ data, userId }) {
+  static async createGiveaway (item, data, userId) {
     const pool = await getConnection()
-
-    const item = await ItemRepository.createItem(data.condition, data.category)
 
     const giveaway = await pool
       .request()

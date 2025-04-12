@@ -4,6 +4,7 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import LoanRepository from '../repositories/loan-repository.js'
 import IdService from '../services/id-service.js'
+import ItemController from './item-controller.js'
 
 class LoanController {
   static async createLoan (req, res) {
@@ -15,9 +16,13 @@ class LoanController {
         throw new HttpException('A data de início deve ser anterior à data de fim.', StatusCodes.BAD_REQUEST)
       }
 
-      await LoanRepository.createLoan({ data, userId })
+      const item = await ItemController.createItem(data)
 
-      return response(res, true, StatusCodes.OK, 'Empréstimo criado com sucesso')
+      if (item) {
+        await LoanRepository.createLoan(item, data, userId)
+      }
+
+      return response(res, true, StatusCodes.CREATED, 'Empréstimo criado com sucesso')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao criar o empréstimo.')
     }
