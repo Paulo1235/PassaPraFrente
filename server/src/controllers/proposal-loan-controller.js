@@ -89,6 +89,38 @@ class ProposalLoanController {
       handleError(res, error, 'Ocorreu um erro ao atualizar o estado da proposta.')
     }
   }
+
+  static async getLoanProposalsByUser (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const proposal = await ProposalLoanRepository.getLoanProposalsByUser(userId)
+
+      if (!proposal || proposal.length === 0) {
+        throw new HttpException('Não existem propostas.', StatusCodes.NOT_FOUND)
+      }
+
+      return response(res, true, StatusCodes.OK, proposal)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar as propostas.')
+    }
+  }
+
+  static async getAllProposalEntriesByLoan (req, res) {
+    const { loanId } = req.params
+
+    try {
+      const proposal = await ProposalLoanRepository.getAllProposalEntriesByLoan(parseInt(loanId))
+
+      if (!proposal) {
+        throw new HttpException('Não existem propostas.', StatusCodes.NOT_FOUND)
+      }
+
+      return response(res, true, StatusCodes.OK, proposal)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar as propostas.')
+    }
+  }
 }
 
 export default ProposalLoanController

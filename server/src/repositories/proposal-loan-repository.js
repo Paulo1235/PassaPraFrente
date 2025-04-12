@@ -66,6 +66,35 @@ class ProposalLoanRepository {
 
     return updatedProposal.recordset
   }
+
+  static async getLoanProposalsByUser (userId) {
+    const pool = await getConnection()
+
+    const proposal = await pool
+      .request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        SELECT *
+        FROM PropostaEmprestimo
+        WHERE Utilizador_ID = @userId
+      `)
+    return proposal.recordset
+  }
+
+  static async getAllProposalEntriesByLoan (loanId) {
+    const pool = await getConnection()
+
+    const proposal = await pool
+      .request()
+      .input('loanId', sql.Int, loanId)
+      .query(`
+        SELECT *
+        FROM PropostaVenda
+        WHERE Venda_ID = @loanId
+        
+      `)
+    return proposal.recordset
+  }
 }
 
 export default ProposalLoanRepository
