@@ -37,10 +37,13 @@ import CreateDraw from "./pages/BPMN/createDraw";
 import EditDraw from "./pages/BPMN/editDraw";
 import EditLoan from "./pages/BPMN/editLoan";
 import EditSale from "./pages/BPMN/editSale";
+import VendaProposta from "./pages/BPMN/vendaProposta";
+
 import ConfirmAccount from "./pages/BPMN/confirmAccount";
 import EditAccountPage from "./pages/editAccountPage";
 
 import AdminProtectedRoute from "./pages/ProtectedRoutes/adminProtectedRoute";
+import EmprestimoProposta from "./pages/BPMN/emprestimoProposta.jsx";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -55,9 +58,13 @@ root.render(
         <Route path="/newpassword" element={<NewPassword />} />
 
         {/* Test Pages */}
-        <Route path="/testesale" element={<EditSale />} />
+        {/* <Route path="/testesale" element={<EditSale />} />
         <Route path="/testeloan" element={<EditLoan />} />
-        <Route path="/testedraw" element={<EditDraw />} />
+        
+        <Route path="/testedraw" element={<EditDraw />} /> */}
+
+        <Route path="/testevenda" element={<VendaProposta />} />
+        <Route path="/testeemprestimo" element={<EmprestimoProposta />} />
 
         {/* Admin */}
         <Route
