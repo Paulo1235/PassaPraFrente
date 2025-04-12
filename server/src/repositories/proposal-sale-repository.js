@@ -91,6 +91,7 @@ class ProposalSaleRepository {
         WHERE Venda_ID = @saleId
         
       `)
+
     return proposal.recordset
   }
 }

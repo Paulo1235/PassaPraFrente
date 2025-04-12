@@ -4,7 +4,7 @@ import { dbConfig, getConnection } from '../database/db-config.js'
 import IdService from '../services/id-service.js'
 
 class ItemRepository {
-  static async createItem (condition, category) {
+  static async createItem ({ condition, category }) {
     const pool = await getConnection(dbConfig)
 
     const condicaoId = await IdService.getConditionById(condition)
@@ -78,9 +78,10 @@ class ItemRepository {
       .request()
       .input('id', sql.Int, id)
       .input('publicId', sql.VarChar, publicId)
-      .input('url', sql.VarChar, url).query(`
-        INSERT INTO Imagem (URL, Artigo_ID)
-        VALUES (@url,@publicId, @id)
+      .input('url', sql.VarChar, url)
+      .query(`
+        INSERT INTO Imagem (PublicID, Url, ArtigoArtigo_ID)
+        VALUES (@publicId, @url, @id)
     `)
 
     return item.rowsAffected[0] > 0

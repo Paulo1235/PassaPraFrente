@@ -93,13 +93,9 @@ class ProposalSaleController {
     const userId = req.user.Utilizador_ID
 
     try {
-      const proposal = await ProposalSaleRepository.getSaleProposalsByUser(userId)
+      const proposals = await ProposalSaleRepository.getSaleProposalsByUser(userId)
 
-      if (!proposal || proposal.length === 0) {
-        throw new HttpException('Não existem propostas.', StatusCodes.NOT_FOUND)
-      }
-
-      return response(res, true, StatusCodes.OK, proposal)
+      return response(res, true, StatusCodes.OK, proposals)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as propostas.')
     }
@@ -109,13 +105,9 @@ class ProposalSaleController {
     const { saleId } = req.params
 
     try {
-      const proposal = await ProposalSaleRepository.getAllProposalEntriesBySale(parseInt(saleId))
+      const proposals = await ProposalSaleRepository.getAllProposalEntriesBySale(parseInt(saleId))
 
-      if (!proposal) {
-        throw new HttpException('Não existem propostas.', StatusCodes.NOT_FOUND)
-      }
-
-      return response(res, true, StatusCodes.OK, proposal)
+      return response(res, true, StatusCodes.OK, proposals)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as propostas.')
     }

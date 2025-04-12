@@ -40,7 +40,7 @@ proposalLoanRouter.post(
   ProposalLoanController.createProposalLoan
 )
 proposalLoanRouter.get(
-  '/proposal-loans/user',
+  '/proposal-loans/user/user',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,

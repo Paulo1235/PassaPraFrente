@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import cloudinary from 'cloudinary'
 
 import response from '../utils/response.js'
-import { ItemRepository } from '../repositories/item-repository.js'
+import ItemRepository from '../repositories/item-repository.js'
 import { handleError, HttpException } from '../utils/error-handler.js'
 
 class ItemController {
@@ -50,7 +50,7 @@ class ItemController {
   }
 
   static async uploadItemPhoto (req, res) {
-    const id = req.user.Artigo_ID
+    const { id } = req.params
     const { thumbnails } = req.body
 
     try {

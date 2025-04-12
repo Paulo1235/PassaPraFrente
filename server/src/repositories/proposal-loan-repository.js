@@ -91,7 +91,7 @@ class ProposalLoanRepository {
       .query(`
         SELECT *
         FROM PropostaVenda
-        WHERE Venda_ID = @loanId
+        WHERE Emprestimo_ID = @loanId
         
       `)
 

@@ -107,13 +107,9 @@ class ProposalLoanController {
     const { loanId } = req.params
 
     try {
-      const proposal = await ProposalLoanRepository.getAllProposalEntriesByLoan(parseInt(loanId))
+      const proposals = await ProposalLoanRepository.getAllProposalEntriesByLoan(parseInt(loanId))
 
-      if (!proposal) {
-        throw new HttpException('Não existem propostas.', StatusCodes.NOT_FOUND)
-      }
-
-      return response(res, true, StatusCodes.OK, proposal)
+      return response(res, true, StatusCodes.OK, proposals)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as propostas.')
     }

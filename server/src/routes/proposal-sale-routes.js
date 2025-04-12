@@ -40,7 +40,7 @@ proposalSaleRouter.post(
   ProposalSaleController.createProposalSale
 )
 proposalSaleRouter.get(
-  '/proposal-sales/user',
+  '/proposal-sales/user/user',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
