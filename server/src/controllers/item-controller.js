@@ -51,20 +51,32 @@ class ItemController {
 
   static async uploadItemPhoto (req, res) {
     const id = req.user.Artigo_ID
-    const { thumbnail } = req.body
+    const { thumbnails } = req.body
 
     try {
-      const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
-        folder: 'items'
-      })
-
-      const uploadSuccess = await ItemRepository.uploadItemPhoto(id, myCloud.public_id, myCloud.url)
-
-      if (uploadSuccess) {
-        return response(res, true, StatusCodes.OK, 'Imagem inserida.')
+      if (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0) {
+        throw new HttpException('Deve enviar pelo menos uma imagem.', StatusCodes.BAD_REQUEST)
       }
 
-      return response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao inserir a imagem.')
+      if (thumbnails.length > 3) {
+        throw new HttpException('Deve ter no máximo 3 imagens.', StatusCodes.BAD_REQUEST)
+      }
+
+      const uploadResults = []
+
+      for (const image of thumbnails) {
+        const myCloud = await cloudinary.v2.uploader.upload(image, {
+          folder: 'items'
+        })
+
+        const uploadSuccess = await ItemRepository.uploadItemPhoto(id, myCloud.public_id, myCloud.url)
+
+        if (uploadSuccess) {
+          uploadResults.push(myCloud.secure_url)
+        }
+      }
+
+      return response(res, false, StatusCodes.OK, `${uploadResults.length} imagens inseridas.`)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao fazer upload da imagem.')
     }
