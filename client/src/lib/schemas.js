@@ -124,6 +124,13 @@ const CreateDrawSchema = yup.object().shape({
   //   .max(3, "Máximo de 3 fotos permitido")
 });
 
+const CreateProposalSaleSchema = yup.object().shape({
+  price: yup
+  .number()
+  .typeError("Valor deve ser um número")
+  .positive("Valor deve ser positivo")
+  .required("Valor é obrigatório"),
+});
 
 export {
   SendEmailSchema,
@@ -133,4 +140,5 @@ export {
   CreateSaleSchema,
   CreateLoanSchema,
   CreateDrawSchema,
+  CreateProposalSaleSchema,
 };
