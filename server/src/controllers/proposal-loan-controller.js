@@ -4,15 +4,12 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import ProposalLoanRepository from '../repositories/proposal-loan-repository.js'
 import LoanRepository from '../repositories/loan-repository.js'
-import IdService from '../services/id-service.js'
 
 class ProposalLoanController {
   static async createProposalLoan (req, res) {
     const data = req.body
 
     const newValue = data.newValue ?? 0
-    const newStartDate = data.newStartDate ?? null
-    const newEndDate = data.newEndDate ?? null
 
     const userId = req.user.Utilizador_ID
     const { id } = req.params
@@ -20,9 +17,10 @@ class ProposalLoanController {
     try {
       const loan = await LoanRepository.getLoanById(id)
 
-      const state = await IdService.getStateById(loan.Estado_ID)
+      const newStartDate = data.newStartDate ?? loan.DataInicio
+      const newEndDate = data.newEndDate ?? loan.DataFim
 
-      if (state.Estado === 'Concluído' || state.Estado === 'Cancelado' || state.Estado === 'Em progresso') {
+      if (loan.Estado === 'Concluído' || loan.Estado === 'Cancelado' || loan.Estado === 'Em progresso') {
         throw new HttpException('Não é possível fazer uma proposta para esta venda.', StatusCodes.BAD_REQUEST)
       }
 
@@ -30,13 +28,15 @@ class ProposalLoanController {
         throw new HttpException('Não é possível fazer uma proposta para a sua própria venda.', StatusCodes.BAD_REQUEST)
       }
 
-      const proposal = await ProposalLoanRepository.createProposalLoan(newValue, newStartDate, newEndDate)
+      const proposal = await ProposalLoanRepository.getLoanProposalById(userId, id)
 
-      if (!proposal) {
-        throw new HttpException('Não foi possível criar a proposta.', StatusCodes.BAD_REQUEST)
+      if (proposal) {
+        throw new HttpException('Já fez uma proposta para este empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
-      return response(res, true, StatusCodes.OK, proposal)
+      await ProposalLoanRepository.createProposalLoan(userId, id, newValue, newStartDate, newEndDate)
+
+      return response(res, true, StatusCodes.CREATED, 'Proposta de empréstimo criada com sucesso.')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao criar proposta.')
     }

@@ -33,10 +33,12 @@ class LoanRepository {
     const loan = await pool.request()
       .input('id', sql.Int, id)
       .query(`
-        SELECT Emprestimo_ID, Titulo, Descricao, DataInicio, DataFim, Valor, NomeCategoria, Condicao, Contacto, Emprestimo.Utilizador_ID, Emprestimo.ArtigoArtigo_ID
+        SELECT Emprestimo_ID, Titulo, Descricao, DataInicio, DataFim, Valor, NomeCategoria, Condicao, 
+        Contacto, Emprestimo.Utilizador_ID, Emprestimo.ArtigoArtigo_ID, Emprestimo.EstadoEstado_ID, Estado.Estado
         FROM Emprestimo
         JOIN Utilizador ON Utilizador.Utilizador_ID = Emprestimo.Utilizador_ID
         JOIN Artigo ON Artigo.Artigo_ID = Emprestimo.ArtigoArtigo_ID
+        JOIN Estado ON Estado.Estado_ID = Emprestimo.EstadoEstado_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
         WHERE Emprestimo_ID = @id

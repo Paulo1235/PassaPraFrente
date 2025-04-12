@@ -21,6 +21,7 @@ import userRouter from './src/routes/user-routes.js'
 import authRouter from './src/routes/auth-routes.js'
 import saleRouter from './src/routes/sale-routes.js'
 import proposalSaleRouter from './src/routes/proposal-sale-routes.js'
+import proposalLoanRouter from './src/routes/proposal-loan-routes.js'
 import transactionSaleRouter from './src/routes/transaction-sale-routes.js'
 import loanRouter from './src/routes/loan-routes.js'
 import giveawayRouter from './src/routes/giveaway-routes.js'
@@ -74,7 +75,8 @@ app.use('/api',
   giveawayRouter,
   notificationRouter,
   entryGiveawayRouter,
-  winnerGiveawayRouter
+  winnerGiveawayRouter,
+  proposalLoanRouter
 )
 
 app.get('/', (req, res) => {
