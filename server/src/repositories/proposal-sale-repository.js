@@ -79,12 +79,12 @@ class ProposalSaleRepository {
     return proposal.recordset
   }
 
-  static async getAllProposalEntriesBySale (saleId) {
+  static async getAllProposalEntriesBySale (id) {
     const pool = await getConnection()
 
     const proposal = await pool
       .request()
-      .input('saleId', sql.Int, saleId)
+      .input('saleId', sql.Int, id)
       .query(`
         SELECT *
         FROM PropostaVenda

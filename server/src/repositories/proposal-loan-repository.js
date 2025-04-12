@@ -82,17 +82,16 @@ class ProposalLoanRepository {
     return proposals.recordset
   }
 
-  static async getAllProposalEntriesByLoan (loanId) {
+  static async getAllProposalEntriesByLoan (id) {
     const pool = await getConnection()
 
     const proposals = await pool
       .request()
-      .input('loanId', sql.Int, loanId)
+      .input('loanId', sql.Int, id)
       .query(`
         SELECT *
-        FROM PropostaVenda
+        FROM PropostaEmprestimo
         WHERE Emprestimo_ID = @loanId
-        
       `)
 
     return proposals.recordset

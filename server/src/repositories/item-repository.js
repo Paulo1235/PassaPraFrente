@@ -4,7 +4,7 @@ import { dbConfig, getConnection } from '../database/db-config.js'
 import IdService from '../services/id-service.js'
 
 class ItemRepository {
-  static async createItem ({ condition, category }) {
+  static async createItem (condition, category) {
     const pool = await getConnection(dbConfig)
 
     const condicaoId = await IdService.getConditionById(condition)

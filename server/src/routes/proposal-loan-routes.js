@@ -5,6 +5,7 @@ import ProposalLoanController from '../controllers/proposal-loan-controller.js'
 import AuthController from '../controllers/auth-controller.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import { proposalLoanSchema } from '../validations/proposal-loan-schema.js'
+import ProposalMiddleware from '../middlewares/owner-middleware.js'
 
 const proposalLoanRouter = express.Router()
 
@@ -52,7 +53,7 @@ proposalLoanRouter.get(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  AuthMiddleware.authorizedRoles(['admin']),
+  ProposalMiddleware.isOwnerLoan,
   ProposalLoanController.getAllProposalEntriesByLoan
 )
 

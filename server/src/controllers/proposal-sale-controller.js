@@ -102,10 +102,10 @@ class ProposalSaleController {
   }
 
   static async getAllProposalEntriesBySale (req, res) {
-    const { saleId } = req.params
+    const { id } = req.params
 
     try {
-      const proposals = await ProposalSaleRepository.getAllProposalEntriesBySale(parseInt(saleId))
+      const proposals = await ProposalSaleRepository.getAllProposalEntriesBySale(parseInt(id))
 
       return response(res, true, StatusCodes.OK, proposals)
     } catch (error) {

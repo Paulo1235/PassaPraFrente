@@ -104,10 +104,10 @@ class ProposalLoanController {
   }
 
   static async getAllProposalEntriesByLoan (req, res) {
-    const { loanId } = req.params
+    const { id } = req.params
 
     try {
-      const proposals = await ProposalLoanRepository.getAllProposalEntriesByLoan(parseInt(loanId))
+      const proposals = await ProposalLoanRepository.getAllProposalEntriesByLoan(parseInt(id))
 
       return response(res, true, StatusCodes.OK, proposals)
     } catch (error) {

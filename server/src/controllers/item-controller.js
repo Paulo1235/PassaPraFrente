@@ -7,19 +7,17 @@ import ItemRepository from '../repositories/item-repository.js'
 import { handleError, HttpException } from '../utils/error-handler.js'
 
 class ItemController {
-  static async createItem (req, res) {
-    const data = req.body
-
+  static async createItem (data) {
     try {
-      const item = await ItemRepository.createItem(data)
+      const item = await ItemRepository.createItem(data.condition, data.category)
 
-      if (!item) {
-        throw new HttpException('Não foi possível criar artigo.', StatusCodes.BAD_REQUEST)
+      if (item) {
+        await ItemController.uploadItemPhotos(item.Artigo_ID, data.thumbnails)
       }
 
-      return response(res, true, StatusCodes.OK, item)
+      return item
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao criar o artigo.')
+      throw new HttpException('Erro ao criar o artigo', StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -49,9 +47,8 @@ class ItemController {
     }
   }
 
-  static async uploadItemPhoto (req, res) {
-    const { id } = req.params
-    const { thumbnails } = req.body
+  static async uploadItemPhotos (itemId, thumbnails) {
+    const uploadedResults = []
 
     try {
       if (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0) {
@@ -62,23 +59,21 @@ class ItemController {
         throw new HttpException('Deve ter no máximo 3 imagens.', StatusCodes.BAD_REQUEST)
       }
 
-      const uploadResults = []
-
       for (const image of thumbnails) {
         const myCloud = await cloudinary.v2.uploader.upload(image, {
           folder: 'items'
         })
 
-        const uploadSuccess = await ItemRepository.uploadItemPhoto(id, myCloud.public_id, myCloud.url)
+        const uploadSuccess = await ItemRepository.uploadItemPhoto(itemId, myCloud.public_id, myCloud.url)
 
         if (uploadSuccess) {
-          uploadResults.push(myCloud.secure_url)
+          uploadedResults.push(myCloud.secure_url)
         }
       }
 
-      return response(res, false, StatusCodes.OK, `${uploadResults.length} imagens inseridas.`)
+      return uploadedResults
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao fazer upload da imagem.')
+      throw new HttpException('Erro ao fazer upload das imagens', StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
 

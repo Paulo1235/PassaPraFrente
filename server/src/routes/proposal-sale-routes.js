@@ -5,6 +5,7 @@ import ProposalSaleController from '../controllers/proposal-sale-controller.js'
 import AuthController from '../controllers/auth-controller.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import { proposalSaleSchema } from '../validations/proposal-sale-schema.js'
+import ProposalMiddleware from '../middlewares/owner-middleware.js'
 
 const proposalSaleRouter = express.Router()
 
@@ -52,7 +53,7 @@ proposalSaleRouter.get(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  AuthMiddleware.authorizedRoles(['admin']),
+  ProposalMiddleware.isOwnerSale,
   ProposalSaleController.getAllProposalEntriesBySale
 )
 

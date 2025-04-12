@@ -4,6 +4,7 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import SaleRepository from '../repositories/sale-repository.js'
 import IdService from '../services/id-service.js'
+import ItemController from './item-controller.js'
 
 class SaleController {
   static async createSale (req, res) {
@@ -11,7 +12,11 @@ class SaleController {
     const data = req.body
 
     try {
-      await SaleRepository.createSale({ data, userId })
+      const item = await ItemController.createItem(data)
+
+      if (item) {
+        await SaleRepository.createSale(item, data, userId)
+      }
 
       response(res, true, StatusCodes.CREATED, 'Venda criada com sucesso')
     } catch (error) {
