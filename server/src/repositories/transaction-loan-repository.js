@@ -18,7 +18,7 @@ class TransactionLoanRepository {
         VALUES (@valorFinal, @finalNewDate, @finalEndDate, 0, @userId, @loanId)
     `)
 
-    return transaction.recordset[0]
+    return transaction.rowsAffected[0] > 0
   }
 
   static async getAllLoanTransactions () {
@@ -34,16 +34,17 @@ class TransactionLoanRepository {
     return transactions.recordset
   }
 
-  static async getLoanTransactionById (id) {
+  static async getLoanTransactionById (id, userId) {
     const pool = await getConnection()
 
     const transaction = await pool
       .request()
-      .input('id', sql.Int, id)
+      .input('loanId', sql.Int, id)
+      .input('userId', sql.Int, userId)
       .query(`
         SELECT *
         FROM TransacaoEmprestimo
-        WHERE TransacaoEmprestimo_ID = @id
+        WHERE PropostaEmprestimoUtilizador_ID = @userId AND PropostaEmprestimoEmprestimo_ID = @loanId 
       `)
 
     return transaction.recordset[0]

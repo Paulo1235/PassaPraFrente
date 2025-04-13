@@ -20,7 +20,7 @@ class ProposalLoanRepository {
         VALUES (@userId, @emprestimoId, @novoValor, @novaDataInicio, @novaDataFim, @accepted)
     `)
 
-    return proposal.recordset
+    return proposal.rowsAffected[0] > 0
   }
 
   static async getAllLoanProposals () {

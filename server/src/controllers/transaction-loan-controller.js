@@ -30,6 +30,8 @@ class TransactionLoanController {
 
       const proposal = await ProposalLoanRepository.createProposalLoan(userId, id, loan.Valor, loan.DataInicio, loan.DataFim, PROPOSAL_LOAN_STATES.ACEITE)
 
+      console.log(proposal)
+
       if (proposal) {
         await TransactionLoanController.createTransactionLoan(loan.Valor, userId, id, loan.DataInicio, loan.DataFim)
       }
@@ -42,15 +44,21 @@ class TransactionLoanController {
 
   static async createTransactionLoan (finalValue, userId, id, finalNewDate, finalEndDate) {
     try {
+      const existsTransaction = await TransactionLoanRepository.getLoanTransactionById(id, userId)
+
+      if (existsTransaction) {
+        return
+      }
+
       const transaction = await TransactionLoanRepository.createTransactionLoan(finalValue, userId, id, finalNewDate, finalEndDate)
 
       if (transaction) {
-        await LoanRepository.updateLoanStatus(id, LOAN_STATES.CONCLUIDO)
+        await LoanRepository.updateLoanStatus(parseInt(id), LOAN_STATES.CONCLUIDO)
 
         const loan = await LoanRepository.getLoanById(id)
 
         const notificationData = {
-          message: `Avalie o vendedor do empréstimo ${loan.Titulo}`,
+          message: `Avalie o vendedor do empréstimo: ${loan.Titulo}`,
           userId
         }
 

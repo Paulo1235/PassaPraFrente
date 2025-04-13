@@ -51,9 +51,7 @@ class TransactionSaleController {
       const transaction = await TransactionSaleRepository.createTransactionSale(finalValue, userId, id)
 
       if (transaction) {
-        const status = await SaleRepository.updateSaleStatus(parseInt(id), SALE_STATES.CONCLUIDO)
-
-        console.log(status)
+        await SaleRepository.updateSaleStatus(parseInt(id), SALE_STATES.CONCLUIDO)
 
         const sale = await SaleRepository.getSaleById(id)
 
