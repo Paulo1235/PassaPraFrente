@@ -1,232 +1,250 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { Undo2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchUserInfo } from "../lib/authSlice";
+import { useEffect, useState } from "react"
+import { Undo2 } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
+import { fetchUserInfo } from "../lib/authSlice"
 
 //? CSS
-import "../components/css/sidebar.css";
-import "../index.css";
+import "../components/css/sidebar.css"
+import "../index.css"
 
 //? Components
-import SideBar from "../components/sideBar";
-import ProposalCard from "../components/proposalCard";
-import Footer from "../components/footer";
-import { Helmet } from "react-helmet";
+import SideBar from "../components/sideBar"
+import ProposalCard from "../components/proposalCard"
+import Footer from "../components/footer"
+import { Helmet } from "react-helmet"
+import ProposalCardAnnouce from "../components/proposalCardAnnouce"
 
 export default function ProposalsPage() {
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
-  const [proposalData, setProposalData] = useState({
-    sales: {
-      title: "Vendas",
-      items: [],
-    },
-    loans: {
-      title: "Empréstimos",
-      items: [],
-    },
-  });
+  const { user, isAuthenticated } = useSelector((state) => state.auth)
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [proposalsMade, setProposalsMade] = useState({ sales: [], loans: [] })        // propostas que eu fiz
+  const [proposalsReceived, setProposalsReceived] = useState({ sales: [], loans: [] }) // propostas que eu recebi
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/");
-      return;
+      navigate("/")
+      return
     }
+    dispatch(fetchUserInfo())
+  }, [isAuthenticated, dispatch, navigate])
 
-    // Só fetch do user info no início
-    dispatch(fetchUserInfo());
-  }, [isAuthenticated, dispatch, navigate]);
-
+  // Fetch propostas que EU fiz (Efetuadas)
   useEffect(() => {
-    const fetchProposals = async () => {
+    const fetchProposalsMade = async () => {
       try {
-        const userId = user?.message?.Utilizador_ID;
-        if (!userId) return;
+        const userId = user?.message?.Utilizador_ID
+        if (!userId) return
 
-        // Fetch sales proposals
         const fetchSalesProposals = async () => {
-          const responseSales = await fetch(
-            `http://localhost:5000/api/proposal-sales/user/user`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-            }
-          );
+          const response = await fetch(`http://localhost:5000/api/proposal-sales/user/user`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          })
 
-          const dataSales = await responseSales.json();
-          console.log("Sales proposal data:", dataSales);
+          const data = await response.json()
+          if (!data?.message?.length) return []
 
-          // If no sales data, initialize with empty arrays
-          if (!dataSales?.message?.length) {
-            return [];
-          }
-
-          // Process each sale to get detailed information
-          const salesPromises = dataSales.message.map(async (proposal) => {
-            const saleId = proposal.Venda_ID;
-            const detailResponse = await fetch(
-              `http://localhost:5000/api/sales/id/${saleId}`,
-              {
+          const results = await Promise.all(
+            data.message.map(async (proposal) => {
+              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}`, {
                 method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 credentials: "include",
+              })
+              const saleDetail = await detailRes.json()
+              const item = saleDetail.message || {}
+
+              return {
+                title: item.Titulo || "Sem título",
+                idVenda: proposal.Venda_ID || "ID",
+                idEmprestimo: "ID",
+                idSorteio: "ID",
+                category: "Vendas",
+                price: proposal.NovoValor ?? 0,
+                description: item.Descricao || "Sem descrição",
+                status: proposal.Aceite ?? 0,
+                date: proposal.Data_Criacao || new Date().toISOString(),
               }
-            );
+            })
+          )
+          return results
+        }
 
-            const saleDetail = await detailResponse.json();
-            return {
-              proposal,
-              saleDetail,
-            };
-          });
-
-          const salesResults = await Promise.all(salesPromises);
-          // Transform the sales data
-          return salesResults.map((result) => {
-            const { proposal, saleDetail } = result;
-            const item = saleDetail.message || {};
-
-            // Use nullish coalescing operator (??) instead of logical OR (||)
-            // This way, 0 will be preserved as 0 and not replaced with the default value
-            console.log("Aceite value:", proposal.Aceite);
-
-            return {
-              title: item.Titulo || "Sem título",
-              idVenda: proposal.Venda_ID || "ID",
-              idEmprestimo: "ID",
-              idSorteio: "ID",
-              category: "Vendas",
-              price: proposal.NovoValor ?? 0, // Use ?? instead of ||
-              description: item.Descricao || "Sem descrição",
-              status: proposal.Aceite ?? 0, // Use ?? instead of ||
-              date: proposal.Data_Criacao || new Date().toISOString(),
-            };
-          });
-        };
-
-        // Fetch loan proposals
         const fetchLoanProposals = async () => {
-          const responseLoans = await fetch(
-            `http://localhost:5000/api/proposal-loans/user/user`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-            }
-          );
+          const response = await fetch(`http://localhost:5000/api/proposal-loans/user/user`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          })
 
-          const dataLoans = await responseLoans.json();
-          console.log("Loans proposal data:", dataLoans);
+          const data = await response.json()
+          if (!data?.message?.length) return []
 
-          // If no loans data, initialize with empty arrays
-          if (!dataLoans?.message?.length) {
-            return [];
-          }
-
-          // Process each loan to get detailed information
-          const loansPromises = dataLoans.message.map(async (proposal) => {
-            const loanId = proposal.Emprestimo_ID;
-            const detailResponse = await fetch(
-              `http://localhost:5000/api/loans/id/${loanId}`,
-              {
+          const results = await Promise.all(
+            data.message.map(async (proposal) => {
+              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}`, {
                 method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 credentials: "include",
+              })
+              const loanDetail = await detailRes.json()
+              const item = loanDetail.message || {}
+
+              return {
+                title: item.Titulo || "Sem título",
+                idVenda: "ID",
+                idEmprestimo: proposal.Emprestimo_ID || "ID",
+                idSorteio: "ID",
+                category: "Empréstimos",
+                price: proposal.NovoValor ?? 0,
+                description: item.Descricao || "Sem descrição",
+                status: proposal.Aceite ?? 0,
+                date: proposal.Data_Criacao || new Date().toISOString(),
+                duration: (() => {
+                  const start = new Date(proposal.NovaDataInicio || new Date())
+                  const end = new Date(proposal.NovaDataFim || new Date())
+                  const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24))
+                  return `${diffDays} dia(s)`
+                })(),
               }
-            );
+            })
+          )
+          return results
+        }
 
-            const loanDetail = await detailResponse.json();
-            return {
-              proposal,
-              loanDetail,
-            };
-          });
-
-          const loansResults = await Promise.all(loansPromises);
-
-          // Transform the loans data
-          return loansResults.map((result) => {
-            const { proposal, loanDetail } = result;
-            const item = loanDetail.message || {};
-
-            return {
-              title: item.Titulo || "Sem título",
-              idVenda: "ID",
-              idEmprestimo: proposal.Emprestimo_ID || "ID",
-              idSorteio: "ID",
-              category: "Empréstimos",
-              price: proposal.NovoValor ?? 0, // Use ?? instead of ||
-              description: item.Descricao || "Sem descrição",
-              status: proposal.Aceite ?? 0, // Use ?? instead of ||
-              date: proposal.Data_Criacao || new Date().toISOString(),
-              duration: (() => {
-                const start = new Date(proposal.NovaDataInicio || new Date());
-                const end = new Date(proposal.NovaDataFim || new Date());
-                const diffMs = end - start;
-                const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24)); // diferença em dias
-                return `${diffDays} dia(s)`;
-              })(),
-            };
-          });
-        };
-
-        // Fetch both sales and loans data in parallel
-        const [salesItems, loansItems] = await Promise.all([
+        const [salesItems, loanItems] = await Promise.all([
           fetchSalesProposals(),
-          fetchLoanProposals(),
-        ]);
+          fetchLoanProposals()
+        ])
 
-        // Update state with the transformed data
-        setProposalData((prev) => ({
-          ...prev,
-          sales: {
-            ...prev.sales,
-            items: salesItems,
-          },
-          loans: {
-            ...prev.loans,
-            items: loansItems,
-          },
-        }));
+        setProposalsMade({ sales: salesItems, loans: loanItems })
       } catch (error) {
-        console.error("Error fetching shop data:", error);
+        console.error("Erro ao buscar propostas efetuadas:", error)
       }
-    };
+    }
 
     if (user?.message?.Utilizador_ID) {
-      fetchProposals();
+      fetchProposalsMade()
     }
-  }, [user]);
+  }, [user])
 
-  // Combine all items for the "A Anunciar" section
-  const announcingItems = [
-    ...proposalData.sales.items,
-    ...proposalData.loans.items,
-  ];
+  // Fetch propostas que EU RECEBI (Recebidas)
+  useEffect(() => {
+    const fetchProposalsReceived = async () => {
+      try {
+        const userId = user?.message?.Utilizador_ID
+        if (!userId) return
+
+        const fetchSalesProposalsAnnounce = async () => {
+          const response = await fetch(`http://localhost:5000/api/proposal-sales/sales/user`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          })
+
+          const data = await response.json()
+          if (!data?.message?.length) return []
+
+          const results = await Promise.all(
+            data.message.map(async (proposal) => {
+              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+              })
+              const saleDetail = await detailRes.json()
+              const item = saleDetail.message || {}
+
+              return {
+                title: item.Titulo || "Sem título",
+                idVenda: proposal.Venda_ID || "ID",
+                idEmprestimo: "ID",
+                idSorteio: "ID",
+                category: "Vendas",
+                price: proposal.NovoValor ?? 0,
+                description: item.Descricao || "Sem descrição",
+                status: proposal.Aceite ?? 0,
+                date: proposal.Data_Criacao || new Date().toISOString(),
+              }
+            })
+          )
+          return results
+        }
+
+        const fetchLoanProposalsAnnounce = async () => {
+          const response = await fetch(`http://localhost:5000/api/proposal-loans/loans/user`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          })
+
+          const data = await response.json()
+          if (!data?.message?.length) return []
+
+          const results = await Promise.all(
+            data.message.map(async (proposal) => {
+              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+              })
+              const loanDetail = await detailRes.json()
+              const item = loanDetail.message || {}
+
+              return {
+                title: item.Titulo || "Sem título",
+                idVenda: "ID",
+                idEmprestimo: proposal.Emprestimo_ID || "ID",
+                idSorteio: "ID",
+                category: "Empréstimos",
+                price: proposal.NovoValor ?? 0,
+                description: item.Descricao || "Sem descrição",
+                status: proposal.Aceite ?? 0,
+                date: proposal.Data_Criacao || new Date().toISOString(),
+                duration: (() => {
+                  const start = new Date(proposal.NovaDataInicio || new Date())
+                  const end = new Date(proposal.NovaDataFim || new Date())
+                  const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24))
+                  return `${diffDays} dia(s)`
+                })(),
+              }
+            })
+          )
+          return results
+        }
+
+        const [salesItems, loanItems] = await Promise.all([
+          fetchSalesProposalsAnnounce(),
+          fetchLoanProposalsAnnounce()
+        ])
+
+        setProposalsReceived({ sales: salesItems, loans: loanItems })
+      } catch (error) {
+        console.error("Erro ao buscar propostas recebidas:", error)
+      }
+    }
+
+    if (user?.message?.Utilizador_ID) {
+      fetchProposalsReceived()
+    }
+  }, [user])
+
+  const announcingItems = [...proposalsMade.sales, ...proposalsMade.loans]           // Efetuadas
+  const announcingItemsAnnounce = [...proposalsReceived.sales, ...proposalsReceived.loans] // Recebidas
 
   return (
-    <div className="flex h-screen bg-bgp overflow-hidden">
+    <div className="flex  bg-bgp overflow-hidden">
       <Helmet>
         <title>Propostas</title>
       </Helmet>
       <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
-        {/* Botão fixo no topo direito */}
         <button
           className="absolute top-4 right-4 sm:top-6 sm:right-10 flex items-center text-txts z-10"
           onClick={() => navigate("/account")}
@@ -235,22 +253,24 @@ export default function ProposalsPage() {
           <span className="ml-1">Voltar</span>
         </button>
 
-        {/* Cabeçalho */}
         <div className="p-6 sm:p-10 pb-0">
           <h1 className="text-2xl font-medium text-txtp">Propostas</h1>
         </div>
 
-        {/* Conteúdo */}
         <div className="flex flex-col md:flex-row flex-1 overflow-auto">
-          {/* A Anunciar */}
           <div className="w-full md:w-1/2 p-4 md:p-6 overflow-y-auto">
             <h2 className="text-gray-400 font-semibold mb-4">Recebidas</h2>
+            {announcingItemsAnnounce.length > 0 ? (
+              announcingItemsAnnounce.map((item, index) => (
+                <ProposalCardAnnouce key={index} item={item} />
+              ))
+            ) : (
+              <p className="text-[#7b892f] font-semibold text-lg text-center">Nenhuma proposta ainda.</p>
+            )}
           </div>
 
-          {/* Divisória visível só em desktop */}
           <div className="hidden md:block w-px bg-[#8b9a41]" />
 
-          {/* A Querer */}
           <div className="w-full md:w-1/2 p-4 md:p-6 overflow-y-auto flex flex-col">
             <h2 className="text-gray-400 font-semibold mb-4">Efetuadas</h2>
             {announcingItems.length > 0 ? (
@@ -258,18 +278,15 @@ export default function ProposalsPage() {
                 <ProposalCard key={index} item={item} />
               ))
             ) : (
-              <p className="text-[#7b892f] font-semibold text-lg text-center">
-                Nenhuma proposta ainda.
-              </p>
+              <p className="text-[#7b892f] font-semibold text-lg text-center">Nenhuma proposta ainda.</p>
             )}
           </div>
         </div>
 
-        {/* Footer */}
         <div className="mt-auto w-full">
           <Footer />
         </div>
       </div>
     </div>
-  );
+  )
 }
