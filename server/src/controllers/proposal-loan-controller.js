@@ -130,10 +130,21 @@ class ProposalLoanController {
   }
 
   static async getAllProposalEntriesByLoan (req, res) {
-    const { id } = req.params
+    const userId = req.user.Utilizador_ID
+    const proposals = []
 
     try {
-      const proposals = await ProposalLoanRepository.getAllProposalEntriesByLoan(parseInt(id))
+      const loans = await LoanRepository.getUserLoans(userId)
+
+      const loanIds = loans.map(loan => loan.Emprestimo_ID)
+
+      for (const loanId of loanIds) {
+        const proposal = await ProposalLoanRepository.getLoanProposalByLoanId(loanId)
+
+        if (proposal) {
+          proposals.push(proposal)
+        }
+      }
 
       return response(res, true, StatusCodes.OK, proposals)
     } catch (error) {

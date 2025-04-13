@@ -96,6 +96,37 @@ class TransactionSaleController {
       handleError(res, error, 'Ocorreu um erro ao encontrar a transação.')
     }
   }
+
+  static async createReviewTransactionSale (req, res) {
+    const review = req.body.review
+
+    const userId = req.user.Utilizador_ID
+    const { id } = req.params
+
+    const data = {
+      review,
+      userId,
+      id
+    }
+
+    try {
+      const transaction = await TransactionSaleRepository.getSaleTransactionByTransactionId(id)
+
+      if (!transaction) {
+        throw new HttpException('Transação de empréstimo não existe.', StatusCodes.NOT_FOUND)
+      }
+
+      if (userId !== transaction.PropostaVendaUtilizador_ID) {
+        throw new HttpException('Não pode fazer review deste empréstimo', StatusCodes.BAD_REQUEST)
+      }
+
+      await TransactionSaleRepository.updateSaleReview(data)
+
+      return response(res, true, StatusCodes.CREATED, 'Review do empréstimo criada com sucesso.')
+    } catch (error) {
+      handleError(res, error, 'Não foi possível efetuar a avaliação do empréstimo.')
+    }
+  }
 }
 
 export default TransactionSaleController

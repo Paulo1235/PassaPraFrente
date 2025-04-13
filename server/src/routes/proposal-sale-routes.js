@@ -50,11 +50,10 @@ proposalSaleRouter.get(
   ProposalSaleController.getSaleProposalsByUser
 )
 proposalSaleRouter.get(
-  '/proposal-sales/sale/:id',
+  '/proposal-sales/sales/user',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  ProposalMiddleware.isOwnerSale,
   ProposalSaleController.getAllProposalEntriesBySale
 )
 

@@ -8,7 +8,7 @@ export const transactionSaleSchema = z.object({
     })
     .gte(1, { message: 'O valor final deve ser maior ou igual a 1' }),
 
-  stars: z
+  review: z
     .number({
       required_error: 'A avaliação é obrigatória',
       invalid_type_error: 'A avaliação deve ser um número inteiro'

@@ -50,6 +50,37 @@ class TransactionLoanRepository {
 
     return transaction.recordset[0]
   }
+
+  static async getLoanTransactionByTransactionId (id) {
+    const pool = await getConnection()
+
+    const transaction = await pool
+      .request()
+      .input('loanId', sql.Int, id)
+      .query(`
+        SELECT *
+        FROM TransacaoEmprestimo
+        WHERE PropostaEmprestimoEmprestimo_ID = @loanId 
+      `)
+
+    return transaction.recordset[0]
+  }
+
+  static async updateLoanReview (data) {
+    const pool = await getConnection()
+
+    const updatedTransaction = await pool
+      .request()
+      .input('transactionId', sql.Int, data.id)
+      .input('review', sql.Int, data.review)
+      .query(`
+        UPDATE TransacaoVenda
+        SET Nota = @review
+        WHERE TransacaoVenda_ID = @transactionId  
+      `)
+
+    return updatedTransaction.rowsAffected[0] > 0
+  }
 }
 
 export default TransactionLoanRepository

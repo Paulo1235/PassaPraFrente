@@ -51,11 +51,10 @@ proposalLoanRouter.get(
   ProposalLoanController.getLoanProposalsByUser
 )
 proposalLoanRouter.get(
-  '/proposal-loans/loan/:id',
+  '/proposal-loans/loans/user',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  ProposalMiddleware.isOwnerLoan,
   ProposalLoanController.getAllProposalEntriesByLoan
 )
 

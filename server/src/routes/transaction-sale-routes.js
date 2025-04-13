@@ -31,4 +31,12 @@ transactionSaleRouter.get(
   TransactionSaleController.getSaleTransactionById
 )
 
+// transactionSaleRouter.patch(
+//   '/transaction-sales/review/:id',
+//   AuthController.refreshAccessToken,
+//   AuthMiddleware.isAuthenticated,
+//   AuthMiddleware.isVerified,
+//   TransactionSaleController.crea
+// )
+
 export default transactionSaleRouter

@@ -129,14 +129,25 @@ class ProposalSaleController {
   }
 
   static async getAllProposalEntriesBySale (req, res) {
-    const { id } = req.params
+    const userId = req.user.Utilizador_ID
+    const proposals = []
 
     try {
-      const proposals = await ProposalSaleRepository.getAllProposalEntriesBySale(parseInt(id))
+      const sales = await SaleRepository.getUserSales(userId)
 
-      return response(res, true, StatusCodes.OK, proposals)
+      const saleIds = sales.map(sale => sale.Emprestimo_ID)
+
+      for (const saleId of saleIds) {
+        const proposal = await ProposalSaleRepository.getSaleProposalBySaleId(saleId)
+
+        if (proposal) {
+          proposals.push(proposal)
+        }
+      }
+
+      return response(res, true, StatusCodes.OK, sales)
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao encontrar as propostas.')
+      handleError(res, error, 'Ocorreu um erro ao encontrar as vendas.')
     }
   }
 }

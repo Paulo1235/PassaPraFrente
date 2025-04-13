@@ -50,6 +50,21 @@ class ProposalSaleRepository {
     return proposal.recordset[0]
   }
 
+  static async getSaleProposalBySaleId (id) {
+    const pool = await getConnection()
+
+    const proposal = await pool
+      .request()
+      .input('saleId', sql.Int, id)
+      .query(`
+        SELECT *
+        FROM PropostaVenda
+        WHERE Venda_ID = @saleId
+      `)
+
+    return proposal.recordset[0]
+  }
+
   static async updateProposalSaleStatus (userId, saleId, status) {
     const pool = await getConnection()
 
@@ -77,22 +92,6 @@ class ProposalSaleRepository {
         FROM PropostaVenda
         WHERE Utilizador_ID = @userId
       `)
-    return proposal.recordset
-  }
-
-  static async getAllProposalEntriesBySale (id) {
-    const pool = await getConnection()
-
-    const proposal = await pool
-      .request()
-      .input('saleId', sql.Int, id)
-      .query(`
-        SELECT *
-        FROM PropostaVenda
-        WHERE Venda_ID = @saleId
-        
-      `)
-
     return proposal.recordset
   }
 }

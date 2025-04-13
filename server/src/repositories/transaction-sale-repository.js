@@ -48,6 +48,37 @@ class TransactionSaleRepository {
 
     return transaction.recordset[0]
   }
+
+  static async getSaleTransactionByTransactionId (id) {
+    const pool = await getConnection()
+
+    const transaction = await pool
+      .request()
+      .input('saleId', sql.Int, id)
+      .query(`
+        SELECT *
+        FROM TransacaoVenda
+        WHERE PropostaVendaVenda_ID = @saleId 
+      `)
+
+    return transaction.recordset[0]
+  }
+
+  static async updateSaleReview (data) {
+    const pool = await getConnection()
+
+    const updatedTransaction = await pool
+      .request()
+      .input('transactionId', sql.Int, data.id)
+      .input('review', sql.Int, data.review)
+      .query(`
+        UPDATE TransacaoVenda
+        SET Nota = @review
+        WHERE TransacaoVenda_ID = @transactionId  
+      `)
+
+    return updatedTransaction.rowsAffected[0] > 0
+  }
 }
 
 export default TransactionSaleRepository

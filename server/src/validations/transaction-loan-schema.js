@@ -16,7 +16,7 @@ export const transactionLoanSchema = z.object({
     invalid_type_error: 'Formato de data de fim inválido'
   }),
 
-  stars: z.coerce
+  review: z.coerce
     .int()
     .number()
     .gte(1, { message: 'A avaliação deve ser no mínimo 1 estrela' })
