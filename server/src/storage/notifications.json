@@ -12,5 +12,19 @@
     "userId": 7,
     "read": false,
     "date": "2025-04-05T20:28:02.744Z"
+  },
+  {
+    "id": "f9c47f1e-d7c2-4594-834f-8b4ce6f7e857",
+    "message": "Avalie o vendedor da venda: Camisola Quentinha Tigresa - XS",
+    "userId": 6,
+    "read": true,
+    "date": "2025-04-13T16:03:00.954Z"
+  },
+  {
+    "id": "f9c47f1e-d7c2-4594-834f-8b4ce6f7e855",
+    "message": "Avalie o vendedor da venda: Camisola Quentinha Tigresa - XS",
+    "userId": 6,
+    "read": true,
+    "date": "2025-04-13T16:03:00.954Z"
   }
 ]

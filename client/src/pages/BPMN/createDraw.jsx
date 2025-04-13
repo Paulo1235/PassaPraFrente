@@ -20,7 +20,7 @@ export default function CreateDraw() {
     endDate: "2025-03-28T14:30",
     // photos: [],
   };
-
+  
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
