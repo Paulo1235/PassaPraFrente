@@ -7,29 +7,24 @@ import UserRepository from '../repositories/user-repository.js'
 import response from '../utils/response.js'
 
 class NotificationController {
-  static async createNotification (req, res) {
-    const data = req.body
-
+  static async createNotification (notificationData) {
     const id = randomUUID()
 
     const notification = {
-      ...data,
+      ...notificationData,
       id
     }
 
     try {
-      const user = await UserRepository.getUserById(data.userId)
+      const user = await UserRepository.getUserById(notificationData.userId)
 
       if (!user) {
-        // Improve
-        throw new HttpException('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
+        return
       }
 
-      await NotificationRepository.createNotification(notification)
-
-      return response(res, true, StatusCodes.CREATED, 'Notificação criada com sucesso.')
+      NotificationRepository.createNotification(notification)
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao criar a notificação. Tente novamente mais tarde.')
+      throw new HttpException('Erro ao criar notificação', StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
 

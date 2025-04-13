@@ -4,9 +4,9 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import ProposalLoanRepository from '../repositories/proposal-loan-repository.js'
 import LoanRepository from '../repositories/loan-repository.js'
-import NotificationRepository from '../repositories/notification-repository.js'
 import { PROPOSAL_LOAN_STATES } from '../constants/status-constants.js'
 import TransactionLoanController from './transaction-loan-controller.js'
+import NotificationController from './notification-controller.js'
 
 class ProposalLoanController {
   static async createProposalLoan (req, res) {
@@ -88,7 +88,7 @@ class ProposalLoanController {
         userId
       }
 
-      NotificationRepository.createNotification(notificationData)
+      NotificationController.createNotification(notificationData)
 
       // Se a proposta for aceite, cria diretamente a transação
       if (status === PROPOSAL_LOAN_STATES.ACEITE) {

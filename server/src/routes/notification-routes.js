@@ -5,11 +5,6 @@ import AuthMiddleware from '../middlewares/auth-middleware.js'
 
 const notificationRouter = express.Router()
 
-notificationRouter.post(
-  '/notifications/create',
-  NotificationController.createNotification
-)
-
 notificationRouter.get(
   '/notifications/id/:id',
   AuthController.refreshAccessToken,

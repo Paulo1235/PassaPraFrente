@@ -6,6 +6,7 @@ import TransactionSaleRepository from '../repositories/transaction-sale-reposito
 import SaleRepository from '../repositories/sale-repository.js'
 import { SALE_STATES } from '../constants/status-constants.js'
 import ProposalSaleRepository from '../repositories/proposal-sale-repository.js'
+import NotificationController from './notification-controller.js'
 
 class TransactionSaleController {
   static async createDirectTransactionSale (req, res) {
@@ -41,6 +42,15 @@ class TransactionSaleController {
 
       if (transaction) {
         await SaleRepository.updateSaleStatus(id, SALE_STATES.CONCLUIDO)
+
+        const sale = await SaleRepository.getLoanById(id)
+
+        const notificationData = {
+          message: `Avalie o vendedor da venda ${sale.Titulo}`,
+          userId
+        }
+
+        NotificationController.createNotification(notificationData)
       }
 
       return transaction

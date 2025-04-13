@@ -6,6 +6,14 @@ import AuthController from '../controllers/auth-controller.js'
 
 const transactionLoanRouter = express.Router()
 
+transactionLoanRouter.post(
+  '/transactions-loans-create',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  TransactionLoanController.createDirectTransactionLoan
+)
+
 transactionLoanRouter.get(
   '/transaction-loans',
   AuthController.refreshAccessToken,

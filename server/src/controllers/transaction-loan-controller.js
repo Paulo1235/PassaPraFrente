@@ -6,6 +6,7 @@ import { LOAN_STATES } from '../constants/status-constants.js'
 import TransactionLoanRepository from '../repositories/transaction-loan-repository.js'
 import LoanRepository from '../repositories/loan-repository.js'
 import ProposalLoanRepository from '../repositories/proposal-loan-repository.js'
+import NotificationController from './notification-controller.js'
 
 class TransactionLoanController {
   static async createDirectTransactionLoan (req, res) {
@@ -41,6 +42,15 @@ class TransactionLoanController {
 
       if (transaction) {
         await LoanRepository.updateLoanStatus(id, LOAN_STATES.CONCLUIDO)
+
+        const loan = await LoanRepository.getLoanById(id)
+
+        const notificationData = {
+          message: `Avalie o vendedor do empréstimo ${loan.Titulo}`,
+          userId
+        }
+
+        NotificationController.createNotification(notificationData)
       }
 
       return transaction

@@ -4,9 +4,9 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import ProposalSaleRepository from '../repositories/proposal-sale-repository.js'
 import SaleRepository from '../repositories/sale-repository.js'
-import NotificationRepository from '../repositories/notification-repository.js'
 import TransactionSaleController from './transaction-sale-controller.js'
 import { PROPOSAL_SALE_STATES, SALE_STATES } from '../constants/status-constants.js'
+import NotificationController from './notification-controller.js'
 
 class ProposalSaleController {
   static async createProposalSale (req, res) {
@@ -93,7 +93,7 @@ class ProposalSaleController {
         userId
       }
 
-      NotificationRepository.createNotification(notificationData)
+      NotificationController.createNotification(notificationData)
 
       // Se a proposta for aceite, cria diretamente a transação
       if (status === PROPOSAL_SALE_STATES.ACEITE) {
