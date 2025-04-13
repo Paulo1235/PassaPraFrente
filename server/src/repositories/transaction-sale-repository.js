@@ -3,15 +3,17 @@ import sql from 'mssql'
 import { getConnection } from '../database/db-config.js'
 
 class TransactionSaleRepository {
-  static async createTransactionSale (valorFinal, nota) {
+  static async createTransactionSale (finalValue, userId, id) {
     const pool = await getConnection()
 
     const transaction = await pool
       .request()
-      .input('valorFinal', sql.Float, valorFinal)
-      .input('nota', sql.Int, nota)
+      .input('valorFinal', sql.Real, finalValue)
+      .input('userId', sql.Int, userId)
+      .input('saleId', sql.Int, id)
       .query(`
-        INSERT INTO TransacaoVenda (NovoValor, Nota) VALUES (@valorFinal, @nota)
+        INSERT INTO TransacaoVenda (ValorFinal, Nota, PropostaVendaUtilizador_ID, PropostaVendaVenda_ID)
+        VALUES (@valorFinal, 0, @userId, @saleId)
     `)
 
     return transaction.recordset[0]

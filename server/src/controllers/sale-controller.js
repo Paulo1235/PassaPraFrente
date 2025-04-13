@@ -98,10 +98,10 @@ class SaleController {
   }
 
   static async getUserSales (req, res) {
-    const id = req.user.Utilizador_ID
+    const userId = req.user.Utilizador_ID
 
     try {
-      const sales = await SaleRepository.getUserSales(id)
+      const sales = await SaleRepository.getUserSales(userId)
 
       response(res, true, StatusCodes.OK, sales)
     } catch (error) {

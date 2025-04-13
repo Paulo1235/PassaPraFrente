@@ -1,19 +1,23 @@
 import { StatusCodes } from 'http-status-codes'
 
-import { handleError } from '../utils/error-handler.js'
+import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import TransactionSaleRepository from '../repositories/transaction-sale-repository.js'
+import SaleRepository from '../repositories/sale-repository.js'
+import { SALE_STATES } from '../constants/status-constants.js'
 
 class TransactionSaleController {
-  static async createTransactionSale (req, res) {
-    const data = req.body
-
+  static async createTransactionSale (finalValue, userId, id) {
     try {
-      const transaction = await TransactionSaleRepository.createTransactionSale(data.valorFinal, data.nota)
+      const transaction = await TransactionSaleRepository.createTransactionSale(finalValue, userId, id)
 
-      return response(res, true, StatusCodes.OK, transaction)
+      if (transaction) {
+        await SaleRepository.updateSaleStatus(id, SALE_STATES.CONCLUIDO)
+      }
+
+      return transaction
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao criar a transação.')
+      throw new HttpException('Ocorreu um erro ao criar a transação.', StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
 

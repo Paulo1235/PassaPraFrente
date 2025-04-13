@@ -5,6 +5,8 @@ import response from '../utils/response.js'
 import ProposalSaleRepository from '../repositories/proposal-sale-repository.js'
 import SaleRepository from '../repositories/sale-repository.js'
 import NotificationRepository from '../repositories/notification-repository.js'
+import TransactionSaleController from './transaction-sale-controller.js'
+import { PROPOSAL_SALE_STATES, SALE_STATES } from '../constants/status-constants.js'
 
 class ProposalSaleController {
   static async createProposalSale (req, res) {
@@ -26,6 +28,13 @@ class ProposalSaleController {
 
       if (sale.Utilizador_ID === userId) {
         throw new HttpException('Não é possível fazer uma proposta para a sua própria venda.', StatusCodes.BAD_REQUEST)
+      }
+
+      // Se não houve proposta e foi logo compra direta
+      if (newValue === 0) {
+        await TransactionSaleController.createTransactionSale(sale.Valor, userId, id)
+
+        return response(res, true, StatusCodes.CREATED, 'Artigo comprado com sucesso.')
       }
 
       const proposal = await ProposalSaleRepository.getSaleProposalById(userId, id)
@@ -79,14 +88,25 @@ class ProposalSaleController {
         throw new HttpException('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
       }
 
+      if (sale.Estado === 'Concluído') {
+        throw new HttpException('Esta venda já foi concluída. Não pode aceitar mais propostas.')
+      }
+
+      await ProposalSaleRepository.updateProposalSaleStatus(userId, id, status)
+
       const notificationData = {
-        message: `A sua proposta para ${sale.Titulo} foi ${status === 1 ? 'aceite' : 'recusada'}`,
+        message: `A sua proposta para ${sale.Titulo} foi ${status === SALE_STATES.ACEITE ? 'aceite' : 'recusada'}`,
         userId
       }
 
       NotificationRepository.createNotification(notificationData)
 
-      await ProposalSaleRepository.updateProposalSaleStatus(userId, id, status)
+      // Se a proposta for aceite, cria diretamente a transação
+      if (status === PROPOSAL_SALE_STATES.ACEITE) {
+        const proposal = await ProposalSaleRepository.getSaleProposalById(userId, id)
+
+        await TransactionSaleController.createTransactionSale(proposal.Valor, userId, id)
+      }
 
       return response(res, true, StatusCodes.OK, 'Estado da proposta atualizado.')
     } catch (error) {

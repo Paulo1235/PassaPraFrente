@@ -1,0 +1,12 @@
+export const SALE_STATES = {
+  EM_ANALISE: 1,
+  EM_PROGRESSO: 2,
+  CANCELADO: 3,
+  CONCLUIDO: 4
+}
+
+export const PROPOSAL_SALE_STATES = {
+  EM_ANALISE: 1,
+  ACEITE: 2,
+  REJEITADO: 3
+}
