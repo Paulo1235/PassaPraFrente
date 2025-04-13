@@ -4,19 +4,13 @@
     "message": "NotificaoTeste",
     "userId": 6,
     "read": true,
-    "date": "2025-04-09T20:00:52.392Z"
+    "date": "2025-04-05T20:00:52.392Z"
   },
   {
     "id": "7b3bc241-3de1-46df-824c-c6d835b7eb74",
     "message": "Proposta rejeitada",
     "userId": 7,
     "read": false,
-    "date": "2025-04-09T20:28:02.744Z"
-  },
-  {
-    "message": "A sua proposta para corta relva amarelo foi 1 == 'Aceite' ? 'aceite' : 'recusada'",
-    "userId": "6",
-    "read": false,
-    "date": "2025-04-12T20:49:11.821Z"
+    "date": "2025-04-05T20:28:02.744Z"
   }
 ]

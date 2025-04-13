@@ -34,3 +34,5 @@ export const SMTP_MAIL = config.get('EMAIL.SMTP_MAIL')
 export const CLOUDINARY_NAME = config.get('CLOUDINARY.NAME')
 export const CLOUDINARY_API_KEY = config.get('CLOUDINARY.API_KEY')
 export const CLOUDINARY_API_SECRET = config.get('CLOUDINARY.API_SECRET')
+
+export const NOTIFICATION_EXPIRE_DAYS = config.get('NOTIFICATION.EXPIRE_DAYS')
