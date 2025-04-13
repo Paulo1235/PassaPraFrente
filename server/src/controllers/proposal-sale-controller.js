@@ -23,7 +23,7 @@ class ProposalSaleController {
       }
 
       // Manipular datas será melhor neste caso
-      if (sale.Estado === 'Em análise' || sale.Estado === 'Concluído' || sale.Estado === 'Cancelado' || sale.Estado === 'Em progresso') {
+      if (sale.Estado === 'Concluído' || sale.Estado === 'Em análise' || sale.Estado === 'Rejeitado') {
         throw new HttpException('Não é possível fazer uma proposta para esta venda.', StatusCodes.BAD_REQUEST)
       }
 
@@ -37,7 +37,7 @@ class ProposalSaleController {
         throw new HttpException('Já fez uma proposta para esta venda.', StatusCodes.BAD_REQUEST)
       }
 
-      await ProposalSaleRepository.createProposalSale(newValue, userId, id)
+      await ProposalSaleRepository.createProposalSale(newValue, userId, id, PROPOSAL_SALE_STATES.EM_ANALISE)
 
       return response(res, true, StatusCodes.CREATED, 'Proposta criada com sucesso.')
     } catch (error) {

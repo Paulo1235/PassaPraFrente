@@ -16,7 +16,7 @@ class TransactionSaleRepository {
         VALUES (@valorFinal, 0, @userId, @saleId)
     `)
 
-    return transaction.recordset[0]
+    return transaction.rowsAffected[0] > 0
   }
 
   static async getAllSaleTransactions () {
@@ -32,16 +32,17 @@ class TransactionSaleRepository {
     return transactions.recordset
   }
 
-  static async getSaleTransactionById (id) {
+  static async getSaleTransactionById (saleId, userId) {
     const pool = await getConnection()
 
     const transaction = await pool
       .request()
-      .input('id', sql.Int, id)
+      .input('saleId', sql.Int, saleId)
+      .input('userId', sql.Int, userId)
       .query(`
         SELECT *
         FROM TransacaoVenda
-        WHERE TransacaoVenda_ID = @id
+        WHERE PropostaVendaVenda_ID = @saleId AND PropostaVendaUtilizador_ID = @userId
       `)
 
     return transaction.recordset[0]

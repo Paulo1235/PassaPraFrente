@@ -22,7 +22,7 @@ class ProposalLoanController {
       const newStartDate = data.newStartDate ?? loan.DataInicio
       const newEndDate = data.newEndDate ?? loan.DataFim
 
-      if (loan.Estado === 'Concluído' || loan.Estado === 'Cancelado' || loan.Estado === 'Em progresso') {
+      if (loan.Estado === 'Concluído' || loan.Estado === 'Em análise' || loan.Estado === 'Rejeitado') {
         throw new HttpException('Não é possível fazer uma proposta para este empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
@@ -36,7 +36,7 @@ class ProposalLoanController {
         throw new HttpException('Já fez uma proposta para este empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
-      await ProposalLoanRepository.createProposalLoan(userId, id, newValue, newStartDate, newEndDate)
+      await ProposalLoanRepository.createProposalLoan(userId, id, newValue, newStartDate, newEndDate, PROPOSAL_LOAN_STATES.EM_ANALISE)
 
       return response(res, true, StatusCodes.CREATED, 'Proposta de empréstimo criada com sucesso.')
     } catch (error) {

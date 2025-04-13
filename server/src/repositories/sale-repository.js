@@ -26,6 +26,8 @@ class SaleRepository {
   static async getSaleById (id) {
     const pool = await getConnection(dbConfig)
 
+    console.log(typeof id)
+
     const sale = await pool.request()
       .input('id', sql.Int, id)
       .query(`
@@ -61,7 +63,7 @@ class SaleRepository {
     const availableSales = await pool
       .request()
       .query(`
-        SELECT * 
+        SELECT Venda_ID, Titulo, Descricao, Valor, Utilizador_ID, Venda.Estado_ID, Estado.Estado
         FROM Venda
         JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
         WHERE Estado = 'Disponível'
@@ -136,12 +138,14 @@ class SaleRepository {
 
   }
 
-  static async updateSaleStatus (saleId, stateId) {
+  static async updateSaleStatus (id, stateId) {
     const pool = await getConnection()
+
+    console.log(id, stateId)
 
     const updatedSale = await pool
       .request()
-      .input('saleId', sql.Int, saleId)
+      .input('saleId', sql.Int, id)
       .input('stateId', sql.Int, stateId)
       .query(`
         UPDATE Venda

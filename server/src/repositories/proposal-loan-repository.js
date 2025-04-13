@@ -3,7 +3,7 @@ import sql from 'mssql'
 import { getConnection } from '../database/db-config.js'
 
 class ProposalLoanRepository {
-  static async createProposalLoan (userId, id, newValue, newStartDate, newEndDate) {
+  static async createProposalLoan (userId, id, newValue, newStartDate, newEndDate, accepted) {
     const pool = await getConnection()
 
     const proposal = await pool
@@ -13,10 +13,11 @@ class ProposalLoanRepository {
       .input('novaDataFim', sql.DateTime, newEndDate)
       .input('userId', sql.Int, userId)
       .input('emprestimoId', sql.Int, id)
+      .input('accepted', sql.TinyInt, accepted)
       .query(`
         INSERT INTO 
         PropostaEmprestimo(Utilizador_ID, Emprestimo_ID, NovoValor, NovaDataInicio, NovaDataFim, Aceite) 
-        VALUES (@userId, @emprestimoId, @novoValor, @novaDataInicio, @novaDataFim, 0)
+        VALUES (@userId, @emprestimoId, @novoValor, @novaDataInicio, @novaDataFim, @accepted)
     `)
 
     return proposal.recordset

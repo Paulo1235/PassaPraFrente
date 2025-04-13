@@ -1,7 +1,7 @@
 export const SALE_STATES = {
   EM_ANALISE: 1,
-  EM_PROGRESSO: 2,
-  CANCELADO: 3,
+  REJEITADO: 2,
+  DISPONIVEL: 3,
   CONCLUIDO: 4
 }
 
@@ -13,8 +13,8 @@ export const PROPOSAL_SALE_STATES = {
 
 export const LOAN_STATES = {
   EM_ANALISE: 1,
-  EM_PROGRESSO: 2,
-  CANCELADO: 3,
+  REJEITADO: 2,
+  DISPONIVEL: 3,
   CONCLUIDO: 4
 }
 

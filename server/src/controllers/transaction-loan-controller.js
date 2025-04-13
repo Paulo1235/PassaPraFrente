@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes'
 
 import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
-import { LOAN_STATES } from '../constants/status-constants.js'
+import { LOAN_STATES, PROPOSAL_LOAN_STATES } from '../constants/status-constants.js'
 import TransactionLoanRepository from '../repositories/transaction-loan-repository.js'
 import LoanRepository from '../repositories/loan-repository.js'
 import ProposalLoanRepository from '../repositories/proposal-loan-repository.js'
@@ -11,7 +11,7 @@ import NotificationController from './notification-controller.js'
 class TransactionLoanController {
   static async createDirectTransactionLoan (req, res) {
     const userId = req.user.Utilizador_ID
-    const id = req.params
+    const { id } = req.params
 
     try {
       const loan = await LoanRepository.getLoanById(id)
@@ -28,7 +28,7 @@ class TransactionLoanController {
         throw new HttpException('Já não pode criar uma transação neste empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
-      const proposal = await ProposalLoanRepository.createProposalLoan(userId, id, loan.Valor, loan.DataInicio, loan.DataFim)
+      const proposal = await ProposalLoanRepository.createProposalLoan(userId, id, loan.Valor, loan.DataInicio, loan.DataFim, PROPOSAL_LOAN_STATES.ACEITE)
 
       if (proposal) {
         await TransactionLoanController.createTransactionLoan(loan.Valor, userId, id, loan.DataInicio, loan.DataFim)

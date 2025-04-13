@@ -12,5 +12,12 @@
     "userId": 7,
     "read": false,
     "date": "2025-04-05T20:28:02.744Z"
+  },
+  {
+    "id": "fd5fa6f8-8be4-4b13-bb81-58139baf7b41",
+    "message": "Avalie o vendedor da venda: Vendo Sofá",
+    "userId": 7,
+    "read": false,
+    "date": "2025-04-13T13:58:59.760Z"
   }
 ]

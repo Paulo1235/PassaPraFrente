@@ -4,14 +4,14 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import TransactionSaleRepository from '../repositories/transaction-sale-repository.js'
 import SaleRepository from '../repositories/sale-repository.js'
-import { SALE_STATES } from '../constants/status-constants.js'
+import { PROPOSAL_SALE_STATES, SALE_STATES } from '../constants/status-constants.js'
 import ProposalSaleRepository from '../repositories/proposal-sale-repository.js'
 import NotificationController from './notification-controller.js'
 
 class TransactionSaleController {
   static async createDirectTransactionSale (req, res) {
     const userId = req.user.Utilizador_ID
-    const id = req.params
+    const { id } = req.params
 
     try {
       const sale = await SaleRepository.getSaleById(id)
@@ -24,11 +24,11 @@ class TransactionSaleController {
         throw new HttpException('Não pode comprar a sua própria venda.', StatusCodes.BAD_REQUEST)
       }
 
-      if (sale.Estado === 'Concluído') {
-        throw new HttpException('Já não pode criar uma transação nesta venda.', StatusCodes.BAD_REQUEST)
+      if (sale.Estado === 'Concluído' || sale.Estado === 'Em análise' || sale.Estado === 'Rejeitado') {
+        throw new HttpException('Não pode criar uma transação nesta venda.', StatusCodes.BAD_REQUEST)
       }
 
-      const proposal = await ProposalSaleRepository.createProposalSale(sale.Valor, userId, id)
+      const proposal = await ProposalSaleRepository.createProposalSale(sale.Valor, userId, id, PROPOSAL_SALE_STATES.ACEITE)
 
       if (proposal) {
         await TransactionSaleController.createTransactionSale(sale.Valor, userId, id)
@@ -42,15 +42,23 @@ class TransactionSaleController {
 
   static async createTransactionSale (finalValue, userId, id) {
     try {
+      const existsTransaction = await TransactionSaleRepository.getSaleTransactionById(id, userId)
+
+      if (existsTransaction) {
+        return
+      }
+
       const transaction = await TransactionSaleRepository.createTransactionSale(finalValue, userId, id)
 
       if (transaction) {
-        await SaleRepository.updateSaleStatus(id, SALE_STATES.CONCLUIDO)
+        const status = await SaleRepository.updateSaleStatus(parseInt(id), SALE_STATES.CONCLUIDO)
 
-        const sale = await SaleRepository.getLoanById(id)
+        console.log(status)
+
+        const sale = await SaleRepository.getSaleById(id)
 
         const notificationData = {
-          message: `Avalie o vendedor da venda ${sale.Titulo}`,
+          message: `Avalie o vendedor da venda: ${sale.Titulo}`,
           userId
         }
 

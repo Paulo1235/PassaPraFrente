@@ -3,7 +3,7 @@ import sql from 'mssql'
 import { getConnection } from '../database/db-config.js'
 
 class ProposalSaleRepository {
-  static async createProposalSale (newValue, userId, saleId) {
+  static async createProposalSale (newValue, userId, saleId, accepted) {
     const pool = await getConnection()
 
     const proposal = await pool
@@ -11,13 +11,14 @@ class ProposalSaleRepository {
       .input('novoValor', sql.Float, newValue)
       .input('userId', sql.Int, userId)
       .input('saleId', sql.Int, saleId)
+      .input('accepted', sql.TinyInt, accepted)
       .query(`
         INSERT INTO 
         PropostaVenda (Utilizador_ID, Venda_ID, NovoValor, Aceite) 
-        VALUES (@userId, @saleId, @novoValor, 0)
+        VALUES (@userId, @saleId, @novoValor, @accepted)
     `)
 
-    return proposal.recordset
+    return proposal.rowsAffected[0] > 0
   }
 
   static async getAllSaleProposals () {
