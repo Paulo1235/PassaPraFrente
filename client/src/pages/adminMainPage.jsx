@@ -71,7 +71,7 @@ const AdminMain = () => {
             items: transformItems(dataSales, "Venda"),
           },
           {
-            title: "Emprestimo",
+            title: "Empréstimo",
             items: transformItems(dataLoans, "Emprestimo"),
           },
           {
@@ -102,7 +102,7 @@ const AdminMain = () => {
         <title>Loja</title>
       </Helmet>
       <div className="md:sticky md:top-0 md:h-screen">
-        <SideBar canAdd={false} />
+        <SideBar canAdd={false} Home={true} Account={true} LogOut={true} />
       </div>
       <div className="App w-full overflow-x-auto flex flex-col">
         <div className="flex flex-col md:flex-row px-4 md:px-6 flex-grow">

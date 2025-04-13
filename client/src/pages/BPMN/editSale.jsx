@@ -6,7 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-
+import '../../components/css/sidebar.css';
+import '../../index.css';
 
 export default function EditSale() {
   const { id } = useParams();

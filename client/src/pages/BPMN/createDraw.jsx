@@ -5,6 +5,9 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { CreateDrawSchema } from "../../lib/schemas";
 
+import '../../components/css/sidebar.css';
+import '../../index.css';
+
 export default function CreateDraw() {
   const fileInputRef = useRef(null);
 

@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { Undo2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +10,7 @@ import "../index.css";
 import SideBar from "../components/sideBar";
 import Footer from "../components/footer";
 import { NotificationList } from "../components/notificationCard";
+import { Helmet } from "react-helmet";
 
 export default function NotificationsPage() {
   const navigate = useNavigate();
@@ -23,13 +22,16 @@ export default function NotificationsPage() {
     const fetchNotifications = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://localhost:5000/api/notifications/user", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        const response = await fetch(
+          "http://localhost:5000/api/notifications/user",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Erro ao buscar notificações");
@@ -41,7 +43,9 @@ export default function NotificationsPage() {
         setError(null);
       } catch (error) {
         console.error(error);
-        setError("Não foi possível carregar as notificações. Tente novamente mais tarde.");
+        setError(
+          "Não foi possível carregar as notificações. Tente novamente mais tarde."
+        );
       } finally {
         setLoading(false);
       }
@@ -52,13 +56,16 @@ export default function NotificationsPage() {
 
   const handleMarkAsRead = async (notificationId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/notifications/read/${notificationId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        `http://localhost:5000/api/notifications/read/${notificationId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Erro ao marcar notificação como lida");
@@ -68,7 +75,9 @@ export default function NotificationsPage() {
         setNotificationsData({
           ...notificationsData,
           message: notificationsData.message.map((notification) =>
-            notification.id === notificationId ? { ...notification, read: true } : notification
+            notification.id === notificationId
+              ? { ...notification, read: true }
+              : notification
           ),
         });
       }
@@ -79,6 +88,9 @@ export default function NotificationsPage() {
 
   return (
     <div className="flex h-screen bg-bgp overflow-hidden">
+      <Helmet>
+        <title>Notificações</title>
+      </Helmet>
       <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
@@ -96,7 +108,8 @@ export default function NotificationsPage() {
           <h1 className="text-2xl font-medium text-txtp">Notificações</h1>
           {!loading && notificationsData && (
             <p className="text-sm text-gray-500 mt-1">
-              {notificationsData.message.filter((n) => !n.read).length} não lidas
+              {notificationsData.message.filter((n) => !n.read).length} não
+              lidas
             </p>
           )}
         </div>
@@ -112,7 +125,9 @@ export default function NotificationsPage() {
               <p className="text-red-500 text-center">{error}</p>
             ) : (
               <NotificationList
-                notifications={notificationsData ? notificationsData.message : []}
+                notifications={
+                  notificationsData ? notificationsData.message : []
+                }
                 onMarkAsRead={handleMarkAsRead}
               />
             )}

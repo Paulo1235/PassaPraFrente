@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import { loginSchema } from "../../lib/schemas";
 import { toast, ToastContainer } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
+import { Helmet } from "react-helmet";
 
 const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
@@ -61,6 +62,9 @@ export default function Login() {
 
   return (
     <div className="flex flex-col sm:flex-row justify-center items-center min-h-screen bg-bgp p-4 sm:p-8">
+      <Helmet>
+        <title>PassaPraFrente</title>
+      </Helmet>
       <ToastContainer />
       <div className="w-full max-w-4xl bg-bgs rounded-3xl shadow-xl overflow-hidden flex flex-col sm:flex-row p-4 sm:p-6">
         <div className="flex sm:hidden w-full bg-bgs flex-col items-center justify-center p-8">

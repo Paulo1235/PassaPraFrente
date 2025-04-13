@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const ProposalCard = ({ item }) => {
   const formatDate = (dateString) => {
@@ -7,6 +7,7 @@ const ProposalCard = ({ item }) => {
     return date.toLocaleDateString("pt-BR");
   };
 
+  useEffect(() => { console.log(item) }, []);
   // Convert status number to a readable string
   const getStatusText = (status) => {
     if (status === undefined) return "Pendente";

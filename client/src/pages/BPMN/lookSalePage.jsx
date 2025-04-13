@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { Undo2 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 //? Components
 import SideBar from "../../components/sideBar";
@@ -51,11 +52,36 @@ function LookSale() {
 
   if (!isAuthenticated) return null;
 
+  const createTransaction = async () => { 
+    try {
+      const response = await fetch(`http://localhost:5000/api/transactions-sales/create/${data.Venda_ID}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const result = await response.json();
+      console.log(result.message);
+      if(result.message == "Transação criada com sucesso.") {
+        toast.success("Transação criada com sucesso!");
+      }	
+      else
+      {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+      toast.error(error);
+    }
+  }
+
   return (
     <div className="flex flex-row h-screen overflow-y-auto">
       <Helmet>
         <title>Venda</title>
       </Helmet>
+      <ToastContainer />
       <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
       <div className="App w-full flex flex-col">
         <div className="modal-sale w-[90%] max-w-[1200px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
@@ -88,7 +114,7 @@ function LookSale() {
                 </span>
               </p>
               <div className="flex flex-col mb-4">
-                <p className="text-2xl">Descricao:</p>
+                <p className="text-2xl">Descrição:</p>
                 <span className="text-lg text-black">
                   {data.Descricao}
                 </span>
@@ -99,14 +125,14 @@ function LookSale() {
                   <span className="text-lg text-black">{data.Valor}€</span>
                 </div>
                 <div className="flex flex-col">
-                  <p className="text-2xl">Condicao:</p>
+                  <p className="text-2xl">Condição:</p>
                   <span className="text-lg text-black">{data.Condicao}</span>
                 </div>
               </div>
             </div>
             <div className="right flex flex-col gap-4 w-full md:w-1/3">
               <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center justify-center">
-                <span className="text-xl text-white">Comprar Agora</span>
+                <span className="text-xl text-white" onClick={createTransaction}>Comprar Agora</span>
               </button>
               <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center justify-center">
                 <span className="text-xl text-white" onClick={() => navigate(`/saleproposal/${data.Venda_ID}`)}>Fazer proposta</span>

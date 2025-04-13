@@ -8,7 +8,8 @@ import { fetchUserInfo } from "../../lib/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-
+import '../../components/css/sidebar.css';
+import '../../index.css';
 
 export default function CreateSale() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);

@@ -21,11 +21,15 @@
   --white: #FFFAEE;
 }
 
+body{
+  font-family: "Raleway", sans-serif;
+}
+
 .App {
   background-color: var(--background);
   /* height: 100vh; /*Ocupa 100% da altura da tela */
 
-  font-family: "Jua", sans-serif;
+  font-family: "Raleway", sans-serif;
 
   user-select: none;
 }

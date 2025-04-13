@@ -3,8 +3,8 @@ import { Menu, X, Home, User, ChevronDown, LogOut } from "lucide-react";
 // You can still use your logo image
 import logo from "../images/logoEmpresa.png"; // Replace with actual logo path
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { logout } from "../lib/authSlice"; // Import the action
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserInfo, logout } from "../lib/authSlice"; // Import the action
 
 const Sidebar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,24 +12,31 @@ const Sidebar = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
 
   const navigate = useNavigate();
 
   // Check if we're on mobile when component mounts and when window resizes
   useEffect(() => {
+    const fetchData = async () => {
+      await dispatch(fetchUserInfo());
+    };
+
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
       if (window.innerWidth >= 768) {
         setIsOpen(true);
       }
     };
-    // Set initial state
+
+    fetchData();
+    console.log(user)
     checkIfMobile();
-    // Add event listener for window resize
     window.addEventListener("resize", checkIfMobile);
-    // Clean up
     return () => window.removeEventListener("resize", checkIfMobile);
-  }, []);
+
+
+  }, [dispatch]);
 
   // Handle clicks outside of dropdown to close it
   useEffect(() => {
@@ -149,6 +156,16 @@ const Sidebar = (props) => {
               <a href="/account">Conta</a>
             </button>
           )}
+
+          {user?.message?.TipoUtilizador == "admin" && (
+            <button
+              type="button"
+              className="text-[#ADADAD] bg-[#FFFAEE] hover:bg-[#D4CFC3]/90 focus:ring-4 focus:outline-none focus:ring-[#FFFAEE]/50 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
+            >
+              <User className="w-6 h-6 mr-3 text-[#ADADAD]" />
+              <a href="/indexadmin">Admin</a>
+            </button>
+          )}
         </nav>
 
         {props.canAdd && (
@@ -198,7 +215,9 @@ const Sidebar = (props) => {
             className="logout flex flex-row items-center cursor-pointer text-red-600 mb-8"
           >
             <LogOut />
-            <span className="ml-2  text-sm md:text-base text-red-600">Logout</span>
+            <span className="ml-2  text-sm md:text-base text-red-600">
+              Logout
+            </span>
           </div>
         )}
       </aside>

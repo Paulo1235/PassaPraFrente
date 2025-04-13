@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import Sidebar from "../components/sideBar";
 import { Undo2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -8,12 +7,18 @@ import { ToastContainer, toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { EditAccountSchema } from "../lib/schemas";
+import { Helmet } from "react-helmet";
+
+import "../components/css/sidebar.css";
+import "../index.css";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 const EditAccountPage = () => {
   const [userData, setUserData] = useState(null);
-  const [profileImage, setProfileImage] = useState("/placeholder.svg?height=120&width=120");
+  const [profileImage, setProfileImage] = useState(
+    "/placeholder.svg?height=120&width=120"
+  );
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -106,14 +111,17 @@ const EditAccountPage = () => {
       // Upload da imagem (se alterada)
       if (values.imageUrl && values.imageUrl !== userData?.Url) {
         try {
-          const response = await fetch("http://localhost:5000/api/users/update-avatar", {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({ thumbnail: values.imageUrl }),
-          });
+          const response = await fetch(
+            "http://localhost:5000/api/users/update-avatar",
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify({ thumbnail: values.imageUrl }),
+            }
+          );
 
           if (!response.ok) throw new Error("Erro ao atualizar a imagem.");
 
@@ -139,11 +147,17 @@ const EditAccountPage = () => {
 
   return (
     <div className="flex h-screen bg-bgp">
+      <Helmet>
+        <title>Editar Conta</title>
+      </Helmet>
       <Sidebar canAdd={true} Home={true} Account={true} LogOut={false} />
       <div className="flex-1 p-10">
         <div className="flex justify-between items-center mb-12">
           <h1 className="text-2xl font-medium text-txtp mb-6">Editar Conta</h1>
-          <button className="flex items-center text-txts" onClick={() => navigate("/account")}>
+          <button
+            className="flex items-center text-txts"
+            onClick={() => navigate("/account")}
+          >
             <Undo2 />
             <span>Voltar</span>
           </button>
@@ -159,8 +173,17 @@ const EditAccountPage = () => {
                   alt="Foto de perfil"
                 />
               </div>
-              <input type="file" accept="image/*" className="hidden" id="profileImageInput" onChange={imageHandler} />
-              <label htmlFor="profileImageInput" className="mt-2 text-sm text-txts text-center block cursor-pointer">
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                id="profileImageInput"
+                onChange={imageHandler}
+              />
+              <label
+                htmlFor="profileImageInput"
+                className="mt-2 text-sm text-txts text-center block cursor-pointer"
+              >
                 Alterar Foto Perfil
               </label>
             </div>
@@ -168,7 +191,10 @@ const EditAccountPage = () => {
 
           <form onSubmit={formik.handleSubmit} className="space-y-4">
             <div className="space-y-1">
-              <label htmlFor="name" className="block text-sm font-medium text-txtp">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-txtp"
+              >
                 Nome
               </label>
               <input
@@ -187,7 +213,10 @@ const EditAccountPage = () => {
             </div>
 
             <div className="space-y-1">
-              <label htmlFor="phone" className="block text-sm font-medium text-txtp">
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium text-txtp"
+              >
                 Telefone
               </label>
               <input
@@ -214,7 +243,10 @@ const EditAccountPage = () => {
                 Alterar Password
               </button>
 
-              <button type="submit" className="w-1/2 px-6 py-2 text-xl text-white bg-btnp rounded-md transition-colors">
+              <button
+                type="submit"
+                className="w-1/2 px-6 py-2 text-xl text-white bg-btnp rounded-md transition-colors"
+              >
                 Guardar
               </button>
             </div>

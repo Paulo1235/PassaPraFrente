@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchUserInfo } from "../lib/authSlice"; // Import the action 
 
-
 //? CSS
 import "../components/css/sidebar.css";
 import "../index.css";

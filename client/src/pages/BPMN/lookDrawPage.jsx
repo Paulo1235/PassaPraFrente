@@ -4,6 +4,7 @@ import { Undo2 } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
 
 //? Components
 import SideBar from '../../components/sideBar';
@@ -55,11 +56,33 @@ function LookDraw(props) {
 
   if (!isAuthenticated) return null;
 
+  const enterGiveaway = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/entry-giveaway/create/${data.Sorteio_ID}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const result = await response.json(); // <- trocado de `data` para `result`
+      console.log(result.message);
+      if(result.message == "Inscrição criada com sucesso.")
+        toast.success("Entrou no sorteio com sucesso!")
+      else
+        toast.error(result.message)
+    } catch (error) {
+      console.error("Error entering giveaway:", error);
+    }
+  }
+  
+
   return (
     <div className="flex flex-row h-screen overflow-y-auto">
       <Helmet>
         <title>Sorteio</title>
       </Helmet>
+      <ToastContainer />
       <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
       <div className="App w-full flex flex-col">
         <div className="modal-sale w-[90%] max-w-[1200px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
@@ -92,14 +115,14 @@ function LookDraw(props) {
                 </span>
               </p>
               <div className="flex flex-col mb-4">
-                <p className="text-2xl">Descricao:</p>
+                <p className="text-2xl">Descrição:</p>
                 <span className="text-lg text-black">
                   {data.Descricao}
                 </span>
               </div>
               <div className="flex flex-wrap gap-10 mb-4">
                 <div className="flex flex-col">
-                  <p className="text-2xl">Condicao:</p>
+                  <p className="text-2xl">Condição:</p>
                   <span className="text-lg text-black">{data.Condicao}</span>
                 </div>
               </div>
@@ -116,7 +139,7 @@ function LookDraw(props) {
             </div>
             <div className="right flex flex-col gap-4 w-full md:w-1/3">
               <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center justify-center">
-                <span className="text-xl text-white">Entrar no Sorteio</span>
+                <span className="text-xl text-white" onClick={enterGiveaway}>Entrar no Sorteio</span>
               </button>
               <button className="border border-txtp rounded-lg px-4 py-2 flex items-center justify-center">
                 <span className="text-xl text-txtp">{data.Contacto}</span>

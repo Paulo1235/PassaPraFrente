@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { fetchUserInfo } from "../../lib/authSlice";
 import { Undo2 } from "lucide-react";
 
+import '../../components/css/sidebar.css';
+import '../../index.css';
+
 const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
@@ -35,7 +38,7 @@ export default function PasswordReset() {
       setIsLoading(true);
 
       try {
-        const response = await fetch(`${BACKEND_URL}/api/auth/activate-user`, {
+        const response = await fetch(`http://localhost:5000/api/auth/activate-user`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

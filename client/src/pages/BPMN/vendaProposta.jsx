@@ -12,6 +12,7 @@ import { CreateProposalSaleSchema } from "../../lib/schemas";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { Helmet } from "react-helmet";
 
 export default function VendaProposta() {
   const { id } = useParams();
@@ -38,11 +39,9 @@ export default function VendaProposta() {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         setData(data.message);
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     };
 
     fetchData();
@@ -71,20 +70,17 @@ export default function VendaProposta() {
       );
       const data = await response.json();
       console.log(data.message);
-      if(data.message === "Proposta criada com sucesso."){
+      if (data.message === "Proposta criada com sucesso.") {
         toast.success("Proposta enviada com sucesso!");
         setTimeout(() => {
           navigate("/index");
         }, 5000); // Redireciona após 2 segundos
-      }
-      else
-      {
+      } else {
         toast.error(data.message);
         setTimeout(() => {
           navigate("/index");
         }, 5000); // Redireciona após 2 segundos
       }
-
     } catch (error) {
       console.error("Error submitting proposal:", error);
     } finally {
@@ -107,6 +103,9 @@ export default function VendaProposta() {
 
   return (
     <div className="min-h-screen bg-[#E0E5B6] py-8 px-4 font-sans">
+      <Helmet>
+        <title>Proposta de Venda</title>
+      </Helmet>
       <ToastContainer />
       <div className="max-w-4xl mx-auto">
         {/* Header sem fundo branco */}

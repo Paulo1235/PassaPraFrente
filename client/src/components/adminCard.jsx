@@ -5,10 +5,10 @@ import { Trash2, Check } from "lucide-react";
 
 const AdminCard = (props) => {
   const accept = async (id, values) => {
-    toast("Aceite!");
+    toast.success("Aceite!");
     console.log("ACCEPT CALLED", { id, values });
     console.log("ACCEPT -> tipoAnuncio:", values.tipoAnuncio);
-    if (values.tipoAnuncio === "Emprestimo") {
+    if (values.tipoAnuncio === "Empréstimo") {
       return await fetch(
         `http://localhost:5000/api/loans/update-status/${id}`,
         {
@@ -56,7 +56,7 @@ const AdminCard = (props) => {
   };
 
   const deny = async (id, values) => {
-    toast("Recusado!");
+    toast.error("Recusado!");
     console.log("DENY CALLED", { id, values });
     console.log("DENY -> tipoAnuncio:", values.tipoAnuncio);
     if (values.tipoAnuncio === "Emprestimo") {
@@ -92,7 +92,7 @@ const AdminCard = (props) => {
     }
     if (values.tipoAnuncio === "Sorteio") {
       return await fetch(
-        `http://localhost:5000/api/sales/update-status/${id}`,
+        `http://localhost:5000/api/giveaways/update-status/${id}`,
         {
           method: "PATCH",
           headers: {

@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { CreateLoanSchema } from "../../lib/schemas";
 
+import '../../components/css/sidebar.css';
+import '../../index.css';
+
 export default function CreateLoan() {
   const fileInputRef = useRef(null);
 

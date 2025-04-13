@@ -90,7 +90,7 @@ function LookLoan() {
                 </span>
               </p>
               <div className="flex flex-col mb-4">
-                <p className="text-2xl">Descricao:</p>
+                <p className="text-2xl">Descrição:</p>
                 <span className="text-lg text-black">
                   {data.Descricao}
                 </span>
@@ -101,7 +101,7 @@ function LookLoan() {
                   <span className="text-lg text-black">{data.Valor}€</span>
                 </div>
                 <div className="flex flex-col">
-                  <p className="text-2xl">Condicao:</p>
+                  <p className="text-2xl">Condição:</p>
                   <span className="text-lg text-black">{data.Condicao}</span>
                 </div>
               </div>

@@ -23,29 +23,38 @@ const Main = () => {
   useEffect(() => {
     const fetchShopData = async () => {
       try {
-        const responseSales = await fetch("http://localhost:5000/api/sales/available", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        const responseSales = await fetch(
+          "http://localhost:5000/api/sales/available",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
-        const responseLoans = await fetch("http://localhost:5000/api/loans/available", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        const responseLoans = await fetch(
+          "http://localhost:5000/api/loans/available",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
-        const responseGiveaways = await fetch("http://localhost:5000/api/giveaways/available", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        const responseGiveaways = await fetch(
+          "http://localhost:5000/api/giveaways/available",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
         if (!responseSales.ok || !responseGiveaways.ok || !responseLoans.ok) {
           throw new Error("Failed to fetch shop data");
@@ -101,7 +110,11 @@ const Main = () => {
   if (!isAuthenticated) return null;
 
   if (loading) {
-    return <div>Dados estão a ser carregados...</div>; // Exibe a mensagem de carregamento
+    return (
+      <div className="flex bg-bgp h-screen justify-center items-center h-40">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7b892f]"></div>
+      </div>
+    ); // Exibe a mensagem de carregamento
   }
 
   return (

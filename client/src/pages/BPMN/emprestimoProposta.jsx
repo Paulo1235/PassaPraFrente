@@ -13,6 +13,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
+import "../../components/css/sidebar.css";
+import "../../index.css";
+import { Helmet } from "react-helmet";
+
 const CreateProposalSaleSchema = Yup.object().shape({
   price: Yup.number()
     .optional("O preço é obrigatório")
@@ -90,21 +94,19 @@ export default function EmprestimoProposta() {
       const data = await response.json();
       console.log(data.message);
 
-      console.log(values)
-      
+      console.log(values);
+
       if (data.message === "Proposta de empréstimo criada com sucesso.") {
         toast.success("Proposta enviada com sucesso!");
         setTimeout(() => {
           navigate("/index");
         }, 5000); // Redireciona após 2 segundos
-      }else
-      {
+      } else {
         toast.error(data.message);
         setTimeout(() => {
           navigate("/index");
         }, 5000); // Redireciona após 2 segundos
       }
-
     } catch (error) {
       console.error("Error submitting proposal:", error);
     } finally {
@@ -129,13 +131,16 @@ export default function EmprestimoProposta() {
 
   if (isLoading)
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#FFF8E8]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#CAAD7E]"></div>
+      <div className="flex bg-bgp h-screen justify-center items-center h-40">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7b892f]"></div>
       </div>
     );
 
   return (
     <div className="min-h-screen bg-[#E0E5B6] py-8 px-4 font-sans">
+      <Helmet>
+        <title>Proposta de Emprestimo</title>
+      </Helmet>
       <ToastContainer />
       <div className="max-w-4xl mx-auto">
         {/* Header sem quadrado branco */}
