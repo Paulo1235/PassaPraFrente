@@ -47,5 +47,13 @@
     "userId": 5,
     "read": false,
     "date": "2025-04-13T17:50:53.574Z"
+  },
+  {
+    "id": "b10d56a3-434a-4867-8510-514bed29fdc2",
+    "message": "Avalie o vendedor da venda: Porque não daaaaaa",
+    "userId": 6,
+    "link": "http://localhost:3000/review/user/sale/36",
+    "read": false,
+    "date": "2025-04-13T20:25:08.121Z"
   }
 ]

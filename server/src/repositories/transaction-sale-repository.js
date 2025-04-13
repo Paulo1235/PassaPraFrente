@@ -13,10 +13,11 @@ class TransactionSaleRepository {
       .input('saleId', sql.Int, id)
       .query(`
         INSERT INTO TransacaoVenda (ValorFinal, Nota, PropostaVendaUtilizador_ID, PropostaVendaVenda_ID)
+        OUTPUT Inserted.TransacaoVenda_ID
         VALUES (@valorFinal, 0, @userId, @saleId)
     `)
 
-    return transaction.rowsAffected[0] > 0
+    return transaction.recordset[0]
   }
 
   static async getAllSaleTransactions () {

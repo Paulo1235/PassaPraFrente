@@ -15,10 +15,11 @@ class TransactionLoanRepository {
       .input('finalEndDate', sql.DateTime, finalEndDate)
       .query(`
         INSERT INTO TransacaoEmprestimo (ValorFinal, DataInicioFinal, DataFimFinal, Nota, PropostaEmprestimoUtilizador_ID, PropostaEmprestimoEmprestimo_ID)
+        OUTPUT Inserted.TransacaoEmprestimo_ID
         VALUES (@valorFinal, @finalNewDate, @finalEndDate, 0, @userId, @loanId)
     `)
 
-    return transaction.rowsAffected[0] > 0
+    return transaction.recordset[0]
   }
 
   static async getAllLoanTransactions () {

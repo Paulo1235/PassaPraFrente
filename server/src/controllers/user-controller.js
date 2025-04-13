@@ -186,7 +186,6 @@ class UserController {
       }
 
       const userAvatar = await UserRepository.getUserAvatar(id)
-      console.log(userAvatar)
 
       if (userAvatar?.PublicID) {
         await cloudinary.v2.uploader.destroy(userAvatar.PublicID)
@@ -196,8 +195,6 @@ class UserController {
         folder: 'users',
         width: 150
       })
-
-      console.log(uploadedImage)
 
       const { public_id, secure_url } = uploadedImage
 

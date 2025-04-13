@@ -74,6 +74,7 @@ class ItemRepository {
 
   static async uploadItemPhoto (id, publicId, url) {
     const pool = await getConnection()
+
     const item = await pool
       .request()
       .input('id', sql.Int, id)

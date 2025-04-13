@@ -36,3 +36,5 @@ export const CLOUDINARY_API_KEY = config.get('CLOUDINARY.API_KEY')
 export const CLOUDINARY_API_SECRET = config.get('CLOUDINARY.API_SECRET')
 
 export const NOTIFICATION_EXPIRE_DAYS = config.get('NOTIFICATION.EXPIRE_DAYS')
+
+export const FRONTEND_URL = config.get('FRONTEND.URL')

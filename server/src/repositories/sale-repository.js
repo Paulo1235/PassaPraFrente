@@ -26,8 +26,6 @@ class SaleRepository {
   static async getSaleById (id) {
     const pool = await getConnection(dbConfig)
 
-    console.log(typeof id)
-
     const sale = await pool.request()
       .input('id', sql.Int, id)
       .query(`

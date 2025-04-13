@@ -7,6 +7,7 @@ import SaleRepository from '../repositories/sale-repository.js'
 import { PROPOSAL_SALE_STATES, SALE_STATES } from '../constants/status-constants.js'
 import ProposalSaleRepository from '../repositories/proposal-sale-repository.js'
 import NotificationController from './notification-controller.js'
+import { FRONTEND_URL } from '../../config.js'
 
 class TransactionSaleController {
   static async createDirectTransactionSale (req, res) {
@@ -57,7 +58,8 @@ class TransactionSaleController {
 
         const notificationData = {
           message: `Avalie o vendedor da venda: ${sale.Titulo}`,
-          userId
+          userId,
+          link: `${FRONTEND_URL}/review/user/sale/${transaction.TransacaoVenda_ID}`
         }
 
         NotificationController.createNotification(notificationData)
