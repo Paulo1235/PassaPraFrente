@@ -24,7 +24,7 @@ transactionSaleRouter.get(
 )
 
 transactionSaleRouter.get(
-  '/transaction-sales/:id',
+  '/transaction-sales/:id/user/:userId',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,

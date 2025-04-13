@@ -53,7 +53,7 @@ class ProposalSaleRepository {
   static async updateProposalSaleStatus (userId, saleId, status) {
     const pool = await getConnection()
 
-    const updatedProposal = pool.request()
+    const updatedProposal = await pool.request()
       .input('vendaId', sql.Int, saleId)
       .input('userId', sql.Int, userId)
       .input('status', sql.TinyInt, status)
@@ -63,7 +63,7 @@ class ProposalSaleRepository {
         WHERE Venda_ID = @vendaId AND Utilizador_ID = @userId
       `)
 
-    return updatedProposal.recordset[0]
+    return updatedProposal.rowsAffected[0] > 0
   }
 
   static async getSaleProposalsByUser (userId) {

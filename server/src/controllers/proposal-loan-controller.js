@@ -81,20 +81,34 @@ class ProposalLoanController {
         throw new HttpException('Não foi possível encontrar o empréstimo.', StatusCodes.NOT_FOUND)
       }
 
+      const proposal = await ProposalLoanRepository.getLoanProposalById(userId, id)
+
+      if (!proposal) {
+        throw new HttpException('Não foi possível encontrar a proposta', StatusCodes.NOT_FOUND)
+      }
+
+      if (proposal.Aceite === PROPOSAL_LOAN_STATES.ACEITE) {
+        throw new HttpException('Esta proposta já foi aceite.', StatusCodes.BAD_REQUEST)
+      }
+
       await ProposalLoanRepository.updateProposalLoanStatus(userId, id, status)
 
       const notificationData = {
-        message: `A sua proposta para ${loan.Titulo} foi ${status === 1 ? 'aceite' : 'recusada'}`,
+        message: `A sua proposta para ${loan.Titulo} foi ${parseInt(status) === PROPOSAL_LOAN_STATES.ACEITE ? 'aceite' : 'recusada'}`,
         userId
       }
 
       NotificationController.createNotification(notificationData)
 
       // Se a proposta for aceite, cria diretamente a transação
-      if (status === PROPOSAL_LOAN_STATES.ACEITE) {
-        const proposal = await ProposalLoanRepository.getLoanProposalById(userId, id)
+      if (parseInt(status) === PROPOSAL_LOAN_STATES.ACEITE) {
+        const createdTransaction = await TransactionLoanController.createTransactionLoan(proposal.NovoValor, userId, id, proposal.NovaDataInicio, proposal.NovaDataFim)
 
-        await TransactionLoanController.createTransactionLoan(proposal.Valor, userId, id, proposal.DataInicio, proposal.DataFim)
+        if (createdTransaction) {
+          return response(res, true, StatusCodes.CREATED, 'Transação criada com sucesso.')
+        }
+
+        return response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao criar a transação ao aceitar a proposta.')
       }
 
       return response(res, true, StatusCodes.OK, 'Estado da proposta atualizado.')

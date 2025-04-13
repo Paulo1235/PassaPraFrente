@@ -142,12 +142,12 @@ class LoanRepository {
 
   }
 
-  static async updateLoanStatus (loanId, stateId) {
+  static async updateLoanStatus (id, stateId) {
     const pool = await getConnection()
 
     const updatedLoan = await pool
       .request()
-      .input('loanId', sql.Int, loanId)
+      .input('loanId', sql.Int, id)
       .input('stateId', sql.Int, stateId)
       .query(`
         UPDATE Emprestimo

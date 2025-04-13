@@ -141,8 +141,6 @@ class SaleRepository {
   static async updateSaleStatus (id, stateId) {
     const pool = await getConnection()
 
-    console.log(id, stateId)
-
     const updatedSale = await pool
       .request()
       .input('saleId', sql.Int, id)

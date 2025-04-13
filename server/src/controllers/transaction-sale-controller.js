@@ -40,7 +40,7 @@ class TransactionSaleController {
     }
   }
 
-  static async createTransactionSale (finalValue, userId, id) {
+  static async createTransactionSale (finalValue, userId, id, res) {
     try {
       const existsTransaction = await TransactionSaleRepository.getSaleTransactionById(id, userId)
 
@@ -65,7 +65,7 @@ class TransactionSaleController {
 
       return transaction
     } catch (error) {
-      throw new HttpException('Ocorreu um erro ao criar a transação.', StatusCodes.INTERNAL_SERVER_ERROR)
+      throw new HttpException('Erro ao criar a transação', StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
 
@@ -80,10 +80,14 @@ class TransactionSaleController {
   }
 
   static async getSaleTransactionById (req, res) {
-    const { id } = req.params
+    const { id, userId } = req.params
 
     try {
-      const transaction = await TransactionSaleRepository.getSaleTransactionById(id)
+      const transaction = await TransactionSaleRepository.getSaleTransactionById(id, userId)
+
+      if (!transaction) {
+        throw new HttpException('Transação não encontrada!', StatusCodes.NOT_FOUND)
+      }
 
       return response(res, true, StatusCodes.OK, transaction)
     } catch (error) {

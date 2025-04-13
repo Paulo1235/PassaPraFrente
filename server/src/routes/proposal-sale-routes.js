@@ -17,8 +17,8 @@ proposalSaleRouter.get(
   ProposalSaleController.getSaleProposalById
 )
 
-proposalSaleRouter.patch(
-  'proposal-sales/:id/user/:userId',
+proposalSaleRouter.post(
+  '/proposal-sales/:id/user/:userId',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,

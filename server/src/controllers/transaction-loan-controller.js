@@ -30,8 +30,6 @@ class TransactionLoanController {
 
       const proposal = await ProposalLoanRepository.createProposalLoan(userId, id, loan.Valor, loan.DataInicio, loan.DataFim, PROPOSAL_LOAN_STATES.ACEITE)
 
-      console.log(proposal)
-
       if (proposal) {
         await TransactionLoanController.createTransactionLoan(loan.Valor, userId, id, loan.DataInicio, loan.DataFim)
       }
