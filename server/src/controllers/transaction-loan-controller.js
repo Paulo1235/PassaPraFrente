@@ -24,6 +24,10 @@ class TransactionLoanController {
         throw new HttpException('Não pode pedir o seu próprio empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
+      if (loan.Estado === 'Concluído') {
+        throw new HttpException('Já não pode criar uma transação neste empréstimo.', StatusCodes.BAD_REQUEST)
+      }
+
       const proposal = await ProposalLoanRepository.createProposalLoan(userId, id, loan.Valor, loan.DataInicio, loan.DataFim)
 
       if (proposal) {

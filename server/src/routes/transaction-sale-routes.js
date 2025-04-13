@@ -6,6 +6,14 @@ import AuthController from '../controllers/auth-controller.js'
 
 const transactionSaleRouter = express.Router()
 
+transactionSaleRouter.post(
+  '/transactions-sales/create',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  TransactionSaleController.createDirectTransactionSale
+)
+
 transactionSaleRouter.get(
   '/transaction-sales',
   AuthController.refreshAccessToken,

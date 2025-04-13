@@ -24,6 +24,10 @@ class TransactionSaleController {
         throw new HttpException('Não pode comprar a sua própria venda.', StatusCodes.BAD_REQUEST)
       }
 
+      if (sale.Estado === 'Concluído') {
+        throw new HttpException('Já não pode criar uma transação nesta venda.', StatusCodes.BAD_REQUEST)
+      }
+
       const proposal = await ProposalSaleRepository.createProposalSale(sale.Valor, userId, id)
 
       if (proposal) {
