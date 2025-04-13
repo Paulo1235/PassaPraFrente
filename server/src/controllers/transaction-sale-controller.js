@@ -5,8 +5,36 @@ import response from '../utils/response.js'
 import TransactionSaleRepository from '../repositories/transaction-sale-repository.js'
 import SaleRepository from '../repositories/sale-repository.js'
 import { SALE_STATES } from '../constants/status-constants.js'
+import ProposalSaleRepository from '../repositories/proposal-sale-repository.js'
 
 class TransactionSaleController {
+  static async createDirectTransactionSale (req, res) {
+    const userId = req.user.Utilizador_ID
+    const id = req.params
+
+    try {
+      const sale = await SaleRepository.getSaleById(id)
+
+      if (!sale) {
+        throw new HttpException('A venda não existe.', StatusCodes.NOT_FOUND)
+      }
+
+      if (sale.Utilizador_ID === userId) {
+        throw new HttpException('Não pode comprar a sua própria venda.', StatusCodes.BAD_REQUEST)
+      }
+
+      const proposal = await ProposalSaleRepository.createProposalSale(sale.Valor, userId, id)
+
+      if (proposal) {
+        await TransactionSaleController.createTransactionSale(sale.Valor, userId, id)
+      }
+
+      return response(res, true, StatusCodes.CREATED, 'Transação criada com sucesso.')
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao criar a transação')
+    }
+  }
+
   static async createTransactionSale (finalValue, userId, id) {
     try {
       const transaction = await TransactionSaleRepository.createTransactionSale(finalValue, userId, id)

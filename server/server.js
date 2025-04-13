@@ -23,6 +23,7 @@ import saleRouter from './src/routes/sale-routes.js'
 import proposalSaleRouter from './src/routes/proposal-sale-routes.js'
 import proposalLoanRouter from './src/routes/proposal-loan-routes.js'
 import transactionSaleRouter from './src/routes/transaction-sale-routes.js'
+import transactionLoanRouter from './src/routes/transaction-loan-routes.js'
 import loanRouter from './src/routes/loan-routes.js'
 import giveawayRouter from './src/routes/giveaway-routes.js'
 import entryGiveawayRouter from './src/routes/entry-giveaway-routes.js'
@@ -65,7 +66,8 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }))
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
 
-app.use('/api',
+app.use(
+  '/api',
   userRouter,
   authRouter,
   proposalSaleRouter,
@@ -76,7 +78,8 @@ app.use('/api',
   notificationRouter,
   entryGiveawayRouter,
   winnerGiveawayRouter,
-  proposalLoanRouter
+  proposalLoanRouter,
+  transactionLoanRouter
 )
 
 app.get('/', (req, res) => {

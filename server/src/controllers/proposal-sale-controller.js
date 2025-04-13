@@ -10,7 +10,8 @@ import { PROPOSAL_SALE_STATES, SALE_STATES } from '../constants/status-constants
 
 class ProposalSaleController {
   static async createProposalSale (req, res) {
-    const newValue = req.body.price ?? 0
+    const newValue = req.body.price
+
     const userId = req.user.Utilizador_ID
     const { id } = req.params
 
@@ -28,13 +29,6 @@ class ProposalSaleController {
 
       if (sale.Utilizador_ID === userId) {
         throw new HttpException('Não é possível fazer uma proposta para a sua própria venda.', StatusCodes.BAD_REQUEST)
-      }
-
-      // Se não houve proposta e foi logo compra direta
-      if (newValue === 0) {
-        await TransactionSaleController.createTransactionSale(sale.Valor, userId, id)
-
-        return response(res, true, StatusCodes.CREATED, 'Artigo comprado com sucesso.')
       }
 
       const proposal = await ProposalSaleRepository.getSaleProposalById(userId, id)

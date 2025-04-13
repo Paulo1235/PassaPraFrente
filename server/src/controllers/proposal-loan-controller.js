@@ -5,22 +5,22 @@ import response from '../utils/response.js'
 import ProposalLoanRepository from '../repositories/proposal-loan-repository.js'
 import LoanRepository from '../repositories/loan-repository.js'
 import NotificationRepository from '../repositories/notification-repository.js'
+import { PROPOSAL_LOAN_STATES } from '../constants/status-constants.js'
+import TransactionLoanController from './transaction-loan-controller.js'
 
 class ProposalLoanController {
   static async createProposalLoan (req, res) {
     const data = req.body
-    const newValue = data.price ?? 0
-    console.log(data)
+
     const userId = req.user.Utilizador_ID
     const { id } = req.params
 
     try {
       const loan = await LoanRepository.getLoanById(id)
 
+      const newValue = data.price ?? loan.Valor
       const newStartDate = data.newStartDate ?? loan.DataInicio
       const newEndDate = data.newEndDate ?? loan.DataFim
-
-      console.log(newStartDate, newEndDate)
 
       if (loan.Estado === 'Concluído' || loan.Estado === 'Cancelado' || loan.Estado === 'Em progresso') {
         throw new HttpException('Não é possível fazer uma proposta para este empréstimo.', StatusCodes.BAD_REQUEST)
@@ -81,6 +81,8 @@ class ProposalLoanController {
         throw new HttpException('Não foi possível encontrar o empréstimo.', StatusCodes.NOT_FOUND)
       }
 
+      await ProposalLoanRepository.updateProposalLoanStatus(userId, id, status)
+
       const notificationData = {
         message: `A sua proposta para ${loan.Titulo} foi ${status === 1 ? 'aceite' : 'recusada'}`,
         userId
@@ -88,7 +90,12 @@ class ProposalLoanController {
 
       NotificationRepository.createNotification(notificationData)
 
-      await ProposalLoanRepository.updateProposalLoanStatus(userId, id, status)
+      // Se a proposta for aceite, cria diretamente a transação
+      if (status === PROPOSAL_LOAN_STATES.ACEITE) {
+        const proposal = await ProposalLoanRepository.getLoanProposalById(userId, id)
+
+        await TransactionLoanController.createTransactionLoan(proposal.Valor, userId, id, proposal.DataInicio, proposal.DataFim)
+      }
 
       return response(res, true, StatusCodes.OK, 'Estado da proposta atualizado.')
     } catch (error) {
