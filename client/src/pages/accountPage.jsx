@@ -1,87 +1,94 @@
-import { Helmet } from "react-helmet";
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { fetchUserInfo } from "../lib/authSlice"; // Import the action 
+"use client"
+
+import { Helmet } from "react-helmet"
+import { useState, useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import { fetchUserInfo } from "../lib/authSlice" // Import the action
 
 //? CSS
-import "../components/css/sidebar.css";
-import "../index.css";
+import "../components/css/sidebar.css"
+import "../index.css"
 
 //? Components
-import SideBar from "../components/sideBar";
-import Footer from "../components/footer";
-import Review from "../components/review";
-import ContentAccount from "../components/contentAccount";
+import SideBar from "../components/sideBar"
+import Footer from "../components/footer"
+import Review from "../components/review"
+import ContentAccount from "../components/contentAccount"
 
 //? Icons
-import ProfilePicture from "../images/default-avatar.jpg";
-import Star1 from "../images/star1.svg";
-import Star2 from "../images/star2.svg";
-import EditIco from "../images/edit-account.svg";
-import ProposalsIco from "../images/proposals.svg";
-import { Bell } from "lucide-react";
+import ProfilePicture from "../images/default-avatar.jpg"
+import Star1 from "../images/star1.svg"
+import Star2 from "../images/star2.svg"
+import EditIco from "../images/edit-account.svg"
+import ProposalsIco from "../images/proposals.svg"
+import { Bell } from "lucide-react"
 
 const Account = () => {
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const [userData, setUserData] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userData, setUserData] = useState(null)
+  const [rating, setRating] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
+    setIsModalOpen(!isModalOpen)
+  }
 
   useEffect(() => {
     const fetchShopData = async () => {
       try {
-        const responseSales = await fetch(
-          "http://localhost:5000/api/sales/user",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
+        const responseSales = await fetch("http://localhost:5000/api/sales/user", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
 
-        const responseLoans = await fetch(
-          "http://localhost:5000/api/loans/user",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
+        const responseLoans = await fetch("http://localhost:5000/api/loans/user", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
 
-        const responseGiveaways = await fetch(
-          "http://localhost:5000/api/giveaways/user",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
+        const responseGiveaways = await fetch("http://localhost:5000/api/giveaways/user", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
+
+        const responseRating = await fetch("http://localhost:5000/api/users/my-reviews", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
 
         if (!responseSales.ok || !responseGiveaways.ok || !responseLoans.ok) {
-          throw new Error("Failed to fetch shop data");
+          throw new Error("Failed to fetch shop data")
         }
 
-        const dataSales = await responseSales.json();
-        const dataLoans = await responseLoans.json();
-        const dataGiveaways = await responseGiveaways.json();
+        const dataSales = await responseSales.json()
+        const dataLoans = await responseLoans.json()
+        const dataGiveaways = await responseGiveaways.json()
+        const dataRating = await responseRating.json()
 
-        console.log(dataSales);
-        console.log(dataLoans);
-        console.log(dataGiveaways);
-        
+        console.log(dataRating)
+        console.log(dataSales)
+        console.log(dataLoans)
+        console.log(dataGiveaways)
+
+        // Set the rating value from backend
+        setRating(dataRating.message || 0)
+
         const transformItems = (items, category) => {
           return items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
@@ -91,8 +98,8 @@ const Account = () => {
             idEmprestimo: item.Emprestimo_ID || "ID",
             idSorteio: item.Sorteio_ID || "ID",
             category,
-          }));
-        };
+          }))
+        }
 
         const userData = {
           sales: {
@@ -107,27 +114,57 @@ const Account = () => {
             title: "Sorteios",
             items: transformItems(dataGiveaways, "Sorteios"),
           },
-        };
+        }
 
-        console.log(userData);
-        setUserData(userData);
-
+        console.log(userData)
+        setUserData(userData)
       } catch (error) {
-        console.error("Error fetching shop data:", error);
+        console.error("Error fetching shop data:", error)
       }
-    };
-
-    fetchShopData();
-
-    if (!isAuthenticated) {
-      navigate("/");
-      return;
     }
 
-    dispatch(fetchUserInfo());
-  }, [isAuthenticated, dispatch, navigate]);
+    fetchShopData()
 
-  if (!isAuthenticated) return null;
+    if (!isAuthenticated) {
+      navigate("/")
+      return
+    }
+
+    dispatch(fetchUserInfo())
+  }, [isAuthenticated, dispatch, navigate])
+
+  // Function to render stars based on rating
+  const renderStars = () => {
+    const stars = []
+
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        // Filled star
+        stars.push(
+          <img
+            key={i}
+            src={Star1 || "/placeholder.svg"}
+            className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-[29px] xl:h-[29px]"
+            alt="Filled star"
+          />,
+        )
+      } else {
+        // Empty star
+        stars.push(
+          <img
+            key={i}
+            src={Star2 || "/placeholder.svg"}
+            className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-[29px] xl:h-[29px]"
+            alt="Empty star"
+          />,
+        )
+      }
+    }
+
+    return stars
+  }
+
+  if (!isAuthenticated) return null
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
@@ -148,54 +185,21 @@ const Account = () => {
                 alt="account-logo"
               />
               <div className="info mt-4 md:mt-0 md:ml-4 lg:ml-10 flex flex-col justify-center text-center md:text-left">
-                <p className="text-xl md:text-2xl lg:text-3xl text-[#73802A]">
-                  {user?.message.Nome}
-                </p>
-                <p className="md:ml-2 lg:ml-5 text-sm md:text-base">
-                  {user?.message.Email}
-                </p>
+                <p className="text-xl md:text-2xl lg:text-3xl text-[#73802A]">{user?.message.Nome}</p>
+                <p className="md:ml-2 lg:ml-5 text-sm md:text-base">{user?.message.Email}</p>
               </div>
 
               <div className="rating mt-4 md:mt-0 md:ml-6 lg:ml-20 xl:ml-60 flex flex-col items-center md:items-start">
                 <div className="flex flex-row items-center justify-center md:justify-start gap-1 md:gap-2">
-                  <img
-                    src={Star1 || "/placeholder.svg"}
-                    className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-[29px] xl:h-[29px]"
-                    alt=""
-                  />
-                  <img
-                    src={Star1 || "/placeholder.svg"}
-                    className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-[29px] xl:h-[29px]"
-                    alt=""
-                  />
-                  <img
-                    src={Star1 || "/placeholder.svg"}
-                    className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-[29px] xl:h-[29px]"
-                    alt=""
-                  />
-                  <img
-                    src={Star2 || "/placeholder.svg"}
-                    className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-[29px] xl:h-[29px]"
-                    alt=""
-                  />
-                  <img
-                    src={Star2 || "/placeholder.svg"}
-                    className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-[29px] xl:h-[29px]"
-                    alt=""
-                  />
+                  {renderStars()}
                 </div>
-                <button
-                  onClick={toggleModal}
-                  className="text-xs md:text-sm mt-1 hover:underline cursor-pointer"
-                >
-                  X avaliações
-                </button>
+                <p className="mx-auto my-1 text-center">Rating</p>
               </div>
 
               <div className="icons mt-6 md:mt-0 md:ml-6 lg:ml-10 xl:ml-20 flex flex-row md:flex-col justify-center gap-4 md:gap-3">
-              <div
+                <div
                   onClick={() => {
-                    navigate("/editaccount");
+                    navigate("/editaccount")
                   }}
                   className="edit flex flex-row items-center cursor-pointer text-txts"
                 >
@@ -208,17 +212,17 @@ const Account = () => {
                 </div>
                 <div
                   onClick={() => {
-                    navigate("/notifications");
+                    navigate("/notifications")
                   }}
                   className="edit flex flex-row items-center cursor-pointer text-txtp"
                 >
-                  <Bell className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]"/>
+                  <Bell className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
                   <span className="ml-2 text-sm md:text-base">Notificações</span>
                 </div>
                 <div
                   className="proposals flex flex-row items-center cursor-pointer text-txtp"
                   onClick={() => {
-                    navigate("/proposals");
+                    navigate("/proposals")
                   }}
                 >
                   <img
@@ -245,7 +249,7 @@ const Account = () => {
         {isModalOpen && <Review closeModal={toggleModal} />}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Account;
+export default Account

@@ -54,7 +54,7 @@
     "message": "Avalie o vendedor da venda: Porque não daaaaaa",
     "userId": 6,
     "link": "http://localhost:3000/review/user/sale/36",
-    "read": false,
+    "read": true,
     "date": "2025-04-13T20:25:08.121Z"
   },
   {

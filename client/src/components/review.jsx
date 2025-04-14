@@ -1,24 +1,120 @@
 import { useState } from "react";
 import { Star, X } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-const Modal = ({ closeModal }) => {
+const Modal = ({ closeModal, reviewId, category }) => {
   const [rating, setRating] = useState(1);
+  const navigate = useNavigate();
+  const submitAvaliation = async () => {
+    if (category == "sale") {
+      try {
+        const result = await fetch(
+          `http://localhost:5000/api/transaction-sales/review/${reviewId}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(
+              { 
+                review: rating, 
+              }
+            ),
+          }
+        );
+        const data = await result.json();
+        if(data.message == "Review da venda criada com sucesso.")
+          {
+            toast.success("Review da venda criada com sucesso.");
+            setTimeout(() => {
+              navigate("/index");
+            }, 2000);
+          }else
+          {
+            toast.error(data.message)
+            setTimeout(() => {
+              navigate("/index");
+            }, 2000);
+          }
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
-  const submitAvaliation = () => {
-    console.log("Avaliação submetida com nota:", rating);
+    if (category == "loan") {
+      try {
+        const result = await fetch(
+          `http://localhost:5000/api/transaction-loans/review/${reviewId}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(
+              { 
+                review: rating, 
+              }
+            ),
+          }
+        );
+        const data = await result.json();
+        if(data.message == "Review do empréstimo criada com sucesso.")
+        {
+          toast.success("Review do empréstimo criada com sucesso.");
+          setTimeout(() => {
+            navigate("/index");
+          }, 2000);
+        }else
+        {
+          toast.error(data.message)
+          setTimeout(() => {
+            navigate("/index");
+          }, 2000);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (category == "giveaway") {
+      try {
+        const result = await fetch(
+          `http://localhost:5000/api/winner-giveaway/review/${reviewId}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(
+              { 
+                review: rating, 
+              }
+            ),
+          }
+        );
+        console.log(await result.json());
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
-    <div 
+    <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-      onClick={closeModal} 
+      onClick={closeModal}
     >
-      <div 
+      <ToastContainer />
+      <div
         className="bg-white p-6 rounded-lg shadow-lg w-96 text-center relative"
-        onClick={(e) => e.stopPropagation()} 
+        onClick={(e) => e.stopPropagation()}
       >
-        <button 
-          onClick={closeModal} 
+        <button
+          onClick={closeModal}
           className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
         >
           <X size={24} />
@@ -32,7 +128,9 @@ const Modal = ({ closeModal }) => {
             <Star
               key={star}
               className={`w-8 h-8 cursor-pointer transition-colors ${
-                star <= rating ? "fill-yellow-500 text-yellow-500" : "text-gray-400"
+                star <= rating
+                  ? "fill-yellow-500 text-yellow-500"
+                  : "text-gray-400"
               }`}
               onClick={() => setRating(star)}
             />

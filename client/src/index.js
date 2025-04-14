@@ -26,6 +26,7 @@ import ProtectedRoute from "./pages/ProtectedRoutes/protectedRoute";
 import NotFound from "./pages/notFound";
 import ProposalsPage from "./pages/proposalsPage";
 import NotificationsPage from "./pages/notificationsPage";
+import ReviewPage from "./pages/reviewPage.jsx";
 
 //? Business Processes
 import LookSale from "./pages/BPMN/lookSalePage";
@@ -38,12 +39,12 @@ import EditDraw from "./pages/BPMN/editDraw";
 import EditLoan from "./pages/BPMN/editLoan";
 import EditSale from "./pages/BPMN/editSale";
 import VendaProposta from "./pages/BPMN/vendaProposta";
+import EmprestimoProposta from "./pages/BPMN/emprestimoProposta.jsx";
 
 import ConfirmAccount from "./pages/BPMN/confirmAccount";
 import EditAccountPage from "./pages/editAccountPage";
 
 import AdminProtectedRoute from "./pages/ProtectedRoutes/adminProtectedRoute";
-import EmprestimoProposta from "./pages/BPMN/emprestimoProposta.jsx";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -56,15 +57,6 @@ root.render(
         <Route path="/signin" element={<SignIn />} />
         <Route path="/recoverpass" element={<RecoverPass />} />
         <Route path="/newpassword" element={<NewPassword />} />
-
-        {/* Test Pages */}
-        {/* <Route path="/testesale" element={<EditSale />} />
-        <Route path="/testeloan" element={<EditLoan />} />
-        
-        <Route path="/testedraw" element={<EditDraw />} /> */}
-
-        {/* <Route path="/testevenda" element={<VendaProposta />} />
-        <Route path="/testeemprestimo" element={<EmprestimoProposta />} /> */}
 
         {/* Admin */}
         <Route
@@ -151,6 +143,11 @@ root.render(
         <Route
           path="/notifications"
           element={<ProtectedRoute element={<NotificationsPage />} />}
+        />
+
+        <Route
+          path="/review/user/:category/:id"
+          element={<ProtectedRoute element={<ReviewPage />} />}
         />
 
         <Route path="/notfound" element={<NotFound />} />

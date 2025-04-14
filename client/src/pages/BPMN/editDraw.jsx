@@ -6,8 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-import '../../components/css/sidebar.css';
-import '../../index.css';
+import "../../components/css/sidebar.css";
+import "../../index.css";
 
 export default function EditDraw() {
   const { id } = useParams();
@@ -53,22 +53,25 @@ export default function EditDraw() {
 
   const handleSubmit = async (values) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/giveaways/id/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          title: values.title,
-          description: values.description,
-          value: values.price,
-          condition: values.condition,
-          category: values.category,
-          startDate: values.startDate,
-          endDate: values.endDate,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:5000/api/giveaways/id/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            title: values.title,
+            description: values.description,
+            value: values.price,
+            condition: values.condition,
+            category: values.category,
+            startDate: values.startDate,
+            endDate: values.endDate,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Erro ao atualizar o sorteio.");
@@ -76,13 +79,44 @@ export default function EditDraw() {
 
       const result = await response.json();
       console.log("Venda atualizada:", result);
-      toast.success("Sorteio atualizado com sucesso!")
+      toast.success("Sorteio atualizado com sucesso!");
       setTimeout(() => {
         navigate("/index");
       }, 2000);
     } catch (error) {
       console.error("Erro ao submeter dados:", error);
       toast.error("Erro ao atualizar o sorteio.");
+    }
+  };
+
+  const pickWinner = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/winner-giveaway/create/${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      console.log(data.message);
+      if (data.message == "Vencedor do sorteio criado com sucesso.") {
+        toast.success("Vencedor do sorteio criado com sucesso!");
+        setTimeout(() => {
+          navigate("/index");
+        }, 2000);
+      }else
+      {
+        toast.error(data.message);
+        setTimeout(() => {
+          navigate("/index");
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
     }
   };
 
@@ -118,17 +152,26 @@ export default function EditDraw() {
             </a>
           </div>
 
-          <h1 className="text-3xl font-medium text-[#CAAD7E] text-center my-6">Editar Sorteio</h1>
+          <h1 className="text-3xl font-medium text-[#CAAD7E] text-center my-6">
+            Editar Sorteio
+          </h1>
 
-          <Formik initialValues={initialValues} validationSchema={CreateDrawSchema} onSubmit={handleSubmit}>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={CreateDrawSchema}
+            onSubmit={handleSubmit}
+          >
             {({ values, errors, touched, setFieldValue }) => (
               <Form className="w-full">
                 <p className="text-center text-sm text-gray-500 mb-2">
-                  Mínimo 1 Foto, Máximo 3{values.photos.length > 0 && ` (${values.photos.length}/3)`}
+                  Mínimo 1 Foto, Máximo 3
+                  {values.photos.length > 0 && ` (${values.photos.length}/3)`}
                 </p>
 
                 {errors.photos && touched.photos && (
-                  <p className="text-red-500 text-center text-sm mb-4">{errors.photos}</p>
+                  <p className="text-red-500 text-center text-sm mb-4">
+                    {errors.photos}
+                  </p>
                 )}
 
                 <div className="images flex flex-row gap-4 justify-center flex-wrap mb-10">
@@ -146,10 +189,10 @@ export default function EditDraw() {
                         type="button"
                         className="absolute top-2 right-2 bg-gray-800 bg-opacity-50 rounded-full p-1 hover:bg-opacity-70"
                         onClick={() => {
-                          const newPhotos = [...values.photos]
-                          URL.revokeObjectURL(newPhotos[index])
-                          newPhotos.splice(index, 1)
-                          setFieldValue("photos", newPhotos)
+                          const newPhotos = [...values.photos];
+                          URL.revokeObjectURL(newPhotos[index]);
+                          newPhotos.splice(index, 1);
+                          setFieldValue("photos", newPhotos);
                         }}
                       >
                         <X className="h-4 w-4 text-white" />
@@ -162,7 +205,7 @@ export default function EditDraw() {
                       className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-100 rounded-md flex items-center justify-center border border-dashed border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors"
                       onClick={() => {
                         if (fileInputRef.current) {
-                          fileInputRef.current.click()
+                          fileInputRef.current.click();
                         }
                       }}
                     >
@@ -177,16 +220,16 @@ export default function EditDraw() {
                     accept="image/*"
                     onChange={(e) => {
                       if (e.target.files && e.target.files.length > 0) {
-                        const file = e.target.files[0]
+                        const file = e.target.files[0];
 
                         if (values.photos.length >= 3) {
-                          alert("Máximo de 3 fotos permitido.")
-                          return
+                          alert("Máximo de 3 fotos permitido.");
+                          return;
                         }
 
-                        const imageUrl = URL.createObjectURL(file)
-                        setFieldValue("photos", [...values.photos, imageUrl])
-                        e.target.value = ""
+                        const imageUrl = URL.createObjectURL(file);
+                        setFieldValue("photos", [...values.photos, imageUrl]);
+                        e.target.value = "";
                       }
                     }}
                   />
@@ -194,7 +237,10 @@ export default function EditDraw() {
 
                 <div className="form-container space-y-6 max-w-3xl mx-auto w-full">
                   <div className="form-group">
-                    <label htmlFor="title" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="title"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Título:
                     </label>
                     <Field
@@ -202,14 +248,23 @@ export default function EditDraw() {
                       name="title"
                       type="text"
                       className={`w-full p-2 border ${
-                        errors.title && touched.title ? "border-red-500" : "border-gray-300"
+                        errors.title && touched.title
+                          ? "border-red-500"
+                          : "border-gray-300"
                       } rounded-md`}
                     />
-                    <ErrorMessage name="title" component="div" className="text-red-500 text-sm mt-1" />
+                    <ErrorMessage
+                      name="title"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="description" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="description"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Descrição:
                     </label>
                     <Field
@@ -217,14 +272,23 @@ export default function EditDraw() {
                       id="description"
                       name="description"
                       className={`w-full p-2 border ${
-                        errors.description && touched.description ? "border-red-500" : "border-gray-300"
+                        errors.description && touched.description
+                          ? "border-red-500"
+                          : "border-gray-300"
                       } rounded-md min-h-[100px]`}
                     />
-                    <ErrorMessage name="description" component="div" className="text-red-500 text-sm mt-1" />
+                    <ErrorMessage
+                      name="description"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="startDate" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="startDate"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Data Início:
                     </label>
                     <Field
@@ -232,14 +296,23 @@ export default function EditDraw() {
                       name="startDate"
                       type="datetime-local"
                       className={`w-full p-2 border ${
-                        errors.startDate && touched.startDate ? "border-red-500" : "border-gray-300"
+                        errors.startDate && touched.startDate
+                          ? "border-red-500"
+                          : "border-gray-300"
                       } rounded-md`}
                     />
-                    <ErrorMessage name="startDate" component="div" className="text-red-500 text-sm mt-1" />
+                    <ErrorMessage
+                      name="startDate"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="endDate" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="endDate"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Data Fim:
                     </label>
                     <Field
@@ -247,15 +320,24 @@ export default function EditDraw() {
                       name="endDate"
                       type="datetime-local"
                       className={`w-full p-2 border ${
-                        errors.endDate && touched.endDate ? "border-red-500" : "border-gray-300"
+                        errors.endDate && touched.endDate
+                          ? "border-red-500"
+                          : "border-gray-300"
                       } rounded-md`}
                     />
-                    <ErrorMessage name="endDate" component="div" className="text-red-500 text-sm mt-1" />
+                    <ErrorMessage
+                      name="endDate"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="form-group">
-                      <label htmlFor="category" className="block text-sm font-medium mb-2">
+                      <label
+                        htmlFor="category"
+                        className="block text-sm font-medium mb-2"
+                      >
                         Categoria:
                       </label>
                       <Field
@@ -263,7 +345,9 @@ export default function EditDraw() {
                         id="category"
                         name="category"
                         className={`w-full p-2 border ${
-                          errors.category && touched.category ? "border-red-500" : "border-gray-300"
+                          errors.category && touched.category
+                            ? "border-red-500"
+                            : "border-gray-300"
                         } rounded-md appearance-none bg-white`}
                       >
                         <option value="Roupa">Roupa</option>
@@ -273,11 +357,18 @@ export default function EditDraw() {
                         <option value="Livros">Livros</option>
                         <option value="Outros">Outros</option>
                       </Field>
-                      <ErrorMessage name="category" component="div" className="text-red-500 text-sm mt-1" />
+                      <ErrorMessage
+                        name="category"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="condition" className="block text-sm font-medium mb-2">
+                      <label
+                        htmlFor="condition"
+                        className="block text-sm font-medium mb-2"
+                      >
                         Condição:
                       </label>
                       <Field
@@ -285,7 +376,9 @@ export default function EditDraw() {
                         id="condition"
                         name="condition"
                         className={`w-full p-2 border ${
-                          errors.condition && touched.condition ? "border-red-500" : "border-gray-300"
+                          errors.condition && touched.condition
+                            ? "border-red-500"
+                            : "border-gray-300"
                         } rounded-md appearance-none bg-white`}
                       >
                         <option value="Como novo">Como novo</option>
@@ -294,17 +387,32 @@ export default function EditDraw() {
                         <option value="Bastante Usado">Bastante Usado</option>
                         <option value="Com defeito">Com defeito</option>
                       </Field>
-                      <ErrorMessage name="condition" component="div" className="text-red-500 text-sm mt-1" />
+                      <ErrorMessage
+                        name="condition"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
                     </div>
                   </div>
 
-                  <div className="flex justify-center mt-10">
-                    <button
-                      type="submit"
-                      className="bg-[#CAAD7E] rounded-lg px-8 py-3 text-white font-medium hover:bg-[#b99c6f] transition-colors"
-                    >
-                      Editar Publicação
-                    </button>
+                  <div className="flex flex-row gap-4 justify-between mt-10">
+                    <div className="flex justify-center mt-10">
+                      <button
+                        type="submit"
+                        className="bg-[#CAAD7E] rounded-lg px-8 py-3 text-white font-medium hover:bg-[#b99c6f] transition-colors"
+                      >
+                        Editar Publicação
+                      </button>
+                    </div>
+                    <div className="flex justify-center mt-10">
+                      <button
+                        type="button"
+                        onClick={pickWinner}
+                        className="bg-[#CAAD7E] rounded-lg px-8 py-3 text-white font-medium hover:bg-[#b99c6f] transition-colors"
+                      >
+                        Sortear Vencedor
+                      </button>
+                    </div>
                   </div>
                 </div>
               </Form>
@@ -313,6 +421,5 @@ export default function EditDraw() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Undo2 } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 //? Components
 import SideBar from '../../components/sideBar';
@@ -53,8 +54,33 @@ function LookLoan() {
 
   if (!isAuthenticated) return null;
 
+    const createTransaction = async () => { 
+      try {
+        const response = await fetch(`http://localhost:5000/api/transactions-loans/create/${data.Emprestimo_ID}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        const result = await response.json();
+        console.log(result.message);
+        if(result.message == "Transação criada com sucesso.") {
+          toast.success("Transação criada com sucesso!");
+        }	
+        else
+        {
+          toast.error(result.message);
+        }
+      } catch (error) {
+        console.error("Error creating transaction:", error);
+        toast.error(error);
+      }
+    }
+
   return (
     <div className="flex flex-row h-screen overflow-y-auto">
+      <ToastContainer />
       <Helmet>
         <title>Empréstimo</title>
       </Helmet>
@@ -118,7 +144,7 @@ function LookLoan() {
             </div>
             <div className="right flex flex-col gap-4 w-full md:w-1/3">
               <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center justify-center">
-                <span className="text-xl text-white">Pedir Agora</span>
+                <span className="text-xl text-white" onClick={createTransaction}>Pedir Agora</span>
               </button>
               <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center justify-center">
                 <span className="text-xl text-white" onClick={() => navigate(`/loanproposal/${data.Emprestimo_ID}`)}>Fazer proposta</span>
