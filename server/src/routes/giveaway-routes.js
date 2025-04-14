@@ -96,4 +96,12 @@ giveawayRouter.get(
   GiveawayController.getNonCompletedGiveawaysByUser
 )
 
+giveawayRouter.get(
+  '/giveaways/completed',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  GiveawayController.getCompletedGiveawaysByUser
+)
+
 export default giveawayRouter

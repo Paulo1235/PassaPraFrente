@@ -84,4 +84,12 @@ saleRouter.get(
   SaleController.getNonCompletedSalesByUser
 )
 
+saleRouter.get(
+  '/sales/completed',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  SaleController.getCompletedSalesByUser
+)
+
 export default saleRouter

@@ -23,3 +23,10 @@ export const PROPOSAL_LOAN_STATES = {
   ACEITE: 2,
   REJEITADO: 3
 }
+
+export const GIVEAWAY_STATES = {
+  EM_ANALISE: 1,
+  REJEITADO: 2,
+  DISPONIVEL: 3,
+  CONCLUIDO: 4
+}

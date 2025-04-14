@@ -172,11 +172,23 @@ class LoanController {
     const userId = req.user.Utilizador_ID
 
     try {
-      const completedLoans = await LoanRepository.getNonCompletedLoansByUser(userId)
+      const uncompletedLoans = await LoanRepository.getNonCompletedLoansByUser(userId)
+
+      return response(res, true, StatusCodes.OK, uncompletedLoans)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos não completos.')
+    }
+  }
+
+  static async getCompletedLoansByUser (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const completedLoans = await LoanRepository.getCompletedLoansByUser(userId)
 
       return response(res, true, StatusCodes.OK, completedLoans)
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos não completados.')
+      handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos completos.')
     }
   }
 }

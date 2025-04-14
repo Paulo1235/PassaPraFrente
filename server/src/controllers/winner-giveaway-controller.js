@@ -8,6 +8,7 @@ import EntryGiveawayRepository from '../repositories/entry-giveaway-repository.j
 import convertUTCToLocalISOString from '../utils/date.js'
 import { FRONTEND_URL } from '../../config.js'
 import NotificationController from './notification-controller.js'
+import { GIVEAWAY_STATES } from '../constants/status-constants.js'
 
 class WinnerGiveawayController {
   static async createWinnerGiveaway (req, res) {
@@ -35,12 +36,14 @@ class WinnerGiveawayController {
 
       const notificationData = {
         message: `Avalie o vendedor do sorteio: ${giveaway.Titulo}`,
-        winnerId,
-        category: 'Empréstimo',
+        userId: winnerId,
+        category: 'Sorteio',
         link: `${FRONTEND_URL}/review/user/giveaway/${giveaway.Sorteio_ID}`
       }
 
       NotificationController.createNotification(notificationData)
+
+      await GiveawayRepository.updateGiveawayStatus(id, GIVEAWAY_STATES.CONCLUIDO)
 
       await WinnerGiveawayRepository.createWinnerGiveaway(data)
 

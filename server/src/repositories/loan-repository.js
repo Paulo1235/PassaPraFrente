@@ -157,7 +157,7 @@ class LoanRepository {
   static async getNonCompletedLoansByUser (userId) {
     const pool = await getConnection()
 
-    const completedLoans = await pool
+    const uncompletedLoans = await pool
       .request()
       .input('userId', sql.Int, userId)
       .query(`
@@ -165,6 +165,22 @@ class LoanRepository {
         FROM Emprestimo
         JOIN Estado ON Estado.Estado_ID = Emprestimo.Estado_ID
         WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
+      `)
+
+    return uncompletedLoans.recordset
+  }
+
+  static async getCompletedLoansByUser (userId) {
+    const pool = await getConnection()
+
+    const completedLoans = await pool
+      .request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        SELECT * 
+        FROM Emprestimo
+        JOIN Estado ON Estado.Estado_ID = Emprestimo.Estado_ID
+        WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
       `)
 
     return completedLoans.recordset

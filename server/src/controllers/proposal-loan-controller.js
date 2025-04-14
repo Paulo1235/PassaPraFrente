@@ -26,6 +26,14 @@ class ProposalLoanController {
         throw new HttpException('Não é possível fazer uma proposta para este empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
+      if (loan.DataInicio < new Date()) {
+        return response(res, false, StatusCodes.BAD_REQUEST, 'O empréstimo já começou. Já não é efetuar propostas.')
+      }
+
+      if (loan.DataFim < new Date()) {
+        return response(res, false, StatusCodes.BAD_REQUEST, 'O empréstimo já terminou. Já não é possível efetuar propostas.')
+      }
+
       if (loan.Utilizador_ID === userId) {
         throw new HttpException('Não é possível fazer uma proposta para o seu próprio empréstimo.', StatusCodes.BAD_REQUEST)
       }

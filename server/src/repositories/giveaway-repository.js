@@ -152,7 +152,7 @@ class GiveawayRepository {
   static async getNonCompletedGiveawaysByUser (userId) {
     const pool = await getConnection()
 
-    const completedGiveaways = await pool
+    const uncompletedGiveaways = await pool
       .request()
       .input('userId', sql.Int, userId)
       .query(`
@@ -160,6 +160,22 @@ class GiveawayRepository {
         FROM Sorteio
         JOIN Estado ON Estado.Estado_ID = Sorteio.Estado_ID
         WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
+      `)
+
+    return uncompletedGiveaways.recordset
+  }
+
+  static async getCompletedGiveawaysByUser (userId) {
+    const pool = await getConnection()
+
+    const completedGiveaways = await pool
+      .request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        SELECT * 
+        FROM Sorteio
+        JOIN Estado ON Estado.Estado_ID = Sorteio.Estado_ID
+        WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
       `)
 
     return completedGiveaways.recordset

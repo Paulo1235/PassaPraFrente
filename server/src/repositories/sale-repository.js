@@ -151,7 +151,7 @@ class SaleRepository {
   static async getNonCompletedSalesByUser (userId) {
     const pool = await getConnection()
 
-    const completedSales = await pool
+    const uncompletedSales = await pool
       .request()
       .input('userId', sql.Int, userId)
       .query(`
@@ -159,6 +159,22 @@ class SaleRepository {
         FROM Venda
         JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
         WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
+      `)
+
+    return uncompletedSales.recordset
+  }
+
+  static async getCompletedSalesByUser (userId) {
+    const pool = await getConnection()
+
+    const completedSales = await pool
+      .request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        SELECT * 
+        FROM Venda
+        JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
+        WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
       `)
 
     return completedSales.recordset

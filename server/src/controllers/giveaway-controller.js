@@ -169,11 +169,23 @@ class GiveawayController {
     const userId = req.user.Utilizador_ID
 
     try {
-      const completedGiveaways = await GiveawayRepository.getNonCompletedGiveawaysByUser(userId)
+      const uncompletedGiveaways = await GiveawayRepository.getNonCompletedGiveawaysByUser(userId)
+
+      return response(res, true, StatusCodes.OK, uncompletedGiveaways)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar os sorteios não completos.')
+    }
+  }
+
+  static async getCompletedGiveawaysByUser (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const completedGiveaways = await GiveawayRepository.getCompletedGiveawaysByUser(userId)
 
       return response(res, true, StatusCodes.OK, completedGiveaways)
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao encontrar os sorteios não completados.')
+      handleError(res, error, 'Ocorreu um erro ao encontrar os sorteios completos.')
     }
   }
 }

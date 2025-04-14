@@ -252,7 +252,7 @@ class UserController {
         }
       }
 
-      const reviewRate = totalItems > 0 ? (totalReviews / totalItems) : 0
+      const reviewRate = totalItems > 0 ? Math.round(totalReviews / totalItems) : 0
 
       return response(res, true, StatusCodes.OK, reviewRate)
     } catch (error) {
