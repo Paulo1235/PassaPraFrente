@@ -79,4 +79,13 @@ giveawayRouter.patch(
   GiveawayController.updateGiveawayStatus
 )
 
+giveawayRouter.patch(
+  '/giveaways/update-image/:id',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  ProposalMiddleware.isOwnerGiveaway,
+  GiveawayController.updateGiveawayImage
+)
+
 export default giveawayRouter

@@ -59,6 +59,7 @@ class TransactionLoanController {
         const notificationData = {
           message: `Avalie o vendedor do empréstimo: ${loan.Titulo}`,
           userId,
+          category: 'Empréstimo',
           link: `${FRONTEND_URL}/review/user/loan/${transaction.TransacaoEmprestimo_ID}`
         }
 

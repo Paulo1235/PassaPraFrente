@@ -140,6 +140,33 @@ class LoanController {
       handleError(res, error, 'Ocorreu um erro ao atualizar o estado do empréstimo.')
     }
   }
+
+  static async updateLoanImage (req, res) {
+    const { id } = req.params
+    const { index, thumbnail } = req.body
+
+    try {
+      const loan = await LoanRepository.getLoanById(id)
+
+      if (!loan) {
+        throw new HttpException('Empréstimo não encontrado.', StatusCodes.NOT_FOUND)
+      }
+
+      const itemId = loan.Artigo_ID
+
+      const data = {
+        itemId,
+        index,
+        thumbnail
+      }
+
+      await ItemController.updateItemPhoto(data)
+
+      return response(res, true, StatusCodes.OK, 'Imagem de empréstimo atualizada com sucesso.')
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao atualizar uma das imagens de empréstimo.')
+    }
+  }
 }
 
 export default LoanController

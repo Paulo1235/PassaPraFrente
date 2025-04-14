@@ -100,6 +100,7 @@ class ProposalSaleController {
 
       const notificationData = {
         message: `A sua proposta para ${sale.Titulo} foi ${parseInt(status) === PROPOSAL_SALE_STATES.ACEITE ? 'aceite' : 'recusada'}`,
+        category: 'Venda',
         userId
       }
 

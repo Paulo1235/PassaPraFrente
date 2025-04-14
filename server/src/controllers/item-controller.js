@@ -77,31 +77,38 @@ class ItemController {
     }
   }
 
-  static async updateItemPhoto (req, res) {
-    const id = req.user.Utilizador_ID
-    const { avatar } = req.body
+  static async updateItemPhoto (data) {
+    const { index, thumbnail, itemId } = data
 
     try {
-      const itemPhotos = await ItemRepository.getItemPhoto(id)
+      const item = await ItemRepository.getItemById(itemId)
 
-      if (itemPhotos.public_id) {
-        await cloudinary.v2.uploader.destroy(itemPhotos.public_id)
+      if (!item) {
+        throw new HttpException('Item não existe.', StatusCodes.NOT_FOUND)
+      }
 
-        const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+      const itemPhotos = await ItemRepository.getItemPhoto(itemId)
+
+      const oldImage = itemPhotos[index]
+
+      if (!oldImage) {
+        throw new HttpException('Imagem não encontrada', StatusCodes.NOT_FOUND)
+      }
+
+      if (oldImage) {
+        await cloudinary.v2.uploader.destroy(oldImage.PublicID)
+
+        const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: 'items',
           width: 150
         })
 
-        const updateSuccess = await ItemRepository.updateItemPhoto(id, myCloud.public_id, myCloud.secure_url)
+        const updated = await ItemRepository.updateItemPhoto(itemId, myCloud.public_id, myCloud.secure_url)
 
-        if (updateSuccess) {
-          return response(res, true, StatusCodes.OK, 'Imagem do artigo atualizada.')
-        }
-
-        return response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao atualizar a imagem.')
+        return updated
       }
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao atualizar a imagem.')
+      throw new HttpException('Não foi possível atualizar a imagem do item', StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
 }

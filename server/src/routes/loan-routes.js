@@ -72,4 +72,13 @@ loanRouter.put(
   LoanController.updateLoan
 )
 
+loanRouter.patch(
+  '/loans/update-image/:id',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  ProposalMiddleware.isOwnerLoan,
+  LoanController.updateLoanImage
+)
+
 export default loanRouter

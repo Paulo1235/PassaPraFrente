@@ -45,7 +45,7 @@ class ItemRepository {
       .query(`
         SELECT * 
         FROM Artigo
-        WHERE Artigo = @id
+        WHERE Artigo_ID = @id
       `)
 
     return item.recordset[0]
@@ -97,7 +97,7 @@ class ItemRepository {
       .query(`
         SELECT PublicID, Url
         FROM Imagem
-        WHERE Artigo_ID = @id
+        WHERE ArtigoArtigo_ID = @id
       `)
 
     return avatar.recordset
@@ -113,7 +113,7 @@ class ItemRepository {
       .input('url', sql.VarChar, url).query(`
         UPDATE Imagem
         SET PublicID = @publicId, Url = @url
-        WHERE Artigo_ID = @id
+        WHERE ArtigoArtigo_ID = @id
       `)
 
     return updatedAvatar.rowsAffected[0] > 0

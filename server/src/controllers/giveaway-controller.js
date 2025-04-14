@@ -137,5 +137,32 @@ class GiveawayController {
       handleError(res, error, 'Ocorreu um erro ao atualizar o estado do sorteio.')
     }
   }
+
+  static async updateGiveawayImage (req, res) {
+    const { id } = req.params
+    const { index, thumbnail } = req.body
+
+    try {
+      const giveaway = await GiveawayRepository.getGiveawayById(id)
+
+      if (!giveaway) {
+        throw new HttpException('Sorteio não encontrado.', StatusCodes.NOT_FOUND)
+      }
+
+      const itemId = giveaway.Artigo_ID
+
+      const data = {
+        itemId,
+        index,
+        thumbnail
+      }
+
+      await ItemController.updateItemPhoto(data)
+
+      return response(res, true, StatusCodes.OK, 'Imagem de sorteio atualizado com sucesso.')
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao atualizar uma das imagens de sorteio.')
+    }
+  }
 }
 export default GiveawayController

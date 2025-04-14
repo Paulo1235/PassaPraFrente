@@ -95,6 +95,7 @@ class ProposalLoanController {
 
       const notificationData = {
         message: `A sua proposta para ${loan.Titulo} foi ${parseInt(status) === PROPOSAL_LOAN_STATES.ACEITE ? 'aceite' : 'recusada'}`,
+        category: 'Empréstimo',
         userId
       }
 

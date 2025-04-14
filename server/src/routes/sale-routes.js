@@ -67,4 +67,13 @@ saleRouter.patch(
   SaleController.updateSaleStatus
 )
 
+saleRouter.patch(
+  '/sales/update-image/:id',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  ProposalMiddleware.isOwnerSale,
+  SaleController.updateSaleImage
+)
+
 export default saleRouter

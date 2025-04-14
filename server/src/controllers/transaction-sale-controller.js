@@ -59,6 +59,7 @@ class TransactionSaleController {
         const notificationData = {
           message: `Avalie o vendedor da venda: ${sale.Titulo}`,
           userId,
+          category: 'Venda',
           link: `${FRONTEND_URL}/review/user/sale/${transaction.TransacaoVenda_ID}`
         }
 

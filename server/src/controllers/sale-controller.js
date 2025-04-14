@@ -133,6 +133,33 @@ class SaleController {
       handleError(res, error, 'Ocorreu um erro ao atualizar o estado da venda.')
     }
   }
+
+  static async updateSaleImage (req, res) {
+    const { id } = req.params
+    const { index, thumbnail } = req.body
+
+    try {
+      const sale = await SaleRepository.getSaleById(id)
+
+      if (!sale) {
+        throw new HttpException('Venda não encontrada', StatusCodes.NOT_FOUND)
+      }
+
+      const itemId = sale.Artigo_ID
+
+      const data = {
+        itemId,
+        index,
+        thumbnail
+      }
+
+      await ItemController.updateItemPhoto(data)
+
+      return response(res, true, StatusCodes.OK, 'Imagem de venda atualizada com sucesso.')
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao atualizar uma das imagens da venda.')
+    }
+  }
 }
 
 export default SaleController

@@ -196,11 +196,9 @@ class UserController {
         width: 150
       })
 
-      const { public_id, secure_url } = uploadedImage
-
       const success = userAvatar?.PublicID
-        ? await UserRepository.updateUserAvatar(id, public_id, secure_url)
-        : await UserRepository.uploadUserAvatar(id, public_id, secure_url)
+        ? await UserRepository.updateUserAvatar(id, uploadedImage.public_id, uploadedImage.secure_url)
+        : await UserRepository.uploadUserAvatar(id, uploadedImage.public_id, uploadedImage.secure_url)
 
       if (!success) {
         return response(res, false, StatusCodes.BAD_REQUEST, 'Erro ao salvar imagem de perfil.')
