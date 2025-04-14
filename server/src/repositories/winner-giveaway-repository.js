@@ -31,10 +31,24 @@ class WinnerGiveawayRepository {
     return winnerGiveaway.recordset[0]
   }
 
+  static async getAllWinnersGiveaways () {
+    const pool = await getConnection()
+
+    const winnersGiveaways = await pool
+      .request()
+      .query(`
+        SELECT *
+        FROM VencedorSorteio
+      `)
+
+    return winnersGiveaways.recordset
+  }
+
   static async getAllWinnersGiveawaysByUserId (userId) {
     const pool = await getConnection()
 
-    const winnersGiveaways = await pool.request()
+    const winnersGiveaways = await pool
+      .request()
       .input('userId', sql.Int, userId)
       .query(`
         SELECT * 
@@ -43,6 +57,22 @@ class WinnerGiveawayRepository {
       `)
 
     return winnersGiveaways.recordset
+  }
+
+  static async updateGiveawayReview (id, review) {
+    const pool = await getConnection()
+
+    const updatedGiveaway = await pool
+      .request()
+      .input('giveawayId', sql.Int, id)
+      .input('review', sql.Int, review)
+      .query(`
+        UPDATE VencedorSorteio
+        SET Nota = @review
+        WHERE InscricaoSorteioSorteioSorteio_ID = @giveawayId
+      `)
+
+    return updatedGiveaway.rowsAffected[0] > 0
   }
 }
 

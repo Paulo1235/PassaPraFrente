@@ -72,6 +72,16 @@ class WinnerGiveawayController {
     }
   }
 
+  static async getAllWinnersGiveaways (req, res) {
+    try {
+      const giveaways = await WinnerGiveawayRepository.getAllWinnersGiveaways()
+
+      return response(res, true, StatusCodes.OK, giveaways)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar os vencedores dos sorteios.')
+    }
+  }
+
   static async getAllWinnersGiveawaysByUserId (req, res) {
     const { userId } = req.params
 
@@ -111,6 +121,41 @@ class WinnerGiveawayController {
       return winnerId
     } else {
       throw new HttpException('O sorteio ainda não terminou.', StatusCodes.BAD_REQUEST)
+    }
+  }
+
+  static async createReviewWinnerGiveaway (req, res) {
+    const userId = req.user.Utilizador_ID
+    const { id } = req.params
+
+    const review = req.body.review
+
+    try {
+      const giveaway = await GiveawayRepository.getGiveawayById(id)
+
+      if (!giveaway) {
+        throw new HttpException('Sorteio não encontrado.', StatusCodes.NOT_FOUND)
+      }
+
+      const winnerGiveaway = await WinnerGiveawayRepository.getWinnerGiveawayById(id)
+
+      if (!winnerGiveaway) {
+        throw new HttpException('O sorteio ainda não tem vencedor', StatusCodes.NOT_FOUND)
+      }
+
+      if (userId !== winnerGiveaway.InscricaoSorteioUtilizadorUtilizador_ID) {
+        throw new HttpException('Não pode fazer a review deste sorteio. Não ganhou o sorteio.', StatusCodes.UNAUTHORIZED)
+      }
+
+      if (winnerGiveaway.Nota !== 0) {
+        throw new HttpException('Já fez review deste sorteio.', StatusCodes.BAD_REQUEST)
+      }
+
+      await WinnerGiveawayRepository.updateGiveawayReview(id, review)
+
+      return response(res, true, StatusCodes.OK, 'Review do sorteio efetuada com sucesso.')
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao efetuar a avaliação do sorteio.')
     }
   }
 }
