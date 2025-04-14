@@ -37,7 +37,7 @@ class TransactionLoanController {
 
       return response(res, true, StatusCodes.CREATED, 'Transação criada com sucesso.')
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao criar a transação')
+      handleError(res, error, 'Ocorreu um erro ao criar a transação.')
     }
   }
 

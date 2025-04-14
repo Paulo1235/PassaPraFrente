@@ -7,6 +7,12 @@ import response from '../utils/response.js'
 import UserRepository from '../repositories/user-repository.js'
 import PasswordService from '../services/password-service.js'
 import EmailService from '../services/email-service.js'
+import SaleRepository from '../repositories/sale-repository.js'
+import LoanRepository from '../repositories/loan-repository.js'
+import GiveawayRepository from '../repositories/giveaway-repository.js'
+import TransactionSaleRepository from '../repositories/transaction-sale-repository.js'
+import TransactionLoanRepository from '../repositories/transaction-loan-repository.js'
+import WinnerGiveawayRepository from '../repositories/winner-giveaway-repository.js'
 
 class UserController {
   static async getUserById (req, res) {
@@ -206,6 +212,51 @@ class UserController {
       return response(res, true, StatusCodes.OK, userAvatar?.PublicID ? 'Imagem de perfil atualizada.' : 'Imagem de perfil inserida.')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao atualizar a imagem de perfil.')
+    }
+  }
+
+  static async getReviewRateUser (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const sales = await SaleRepository.getUserSales(userId)
+
+      const loans = await LoanRepository.getUserLoans(userId)
+
+      const giveaways = await GiveawayRepository.getUserGiveaways(userId)
+
+      let totalReviews = 0
+      let totalItems = 0
+
+      for (const sale of sales) {
+        const transactionSale = await TransactionSaleRepository.getTransactionBySaleId(sale.Venda_ID)
+        if (transactionSale && transactionSale.Nota > 0) {
+          totalReviews += transactionSale.Nota
+          totalItems += 1
+        }
+      }
+
+      for (const loan of loans) {
+        const transactionLoan = await TransactionLoanRepository.getTransactionByLoanId(loan.Emprestimo_ID)
+        if (transactionLoan && transactionLoan.Nota > 0) {
+          totalReviews += transactionLoan.Nota
+          totalItems += 1
+        }
+      }
+
+      for (const giveaway of giveaways) {
+        const winnerGiveaway = await WinnerGiveawayRepository.getWinnerGiveawayById(giveaway.Sorteio_ID)
+        if (winnerGiveaway && winnerGiveaway.Nota > 0) {
+          totalReviews += winnerGiveaway.Nota
+          totalItems += 1
+        }
+      }
+
+      const reviewRate = totalItems > 0 ? (totalReviews / totalItems) : 0
+
+      return response(res, true, StatusCodes.OK, reviewRate)
+    } catch (error) {
+      handleError(res, error, 'Não foi possível obter a avaliação do utilizador.')
     }
   }
 }

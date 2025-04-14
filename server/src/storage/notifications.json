@@ -56,5 +56,14 @@
     "link": "http://localhost:3000/review/user/sale/36",
     "read": false,
     "date": "2025-04-13T20:25:08.121Z"
+  },
+  {
+    "id": "9e20f8b0-387c-4528-8c79-71afc2f25787",
+    "message": "Avalie o vendedor da venda: Huguinho cheira bem",
+    "userId": 7,
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/39",
+    "read": false,
+    "date": "2025-04-14T14:01:20.840Z"
   }
 ]

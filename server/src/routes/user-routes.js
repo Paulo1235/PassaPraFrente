@@ -78,4 +78,11 @@ userRouter.patch(
   UserController.updateUserAvatar
 )
 
+userRouter.get(
+  '/users/my-reviews',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  UserController.getReviewRateUser
+)
+
 export default userRouter

@@ -79,6 +79,21 @@ class TransactionSaleRepository {
 
     return updatedTransaction.rowsAffected[0] > 0
   }
+
+  static async getTransactionBySaleId (id) {
+    const pool = await getConnection()
+
+    const transaction = await pool
+      .request()
+      .input('saleId', sql.Int, id)
+      .query(`
+        SELECT *
+        FROM TransacaoVenda
+        WHERE PropostaVendaVenda_ID = @saleId
+      `)
+
+    return transaction.recordset[0]
+  }
 }
 
 export default TransactionSaleRepository

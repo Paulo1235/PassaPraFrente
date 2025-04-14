@@ -81,6 +81,21 @@ class TransactionLoanRepository {
 
     return updatedTransaction.rowsAffected[0] > 0
   }
+
+  static async getTransactionByLoanId (id) {
+    const pool = await getConnection()
+
+    const transaction = await pool
+      .request()
+      .input('loanId', sql.Int, id)
+      .query(`
+        SELECT *
+        FROM TransacaoEmprestimo
+        WHERE PropostaEmprestimoEmprestimo_ID = @loanId
+      `)
+
+    return transaction.recordset[0]
+  }
 }
 
 export default TransactionLoanRepository
