@@ -149,7 +149,7 @@ class GiveawayRepository {
     return updatedGiveaway.rowsAffected[0] > 0
   }
 
-  static async getCompletedGiveawaysByUser (userId) {
+  static async getNonCompletedGiveawaysByUser (userId) {
     const pool = await getConnection()
 
     const completedGiveaways = await pool
@@ -159,7 +159,7 @@ class GiveawayRepository {
         SELECT * 
         FROM Sorteio
         JOIN Estado ON Estado.Estado_ID = Sorteio.Estado_ID
-        WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
+        WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
       `)
 
     return completedGiveaways.recordset

@@ -82,11 +82,11 @@ loanRouter.patch(
 )
 
 loanRouter.get(
-  '/loans/completed',
+  '/loans/non-completed',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  LoanController.getCompletedLoansByUser
+  LoanController.getNonCompletedLoansByUser
 )
 
 export default loanRouter

@@ -77,11 +77,11 @@ saleRouter.patch(
 )
 
 saleRouter.get(
-  '/sales/completed',
+  '/sales/non-completed',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  SaleController.getCompletedSalesByUser
+  SaleController.getNonCompletedSalesByUser
 )
 
 export default saleRouter

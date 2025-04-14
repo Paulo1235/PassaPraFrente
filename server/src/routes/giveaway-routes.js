@@ -89,11 +89,11 @@ giveawayRouter.patch(
 )
 
 giveawayRouter.get(
-  '/giveaways/completed',
+  '/giveaways/non-completed',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  GiveawayController.getCompletedGiveawaysByUser
+  GiveawayController.getNonCompletedGiveawaysByUser
 )
 
 export default giveawayRouter

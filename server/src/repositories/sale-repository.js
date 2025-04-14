@@ -148,7 +148,7 @@ class SaleRepository {
     return updatedSale.rowsAffected[0] > 0
   }
 
-  static async getCompletedSalesByUser (userId) {
+  static async getNonCompletedSalesByUser (userId) {
     const pool = await getConnection()
 
     const completedSales = await pool
@@ -158,7 +158,7 @@ class SaleRepository {
         SELECT * 
         FROM Venda
         JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
-        WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
+        WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
       `)
 
     return completedSales.recordset

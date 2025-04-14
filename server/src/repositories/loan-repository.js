@@ -154,7 +154,7 @@ class LoanRepository {
     return updatedLoan.rowsAffected[0] > 0
   }
 
-  static async getCompletedLoansByUser (userId) {
+  static async getNonCompletedLoansByUser (userId) {
     const pool = await getConnection()
 
     const completedLoans = await pool
@@ -164,7 +164,7 @@ class LoanRepository {
         SELECT * 
         FROM Emprestimo
         JOIN Estado ON Estado.Estado_ID = Emprestimo.Estado_ID
-        WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
+        WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
       `)
 
     return completedLoans.recordset

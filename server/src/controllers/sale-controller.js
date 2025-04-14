@@ -161,15 +161,15 @@ class SaleController {
     }
   }
 
-  static async getCompletedSalesByUser (req, res) {
+  static async getNonCompletedSalesByUser (req, res) {
     const userId = req.user.Utilizador_ID
 
     try {
-      const completedSales = await SaleRepository.getCompletedSalesByUser(userId)
+      const completedSales = await SaleRepository.getNonCompletedSalesByUser(userId)
 
       return response(res, true, StatusCodes.OK, completedSales)
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao encontrar as vendas completadas.')
+      handleError(res, error, 'Ocorreu um erro ao encontrar as vendas não completadas.')
     }
   }
 }
