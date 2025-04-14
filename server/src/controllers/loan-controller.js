@@ -167,6 +167,18 @@ class LoanController {
       handleError(res, error, 'Ocorreu um erro ao atualizar uma das imagens de empréstimo.')
     }
   }
+
+  static async getCompletedLoansByUser (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const completedLoans = await LoanRepository.getCompletedLoansByUser(userId)
+
+      return response(res, true, StatusCodes.OK, completedLoans)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos completados.')
+    }
+  }
 }
 
 export default LoanController

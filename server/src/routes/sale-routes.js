@@ -76,4 +76,12 @@ saleRouter.patch(
   SaleController.updateSaleImage
 )
 
+saleRouter.get(
+  '/sales/completed',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  SaleController.getCompletedSalesByUser
+)
+
 export default saleRouter

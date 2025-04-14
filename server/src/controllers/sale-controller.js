@@ -160,6 +160,18 @@ class SaleController {
       handleError(res, error, 'Ocorreu um erro ao atualizar uma das imagens da venda.')
     }
   }
+
+  static async getCompletedSalesByUser (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const completedSales = await SaleRepository.getCompletedSalesByUser(userId)
+
+      return response(res, true, StatusCodes.OK, completedSales)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar as vendas completadas.')
+    }
+  }
 }
 
 export default SaleController

@@ -164,5 +164,17 @@ class GiveawayController {
       handleError(res, error, 'Ocorreu um erro ao atualizar uma das imagens de sorteio.')
     }
   }
+
+  static async getCompletedGiveawaysByUser (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const completedGiveaways = await GiveawayRepository.getCompletedGiveawaysByUser(userId)
+
+      return response(res, true, StatusCodes.OK, completedGiveaways)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar os sorteios completados.')
+    }
+  }
 }
 export default GiveawayController

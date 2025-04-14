@@ -10,7 +10,7 @@ import { reviewSchema } from '../validations/review-schema.js'
 const winnerGiveawayRouter = express.Router()
 
 winnerGiveawayRouter.post(
-  '/winner-giveaway/create/:giveawayId',
+  '/winner-giveaway/create/:id',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
@@ -29,7 +29,7 @@ winnerGiveawayRouter.get(
 )
 
 winnerGiveawayRouter.get(
-  '/winner-giveaway/giveaway/:giveawayId',
+  '/winner-giveaway/giveaway/:id',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,

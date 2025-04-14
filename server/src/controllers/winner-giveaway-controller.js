@@ -11,25 +11,25 @@ import NotificationController from './notification-controller.js'
 
 class WinnerGiveawayController {
   static async createWinnerGiveaway (req, res) {
-    const { giveawayId } = req.params
+    const { id } = req.params
 
     try {
-      const winnerExists = await WinnerGiveawayRepository.getWinnerGiveawayById(giveawayId)
+      const winnerExists = await WinnerGiveawayRepository.getWinnerGiveawayById(id)
 
       if (winnerExists) {
         return response(res, false, StatusCodes.BAD_REQUEST, 'Vencedor do sorteio já existe.')
       }
 
-      const giveaway = await GiveawayRepository.getGiveawayById(giveawayId)
+      const giveaway = await GiveawayRepository.getGiveawayById(id)
 
       if (!giveaway) {
         return response(res, false, StatusCodes.NOT_FOUND, 'Giveaway não encontrado.')
       }
 
-      const winnerId = await WinnerGiveawayController.drawWinnerGiveaway(giveawayId)
+      const winnerId = await WinnerGiveawayController.drawWinnerGiveaway(id)
 
       const data = {
-        giveawayId,
+        id,
         userId: winnerId
       }
 
@@ -51,16 +51,16 @@ class WinnerGiveawayController {
   }
 
   static async getWinnerGiveawayById (req, res) {
-    const { giveawayId } = req.params
+    const { id } = req.params
 
     try {
-      const giveaway = await GiveawayRepository.getGiveawayById(giveawayId)
+      const giveaway = await GiveawayRepository.getGiveawayById(id)
 
       if (!giveaway) {
         return response(res, false, StatusCodes.NOT_FOUND, 'Giveaway não encontrado.')
       }
 
-      const winnerGiveaway = await WinnerGiveawayRepository.getWinnerGiveawayById(giveawayId)
+      const winnerGiveaway = await WinnerGiveawayRepository.getWinnerGiveawayById(id)
 
       if (!winnerGiveaway) {
         return response(res, false, StatusCodes.NOT_FOUND, 'Vencedor do sorteio não encontrado.')

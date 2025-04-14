@@ -148,6 +148,22 @@ class GiveawayRepository {
 
     return updatedGiveaway.rowsAffected[0] > 0
   }
+
+  static async getCompletedGiveawaysByUser (userId) {
+    const pool = await getConnection()
+
+    const completedGiveaways = await pool
+      .request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        SELECT * 
+        FROM Sorteio
+        JOIN Estado ON Estado.Estado_ID = Sorteio.Estado_ID
+        WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
+      `)
+
+    return completedGiveaways.recordset
+  }
 }
 
 export default GiveawayRepository

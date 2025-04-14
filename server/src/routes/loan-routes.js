@@ -81,4 +81,12 @@ loanRouter.patch(
   LoanController.updateLoanImage
 )
 
+loanRouter.get(
+  '/loans/completed',
+  AuthController.refreshAccessToken,
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  LoanController.getCompletedLoansByUser
+)
+
 export default loanRouter

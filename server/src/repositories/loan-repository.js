@@ -153,6 +153,22 @@ class LoanRepository {
 
     return updatedLoan.rowsAffected[0] > 0
   }
+
+  static async getCompletedLoansByUser (userId) {
+    const pool = await getConnection()
+
+    const completedLoans = await pool
+      .request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        SELECT * 
+        FROM Emprestimo
+        JOIN Estado ON Estado.Estado_ID = Emprestimo.Estado_ID
+        WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
+      `)
+
+    return completedLoans.recordset
+  }
 }
 
 export default LoanRepository
