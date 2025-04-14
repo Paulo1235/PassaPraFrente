@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { vi, expect, test } from 'vitest'
-import app from '../server.js'
+import app from '../app.js'
 import SaleRepository from '../src/repositories/sale-repository.js'
 
 vi.mock('../src/repositories/sale-repository.js')

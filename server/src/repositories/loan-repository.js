@@ -138,10 +138,6 @@ class LoanRepository {
     return userLoans.recordset
   }
 
-  static async updateLoanPictures () {
-
-  }
-
   static async updateLoanStatus (id, stateId) {
     const pool = await getConnection()
 

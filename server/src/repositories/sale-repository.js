@@ -132,10 +132,6 @@ class SaleRepository {
     return userSales.recordset
   }
 
-  static async updateSalePictures () {
-
-  }
-
   static async updateSaleStatus (id, stateId) {
     const pool = await getConnection()
 
