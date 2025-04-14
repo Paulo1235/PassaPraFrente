@@ -1,17 +1,22 @@
 import React, { use, useEffect } from "react";
 import logoEmpresa from '../images/logoEmpresa.png';
+import pessoaIco from '../images/pessoaIco.svg';
 import { useNavigate } from "react-router-dom";
 
 const Card = (props) => {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // console.log("Props:", props);
+  }, [props]);
+
   const handleCardClick = () => {
 
-    console.log(props)
+    // console.log(props)
 
     if(props.mainPage == true)
     {
-      if (props.category === "Vendas") {
+      if (props.category === "Vendas" && props.Estado !== "Concluído") {
         navigate(`/sale/${props.idVenda}`);
         } else if (props.category === "Emprestimos") {
           navigate(`/loan/${props.idEmprestimo}`);
@@ -25,6 +30,10 @@ const Card = (props) => {
           idSorteio: props.idSorteio,
           category: props.category,
         });
+    }
+    else if(props.isCompleted == true)
+    {
+
     }
     else
     {
@@ -47,12 +56,12 @@ const Card = (props) => {
 
   return (
     <div
-      className="w-[200px] h-[250px] rounded-lg bg-white shadow-lg cursor-pointer"
+      className="w-[200px] h-[290px] rounded-lg bg-white shadow-lg cursor-pointer"
       onClick={handleCardClick}
     >
       <div className="bg-black mx-5 mt-3 rounded-lg">
         <img
-          src={logoEmpresa}
+          src={props.image || pessoaIco}
           width="123px"
           height="118px"
           className="mx-auto"

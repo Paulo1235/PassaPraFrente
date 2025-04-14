@@ -1,5 +1,5 @@
 import React from "react";
-import logoEmpresa from "../images/logoEmpresa.png";
+import pessoaIco from '../images/pessoaIco.svg';
 import { ToastContainer, toast } from "react-toastify";
 import { Trash2, Check } from "lucide-react";
 
@@ -111,7 +111,7 @@ const AdminCard = (props) => {
     <div className="w-[300px] h-[120px] rounded-lg bg-white shadow-xl flex items-center p-3">
       <ToastContainer />
       <img
-        src={logoEmpresa}
+        src={props.image || pessoaIco}
         alt="Logo da Empresa"
         className="w-20 h-20 rounded-lg object-cover"
       />

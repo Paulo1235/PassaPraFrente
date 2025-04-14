@@ -61,6 +61,7 @@ const AdminMain = () => {
             idVenda: item.Venda_ID || null,
             idEmprestimo: item.Emprestimo_ID || null,
             idSorteio: item.Sorteio_ID || null,
+            image: item.photos || null,
             category,
           }));
         };
