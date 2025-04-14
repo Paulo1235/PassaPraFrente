@@ -16,7 +16,7 @@ class GiveawayController {
         throw new HttpException('A data de início deve ser anterior à data de fim.', StatusCodes.BAD_REQUEST)
       }
 
-      const item = ItemController.createItem(data)
+      const item = await ItemController.createItem(data)
 
       if (item) {
         await GiveawayRepository.createGiveaway(item, data, userId)
