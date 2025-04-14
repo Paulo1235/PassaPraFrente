@@ -49,7 +49,7 @@ class LoanController {
     try {
       const loans = await LoanRepository.getAllLoans()
 
-      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(loans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToLoans(loans)
 
       return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
@@ -61,7 +61,7 @@ class LoanController {
     try {
       const loans = await LoanRepository.getAvailableLoans()
 
-      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(loans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToLoans(loans)
 
       return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
@@ -73,7 +73,7 @@ class LoanController {
     try {
       const loans = await LoanRepository.getPendingLoans()
 
-      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(loans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToLoans(loans)
 
       return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
@@ -117,7 +117,7 @@ class LoanController {
     try {
       const loans = await LoanRepository.getUserLoans(id)
 
-      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(loans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToLoans(loans)
 
       return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
@@ -183,7 +183,7 @@ class LoanController {
     try {
       const uncompletedLoans = await LoanRepository.getNonCompletedLoansByUser(userId)
 
-      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(uncompletedLoans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToLoans(uncompletedLoans)
 
       return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
@@ -197,7 +197,7 @@ class LoanController {
     try {
       const completedLoans = await LoanRepository.getCompletedLoansByUser(userId)
 
-      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(completedLoans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToLoans(completedLoans)
 
       return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
@@ -205,7 +205,7 @@ class LoanController {
     }
   }
 
-  static async attachFirstPhotoToSales (loans) {
+  static async attachFirstPhotoToLoans (loans) {
     const loansWithPhotos = []
 
     for (const loan of loans) {

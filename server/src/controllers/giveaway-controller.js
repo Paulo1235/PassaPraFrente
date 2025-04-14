@@ -49,7 +49,7 @@ class GiveawayController {
     try {
       const giveaways = await GiveawayRepository.getAllGiveaways()
 
-      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(giveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToGiveaways(giveaways)
 
       return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
@@ -61,7 +61,7 @@ class GiveawayController {
     try {
       const giveaways = await GiveawayRepository.getAvailableGiveaways()
 
-      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(giveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToGiveaways(giveaways)
 
       return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
@@ -73,7 +73,7 @@ class GiveawayController {
     try {
       const giveaways = await GiveawayRepository.getPendingGiveaways()
 
-      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(giveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToGiveaways(giveaways)
 
       return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
@@ -116,7 +116,7 @@ class GiveawayController {
     try {
       const giveaways = await GiveawayRepository.getUserGiveaways(userId)
 
-      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(giveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToGiveaways(giveaways)
 
       return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
@@ -180,7 +180,7 @@ class GiveawayController {
     try {
       const uncompletedGiveaways = await GiveawayRepository.getNonCompletedGiveawaysByUser(userId)
 
-      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(uncompletedGiveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToGiveaways(uncompletedGiveaways)
 
       return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
@@ -194,7 +194,7 @@ class GiveawayController {
     try {
       const completedGiveaways = await GiveawayRepository.getCompletedGiveawaysByUser(userId)
 
-      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(completedGiveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToGiveaways(completedGiveaways)
 
       return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {

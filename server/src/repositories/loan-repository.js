@@ -163,7 +163,7 @@ class LoanRepository {
       .query(`
         SELECT * 
         FROM Emprestimo
-        JOIN Estado ON Estado.Estado_ID = Emprestimo.Estado_ID
+        JOIN Estado ON Estado.Estado_ID = Emprestimo.EstadoEstado_ID
         WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
       `)
 
@@ -179,7 +179,7 @@ class LoanRepository {
       .query(`
         SELECT * 
         FROM Emprestimo
-        JOIN Estado ON Estado.Estado_ID = Emprestimo.Estado_ID
+        JOIN Estado ON Estado.Estado_ID = Emprestimo.EstadoEstado_ID
         WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
       `)
 
