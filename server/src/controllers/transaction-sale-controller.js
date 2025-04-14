@@ -113,18 +113,22 @@ class TransactionSaleController {
       const transaction = await TransactionSaleRepository.getSaleTransactionByTransactionId(id)
 
       if (!transaction) {
-        throw new HttpException('Transação de empréstimo não existe.', StatusCodes.NOT_FOUND)
+        throw new HttpException('Transação de venda não existe.', StatusCodes.NOT_FOUND)
       }
 
       if (userId !== transaction.PropostaVendaUtilizador_ID) {
-        throw new HttpException('Não pode fazer review deste empréstimo', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Não pode fazer review desta venda', StatusCodes.UNAUTHORIZED)
+      }
+
+      if (transaction.Nota !== 0) {
+        throw new HttpException('Já efetuou review desta venda.', StatusCodes.BAD_REQUEST)
       }
 
       await TransactionSaleRepository.updateSaleReview(data)
 
-      return response(res, true, StatusCodes.CREATED, 'Review do empréstimo criada com sucesso.')
+      return response(res, true, StatusCodes.CREATED, 'Review da venda criada com sucesso.')
     } catch (error) {
-      handleError(res, error, 'Não foi possível efetuar a avaliação do empréstimo.')
+      handleError(res, error, 'Não foi possível efetuar a avaliação da venda.')
     }
   }
 }

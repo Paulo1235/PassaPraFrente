@@ -60,7 +60,7 @@ class TransactionLoanRepository {
       .query(`
         SELECT *
         FROM TransacaoEmprestimo
-        WHERE PropostaEmprestimoEmprestimo_ID = @loanId 
+        WHERE TransacaoEmprestimo_ID = @loanId 
       `)
 
     return transaction.recordset[0]
@@ -74,9 +74,9 @@ class TransactionLoanRepository {
       .input('transactionId', sql.Int, data.id)
       .input('review', sql.Int, data.review)
       .query(`
-        UPDATE TransacaoVenda
+        UPDATE TransacaoEmprestimo
         SET Nota = @review
-        WHERE TransacaoVenda_ID = @transactionId  
+        WHERE TransacaoEmprestimo_ID = @transactionId  
       `)
 
     return updatedTransaction.rowsAffected[0] > 0

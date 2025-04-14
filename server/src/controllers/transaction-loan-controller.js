@@ -116,6 +116,10 @@ class TransactionLoanController {
         throw new HttpException('Não pode fazer review deste empréstimo', StatusCodes.BAD_REQUEST)
       }
 
+      if (transaction.Nota !== 0) {
+        throw new HttpException('Já efetuou review deste empréstimo.', StatusCodes.BAD_REQUEST)
+      }
+
       await TransactionLoanRepository.updateLoanReview(data)
 
       return response(res, true, StatusCodes.CREATED, 'Review do empréstimo criada com sucesso.')

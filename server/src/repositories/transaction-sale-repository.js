@@ -58,7 +58,7 @@ class TransactionSaleRepository {
       .query(`
         SELECT *
         FROM TransacaoVenda
-        WHERE PropostaVendaVenda_ID = @saleId 
+        WHERE TransacaoVenda_ID = @saleId 
       `)
 
     return transaction.recordset[0]
