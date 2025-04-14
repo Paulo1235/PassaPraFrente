@@ -11,7 +11,7 @@ export const dbConfig = {
   port: parseInt(PORTDB, 10),
   options: {
     encrypt: true,
-    trustServerCertificate: false,
+    trustServerCertificate: true,
     enableArithAbort: true,
     instancename: INSTANCENAME
   }

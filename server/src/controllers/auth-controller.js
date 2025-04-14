@@ -47,13 +47,9 @@ class AuthController {
       }
 
       // Cria o novo utilizador na base de dados
-      const createdUser = await UserRepository.createUser(user)
+      await UserRepository.createUser(user)
 
-      if (!createdUser) {
-        throw new HttpException('Não foi possível criar conta.', StatusCodes.BAD_REQUEST)
-      }
-
-      return response(res, true, StatusCodes.CREATED, createdUser)
+      return response(res, true, StatusCodes.CREATED, 'Conta criada com sucesso.')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao criar a conta. Tente novamente mais tarde.')
     }
