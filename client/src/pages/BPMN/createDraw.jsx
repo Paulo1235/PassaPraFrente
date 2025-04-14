@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Undo2, Plus, X } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
@@ -8,38 +8,56 @@ import { CreateDrawSchema } from "../../lib/schemas";
 import '../../components/css/sidebar.css';
 import '../../index.css';
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+
 export default function CreateDraw() {
-  const fileInputRef = useRef(null);
+  const [isSubmitting, setIsSubmitting] = useState(false)
+    const fileInputRef = useRef(null)
 
   const navigate = useNavigate();
 
   // Initial form values
   const initialValues = {
-    title: "Camisola Quentinha Tigresa - XS",
-    description: "Quentinha, usada poucas vezes",
-    condition: "Quase novo",
-    category: "Roupas",
-    startDate: "2025-03-28T12:30",
-    endDate: "2025-03-28T14:30",
-    // photos: [],
+    title: "",
+    description: "",
+    condition: "Novo",
+    category: "Ferramentas",
+    startDate: "2025-06-28T12:30",
+    endDate: "2025-07-28T14:30",
+    photos: [],
+    photoUrls: [],
   };
   
+// Função para converter arquivo para base64
+const convertToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
+}
+
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const formData = new FormData();
-      formData.append("title", values.title);
-      formData.append("description", values.description);
-      formData.append("startDate", values.startDate);
-      formData.append("endDate", values.endDate);
-      formData.append("condition", values.condition);
-      formData.append("category", values.category);
+      const base64Promises = values.photos.map((photo) => convertToBase64(photo))
+      const photoUrls = await Promise.all(base64Promises)
+      const drawData = {
+        title: values.title,
+        description: values.description,
+        startDate: values.startDate,
+        endDate: values.endDate,
+        condition: values.condition,
+        category: values.category,
+        thumbnails: photoUrls,
+      }
 
       const response = await fetch(
         "http://localhost:5000/api/giveaways/create",
         {
           method: "POST",
-          body: JSON.stringify(values),
+          body: JSON.stringify(drawData),
           headers: {
             "Content-Type": "application/json",
           },
@@ -89,75 +107,77 @@ export default function CreateDraw() {
           >
             {({ values, errors, touched, setFieldValue }) => (
               <Form className="w-full">
-                {/*<p className="text-center text-sm text-gray-500 mb-2">
-                                    Mínimo 1 Foto, Máximo 3{values.photos.length > 0 && ` (${values.photos.length}/3)`}
-                                </p>
+                <p className="text-center text-sm text-gray-500 mb-2">
+                  Mínimo 1 Foto, Máximo 3
+                  {values.photos.length > 0 && ` (${values.photos.length}/3)`}
+                </p>
 
-                                {errors.photos && touched.photos && (
-                                    <p className="text-red-500 text-center text-sm mb-4">{errors.photos}</p>
-                                )}
+                {errors.photos && touched.photos && (
+                  <p className="text-red-500 text-center text-sm mb-4">
+                    {errors.photos}
+                  </p>
+                )}
 
-                                <div className="images flex flex-row gap-4 justify-center flex-wrap mb-10">
-                                    {values.photos.map((photo, index) => (
-                                        <div
-                                            key={index}
-                                            className="relative w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-white rounded-md overflow-hidden border border-gray-200"
-                                        >
-                                            <img
-                                                src={photo || "/placeholder.svg"}
-                                                alt={`Product image ${index + 1}`}
-                                                className="object-cover w-full h-full"
-                                            />
-                                            <button
-                                                type="button"
-                                                className="absolute top-2 right-2 bg-gray-800 bg-opacity-50 rounded-full p-1 hover:bg-opacity-70"
-                                                onClick={() => {
-                                                    const newPhotos = [...values.photos];
-                                                    URL.revokeObjectURL(newPhotos[index]);
-                                                    newPhotos.splice(index, 1);
-                                                    setFieldValue("photos", newPhotos);
-                                                }}
-                                            >
-                                                <X className="h-4 w-4 text-white" />
-                                            </button>
-                                        </div>
-                                    ))}
+                <div className="images flex flex-row gap-4 justify-center flex-wrap mb-10">
+                  {values.photos.map((photo, index) => (
+                    <div
+                      key={index}
+                      className="relative w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-white rounded-md overflow-hidden border border-gray-200"
+                    >
+                      <img
+                        src={URL.createObjectURL(photo)}
+                        alt={`Imagem ${index + 1}`}
+                        className="object-cover w-full h-full"
+                      />
+                      <button
+                        type="button"
+                        className="absolute top-2 right-2 bg-gray-800 bg-opacity-50 rounded-full p-1 hover:bg-opacity-70"
+                        onClick={() => {
+                          const newPhotos = [...values.photos]
+                          newPhotos.splice(index, 1)
+                          setFieldValue("photos", newPhotos)
+                        }}
+                      >
+                        <X className="h-4 w-4 text-white" />
+                      </button>
+                    </div>
+                  ))}
 
-                                    {values.photos.length < 3 && (
-                                        <div
-                                            className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-100 rounded-md flex items-center justify-center border border-dashed border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors"
-                                            onClick={() => {
-                                                if (fileInputRef.current) {
-                                                    fileInputRef.current.click();
-                                                }
-                                            }}
-                                        >
-                                            <Plus className="h-10 w-10 text-gray-400" />
-                                        </div>
-                                    )}
+                  {values.photos.length < 3 && (
+                    <div
+                      className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-100 rounded-md flex items-center justify-center border border-dashed border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors"
+                      onClick={() => {
+                        fileInputRef.current?.click()
+                      }}
+                    >
+                      <Plus className="h-10 w-10 text-gray-400" />
+                    </div>
+                  )}
 
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        className="hidden"
-                                        accept="image/*"
-                                        onChange={(e) => {
-                                            if (e.target.files && e.target.files.length > 0) {
-                                                const file = e.target.files[0];
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (!file) return
 
-                                                if (values.photos.length >= 3) {
-                                                    alert("Máximo de 3 fotos permitido.");
-                                                    return;
-                                                }
+                      if (file.size > MAX_FILE_SIZE) {
+                        toast.error("Imagem demasiado grande. Máx 10MB.")
+                        return
+                      }
 
-                                                const imageUrl = URL.createObjectURL(file);
-                                                setFieldValue("photos", [...values.photos, imageUrl]);
-                                                e.target.value = "";
-                                            }
-                                        }}
-                                    />
-                                </div> */}
+                      if (values.photos.length >= 3) {
+                        toast.error("Máximo de 3 fotos permitido.")
+                        return
+                      }
 
+                      const newPhotos = [...values.photos, file]
+                      setFieldValue("photos", newPhotos)
+                    }}
+                  />
+                </div>
                 <div className="form-container space-y-6 max-w-3xl mx-auto w-full">
                   <div className="form-group">
                     <label

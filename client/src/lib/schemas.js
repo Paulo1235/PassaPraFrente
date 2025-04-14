@@ -52,9 +52,10 @@ const CreateSaleSchema = yup.object().shape({
 
   category: yup.string().required("Categoria é obrigatória"),
 
-  // photos: yup.array()
-  //   .min(1, "Pelo menos 1 foto é obrigatória")
-  //   .max(3, "Máximo de 3 fotos permitido"),
+   photos: yup.array()
+      .min(1, "Pelo menos 1 foto é obrigatória")
+      .max(3, "Máximo de 3 fotos permitido")
+      .required("Imagens são obrigatórias."),
 });
 
 const CreateLoanSchema = yup.object().shape({
@@ -85,10 +86,10 @@ const CreateLoanSchema = yup.object().shape({
       .required("Data de fim é obrigatória")
       .min(yup.ref('startDate'), "Data de fim deve ser posterior à data de início"),
 
-  // Descomente se for usar validação de fotos:
-  // photos: yup.array()
-  //     .min(1, "Pelo menos 1 foto é obrigatória")
-  //     .max(3, "Máximo de 3 fotos permitido")
+    photos: yup.array()
+    .min(1, "Pelo menos 1 foto é obrigatória")
+    .max(3, "Máximo de 3 fotos permitido")
+    .required("Imagens são obrigatórias."),
 });
 
 const CreateDrawSchema = yup.object().shape({
@@ -117,11 +118,10 @@ const CreateDrawSchema = yup.object().shape({
         ? schema.min(startDate, "Data de fim deve ser posterior à data de início")
         : schema
     ),
-
-  // Descomente caso deseje validar o campo de fotos:
-  // photos: yup.array()
-  //   .min(1, "Pelo menos 1 foto é obrigatória")
-  //   .max(3, "Máximo de 3 fotos permitido")
+    photos: yup.array()
+    .min(1, "Pelo menos 1 foto é obrigatória")
+    .max(3, "Máximo de 3 fotos permitido")
+    .required("Imagens são obrigatórias."),
 });
 
 const CreateProposalSaleSchema = yup.object().shape({
