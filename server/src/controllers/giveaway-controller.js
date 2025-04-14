@@ -5,6 +5,7 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import IdService from '../services/id-service.js'
 import ItemController from './item-controller.js'
+import ItemRepository from '../repositories/item-repository.js'
 
 class GiveawayController {
   static async createGiveaway (req, res) {
@@ -48,7 +49,9 @@ class GiveawayController {
     try {
       const giveaways = await GiveawayRepository.getAllGiveaways()
 
-      return response(res, true, StatusCodes.OK, giveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(giveaways)
+
+      return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os giveaways.')
     }
@@ -58,7 +61,9 @@ class GiveawayController {
     try {
       const giveaways = await GiveawayRepository.getAvailableGiveaways()
 
-      return response(res, true, StatusCodes.OK, giveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(giveaways)
+
+      return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os giveaways disponíveis.')
     }
@@ -68,7 +73,9 @@ class GiveawayController {
     try {
       const giveaways = await GiveawayRepository.getPendingGiveaways()
 
-      return response(res, true, StatusCodes.OK, giveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(giveaways)
+
+      return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os giveaways em análise.')
     }
@@ -109,7 +116,9 @@ class GiveawayController {
     try {
       const giveaways = await GiveawayRepository.getUserGiveaways(userId)
 
-      return response(res, true, StatusCodes.OK, giveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(giveaways)
+
+      return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os giveaways do utilizador.')
     }
@@ -171,7 +180,9 @@ class GiveawayController {
     try {
       const uncompletedGiveaways = await GiveawayRepository.getNonCompletedGiveawaysByUser(userId)
 
-      return response(res, true, StatusCodes.OK, uncompletedGiveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(uncompletedGiveaways)
+
+      return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os sorteios não completos.')
     }
@@ -183,10 +194,29 @@ class GiveawayController {
     try {
       const completedGiveaways = await GiveawayRepository.getCompletedGiveawaysByUser(userId)
 
-      return response(res, true, StatusCodes.OK, completedGiveaways)
+      const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToSales(completedGiveaways)
+
+      return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os sorteios completos.')
     }
+  }
+
+  static async attachFirstPhotoToGiveaways (giveaways) {
+    const giveawaysWithPhotos = []
+
+    for (const giveaway of giveaways) {
+      const photos = await ItemRepository.getItemPhoto(giveaway.Artigo_ID)
+
+      const firstPhoto = photos.length > 0 ? photos[0] : null
+
+      giveawaysWithPhotos.push({
+        ...giveaway,
+        photos: firstPhoto
+      })
+    }
+
+    return giveawaysWithPhotos
   }
 }
 export default GiveawayController

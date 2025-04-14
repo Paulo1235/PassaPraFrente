@@ -5,6 +5,7 @@ import response from '../utils/response.js'
 import LoanRepository from '../repositories/loan-repository.js'
 import IdService from '../services/id-service.js'
 import ItemController from './item-controller.js'
+import ItemRepository from '../repositories/item-repository.js'
 
 class LoanController {
   static async createLoan (req, res) {
@@ -48,7 +49,9 @@ class LoanController {
     try {
       const loans = await LoanRepository.getAllLoans()
 
-      return response(res, true, StatusCodes.OK, loans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(loans)
+
+      return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos.')
     }
@@ -58,7 +61,9 @@ class LoanController {
     try {
       const loans = await LoanRepository.getAvailableLoans()
 
-      return response(res, true, StatusCodes.OK, loans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(loans)
+
+      return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos disponíveis.')
     }
@@ -68,7 +73,9 @@ class LoanController {
     try {
       const loans = await LoanRepository.getPendingLoans()
 
-      return response(res, true, StatusCodes.OK, loans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(loans)
+
+      return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos em análise.')
     }
@@ -110,7 +117,9 @@ class LoanController {
     try {
       const loans = await LoanRepository.getUserLoans(id)
 
-      return response(res, true, StatusCodes.OK, loans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(loans)
+
+      return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos do utilizador.')
     }
@@ -174,7 +183,9 @@ class LoanController {
     try {
       const uncompletedLoans = await LoanRepository.getNonCompletedLoansByUser(userId)
 
-      return response(res, true, StatusCodes.OK, uncompletedLoans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(uncompletedLoans)
+
+      return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos não completos.')
     }
@@ -186,10 +197,29 @@ class LoanController {
     try {
       const completedLoans = await LoanRepository.getCompletedLoansByUser(userId)
 
-      return response(res, true, StatusCodes.OK, completedLoans)
+      const loansWithPhotos = await LoanController.attachFirstPhotoToSales(completedLoans)
+
+      return response(res, true, StatusCodes.OK, loansWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os empréstimos completos.')
     }
+  }
+
+  static async attachFirstPhotoToSales (loans) {
+    const loansWithPhotos = []
+
+    for (const loan of loans) {
+      const photos = await ItemRepository.getItemPhoto(loan.Artigo_ID)
+
+      const firstPhoto = photos.length > 0 ? photos[0] : null
+
+      loansWithPhotos.push({
+        ...loan,
+        photos: firstPhoto
+      })
+    }
+
+    return loansWithPhotos
   }
 }
 

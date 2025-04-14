@@ -5,6 +5,7 @@ import response from '../utils/response.js'
 import SaleRepository from '../repositories/sale-repository.js'
 import IdService from '../services/id-service.js'
 import ItemController from './item-controller.js'
+import ItemRepository from '../repositories/item-repository.js'
 
 class SaleController {
   static async createSale (req, res) {
@@ -43,7 +44,9 @@ class SaleController {
     try {
       const sales = await SaleRepository.getAllSales()
 
-      return response(res, true, StatusCodes.OK, sales)
+      const salesWithPhotos = await SaleController.attachFirstPhotoToSales(sales)
+
+      return response(res, true, StatusCodes.OK, salesWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as vendas.')
     }
@@ -53,7 +56,9 @@ class SaleController {
     try {
       const sales = await SaleRepository.getAvailableSales()
 
-      return response(res, true, StatusCodes.OK, sales)
+      const salesWithPhotos = await SaleController.attachFirstPhotoToSales(sales)
+
+      return response(res, true, StatusCodes.OK, salesWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as vendas disponíveis.')
     }
@@ -63,7 +68,9 @@ class SaleController {
     try {
       const sales = await SaleRepository.getPendingSales()
 
-      return response(res, true, StatusCodes.OK, sales)
+      const salesWithPhotos = await SaleController.attachFirstPhotoToSales(sales)
+
+      return response(res, true, StatusCodes.OK, salesWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as vendas em análise.')
     }
@@ -103,7 +110,9 @@ class SaleController {
     try {
       const sales = await SaleRepository.getUserSales(userId)
 
-      response(res, true, StatusCodes.OK, sales)
+      const salesWithPhotos = await SaleController.attachFirstPhotoToSales(sales)
+
+      response(res, true, StatusCodes.OK, salesWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as vendas do utilizador.')
     }
@@ -167,7 +176,9 @@ class SaleController {
     try {
       const uncompletedSales = await SaleRepository.getNonCompletedSalesByUser(userId)
 
-      return response(res, true, StatusCodes.OK, uncompletedSales)
+      const salesWithPhotos = await SaleController.attachFirstPhotoToSales(uncompletedSales)
+
+      return response(res, true, StatusCodes.OK, salesWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as vendas não completas.')
     }
@@ -179,10 +190,29 @@ class SaleController {
     try {
       const completedSales = await SaleRepository.getCompletedSalesByUser(userId)
 
-      return response(res, true, StatusCodes.OK, completedSales)
+      const salesWithPhotos = await SaleController.attachFirstPhotoToSales(completedSales)
+
+      return response(res, true, StatusCodes.OK, salesWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as vendas completas.')
     }
+  }
+
+  static async attachFirstPhotoToSales (sales) {
+    const salesWithPhotos = []
+
+    for (const sale of sales) {
+      const photos = await ItemRepository.getItemPhoto(sale.Artigo_ID)
+
+      const firstPhoto = photos.length > 0 ? photos[0] : null
+
+      salesWithPhotos.push({
+        ...sale,
+        photos: firstPhoto
+      })
+    }
+
+    return salesWithPhotos
   }
 }
 
