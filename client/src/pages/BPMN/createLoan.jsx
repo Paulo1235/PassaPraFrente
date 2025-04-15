@@ -355,11 +355,11 @@ export default function CreateLoan() {
                           : "border-gray-300"
                       } rounded-md appearance-none bg-white`}
                     >
+                      <option value="Brinquedos">Brinquedos</option>
+                      <option value="Eletrónicos">Eletrónicos</option>
                       <option value="Ferramentas">Ferramentas</option>
-                      <option value="Eletrônicos">Eletrônicos</option>
-                      <option value="Esportes">Esportes</option>
-                      <option value="Livros">Livros</option>
-                      <option value="Outros">Outros</option>
+                      <option value="Mobilia">Mobilia</option>
+                      <option value="Roupas">Roupas</option>
                     </Field>
                     <ErrorMessage
                       name="category"

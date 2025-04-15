@@ -6,8 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-import '../../components/css/sidebar.css';
-import '../../index.css';
+import "../../components/css/sidebar.css";
+import "../../index.css";
 
 export default function EditSale() {
   const { id } = useParams();
@@ -32,12 +32,11 @@ export default function EditSale() {
             credentials: "include",
           }
         );
-        
+
         const result = await response.json();
-        console.log(result.message)
+        console.log(result.message);
         setData(result.message); // Ajusta conforme estrutura do retorno
         setIsLoading(false);
-
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
         setIsLoading(false);
@@ -68,14 +67,14 @@ export default function EditSale() {
           category: values.category,
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error("Erro ao atualizar a venda.");
       }
-  
+
       const result = await response.json();
       console.log("Venda atualizada:", result);
-      toast.success("Venda atualizada com sucesso!")
+      toast.success("Venda atualizada com sucesso!");
       setTimeout(() => {
         navigate("/index");
       }, 2000);
@@ -84,9 +83,9 @@ export default function EditSale() {
       toast.error("Erro ao atualizar a venda.");
     }
   };
-  
 
-  if (isLoading) return <p className="text-center mt-10">A carregar dados...</p>;
+  if (isLoading)
+    return <p className="text-center mt-10">A carregar dados...</p>;
 
   const initialValues = {
     title: data?.Titulo || "",
@@ -199,7 +198,10 @@ export default function EditSale() {
 
                 <div className="form-container space-y-6 max-w-3xl mx-auto w-full">
                   <div className="form-group">
-                    <label htmlFor="title" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="title"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Título:
                     </label>
                     <Field
@@ -207,14 +209,23 @@ export default function EditSale() {
                       name="title"
                       type="text"
                       className={`w-full p-2 border ${
-                        errors.title && touched.title ? "border-red-500" : "border-gray-300"
+                        errors.title && touched.title
+                          ? "border-red-500"
+                          : "border-gray-300"
                       } rounded-md`}
                     />
-                    <ErrorMessage name="title" component="div" className="text-red-500 text-sm mt-1" />
+                    <ErrorMessage
+                      name="title"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="description" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="description"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Descrição:
                     </label>
                     <Field
@@ -222,15 +233,24 @@ export default function EditSale() {
                       id="description"
                       name="description"
                       className={`w-full p-2 border ${
-                        errors.description && touched.description ? "border-red-500" : "border-gray-300"
+                        errors.description && touched.description
+                          ? "border-red-500"
+                          : "border-gray-300"
                       } rounded-md min-h-[100px]`}
                     />
-                    <ErrorMessage name="description" component="div" className="text-red-500 text-sm mt-1" />
+                    <ErrorMessage
+                      name="description"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="form-group">
-                      <label htmlFor="price" className="block text-sm font-medium mb-2">
+                      <label
+                        htmlFor="price"
+                        className="block text-sm font-medium mb-2"
+                      >
                         Valor:
                       </label>
                       <div className="relative">
@@ -239,16 +259,25 @@ export default function EditSale() {
                           name="price"
                           type="text"
                           className={`w-full p-2 border ${
-                            errors.price && touched.price ? "border-red-500" : "border-gray-300"
+                            errors.price && touched.price
+                              ? "border-red-500"
+                              : "border-gray-300"
                           } rounded-md pl-8`}
                         />
                         <span className="absolute left-3 top-2.5">€</span>
                       </div>
-                      <ErrorMessage name="price" component="div" className="text-red-500 text-sm mt-1" />
+                      <ErrorMessage
+                        name="price"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="condition" className="block text-sm font-medium mb-2">
+                      <label
+                        htmlFor="condition"
+                        className="block text-sm font-medium mb-2"
+                      >
                         Condição:
                       </label>
                       <Field
@@ -256,20 +285,28 @@ export default function EditSale() {
                         id="condition"
                         name="condition"
                         className={`w-full p-2 border ${
-                          errors.condition && touched.condition ? "border-red-500" : "border-gray-300"
+                          errors.condition && touched.condition
+                            ? "border-red-500"
+                            : "border-gray-300"
                         } rounded-md appearance-none bg-white`}
                       >
                         <option value="Como novo">Como novo</option>
                         <option value="Bom Estado">Bom Estado</option>
                         <option value="Usado">Usado</option>
-                        <option value="Com defeito">Com defeito</option>
                       </Field>
-                      <ErrorMessage name="condition" component="div" className="text-red-500 text-sm mt-1" />
+                      <ErrorMessage
+                        name="condition"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
                     </div>
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="category" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="category"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Categoria:
                     </label>
                     <Field
@@ -277,15 +314,22 @@ export default function EditSale() {
                       id="category"
                       name="category"
                       className={`w-full p-2 border ${
-                        errors.category && touched.category ? "border-red-500" : "border-gray-300"
+                        errors.category && touched.category
+                          ? "border-red-500"
+                          : "border-gray-300"
                       } rounded-md appearance-none bg-white`}
                     >
-                      <option value="Roupa">Roupa</option>
-                      <option value="Calçado">Calçado</option>
-                      <option value="Acessórios">Acessórios</option>
-                      <option value="Outros">Outros</option>
+                      <option value="Brinquedos">Brinquedos</option>
+                      <option value="Eletrónicos">Eletrónicos</option>
+                      <option value="Ferramentas">Ferramentas</option>
+                      <option value="Mobilia">Mobilia</option>
+                      <option value="Roupas">Roupas</option>
                     </Field>
-                    <ErrorMessage name="category" component="div" className="text-red-500 text-sm mt-1" />
+                    <ErrorMessage
+                      name="category"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
                   </div>
 
                   <div className="flex justify-center mt-10">

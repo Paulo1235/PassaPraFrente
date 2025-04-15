@@ -300,7 +300,6 @@ export default function EditLoan() {
                         <option value="Como novo">Como novo</option>
                         <option value="Bom Estado">Bom Estado</option>
                         <option value="Usado">Usado</option>
-                        <option value="Com defeito">Com defeito</option>
                       </Field>
                       <ErrorMessage
                         name="condition"
