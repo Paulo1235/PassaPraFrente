@@ -25,6 +25,7 @@ const ShopSection = ({ title, items }) => {
               size={item.size}
               value={item.value}
               category={title}
+              image={item.foto}
               idVenda={item.idVenda}
               idEmprestimo={item.idEmprestimo}
               idSorteio={item.idSorteio}

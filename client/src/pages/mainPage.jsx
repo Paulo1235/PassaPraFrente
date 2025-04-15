@@ -63,6 +63,9 @@ const Main = () => {
         const dataSales = await responseSales.json();
         const dataLoans = await responseLoans.json();
         const dataGiveaways = await responseGiveaways.json();
+
+        // console.log(dataSales)
+        console.log(dataLoans)
         // console.log(dataGiveaways);
         const transformItems = (items, category) => {
           return items.message.map((item) => ({
@@ -72,6 +75,7 @@ const Main = () => {
             idVenda: item.Venda_ID || "ID",
             idEmprestimo: item.Emprestimo_ID || "ID",
             idSorteio: item.Sorteio_ID || "ID",
+            foto: item.photos || "",
             category,
           }));
         };
