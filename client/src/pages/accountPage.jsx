@@ -133,7 +133,7 @@ const Account = () => {
         const dataRating = await responseRating.json();
 
         // console.log(dataRating)
-        console.log(dataSales)
+        // console.log(dataSales)
         // console.log(dataLoans)
         // console.log(dataGiveaways)
 
@@ -183,8 +183,8 @@ const Account = () => {
           },
         };
 
-        console.log(userData);
-        console.log(userDataNonCompleted);
+        // console.log(userData);
+        // console.log(userDataNonCompleted);
         setUserData(userData);
         setUserDataNonCompleted(userDataNonCompleted);
       } catch (error) {

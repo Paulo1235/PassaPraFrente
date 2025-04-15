@@ -6,8 +6,8 @@ import { Trash2, Check } from "lucide-react";
 const AdminCard = (props) => {
   const accept = async (id, values) => {
     toast.success("Aceite!");
-    console.log("ACCEPT CALLED", { id, values });
-    console.log("ACCEPT -> tipoAnuncio:", values.tipoAnuncio);
+    // console.log("ACCEPT CALLED", { id, values });
+    // console.log("ACCEPT -> tipoAnuncio:", values.tipoAnuncio);
     if (values.tipoAnuncio === "Empréstimo") {
       return await fetch(
         `http://localhost:5000/api/loans/update-status/${id}`,
@@ -57,8 +57,8 @@ const AdminCard = (props) => {
 
   const deny = async (id, values) => {
     toast.error("Recusado!");
-    console.log("DENY CALLED", { id, values });
-    console.log("DENY -> tipoAnuncio:", values.tipoAnuncio);
+    // console.log("DENY CALLED", { id, values });
+    // console.log("DENY -> tipoAnuncio:", values.tipoAnuncio);
     if (values.tipoAnuncio === "Emprestimo") {
       return await fetch(
         `http://localhost:5000/api/loans/update-status/${id}`,

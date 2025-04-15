@@ -38,7 +38,7 @@ export default function NotificationsPage() {
         }
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setNotificationsData(data);
         setError(null);
       } catch (error) {

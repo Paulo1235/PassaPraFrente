@@ -34,7 +34,7 @@ export default function EditSale() {
         );
 
         const result = await response.json();
-        console.log(result.message);
+        // console.log(result.message);
         setData(result.message); // Ajusta conforme estrutura do retorno
         setIsLoading(false);
       } catch (error) {
@@ -73,13 +73,13 @@ export default function EditSale() {
       }
 
       const result = await response.json();
-      console.log("Venda atualizada:", result);
+      // console.log("Venda atualizada:", result);
       toast.success("Venda atualizada com sucesso!");
       setTimeout(() => {
         navigate("/index");
       }, 2000);
     } catch (error) {
-      console.error("Erro ao submeter dados:", error);
+      // console.error("Erro ao submeter dados:", error);
       toast.error("Erro ao atualizar a venda.");
     }
   };

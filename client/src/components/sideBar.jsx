@@ -30,7 +30,7 @@ const Sidebar = (props) => {
     };
 
     fetchData();
-    console.log(user)
+    // console.log(user)
     checkIfMobile();
     window.addEventListener("resize", checkIfMobile);
     return () => window.removeEventListener("resize", checkIfMobile);

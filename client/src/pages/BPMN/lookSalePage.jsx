@@ -35,10 +35,10 @@ function LookSale() {
           credentials: "include",
         });
         const data = await response.json();
-        console.log(data.message);
+        // console.log(data.message);
         setData(data.message);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        // console.error("Error fetching data:", error);
       }
     }
   

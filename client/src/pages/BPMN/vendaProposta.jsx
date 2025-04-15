@@ -39,7 +39,7 @@ export default function VendaProposta() {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setData(data.message);
       } catch (error) {}
     };
@@ -69,7 +69,7 @@ export default function VendaProposta() {
         }
       );
       const data = await response.json();
-      console.log(data.message);
+      // console.log(data.message);
       if (data.message === "Proposta criada com sucesso.") {
         toast.success("Proposta enviada com sucesso!");
         setTimeout(() => {

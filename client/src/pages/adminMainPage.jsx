@@ -81,7 +81,7 @@ const AdminMain = () => {
           },
         ];
         
-        console.log(formattedData)
+        // console.log(formattedData)
         setShopData(formattedData);
       } catch (error) {
         console.error("Erro ao buscar dados do backend:", error);

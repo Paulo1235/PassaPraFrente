@@ -23,7 +23,7 @@ function LookLoan() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(id)
+  // console.log(id)
 
   useEffect(() => {
 
@@ -37,7 +37,7 @@ function LookLoan() {
           credentials: "include",
         });
         const data = await response.json();
-        console.log(data.message);
+        // console.log(data.message);
         setData(data.message);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -64,7 +64,7 @@ function LookLoan() {
           credentials: "include",
         });
         const result = await response.json();
-        console.log(result.message);
+        // console.log(result.message);
         if(result.message == "Transação criada com sucesso.") {
           toast.success("Transação criada com sucesso!");
         }	
@@ -73,7 +73,7 @@ function LookLoan() {
           toast.error(result.message);
         }
       } catch (error) {
-        console.error("Error creating transaction:", error);
+        // console.error("Error creating transaction:", error);
         toast.error(error);
       }
     }

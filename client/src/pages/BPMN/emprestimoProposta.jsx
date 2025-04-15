@@ -12,27 +12,11 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { CreateProposalLoanSchema } from "../../lib/schemas"
 
 import "../../components/css/sidebar.css";
 import "../../index.css";
 import { Helmet } from "react-helmet";
-
-const CreateProposalSaleSchema = Yup.object().shape({
-  price: Yup.number()
-    .optional("O preço é obrigatório")
-    .positive("O preço deve ser positivo")
-    .typeError("O preço deve ser um número"),
-  dataInicio: Yup.date()
-    .optional("A data de início é obrigatória")
-    .typeError("Data inválida"),
-  dataFim: Yup.date()
-    .optional("A data de fim é obrigatória")
-    .min(
-      Yup.ref("dataInicio"),
-      "A data de fim deve ser posterior à data de início"
-    )
-    .typeError("Data inválida"),
-});
 
 export default function EmprestimoProposta() {
   const { id } = useParams();
@@ -60,7 +44,7 @@ export default function EmprestimoProposta() {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setData(data.message);
       } catch (error) {}
     };
@@ -92,9 +76,9 @@ export default function EmprestimoProposta() {
         }
       );
       const data = await response.json();
-      console.log(data.message);
+      // console.log(data.message);
 
-      console.log(values);
+      // console.log(values);
 
       if (data.message === "Proposta de empréstimo criada com sucesso.") {
         toast.success("Proposta enviada com sucesso!");
@@ -160,7 +144,7 @@ export default function EmprestimoProposta() {
           <Formik
             enableReinitialize
             initialValues={initialValues}
-            validationSchema={CreateProposalSaleSchema}
+            validationSchema={CreateProposalLoanSchema}
             onSubmit={handleSubmit}
           >
             {({ errors, touched }) => (

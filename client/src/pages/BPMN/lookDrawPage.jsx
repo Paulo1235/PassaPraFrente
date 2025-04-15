@@ -39,7 +39,7 @@ function LookDraw(props) {
           credentials: "include",
         });
         const data = await response.json();
-        console.log(data.message);
+        // console.log(data.message);
         setData(data.message);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -66,7 +66,7 @@ function LookDraw(props) {
         credentials: "include",
       });
       const result = await response.json(); // <- trocado de `data` para `result`
-      console.log(result.message);
+      // console.log(result.message);
       if(result.message == "Inscrição criada com sucesso.")
         toast.success("Entrou no sorteio com sucesso!")
       else

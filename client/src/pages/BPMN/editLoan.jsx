@@ -34,7 +34,7 @@ export default function EditLoan() {
         );
 
         const result = await response.json();
-        console.log(result.message);
+        // console.log(result.message);
 
         setData(result.message);
         setIsLoading(false);
@@ -77,7 +77,7 @@ export default function EditLoan() {
       }
 
       const result = await response.json();
-      console.log("Venda atualizada:", result);
+      // console.log("Venda atualizada:", result);
       toast.success("Empréstimo atualizado com sucesso!")
       setTimeout(() => {
         navigate("/index");

@@ -24,12 +24,12 @@ const Card = (props) => {
           navigate(`/draw/${props.idSorteio}`);
         }
     
-        console.log("IDs recebidos:", {
-          idVenda: props.idVenda,
-          idEmprestimo: props.idEmprestimo,
-          idSorteio: props.idSorteio,
-          category: props.category,
-        });
+        // console.log("IDs recebidos:", {
+        //   idVenda: props.idVenda,
+        //   idEmprestimo: props.idEmprestimo,
+        //   idSorteio: props.idSorteio,
+        //   category: props.category,
+        // });
     }
     else if(props.isCompleted == true)
     {
@@ -45,12 +45,12 @@ const Card = (props) => {
           navigate(`/editdraw/${props.idSorteio}`);
         }
     
-        console.log("IDs (BPMN) recebidos:", {
-          idVenda: props.idVenda,
-          idEmprestimo: props.idEmprestimo,
-          idSorteio: props.idSorteio,
-          category: props.category,
-        });
+        // console.log("IDs (BPMN) recebidos:", {
+        //   idVenda: props.idVenda,
+        //   idEmprestimo: props.idEmprestimo,
+        //   idSorteio: props.idSorteio,
+        //   category: props.category,
+        // });
     }
   };
 

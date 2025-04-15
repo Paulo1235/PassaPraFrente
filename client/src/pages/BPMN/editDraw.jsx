@@ -34,7 +34,7 @@ export default function EditDraw() {
         );
 
         const result = await response.json();
-        console.log(result.message);
+        // console.log(result.message);
         setData(result.message); // Ajusta conforme estrutura do retorno
         setIsLoading(false);
       } catch (error) {
@@ -78,7 +78,7 @@ export default function EditDraw() {
       }
 
       const result = await response.json();
-      console.log("Venda atualizada:", result);
+      // console.log("Venda atualizada:", result);
       toast.success("Sorteio atualizado com sucesso!");
       setTimeout(() => {
         navigate("/index");
@@ -102,7 +102,7 @@ export default function EditDraw() {
         }
       );
       const data = await response.json();
-      console.log(data.message);
+      // console.log(data.message);
       if (data.message == "Vencedor do sorteio criado com sucesso.") {
         toast.success("Vencedor do sorteio criado com sucesso!");
         setTimeout(() => {

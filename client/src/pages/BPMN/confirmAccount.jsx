@@ -31,7 +31,7 @@ export default function PasswordReset() {
     },
     // validationSchema: SendEmailSchema,
     onSubmit: async (values) => {
-      console.log("Enviando valores do form:", values);
+      // console.log("Enviando valores do form:", values);
       const activationCode = values.activationCode;
 
       setError("");
@@ -179,7 +179,7 @@ export default function PasswordReset() {
                 <button
                   type="submit"
                   disabled={loading}
-                    onClick={() => console.log("Botão clicado")}
+                    // onClick={() => console.log("Botão clicado")}
 
                   className="w-full text-white py-2 px-4 bg-[#CAAD7E] hover:bg-[#c2a478] text-black font-medium rounded-md transition duration-200"
                 >
