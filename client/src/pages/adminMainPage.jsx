@@ -62,6 +62,8 @@ const AdminMain = () => {
         const dataLoans = await responseLoans.json();
         const dataGiveaways = await responseGiveaways.json();
 
+        // console.log(dataGiveaways)
+
         const transformItems = (items, category) => {
           return items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
@@ -90,6 +92,7 @@ const AdminMain = () => {
           },
         ];
 
+        //! as fotos dos sorteios ta sempre null ou undefined
         // console.log(formattedData)
         setShopData(formattedData);
       } catch (error) {

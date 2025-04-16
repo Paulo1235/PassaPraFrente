@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import pessoaIco from '../images/pessoaIco.svg';
 import { ToastContainer, toast } from "react-toastify";
 import { Trash2, Check } from "lucide-react";
@@ -106,6 +106,8 @@ const AdminCard = (props) => {
       );
     }
   };
+
+  // useEffect(() => {console.log(props)}, [])
 
   return (
     <div className="w-[300px] h-[120px] rounded-lg bg-white shadow-xl flex items-center p-3">
