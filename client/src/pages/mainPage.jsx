@@ -12,6 +12,7 @@ import "../index.css";
 import SideBar from "../components/sideBar";
 import Shop from "../components/shop";
 import { useState } from "react";
+import Footer from '../components/footer'
 
 const Main = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -64,8 +65,8 @@ const Main = () => {
         const dataLoans = await responseLoans.json();
         const dataGiveaways = await responseGiveaways.json();
 
-        // console.log(dataSales)
-        // console.log(dataLoans)
+        console.log(dataSales)
+        console.log(dataLoans)
         // console.log(dataGiveaways);
         const transformItems = (items, category) => {
           return items.message.map((item) => ({

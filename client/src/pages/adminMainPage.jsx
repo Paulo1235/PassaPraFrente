@@ -90,7 +90,7 @@ const AdminMain = () => {
           },
         ];
 
-        console.log(formattedData)
+        // console.log(formattedData)
         setShopData(formattedData);
       } catch (error) {
         console.error("Erro ao buscar dados do backend:", error);
@@ -115,7 +115,7 @@ const AdminMain = () => {
         <SideBar canAdd={false} Home={true} Account={true} LogOut={true} />
       </div>
       <div className="App w-full overflow-x-auto flex flex-col">
-        <div className="flex flex-col md:flex-row px-4 md:px-6 flex-grow">
+        <div className="flex flex-col md:flex-row px-4 md:px-6 flex-grow text-center md:text-start">
           {shopData.map((section, sectionIndex) => (
             <div
               key={`section-${sectionIndex}`}

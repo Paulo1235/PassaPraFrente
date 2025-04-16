@@ -238,7 +238,7 @@ export default function ProposalsPage() {
   const announcingItemsAnnounce = [...proposalsReceived.sales, ...proposalsReceived.loans] // Recebidas
 
   return (
-    <div className="flex  bg-bgp overflow-hidden">
+    <div className="flex h-screen bg-bgp overflow-hidden">
       <Helmet>
         <title>Propostas</title>
       </Helmet>

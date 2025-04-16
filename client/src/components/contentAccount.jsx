@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "./card";
+import { useEffect } from "react";
 
 const ContentAccount = (props) => {
     const { 
@@ -7,6 +8,8 @@ const ContentAccount = (props) => {
         completedItems = [], 
         incompleteItems = [] 
     } = props || {};
+
+    // useEffect(()=>{console.log(props)}, [])
 
     const hasCompletedItems = Array.isArray(completedItems) && completedItems.length > 0;
     const hasIncompleteItems = Array.isArray(incompleteItems) && incompleteItems.length > 0;

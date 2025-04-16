@@ -12,12 +12,14 @@ const ProposalCard = ({ item }) => {
   const getStatusText = (status) => {
     if (status === undefined) return "Pendente";
 
+    console.log(status)
+
     switch (status) {
-      case 0:
-        return "Pendente";
       case 1:
-        return "Aprovado";
+        return "Pendente";
       case 2:
+        return "Aprovado";
+      case 3:
         return "Rejeitado";
       default:
         return "Pendente";
@@ -29,11 +31,11 @@ const ProposalCard = ({ item }) => {
     if (status === undefined) return "bg-yellow-100 text-yellow-800";
 
     switch (status) {
-      case 0:
-        return "bg-yellow-100 text-yellow-800";
       case 1:
-        return "bg-green-100 text-green-800";
+        return "bg-yellow-100 text-yellow-800";
       case 2:
+        return "bg-green-100 text-green-800";
+      case 3:
         return "bg-red-100 text-red-800";
       default:
         return "bg-yellow-100 text-yellow-800";
