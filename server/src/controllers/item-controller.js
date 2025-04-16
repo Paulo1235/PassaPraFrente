@@ -100,7 +100,8 @@ class ItemController {
 
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: 'items',
-          width: 150
+          width: 123,
+          height: 118
         })
 
         const updated = await ItemRepository.updateItemPhoto(itemId, myCloud.public_id, myCloud.secure_url)

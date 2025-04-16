@@ -25,10 +25,6 @@ class EntryGiveawayController {
         return response(res, false, StatusCodes.NOT_FOUND, 'Sorteio não encontrado.')
       }
 
-      if (giveaway.DataInicio < new Date()) {
-        return response(res, false, StatusCodes.BAD_REQUEST, 'O sorteio já começou. Já não é possível inscrever-se.')
-      }
-
       if (giveaway.DataFim < new Date()) {
         return response(res, false, StatusCodes.BAD_REQUEST, 'O sorteio já terminou. Já não é possível inscrever-se.')
       }
