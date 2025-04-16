@@ -29,8 +29,6 @@ import notificationRouter from './src/routes/notification-routes.js'
 
 const app = express()
 
-const swaggerOutput = FileService.readJSON('docs/swagger-output.json')
-
 const corsOptions = {
   origin: ['http://localhost:3000'],
   methods: ['POST', 'GET', 'PUT', 'DELETE', 'PATCH'],
@@ -54,6 +52,9 @@ app.use(helmet())
 app.use(compression())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ limit: '50mb', extended: true }))
+
+// Swagger
+const swaggerOutput = FileService.readJSON('docs/swagger-output.json')
 
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerOutput))
 

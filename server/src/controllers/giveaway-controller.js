@@ -134,6 +134,7 @@ class GiveawayController {
   static async updateGiveawayStatus (req, res) {
     const { status } = req.body
     const { id } = req.params
+
     try {
       const giveaway = await GiveawayRepository.getGiveawayById(id)
 
@@ -142,6 +143,7 @@ class GiveawayController {
       }
 
       const stateId = await IdService.getStateById(status)
+
       if (!stateId) {
         throw new HttpException('Estado inválido.', StatusCodes.BAD_REQUEST)
       }

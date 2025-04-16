@@ -37,6 +37,7 @@ authRouter.post(
   AuthMiddleware.isAuthenticated,
   AuthController.sendAccountActivationEmail
 )
+
 authRouter.post(
   '/auth/activate-user',
   AuthController.refreshAccessToken,
