@@ -35,7 +35,9 @@ class SaleController {
         throw new HttpException('Venda não encontrada.', StatusCodes.NOT_FOUND)
       }
 
-      return response(res, true, StatusCodes.OK, sale)
+      const saleWithPhotos = await SaleController.attachPhotosToSale(sale)
+
+      return response(res, true, StatusCodes.OK, saleWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar a venda.')
     }
@@ -200,6 +202,15 @@ class SaleController {
       return response(res, true, StatusCodes.OK, salesWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as vendas completas.')
+    }
+  }
+
+  static async attachPhotosToSale (sale) {
+    const photos = await ItemRepository.getItemPhoto(sale.Artigo_ID)
+
+    return {
+      ...sale,
+      photos
     }
   }
 

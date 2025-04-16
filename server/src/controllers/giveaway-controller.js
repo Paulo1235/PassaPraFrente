@@ -40,7 +40,9 @@ class GiveawayController {
         throw new HttpException('Giveaway não encontrado.', StatusCodes.NOT_FOUND)
       }
 
-      return response(res, true, StatusCodes.OK, giveaway)
+      const giveawayWithPhotos = await GiveawayController.attachPhotosToGiveaway(giveaway)
+
+      return response(res, true, StatusCodes.OK, giveawayWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar o giveaway.')
     }
@@ -204,6 +206,15 @@ class GiveawayController {
       return response(res, true, StatusCodes.OK, giveawaysWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os sorteios completos.')
+    }
+  }
+
+  static async attachPhotosToGiveaway (giveaway) {
+    const photos = await ItemRepository.getItemPhoto(giveaway.Artigo_ID)
+
+    return {
+      ...giveaway,
+      photos
     }
   }
 

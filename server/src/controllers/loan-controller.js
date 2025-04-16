@@ -40,7 +40,9 @@ class LoanController {
         throw new HttpException('Empréstimo não encontrado.', StatusCodes.NOT_FOUND)
       }
 
-      return response(res, true, StatusCodes.OK, loan)
+      const loanWithPhotos = await LoanController.attachPhotosToLoan(loan)
+
+      return response(res, true, StatusCodes.OK, loanWithPhotos)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar o empréstimo.')
     }
@@ -210,11 +212,20 @@ class LoanController {
     }
   }
 
+  static async attachPhotosToLoan (loan) {
+    const photos = await ItemRepository.getItemPhoto(loan.ArtigoArtigo_ID)
+
+    return {
+      ...loan,
+      photos
+    }
+  }
+
   static async attachFirstPhotoToLoans (loans) {
     const loansWithPhotos = []
 
     for (const loan of loans) {
-      const photos = await ItemRepository.getItemPhoto(loan.Artigo_ID)
+      const photos = await ItemRepository.getItemPhoto(loan.ArtigoArtigo_ID)
 
       const firstPhoto = photos.length > 0 ? photos[0] : null
 
