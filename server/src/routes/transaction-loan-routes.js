@@ -13,6 +13,7 @@ transactionLoanRouter.post(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
+  AuthMiddleware.isAdult,
   TransactionLoanController.createDirectTransactionLoan
 )
 

@@ -37,6 +37,7 @@ proposalSaleRouter.post(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
+  AuthMiddleware.isAdult,
   validateSchema(proposalSaleSchema, false),
   ProposalSaleController.createProposalSale
 )

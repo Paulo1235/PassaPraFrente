@@ -15,7 +15,7 @@ giveawayRouter.post(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  // ProposalMiddleware.isAdult,
+  AuthMiddleware.isAdult,
   validateSchema(giveawaySchema, false),
   validateSchema(itemSchema, false),
   GiveawayController.createGiveaway

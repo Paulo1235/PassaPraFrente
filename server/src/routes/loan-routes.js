@@ -41,6 +41,7 @@ loanRouter.post(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
+  AuthMiddleware.isAdult,
   validateSchema(loanSchema, false),
   validateSchema(itemSchema, false),
   LoanController.createLoan

@@ -46,6 +46,7 @@ saleRouter.post(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
+  AuthMiddleware.isAdult,
   validateSchema(saleSchema, false),
   validateSchema(itemSchema, false),
   SaleController.createSale

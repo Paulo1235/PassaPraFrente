@@ -15,7 +15,7 @@ winnerGiveawayRouter.post(
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   ProposalMiddleware.isOwnerGiveaway,
-  // ProposalMiddleware.isAdult,
+  AuthMiddleware.isAdult,
   WinnerGiveawayController.createWinnerGiveaway
 )
 

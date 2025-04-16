@@ -13,6 +13,7 @@ transactionSaleRouter.post(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
+  AuthMiddleware.isAdult,
   TransactionSaleController.createDirectTransactionSale
 )
 

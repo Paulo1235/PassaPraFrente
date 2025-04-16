@@ -5,7 +5,7 @@ import { dbConfig } from './db-config.js'
 
 export const checkDatabaseConnection = async () => {
   try {
-    await sql.connect(dbConfig).then((data) => {
+    await sql.connect(dbConfig).then(() => {
       const server = dbConfig.server
       const database = dbConfig.database
 

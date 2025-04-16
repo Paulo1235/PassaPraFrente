@@ -3,6 +3,7 @@ import express from 'express'
 import AuthMiddleware from '../middlewares/auth-middleware.js'
 import AuthController from '../controllers/auth-controller.js'
 import EntryGiveawayController from '../controllers/entry-giveaway-controller.js'
+import ProposalMiddleware from '../middlewares/owner-middleware.js'
 
 const entryGiveawayRouter = express.Router()
 
@@ -11,7 +12,7 @@ entryGiveawayRouter.post(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  // ProposalMiddleware.isAdult,
+  AuthMiddleware.isAdult,
   EntryGiveawayController.createEntryGiveaway
 )
 
@@ -36,6 +37,7 @@ entryGiveawayRouter.get(
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
+  ProposalMiddleware.isOwnerGiveaway,
   EntryGiveawayController.getAllEntryGiveawaysByGiveaway
 )
 

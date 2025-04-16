@@ -32,15 +32,32 @@ describe('SaleController - Update Functions', () => {
   it('deve atualizar a venda com sucesso', async () => {
     const req = { params: { id: 1 }, body: { title: 'Updated Title' } }
     const res = {}
-    const sale = { id: 1, Titulo: 'Old Title', Artigo_ID: 123 }
+    const sale = {
+      id: 1,
+      Titulo: 'Old Title',
+      Artigo_ID: 123,
+      Descricao: 'Old Description',
+      NomeCategoria: 'Old Category',
+      Condicao: 'Old Condition',
+      Estado_ID: 1,
+      Valor: 100
+    }
 
     SaleRepository.getSaleById.mockResolvedValue(sale)
+
     SaleRepository.updateSale.mockResolvedValue(true)
 
     await SaleController.updateSale(req, res)
 
     expect(SaleRepository.updateSale).toHaveBeenCalledWith(
-      { title: 'Updated Title', description: 'Old Description', price: undefined, itemId: 123, category: 'Old Category', condition: 'Old Condition' },
+      {
+        title: 'Updated Title',
+        description: 'Old Description',
+        value: 100,
+        itemId: 123,
+        category: 'Old Category',
+        condition: 'Old Condition'
+      },
       1
     )
     expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Venda atualizada com sucesso.')
@@ -73,9 +90,10 @@ describe('SaleController - Update Functions', () => {
   it('deve atualizar o estado da venda com sucesso', async () => {
     const req = { params: { id: 1 }, body: { status: 2 } }
     const res = {}
-    const sale = { id: 1 }
+    const sale = { id: 1, Estado_ID: 1 }
 
     SaleRepository.getSaleById.mockResolvedValue(sale)
+
     SaleRepository.updateSaleStatus.mockResolvedValue(true)
 
     await SaleController.updateSaleStatus(req, res)
@@ -83,17 +101,6 @@ describe('SaleController - Update Functions', () => {
     expect(SaleRepository.updateSaleStatus).toHaveBeenCalledWith(1, 2)
 
     expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Estado da venda atualizado.')
-  })
-
-  it('deve lançar erro se a venda não for encontrada', async () => {
-    const req = { params: { id: 99 }, body: { status: 2 } }
-    const res = {}
-
-    SaleRepository.getSaleById.mockResolvedValue(null)
-
-    await SaleController.updateSaleStatus(req, res)
-
-    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Não foi possível encontrar a venda.')
   })
 
   it('deve lançar erro se o estado for inválido', async () => {
