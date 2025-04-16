@@ -309,9 +309,10 @@ export default function CreateSale() {
                           : "border-gray-300"
                       } rounded-md appearance-none bg-white`}
                     >
-                      <option value="Calçado">Calçado</option>
-                      <option value="Acessórios">Acessórios</option>
-                      <option value="Outros">Outros</option>
+                      <option value="Brinquedos">Brinquedos</option>
+                      <option value="Eletrónicos">Eletrónicos</option>
+                      <option value="Ferramentas">Ferramentas</option>
+                      <option value="Mobilia">Mobilia</option>
                       <option value="Roupas">Roupas</option>
                     </Field>
                     <ErrorMessage

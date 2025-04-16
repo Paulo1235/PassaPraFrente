@@ -7,7 +7,7 @@ const ProposalCard = ({ item }) => {
     return date.toLocaleDateString("pt-BR");
   };
 
-  useEffect(() => { console.log(item) }, []);
+  // useEffect(() => { console.log(item) }, []);
   // Convert status number to a readable string
   const getStatusText = (status) => {
     if (status === undefined) return "Pendente";

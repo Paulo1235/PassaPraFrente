@@ -63,7 +63,10 @@ const Main = () => {
         const dataSales = await responseSales.json();
         const dataLoans = await responseLoans.json();
         const dataGiveaways = await responseGiveaways.json();
-        console.log(dataGiveaways);
+
+        // console.log(dataSales)
+        console.log(dataLoans)
+        // console.log(dataGiveaways);
         const transformItems = (items, category) => {
           return items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
@@ -72,6 +75,7 @@ const Main = () => {
             idVenda: item.Venda_ID || "ID",
             idEmprestimo: item.Emprestimo_ID || "ID",
             idSorteio: item.Sorteio_ID || "ID",
+            foto: item.photos || "",
             category,
           }));
         };
@@ -90,7 +94,7 @@ const Main = () => {
             items: transformItems(dataGiveaways, "Sorteios"),
           },
         };
-        console.log(shopData);
+        // console.log(shopData);
         setShopData(shopData);
       } catch (error) {
         console.error("Error fetching shop data:", error);

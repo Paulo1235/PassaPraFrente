@@ -25,7 +25,7 @@ export default function PasswordReset() {
       setError("");
       setIsLoading(true);
 
-      console.log(values);
+      // console.log(values);
 
       try {
         const response = await fetch(
@@ -40,11 +40,11 @@ export default function PasswordReset() {
           }
         );
 
-        console.log(response);
+        // console.log(response);
 
         const data = await response.json();
 
-        console.log(data);
+        // console.log(data);
 
         if (!response.ok) {
           throw new Error(data.message || "Update Password failed");

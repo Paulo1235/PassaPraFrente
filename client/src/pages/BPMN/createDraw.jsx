@@ -293,11 +293,11 @@ const convertToBase64 = (file) => {
                             : "border-gray-300"
                         } rounded-md appearance-none bg-white`}
                       >
-                        <option value="Roupa">Roupas</option>
-                        <option value="Acessórios">Acessórios</option>
-                        <option value="Eletrônicos">Eletrônicos</option>
-                        <option value="Livros">Livros</option>
-                        <option value="Outros">Outros</option>
+                      <option value="Brinquedos">Brinquedos</option>
+                      <option value="Eletrónicos">Eletrónicos</option>
+                      <option value="Ferramentas">Ferramentas</option>
+                      <option value="Mobilia">Mobilia</option>
+                      <option value="Roupas">Roupas</option>
                       </Field>
                       <ErrorMessage
                         name="category"

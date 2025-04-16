@@ -39,7 +39,7 @@ const Modal = ({ closeModal, reviewId, category }) => {
             }, 2000);
           }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     }
 
@@ -75,7 +75,7 @@ const Modal = ({ closeModal, reviewId, category }) => {
           }, 2000);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     }
 
@@ -96,9 +96,9 @@ const Modal = ({ closeModal, reviewId, category }) => {
             ),
           }
         );
-        console.log(await result.json());
+        // console.log(await result.json());
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     }
   };

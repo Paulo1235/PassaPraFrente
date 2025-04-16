@@ -61,6 +61,7 @@ const AdminMain = () => {
             idVenda: item.Venda_ID || null,
             idEmprestimo: item.Emprestimo_ID || null,
             idSorteio: item.Sorteio_ID || null,
+            image: item.photos || null,
             category,
           }));
         };
@@ -80,7 +81,7 @@ const AdminMain = () => {
           },
         ];
         
-        console.log(formattedData)
+        // console.log(formattedData)
         setShopData(formattedData);
       } catch (error) {
         console.error("Erro ao buscar dados do backend:", error);

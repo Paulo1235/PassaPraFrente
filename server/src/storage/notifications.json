@@ -11,7 +11,7 @@
     "message": "Proposta rejeitada",
     "category": "Venda",
     "userId": 7,
-    "read": false,
+    "read": true,
     "date": "2025-04-05T20:28:02.744Z"
   },
   {
@@ -63,7 +63,7 @@
     "userId": 7,
     "category": "Venda",
     "link": "http://localhost:3000/review/user/sale/39",
-    "read": false,
+    "read": true,
     "date": "2025-04-14T14:01:20.840Z"
   }
 ]

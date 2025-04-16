@@ -34,7 +34,7 @@ export default function EditDraw() {
         );
 
         const result = await response.json();
-        console.log(result.message);
+        // console.log(result.message);
         setData(result.message); // Ajusta conforme estrutura do retorno
         setIsLoading(false);
       } catch (error) {
@@ -78,7 +78,7 @@ export default function EditDraw() {
       }
 
       const result = await response.json();
-      console.log("Venda atualizada:", result);
+      // console.log("Venda atualizada:", result);
       toast.success("Sorteio atualizado com sucesso!");
       setTimeout(() => {
         navigate("/index");
@@ -102,7 +102,7 @@ export default function EditDraw() {
         }
       );
       const data = await response.json();
-      console.log(data.message);
+      // console.log(data.message);
       if (data.message == "Vencedor do sorteio criado com sucesso.") {
         toast.success("Vencedor do sorteio criado com sucesso!");
         setTimeout(() => {
@@ -350,12 +350,11 @@ export default function EditDraw() {
                             : "border-gray-300"
                         } rounded-md appearance-none bg-white`}
                       >
-                        <option value="Roupa">Roupa</option>
-                        <option value="Calçado">Calçado</option>
-                        <option value="Acessórios">Acessórios</option>
-                        <option value="Eletrônicos">Eletrônicos</option>
-                        <option value="Livros">Livros</option>
-                        <option value="Outros">Outros</option>
+                      <option value="Brinquedos">Brinquedos</option>
+                      <option value="Eletrónicos">Eletrónicos</option>
+                      <option value="Ferramentas">Ferramentas</option>
+                      <option value="Mobilia">Mobilia</option>
+                      <option value="Roupas">Roupas</option>
                       </Field>
                       <ErrorMessage
                         name="category"
@@ -384,8 +383,6 @@ export default function EditDraw() {
                         <option value="Como novo">Como novo</option>
                         <option value="Bom Estado">Bom Estado</option>
                         <option value="Usado">Usado</option>
-                        <option value="Bastante Usado">Bastante Usado</option>
-                        <option value="Com defeito">Com defeito</option>
                       </Field>
                       <ErrorMessage
                         name="condition"

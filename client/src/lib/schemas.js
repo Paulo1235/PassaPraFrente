@@ -52,73 +52,83 @@ const CreateSaleSchema = yup.object().shape({
 
   category: yup.string().required("Categoria é obrigatória"),
 
-   photos: yup.array()
-      .min(1, "Pelo menos 1 foto é obrigatória")
-      .max(3, "Máximo de 3 fotos permitido")
-      .required("Imagens são obrigatórias."),
+  photos: yup
+    .array()
+    .min(1, "Pelo menos 1 foto é obrigatória")
+    .max(3, "Máximo de 3 fotos permitido")
+    .required("Imagens são obrigatórias."),
 });
 
 const CreateLoanSchema = yup.object().shape({
-  title: yup.string()
-      .required("Título é obrigatório")
-      .min(5, "Título deve ter pelo menos 5 caracteres")
-      .max(100, "Título deve ter no máximo 100 caracteres"),
+  title: yup
+    .string()
+    .required("Título é obrigatório")
+    .min(5, "Título deve ter pelo menos 5 caracteres")
+    .max(100, "Título deve ter no máximo 100 caracteres"),
 
-  description: yup.string()
-      .required("Descrição é obrigatória")
-      .min(10, "Descrição deve ter pelo menos 10 caracteres"),
+  description: yup
+    .string()
+    .required("Descrição é obrigatória")
+    .min(10, "Descrição deve ter pelo menos 10 caracteres"),
 
-  price: yup.number()
-      .typeError("Valor deve ser um número")
-      .required("Valor é obrigatório")
-      .positive("Valor deve ser positivo"),
+  price: yup
+    .number()
+    .typeError("Valor deve ser um número")
+    .required("Valor é obrigatório")
+    .positive("Valor deve ser positivo"),
 
-  condition: yup.string()
-      .required("Condição é obrigatória"),
+  condition: yup.string().required("Condição é obrigatória"),
 
-  category: yup.string()
-      .required("Categoria é obrigatória"),
+  category: yup.string().required("Categoria é obrigatória"),
 
-  startDate: yup.date()
-      .required("Data de início é obrigatória"),
+  startDate: yup.date().required("Data de início é obrigatória"),
 
-  endDate: yup.date()
-      .required("Data de fim é obrigatória")
-      .min(yup.ref('startDate'), "Data de fim deve ser posterior à data de início"),
+  endDate: yup
+    .date()
+    .required("Data de fim é obrigatória")
+    .min(
+      yup.ref("startDate"),
+      "Data de fim deve ser posterior à data de início"
+    ),
 
-    photos: yup.array()
+  photos: yup
+    .array()
     .min(1, "Pelo menos 1 foto é obrigatória")
     .max(3, "Máximo de 3 fotos permitido")
     .required("Imagens são obrigatórias."),
 });
 
 const CreateDrawSchema = yup.object().shape({
-  title: yup.string()
+  title: yup
+    .string()
     .required("Título é obrigatório")
     .min(5, "Título deve ter pelo menos 5 caracteres")
     .max(100, "Título deve ter no máximo 100 caracteres"),
 
-  description: yup.string()
+  description: yup
+    .string()
     .required("Descrição é obrigatória")
     .min(10, "Descrição deve ter pelo menos 10 caracteres"),
 
-  condition: yup.string()
-    .required("Condição é obrigatória"),
+  condition: yup.string().required("Condição é obrigatória"),
 
-  category: yup.string()
-    .required("Categoria é obrigatória"),
+  category: yup.string().required("Categoria é obrigatória"),
 
-  startDate: yup.date()
-    .required("Data de início é obrigatória"),
+  startDate: yup.date().required("Data de início é obrigatória"),
 
-  endDate: yup.date()
+  endDate: yup
+    .date()
     .required("Data de fim é obrigatória")
-    .when("startDate", (startDate, schema) => 
+    .when("startDate", (startDate, schema) =>
       startDate
-        ? schema.min(startDate, "Data de fim deve ser posterior à data de início")
+        ? schema.min(
+            startDate,
+            "Data de fim deve ser posterior à data de início"
+          )
         : schema
     ),
-    photos: yup.array()
+  photos: yup
+    .array()
     .min(1, "Pelo menos 1 foto é obrigatória")
     .max(3, "Máximo de 3 fotos permitido")
     .required("Imagens são obrigatórias."),
@@ -126,10 +136,30 @@ const CreateDrawSchema = yup.object().shape({
 
 const CreateProposalSaleSchema = yup.object().shape({
   price: yup
-  .number()
-  .typeError("Valor deve ser um número")
-  .positive("Valor deve ser positivo")
-  .optional("Valor é obrigatório"),
+    .number()
+    .typeError("Valor deve ser um número")
+    .positive("Valor deve ser positivo")
+    .optional("Valor é obrigatório"),
+});
+
+const CreateProposalLoanSchema = yup.object().shape({
+  price: yup
+    .number()
+    .optional("O preço é obrigatório")
+    .positive("O preço deve ser positivo")
+    .typeError("O preço deve ser um número"),
+  dataInicio: yup
+    .date()
+    .optional("A data de início é obrigatória")
+    .typeError("Data inválida"),
+  dataFim: yup
+    .date()
+    .optional("A data de fim é obrigatória")
+    .min(
+      yup.ref("dataInicio"),
+      "A data de fim deve ser posterior à data de início"
+    )
+    .typeError("Data inválida"),
 });
 
 export {
@@ -141,4 +171,5 @@ export {
   CreateLoanSchema,
   CreateDrawSchema,
   CreateProposalSaleSchema,
+  CreateProposalLoanSchema,
 };
