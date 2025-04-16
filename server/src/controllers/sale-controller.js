@@ -6,6 +6,7 @@ import SaleRepository from '../repositories/sale-repository.js'
 import IdService from '../services/id-service.js'
 import ItemController from './item-controller.js'
 import ItemRepository from '../repositories/item-repository.js'
+import { SALE_STATES } from '../constants/status-constants.js'
 
 class SaleController {
   static async createSale (req, res) {
@@ -85,6 +86,10 @@ class SaleController {
 
       if (!existingSale) {
         throw new HttpException('Venda não encontrada.', StatusCodes.NOT_FOUND)
+      }
+
+      if (existingSale.Estado_ID === SALE_STATES.CONCLUIDO) {
+        throw new HttpException('Já não é possível alterar esta venda.', StatusCodes.BAD_REQUEST)
       }
 
       const updatedData = {

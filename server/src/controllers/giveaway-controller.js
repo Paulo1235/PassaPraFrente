@@ -6,6 +6,7 @@ import response from '../utils/response.js'
 import IdService from '../services/id-service.js'
 import ItemController from './item-controller.js'
 import ItemRepository from '../repositories/item-repository.js'
+import { GIVEAWAY_STATES } from '../constants/status-constants.js'
 
 class GiveawayController {
   static async createGiveaway (req, res) {
@@ -90,6 +91,10 @@ class GiveawayController {
 
       if (!existingGiveaway) {
         throw new HttpException('Giveaway não encontrado.', StatusCodes.NOT_FOUND)
+      }
+
+      if (existingGiveaway.Estado_ID === GIVEAWAY_STATES.CONCLUIDO || new Date(existingGiveaway.DataFim) < new Date()) {
+        throw new HttpException('Já não pode alterar este sorteio', StatusCodes.BAD_REQUEST)
       }
 
       const updatedData = {

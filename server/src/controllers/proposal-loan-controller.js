@@ -89,6 +89,10 @@ class ProposalLoanController {
         throw new HttpException('Não foi possível encontrar o empréstimo.', StatusCodes.NOT_FOUND)
       }
 
+      if (loan.Estado === 'Concluído') {
+        throw new HttpException('Este empréstimo já foi concluída. Não pode aceitar mais propostas.', StatusCodes.BAD_REQUEST)
+      }
+
       const proposal = await ProposalLoanRepository.getLoanProposalById(userId, id)
 
       if (!proposal) {

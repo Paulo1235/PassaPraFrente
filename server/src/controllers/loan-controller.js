@@ -6,6 +6,7 @@ import LoanRepository from '../repositories/loan-repository.js'
 import IdService from '../services/id-service.js'
 import ItemController from './item-controller.js'
 import ItemRepository from '../repositories/item-repository.js'
+import { LOAN_STATES } from '../constants/status-constants.js'
 
 class LoanController {
   static async createLoan (req, res) {
@@ -90,6 +91,10 @@ class LoanController {
 
       if (!existingLoan) {
         throw new HttpException('Empréstimo não encontrado.', StatusCodes.NOT_FOUND)
+      }
+
+      if (existingLoan.Estado_ID === LOAN_STATES.CONCLUIDO || new Date(existingLoan.DataFim) < new Date()) {
+        throw new HttpException('Já não pode alterar este sorteio', StatusCodes.BAD_REQUEST)
       }
 
       const updatedData = {
