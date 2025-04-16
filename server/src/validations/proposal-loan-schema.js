@@ -8,6 +8,7 @@ export const proposalLoanSchema = z.object({
   }).gte(0, { message: 'O valor deve ser no mínimo 0' }).optional(),
 
   newStartDate: z.string()
+    .optional()
     .refine(val => !isNaN(Date.parse(val)), {
       message: 'Data de início inválida'
     })
@@ -24,6 +25,7 @@ export const proposalLoanSchema = z.object({
     }),
 
   newEndDate: z.string()
+    .optional()
     .refine(val => !isNaN(Date.parse(val)), {
       message: 'Data de fim inválida'
     })
@@ -39,7 +41,7 @@ export const proposalLoanSchema = z.object({
       message: 'A data de fim deve ser futura'
     })
 })
-  .refine(data => data.endDate.getTime() > data.startDate.getTime(), {
+  .refine(data => data.newEndDate.getTime() > data.newStartDate.getTime(), {
     message: 'A data de fim deve ser depois da data de início',
     path: ['endDate']
   })

@@ -22,7 +22,7 @@ class UserController {
       const user = await UserRepository.getUserById(id)
 
       if (!user) {
-        return response(res, true, StatusCodes.OK, {})
+        return response(res, true, StatusCodes.NOT_FOUND, 'Utilizador não encontrado.')
       }
 
       return response(res, true, StatusCodes.OK, user)
@@ -32,31 +32,12 @@ class UserController {
   }
 
   static async getAllUsers (req, res) {
-    const page = parseInt(req.query.page) || 1
-    const pageSize = parseInt(req.query.pageSize) || 2
-
     try {
-      const users = await UserRepository.getAllUsers(page, pageSize)
+      const users = await UserRepository.getAllUsers()
 
       return response(res, true, StatusCodes.OK, users)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar os utilizadores.')
-    }
-  }
-
-  static async deleteUser (req, res) {
-    const { id } = req.params
-
-    try {
-      const result = await UserRepository.deleteUser(id)
-
-      if (!result) {
-        throw new HttpException('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
-      }
-
-      return response(res, true, StatusCodes.OK, 'User deleted')
-    } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao eliminar o utilizador.')
     }
   }
 
