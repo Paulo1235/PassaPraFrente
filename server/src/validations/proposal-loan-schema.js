@@ -1,25 +1,54 @@
 import { z } from 'zod'
 
+import convertUTCToLocalISOString from '../utils/date.js'
+
 export const proposalLoanSchema = z.object({
   price: z.number({
     invalid_type_error: 'O valor deve ser um número'
   }).gte(0, { message: 'O valor deve ser no mínimo 0' }).optional(),
 
-  newStartDate: z.string({
-    required_error: 'A nova data de início é obrigatória',
-    invalid_type_error: 'Formato de data inválido'
-  }).optional(),
+  newStartDate: z.string()
+    .refine(val => !isNaN(Date.parse(val)), {
+      message: 'Data de início inválida'
+    })
+    .transform(val => {
+      const date = new Date(val)
+      const localDate = convertUTCToLocalISOString(date)
+      return new Date(localDate)
+    })
+    .refine(date => {
+      const localDate = convertUTCToLocalISOString(new Date())
+      return date > new Date(localDate)
+    }, {
+      message: 'A data de início deve ser futura'
+    }),
 
-  newEnd: z.string({
-    required_error: 'A nova data de fim é obrigatória',
-    invalid_type_error: 'Formato de data inválido'
-  }).optional()
-}).refine((data) => {
-  if (data.newStartDate && data.newEnd) {
-    return data.newEnd > data.newStartDate
-  }
-  return true // Se faltar algum dos dois, ignora a comparação
-}, {
-  path: ['newEnd'],
-  message: 'A nova data de fim deve ser posterior à nova data de início'
+  newEndDate: z.string()
+    .refine(val => !isNaN(Date.parse(val)), {
+      message: 'Data de fim inválida'
+    })
+    .transform(val => {
+      const date = new Date(val)
+      const localDate = convertUTCToLocalISOString(date)
+      return new Date(localDate)
+    })
+    .refine(date => {
+      const localDate = convertUTCToLocalISOString(new Date())
+      return date > new Date(localDate)
+    }, {
+      message: 'A data de fim deve ser futura'
+    })
 })
+  .refine(data => data.endDate.getTime() > data.startDate.getTime(), {
+    message: 'A data de fim deve ser depois da data de início',
+    path: ['endDate']
+  })
+  .refine((data) => {
+    if (data.newStartDate && data.newEndDate) {
+      return data.newEndDate > data.newStartDate
+    }
+    return true
+  }, {
+    path: ['newEnd'],
+    message: 'A nova data de fim deve ser posterior à nova data de início'
+  })
