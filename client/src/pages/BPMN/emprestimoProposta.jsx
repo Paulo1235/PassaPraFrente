@@ -22,7 +22,7 @@ export default function EmprestimoProposta() {
   const { id } = useParams();
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [data, setData] = useState(null);
-  const productImage = data?.ImagemURL || null;
+  const productImage = data?.photos[0].Url || null;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading] = useState(false);
@@ -59,6 +59,7 @@ export default function EmprestimoProposta() {
 
   const handleSubmit = async (values) => {
     // setIsLoading(true);
+    console.log(values.dataInicio)
     try {
       const response = await fetch(
         `http://localhost:5000/api/proposal-loans/create/${id}`,
@@ -76,7 +77,7 @@ export default function EmprestimoProposta() {
         }
       );
       const data = await response.json();
-      // console.log(data.message);
+      console.log(data.message);
 
       // console.log(values);
 

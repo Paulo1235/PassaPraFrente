@@ -39,7 +39,7 @@ export default function VendaProposta() {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        // console.log(data);
+        console.log(data);
         setData(data.message);
       } catch (error) {}
     };
@@ -99,7 +99,7 @@ export default function VendaProposta() {
     price: data?.Valor || 0,
   };
 
-  const productImage = data?.ImagemURL || null;
+  const productImage = data?.photos[0].Url || null;
 
   return (
     <div className="min-h-screen bg-[#E0E5B6] py-8 px-4 font-sans">
