@@ -21,29 +21,38 @@ const AdminMain = () => {
   useEffect(() => {
     const fetchShopData = async () => {
       try {
-        const responseSales = await fetch("http://localhost:5000/api/sales/pending", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        const responseSales = await fetch(
+          "http://localhost:5000/api/sales/pending",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
-        const responseLoans = await fetch("http://localhost:5000/api/loans/pending", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        const responseLoans = await fetch(
+          "http://localhost:5000/api/loans/pending",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
-        const responseGiveaways = await fetch("http://localhost:5000/api/giveaways/pending", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+        const responseGiveaways = await fetch(
+          "http://localhost:5000/api/giveaways/pending",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
         if (!responseSales.ok || !responseLoans.ok || !responseGiveaways.ok) {
           throw new Error("Erro ao buscar dados da loja");
@@ -80,14 +89,14 @@ const AdminMain = () => {
             items: transformItems(dataGiveaways, "Sorteio"),
           },
         ];
-        
-        // console.log(formattedData)
+
+        console.log(formattedData)
         setShopData(formattedData);
       } catch (error) {
         console.error("Erro ao buscar dados do backend:", error);
       }
     };
-    
+
     fetchShopData();
 
     if (!isAuthenticated) {
@@ -100,7 +109,7 @@ const AdminMain = () => {
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       <Helmet>
-        <title>Loja</title>
+        <title>Admin</title>
       </Helmet>
       <div className="md:sticky md:top-0 md:h-screen">
         <SideBar canAdd={false} Home={true} Account={true} LogOut={true} />
@@ -108,21 +117,33 @@ const AdminMain = () => {
       <div className="App w-full overflow-x-auto flex flex-col">
         <div className="flex flex-col md:flex-row px-4 md:px-6 flex-grow">
           {shopData.map((section, sectionIndex) => (
-            <div key={`section-${sectionIndex}`} className="flex flex-col w-full md:w-1/3 px-2">
-              <p className="text-[#73802A] text-2xl md:text-3xl mb-3 md:mb-5 mt-10">{section.title}:</p>
+            <div
+              key={`section-${sectionIndex}`}
+              className="flex flex-col w-full md:w-1/3 px-2"
+            >
+              <p className="text-[#73802A] text-2xl md:text-3xl mb-3 md:mb-5 mt-10">
+                {section.title}:
+              </p>
               <div className="flex flex-col gap-4 md:gap-6 lg:gap-8">
-                {section.items.map((item, itemIndex) => (
-                  <AdminCard
-                  key={`card-${sectionIndex}-${itemIndex}`}
-                  name={item.name}
-                  size={item.size}
-                  value={item.value}
-                  tipoAnuncio={section.title} // Vendas, Emprestimos ou Sorteios
-                  idEmprestimo={item.idEmprestimo}
-                  idVenda={item.idVenda}
-                  idSorteio={item.idSorteio}
-                />
-                ))}
+                {section.items.length === 0 ? (
+                  <p className="text-gray-500 text-lg">
+                    Nenhum(a) {section.title.toLowerCase()} disponível
+                  </p>
+                ) : (
+                  section.items.map((item, itemIndex) => (
+                    <AdminCard
+                      key={`card-${sectionIndex}-${itemIndex}`}
+                      name={item.name}
+                      size={item.size}
+                      value={item.value}
+                      tipoAnuncio={section.title}
+                      image={item.image?.Url}
+                      idEmprestimo={item.idEmprestimo}
+                      idVenda={item.idVenda}
+                      idSorteio={item.idSorteio}
+                    />
+                  ))
+                )}
               </div>
             </div>
           ))}

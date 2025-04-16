@@ -259,7 +259,7 @@ export default function ProposalsPage() {
 
         <div className="flex flex-col md:flex-row flex-1 overflow-auto">
           <div className="w-full md:w-1/2 p-4 md:p-6 overflow-y-auto">
-            <h2 className="text-gray-400 font-semibold mb-4">Recebidas</h2>
+            <h2 className="text-gray-400 font-semibold mb-4 text-xl">Recebidas</h2>
             {announcingItemsAnnounce.length > 0 ? (
               announcingItemsAnnounce.map((item, index) => (
                 <ProposalCardAnnouce key={index} item={item} />
@@ -272,7 +272,7 @@ export default function ProposalsPage() {
           <div className="hidden md:block w-px bg-[#8b9a41]" />
 
           <div className="w-full md:w-1/2 p-4 md:p-6 overflow-y-auto flex flex-col">
-            <h2 className="text-gray-400 font-semibold mb-4">Efetuadas</h2>
+            <h2 className="text-gray-400 font-semibold mb-4 text-xl">Efetuadas</h2>
             {announcingItems.length > 0 ? (
               announcingItems.map((item, index) => (
                 <ProposalCard key={index} item={item} />

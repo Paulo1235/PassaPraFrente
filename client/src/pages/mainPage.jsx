@@ -65,7 +65,7 @@ const Main = () => {
         const dataGiveaways = await responseGiveaways.json();
 
         // console.log(dataSales)
-        console.log(dataLoans)
+        // console.log(dataLoans)
         // console.log(dataGiveaways);
         const transformItems = (items, category) => {
           return items.message.map((item) => ({

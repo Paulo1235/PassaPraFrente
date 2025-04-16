@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Menu, X, Home, User, ChevronDown, LogOut } from "lucide-react";
+import { Menu, X, Home, User, ChevronDown, LogOut, ShieldUser } from "lucide-react";
 // You can still use your logo image
 import logo from "../images/logoEmpresa.png"; // Replace with actual logo path
 import { useNavigate } from "react-router-dom";
@@ -162,7 +162,7 @@ const Sidebar = (props) => {
               type="button"
               className="text-[#ADADAD] bg-[#FFFAEE] hover:bg-[#D4CFC3]/90 focus:ring-4 focus:outline-none focus:ring-[#FFFAEE]/50 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
             >
-              <User className="w-6 h-6 mr-3 text-[#ADADAD]" />
+              <ShieldUser className="w-6 h-6 mr-3 text-[#ADADAD]" />
               <a href="/indexadmin">Admin</a>
             </button>
           )}

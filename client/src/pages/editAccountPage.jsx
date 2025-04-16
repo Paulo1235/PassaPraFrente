@@ -152,7 +152,7 @@ const EditAccountPage = () => {
       </Helmet>
       <Sidebar canAdd={true} Home={true} Account={true} LogOut={false} />
       <div className="flex-1 p-10">
-        <div className="flex justify-between items-center mb-12">
+        <div className="flex justify-between items-center mb-12 md:mt-3 mt-5">
           <h1 className="text-2xl font-medium text-txtp mb-6">Editar Conta</h1>
           <button
             className="flex items-center text-txts"

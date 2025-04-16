@@ -1,56 +1,32 @@
 import React, { use, useEffect } from "react";
-import logoEmpresa from '../images/logoEmpresa.png';
-import pessoaIco from '../images/pessoaIco.svg';
+import pessoaIco from "../images/pessoaIco.svg";
 import { useNavigate } from "react-router-dom";
 
 const Card = (props) => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // console.log("Props:", props);
-  }, [props]);
+  // useEffect(() => {
+  //   console.log("Props:", props);
+  // }, [props]);
 
   const handleCardClick = () => {
-
-    // console.log(props)
-
-    if(props.mainPage == true)
-    {
+    if (props.mainPage == true) {
       if (props.category === "Vendas" && props.Estado !== "Concluído") {
         navigate(`/sale/${props.idVenda}`);
-        } else if (props.category === "Emprestimos") {
-          navigate(`/loan/${props.idEmprestimo}`);
-        } else if (props.category === "Sorteios") {
-          navigate(`/draw/${props.idSorteio}`);
-        }
-    
-        // console.log("IDs recebidos:", {
-        //   idVenda: props.idVenda,
-        //   idEmprestimo: props.idEmprestimo,
-        //   idSorteio: props.idSorteio,
-        //   category: props.category,
-        // });
-    }
-    else if(props.isCompleted == true)
-    {
-
-    }
-    else
-    {
+      } else if (props.category === "Emprestimos") {
+        navigate(`/loan/${props.idEmprestimo}`);
+      } else if (props.category === "Sorteios") {
+        navigate(`/draw/${props.idSorteio}`);
+      }
+    } else if (props.isCompleted == true) {
+    } else {
       if (props.category === "Vendas") {
         navigate(`/editsale/${props.idVenda}`);
-        } else if (props.category === "Emprestimos") {
-          navigate(`/editloan/${props.idEmprestimo}`);
-        } else if (props.category === "Sorteios") {
-          navigate(`/editdraw/${props.idSorteio}`);
-        }
-    
-        // console.log("IDs (BPMN) recebidos:", {
-        //   idVenda: props.idVenda,
-        //   idEmprestimo: props.idEmprestimo,
-        //   idSorteio: props.idSorteio,
-        //   category: props.category,
-        // });
+      } else if (props.category === "Emprestimos") {
+        navigate(`/editloan/${props.idEmprestimo}`);
+      } else if (props.category === "Sorteios") {
+        navigate(`/editdraw/${props.idSorteio}`);
+      }
     }
   };
 
@@ -61,7 +37,7 @@ const Card = (props) => {
     >
       <div className="bg-black mx-5 mt-3 rounded-lg">
         <img
-          src={props.image || pessoaIco}
+          src={props.image?.Url ? props.image.Url : pessoaIco}
           width="123px"
           height="118px"
           className="mx-auto"

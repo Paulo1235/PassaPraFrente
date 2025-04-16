@@ -245,7 +245,7 @@ const Account = () => {
       </div>
       <div className="App w-full overflow-x-hidden flex flex-col flex-grow">
         <div className="left mx-2 md:ml-10 lg:ml-20 mt-6 md:mt-10 flex flex-col px-4 md:px-6">
-          <p className="text-2xl md:text-3xl text-[#73802A]">Conta</p>
+          <p className="text-2xl md:text-3xl text-[#73802A] text-center md:text-start">Conta</p>
           <div className="flex flex-col md:flex-row md:items-center">
             <div className="account mt-6 md:mt-10 flex flex-col md:flex-row">
               <img

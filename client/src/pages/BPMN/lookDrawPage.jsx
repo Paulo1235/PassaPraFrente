@@ -95,16 +95,14 @@ function LookDraw(props) {
             </a>
           </div>
           <div className="images flex flex-wrap justify-center gap-10 mb-10">
-            <img
-              src={logo}
-              className="w-[200px] h-[200px] object-contain"
-              alt="Logo"
-            />
-            <img
-              src={logo}
-              className="w-[200px] h-[200px] object-contain"
-              alt="Logo"
-            />
+          {data.photos && data.photos.map((photo, index) => (
+              <img
+                key={index}
+                src={photo.Url}
+                className="w-[200px] h-[200px] object-contain"
+                alt={`Foto ${index + 1}`}
+              />
+            ))}
           </div>
           <section className="flex flex-wrap justify-between">
             <div className="left flex flex-col w-full md:w-1/2 mb-6">

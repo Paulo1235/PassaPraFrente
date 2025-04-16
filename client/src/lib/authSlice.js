@@ -11,17 +11,17 @@ const getTokenFromCookies = () => {
 
 export const fetchUserInfo = createAsyncThunk("auth/fetchUserInfo", async (_, { rejectWithValue }) => {
   const token = getTokenFromCookies();
-  console.log("Token from cookies:", token); // Log the token
+  // console.log("Token from cookies:", token); // Log the token
   if (!token) return rejectWithValue("No token available");
 
   try {
     const response = await axios.get(`${BACKEND_URL}/api/users/me`, {
       withCredentials: true, // Include credentials in the request
     });
-    console.log("Fetched user info:", response.data); // Log the user info
+    // console.log("Fetched user info:", response.data); // Log the user info
     return response.data;
   } catch (error) {
-    console.error("Error fetching user info:", error); // Log the error
+    // console.error("Error fetching user info:", error); // Log the error
     return rejectWithValue(error.response?.data || "Failed to fetch full user info");
   }
 });

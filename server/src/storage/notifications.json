@@ -46,7 +46,7 @@
     "id": "0ff0669e-61d7-4696-a138-d5bb27e94714",
     "message": "Avalie o vendedor da venda: Marco Teste",
     "userId": 5,
-    "read": false,
+    "read": true,
     "date": "2025-04-13T17:50:53.574Z"
   },
   {
@@ -65,5 +65,14 @@
     "link": "http://localhost:3000/review/user/sale/39",
     "read": true,
     "date": "2025-04-14T14:01:20.840Z"
+  },
+  {
+    "id": "9d4f2989-ec1b-44d0-808e-26c0c26b1980",
+    "message": "Avalie o vendedor da venda: 12311231",
+    "userId": 5,
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/44",
+    "read": true,
+    "date": "2025-04-16T14:02:24.569Z"
   }
 ]

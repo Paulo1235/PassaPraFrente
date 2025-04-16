@@ -3,8 +3,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import authReducer from "./authSlice";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
-
 // Helper function to get the token from cookies
 const getTokenFromCookies = () => {
   const match = document.cookie.match(/(^| )accessToken=([^;]+)/);

@@ -7,7 +7,7 @@ const ShopSection = ({ title, items }) => {
 
   return (
     <div className={`mt-8 md:mt-10 flex flex-col w-full px-4 md:px-6`}>
-      <p className="text-[#73802A] text-2xl md:text-3xl ml-2 md:ml-10 mb-3 md:mb-5">{title}:</p>
+      <p className="text-[#73802A] text-center md:text-start text-2xl md:text-3xl ml-2 md:ml-10 mb-3 md:mb-5">{title}:</p>
 
       {items.length === 0 ? (
         // Se o array estiver vazio, exibe a mensagem
@@ -16,7 +16,7 @@ const ShopSection = ({ title, items }) => {
         </div>
       ) : (
         // Se houver itens, renderiza normalmente
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8 px-2 md:px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8 px-2 md:px-4 justify-items-center">
           {items.map((item, index) => (
             <Card
               mainPage={true}
