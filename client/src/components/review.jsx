@@ -3,7 +3,7 @@ import { Star, X } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const Modal = ({ closeModal, reviewId, category }) => {
+const Review = ({ closeModal, reviewId, category }) => {
   const [rating, setRating] = useState(1);
   const navigate = useNavigate();
   const submitAvaliation = async () => {
@@ -96,9 +96,8 @@ const Modal = ({ closeModal, reviewId, category }) => {
             ),
           }
         );
-        // console.log(await result.json());
       } catch (error) {
-        // console.log(error);
+        // console.log(error)
       }
     }
   };
@@ -148,4 +147,4 @@ const Modal = ({ closeModal, reviewId, category }) => {
   );
 };
 
-export default Modal;
+export default Review;

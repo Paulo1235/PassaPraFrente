@@ -139,7 +139,7 @@ function LookDraw(props) {
               <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center justify-center">
                 <span className="text-xl text-white" onClick={enterGiveaway}>Entrar no Sorteio</span>
               </button>
-              <button className="border border-txtp rounded-lg px-4 py-2 flex items-center justify-center">
+              <button className="border border-txtp rounded-lg px-4 py-2 flex items-center justify-center cursor-default">
                 <span className="text-xl text-txtp">{data.Contacto}</span>
               </button>
             </div>

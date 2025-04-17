@@ -1,6 +1,5 @@
-// Main.jsx
 import { Helmet } from "react-helmet";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -11,13 +10,12 @@ import "../index.css";
 //? Components
 import SideBar from "../components/sideBar";
 import Shop from "../components/shop";
-import { useState } from "react";
-import Footer from '../components/footer'
 
 const Main = () => {
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [shopData, setShopData] = useState([]);
-  const [loading, setLoading] = useState(true); // Estado de carregamento
+  const [loading, setLoading] = useState(true);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -65,9 +63,6 @@ const Main = () => {
         const dataLoans = await responseLoans.json();
         const dataGiveaways = await responseGiveaways.json();
 
-        console.log(dataSales)
-        console.log(dataLoans)
-        // console.log(dataGiveaways);
         const transformItems = (items, category) => {
           return items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
@@ -95,12 +90,11 @@ const Main = () => {
             items: transformItems(dataGiveaways, "Sorteios"),
           },
         };
-        // console.log(shopData);
         setShopData(shopData);
       } catch (error) {
         console.error("Error fetching shop data:", error);
       } finally {
-        setLoading(false); // Dados carregados, desativa o carregamento
+        setLoading(false);
       }
     };
 
@@ -119,7 +113,7 @@ const Main = () => {
       <div className="flex bg-bgp h-screen justify-center items-center h-40">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7b892f]"></div>
       </div>
-    ); // Exibe a mensagem de carregamento
+    );
   }
 
   return (

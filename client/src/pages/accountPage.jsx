@@ -1,5 +1,3 @@
-"use client";
-
 import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -18,11 +16,7 @@ import ContentAccount from "../components/contentAccount";
 
 //? Icons
 import ProfilePicture from "../images/default-avatar.jpg";
-import Star1 from "../images/star1.svg";
-import Star2 from "../images/star2.svg";
-import EditIco from "../images/edit-account.svg";
-import ProposalsIco from "../images/proposals.svg";
-import { Bell } from "lucide-react";
+import { Bell, HandHelping, Star, UserPen } from "lucide-react";
 
 const Account = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -39,7 +33,7 @@ const Account = () => {
   };
 
   useEffect(() => {
-    const fetchShopData = async () => {
+    const fetchAccountData = async () => {
       try {
         const responseSales = await fetch(
           "http://localhost:5000/api/sales/completed",
@@ -128,7 +122,8 @@ const Account = () => {
 
         const dataSalesNonCompleted = await responseSalesNonCompleted.json();
         const dataLoansNonCompleted = await responseLoansNonCompleted.json();
-        const dataGiveawaysNonCompleted = await responseGiveawaysNonCompleted.json();
+        const dataGiveawaysNonCompleted =
+          await responseGiveawaysNonCompleted.json();
 
         const dataRating = await responseRating.json();
 
@@ -148,7 +143,7 @@ const Account = () => {
             idVenda: item.Venda_ID || "ID",
             idEmprestimo: item.Emprestimo_ID || "ID",
             idSorteio: item.Sorteio_ID || "ID",
-            photos : item.photos?.Url,
+            photos: item.photos?.Url,
             category,
           }));
         };
@@ -192,7 +187,7 @@ const Account = () => {
       }
     };
 
-    fetchShopData();
+    fetchAccountData();
 
     if (!isAuthenticated) {
       navigate("/");
@@ -202,31 +197,17 @@ const Account = () => {
     dispatch(fetchUserInfo());
   }, [isAuthenticated, dispatch, navigate]);
 
-  // Function to render stars based on rating
+  //? Renderiza as estrelas do rating
   const renderStars = () => {
     const stars = [];
 
     for (let i = 1; i <= 5; i++) {
       if (i <= rating) {
         // Filled star
-        stars.push(
-          <img
-            key={i}
-            src={Star1 || "/placeholder.svg"}
-            className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-[29px] xl:h-[29px]"
-            alt="Filled star"
-          />
-        );
+        stars.push(<Star fill="yellow" />);
       } else {
         // Empty star
-        stars.push(
-          <img
-            key={i}
-            src={Star2 || "/placeholder.svg"}
-            className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-[29px] xl:h-[29px]"
-            alt="Empty star"
-          />
-        );
+        stars.push(<Star fill="black" />);
       }
     }
 
@@ -245,7 +226,9 @@ const Account = () => {
       </div>
       <div className="App w-full overflow-x-hidden flex flex-col flex-grow">
         <div className="left mx-2 md:ml-10 lg:ml-20 mt-6 md:mt-10 flex flex-col px-4 md:px-6">
-          <p className="text-2xl md:text-3xl text-[#73802A] text-center md:text-start">Conta</p>
+          <p className="text-2xl md:text-3xl text-[#73802A] text-center md:text-start">
+            Conta
+          </p>
           <div className="flex flex-col md:flex-row md:items-center">
             <div className="account mt-6 md:mt-10 flex flex-col md:flex-row">
               <img
@@ -257,7 +240,7 @@ const Account = () => {
                 <p className="text-xl md:text-2xl lg:text-3xl text-[#73802A]">
                   {user?.message.Nome}
                 </p>
-                <p className="md:ml-2 lg:ml-5 text-sm md:text-base">
+                <p className="md:ml-2 lg:ml-5 mt-2 text-sm md:text-base">
                   {user?.message.Email}
                 </p>
               </div>
@@ -276,11 +259,7 @@ const Account = () => {
                   }}
                   className="edit flex flex-row items-center cursor-pointer text-txts"
                 >
-                  <img
-                    src={EditIco || "/placeholder.svg"}
-                    className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]"
-                    alt=""
-                  />
+                  <UserPen className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
                   <span className="ml-2 text-sm md:text-base">Editar</span>
                 </div>
                 <div
@@ -300,11 +279,7 @@ const Account = () => {
                     navigate("/proposals");
                   }}
                 >
-                  <img
-                    src={ProposalsIco || "/placeholder.svg"}
-                    className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]"
-                    alt=""
-                  />
+                  <HandHelping className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
                   <span className="ml-2 text-sm md:text-base">Propostas</span>
                 </div>
               </div>
@@ -333,7 +308,6 @@ const Account = () => {
         <div className="mt-auto w-full">
           <Footer />
         </div>
-        {isModalOpen && <Review closeModal={toggleModal} />}
       </div>
     </div>
   );

@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../../lib/authSlice";
 import { useNavigate } from "react-router-dom";
-import logo from "../../images/logoEmpresa.png";
 import { useFormik } from "formik";
-import { loginSchema } from "../../lib/schemas";
 import { toast, ToastContainer } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 import { Helmet } from "react-helmet";
 
-const BACKEND_URL =
-  process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+import { loginSchema } from "../../lib/schemas";
+import { login } from "../../lib/authSlice";
+//? Logo
+import logo from "../../images/logoEmpresa.png";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,7 +26,7 @@ export default function Login() {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
+        const response = await fetch(`http://localhost:5000/api/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(values),
@@ -35,7 +34,7 @@ export default function Login() {
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || "Login failed");
-        const userResponse = await fetch(`${BACKEND_URL}/api/protected-route`, {
+        const userResponse = await fetch(`http://localhost:5000/api/protected-route`, {
           credentials: "include",
         });
         if (!userResponse.ok) throw new Error("Failed to get user information");
@@ -45,15 +44,7 @@ export default function Login() {
         );
         navigate("/index");
       } catch (err) {
-        toast.error("Login Falhou", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error("Login falhou");
       } finally {
         setIsLoading(false);
       }
@@ -166,26 +157,9 @@ export default function Login() {
                 className="w-full text-white py-2 px-4 bg-btns hover:bg-[#c2a478] text-black font-medium rounded-md transition duration-200"
               >
                 {isLoading ? (
-                  <svg
-                    className="animate-spin h-5 w-5 mx-auto"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="#fff"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-50"
-                      fill="#fff"
-                      d="M4 12a8 8 0 1 1 16 0A8 8 0 0 1 4 12z"
-                    ></path>
-                  </svg>
+                  <div className="flex justify-center items-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                  </div>
                 ) : (
                   "Entrar"
                 )}

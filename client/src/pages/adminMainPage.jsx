@@ -1,4 +1,3 @@
-// AdminMain.jsx
 import { Helmet } from "react-helmet";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -10,16 +9,17 @@ import "../index.css";
 
 //? Components
 import SideBar from "../components/sideBar";
-import AdminCard from "../components/adminCard";
 import Footer from "../components/footer";
+import ContentAdmin from "../components/contentAdmin";
 
 const AdminMain = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const [shopData, setShopData] = useState([]);
+  const [adminData, setAdminData] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchShopData = async () => {
+    const fetchAdminData = async () => {
       try {
         const responseSales = await fetch(
           "http://localhost:5000/api/sales/pending",
@@ -62,8 +62,6 @@ const AdminMain = () => {
         const dataLoans = await responseLoans.json();
         const dataGiveaways = await responseGiveaways.json();
 
-        // console.log(dataGiveaways)
-
         const transformItems = (items, category) => {
           return items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
@@ -93,14 +91,13 @@ const AdminMain = () => {
         ];
 
         //! as fotos dos sorteios ta sempre null ou undefined
-        // console.log(formattedData)
-        setShopData(formattedData);
+        setAdminData(formattedData);
       } catch (error) {
         console.error("Erro ao buscar dados do backend:", error);
       }
     };
 
-    fetchShopData();
+    fetchAdminData();
 
     if (!isAuthenticated) {
       navigate("/");
@@ -118,38 +115,9 @@ const AdminMain = () => {
         <SideBar canAdd={false} Home={true} Account={true} LogOut={true} />
       </div>
       <div className="App w-full overflow-x-auto flex flex-col">
+        <h1 className="text-center mt-16 md:mt-10 text-4xl text-txtp">Pedidos de anuncios</h1>
         <div className="flex flex-col md:flex-row px-4 md:px-6 flex-grow text-center md:text-start">
-          {shopData.map((section, sectionIndex) => (
-            <div
-              key={`section-${sectionIndex}`}
-              className="flex flex-col w-full md:w-1/3 px-2"
-            >
-              <p className="text-[#73802A] text-2xl md:text-3xl mb-3 md:mb-5 mt-10">
-                {section.title}:
-              </p>
-              <div className="flex flex-col gap-4 md:gap-6 lg:gap-8">
-                {section.items.length === 0 ? (
-                  <p className="text-gray-500 text-lg">
-                    Nenhum(a) {section.title.toLowerCase()} disponível
-                  </p>
-                ) : (
-                  section.items.map((item, itemIndex) => (
-                    <AdminCard
-                      key={`card-${sectionIndex}-${itemIndex}`}
-                      name={item.name}
-                      size={item.size}
-                      value={item.value}
-                      tipoAnuncio={section.title}
-                      image={item.image?.Url}
-                      idEmprestimo={item.idEmprestimo}
-                      idVenda={item.idVenda}
-                      idSorteio={item.idSorteio}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
-          ))}
+          <ContentAdmin data={adminData} />
         </div>
         <Footer className="w-full mt-16" />
       </div>

@@ -2,9 +2,13 @@
 
 import React from "react";
 import { Bell, Check } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export const NotificationCard = ({ notification, onMarkAsRead }) => {
-    // Format date to a more readable format
+    
+    const navigate = useNavigate();
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return new Intl.DateTimeFormat("pt-PT", {
@@ -22,6 +26,7 @@ export const NotificationCard = ({ notification, onMarkAsRead }) => {
                 notification.read ? "bg-white border-gray-200" : "bg-[#f5f7e8] border-[#7b892f]"
             } shadow-sm transition-all hover:shadow-md`}
         >
+            <ToastContainer />
             <div className="flex items-start">
                 <div className="mr-3 mt-1">
                     <Bell className={`h-5 w-5 ${notification.read ? "text-gray-400" : "text-[#7b892f]"}`} />
@@ -29,7 +34,7 @@ export const NotificationCard = ({ notification, onMarkAsRead }) => {
                 <div className="flex-1">
                     <div className="flex justify-between items-start">
                         <p className={`font-medium ${notification.read ? "text-txtp" : "text-[#7b892f]"}`}>
-                            <a href={notification.link} className="hover:underline cursor-pointer">
+                            <a onClick={() => notification.read ? toast.warn("Nenhum link disponivel") : navigate(notification.link)} className="hover:underline cursor-pointer">
                             {notification.message}
                             </a>
                         </p>

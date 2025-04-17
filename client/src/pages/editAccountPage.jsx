@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import Sidebar from "../components/sideBar";
-import { Undo2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import "react-toastify/dist/ReactToastify.css";
 import { EditAccountSchema } from "../lib/schemas";
 import { Helmet } from "react-helmet";
 
 import "../components/css/sidebar.css";
+import "react-toastify/dist/ReactToastify.css";
 import "../index.css";
+
+import Sidebar from "../components/sideBar";
+
+import { Undo2 } from "lucide-react";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
@@ -19,7 +21,7 @@ const EditAccountPage = () => {
   const [profileImage, setProfileImage] = useState(
     "/placeholder.svg?height=120&width=120"
   );
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -37,7 +39,7 @@ const EditAccountPage = () => {
         const result = await response.json();
         setUserData(result.message);
         if (result.message?.Url) {
-          setProfileImage(result.message.Url); // Atualiza a imagem de perfil com a URL do backend
+          setProfileImage(result.message.Url);
         }
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
@@ -130,7 +132,7 @@ const EditAccountPage = () => {
             navigate("/account");
           }, 2000);
         } catch (error) {
-          console.error("Erro ao submeter a foto:", error);
+          // console.error("Erro ao submeter a foto:", error);
           toast.error("Erro ao atualizar a imagem.");
         }
       }
@@ -150,6 +152,7 @@ const EditAccountPage = () => {
       <Helmet>
         <title>Editar Conta</title>
       </Helmet>
+      <ToastContainer />
       <Sidebar canAdd={true} Home={true} Account={true} LogOut={false} />
       <div className="flex-1 p-10">
         <div className="flex justify-between items-center mb-12 md:mt-3 mt-5">
@@ -265,7 +268,6 @@ const EditAccountPage = () => {
           </form>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };
