@@ -87,7 +87,6 @@ class LoanController {
   static async updateLoan (req, res) {
     const { id } = req.params
     const data = req.body
-
     try {
       const existingLoan = await LoanRepository.getLoanById(id)
 
@@ -96,7 +95,7 @@ class LoanController {
       }
 
       if (existingLoan.Estado_ID === LOAN_STATES.CONCLUIDO || new Date(existingLoan.DataFim) < new Date()) {
-        throw new HttpException('Já não pode alterar este sorteio', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Já não pode alterar este empréstimo', StatusCodes.BAD_REQUEST)
       }
 
       const updatedData = {
@@ -111,6 +110,7 @@ class LoanController {
       }
 
       await LoanRepository.updateLoan(updatedData, id)
+      await ItemController.replaceItemPhotos(updatedData.itemId, data.thumbnails)
 
       return response(res, true, StatusCodes.OK, 'Empréstimo atualizado com sucesso.')
     } catch (error) {

@@ -112,6 +112,53 @@ class ItemController {
       throw new HttpException('Não foi possível atualizar a imagem do item', StatusCodes.INTERNAL_SERVER_ERROR)
     }
   }
+
+  static async replaceItemPhotos (itemId, newThumbnails) {
+    const uploadedResults = []
+
+    try {
+      if (!newThumbnails || !Array.isArray(newThumbnails) || newThumbnails.length === 0) {
+        throw new HttpException('Deve enviar pelo menos uma imagem.', StatusCodes.BAD_REQUEST)
+      }
+
+      if (newThumbnails.length > 3) {
+        throw new HttpException('Deve ter no máximo 3 imagens.', StatusCodes.BAD_REQUEST)
+      }
+
+      // 1. Buscar imagens atuais
+      const currentPhotos = await ItemRepository.getItemPhoto(itemId)
+
+      for (const photo of currentPhotos) {
+        await cloudinary.v2.uploader.destroy(photo.PublicID)
+        await ItemRepository.deleteItemPhotoByPublicId(itemId, photo.PublicID)
+      }
+
+      // 3. Fazer upload das novas imagens
+      for (const image of newThumbnails) {
+        const myCloud = await cloudinary.v2.uploader.upload(image, {
+          folder: 'items'
+        })
+
+        const uploadSuccess = await ItemRepository.uploadItemPhoto(
+          itemId,
+          myCloud.public_id,
+          myCloud.secure_url
+        )
+
+        if (uploadSuccess) {
+          uploadedResults.push({
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url
+          })
+        }
+      }
+
+      return uploadedResults
+    } catch (error) {
+      console.error(error)
+      throw new HttpException('Erro ao substituir as imagens do item.', StatusCodes.INTERNAL_SERVER_ERROR)
+    }
+  }
 }
 
 export default ItemController

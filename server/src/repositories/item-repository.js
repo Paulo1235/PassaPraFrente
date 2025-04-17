@@ -36,6 +36,21 @@ class ItemRepository {
     return items.recordset
   }
 
+  static async deleteItemPhotoByPublicId (itemId, publicId) {
+    const pool = await getConnection()
+
+    const result = await pool
+      .request()
+      .input('itemId', sql.Int, itemId)
+      .input('publicId', sql.VarChar, publicId)
+      .query(`
+        DELETE FROM Imagem
+        WHERE ArtigoArtigo_ID = @itemId AND PublicID = @publicId
+      `)
+
+    return result.rowsAffected[0] > 0
+  }
+
   static async getItemById (id) {
     const pool = await getConnection(dbConfig)
 

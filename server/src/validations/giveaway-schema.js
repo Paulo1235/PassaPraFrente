@@ -46,9 +46,3 @@ export const giveawaySchema = z.object({
       message: 'A data de fim deve ser futura'
     })
 })
-  .refine(data => {
-    return data.endDate.getTime() > data.startDate.getTime()
-  }, {
-    message: 'A data de fim deve ser depois da data de início',
-    path: ['endDate']
-  })

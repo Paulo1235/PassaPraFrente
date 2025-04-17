@@ -105,6 +105,8 @@ class SaleController {
 
       await SaleRepository.updateSale(updatedData, id)
 
+      await ItemController.replaceItemPhotos(updatedData.itemId, data.thumbnails)
+
       return response(res, true, StatusCodes.OK, 'Venda atualizada com sucesso.')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao atualizar a venda.')

@@ -9,6 +9,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "../../components/css/sidebar.css";
 import "../../index.css";
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+
 export default function EditSale() {
   const { id } = useParams();
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -16,8 +18,33 @@ export default function EditSale() {
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = (error) => reject(error)
+    })
+  }
+
+  const convertBase64ToFile = (base64, fileName) => {
+    const arr = base64.split(',')
+    const mime = arr[0].match(/:(.*?);/)[1]
+    const bstr = atob(arr[1])
+    let n = bstr.length
+    const u8arr = new Uint8Array(n)
+  
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+  
+    return new File([u8arr], fileName, { type: mime })
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +63,12 @@ export default function EditSale() {
         const result = await response.json();
         // console.log(result.message);
         setData(result.message); // Ajusta conforme estrutura do retorno
+        if (result.message?.Imagens?.length > 0) {
+          const photoFiles = await result.message.Imagens.map((img, index) =>
+            convertBase64ToFile(img, `foto${index + 1}.jpg`)          
+          )
+          result.message.PhotosAsFiles = await Promise.all(photoFiles)
+        }
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
@@ -53,6 +86,12 @@ export default function EditSale() {
 
   const handleSubmit = async (values) => {
     try {
+      setIsSubmitting(true)
+
+      // Converter todas as fotos para base64
+      const base64Promises = values.photos.map((photo) => convertToBase64(photo))
+      const photoUrls = await Promise.all(base64Promises)
+
       const response = await fetch(`http://localhost:5000/api/sales/id/${id}`, {
         method: "PUT",
         headers: {
@@ -65,6 +104,7 @@ export default function EditSale() {
           value: values.price,
           condition: values.condition,
           category: values.category,
+          thumbnails: photoUrls,
         }),
       });
 
@@ -79,7 +119,7 @@ export default function EditSale() {
         navigate("/index");
       }, 2000);
     } catch (error) {
-      // console.error("Erro ao submeter dados:", error);
+      console.error("Erro ao submeter dados:", error);
       toast.error("Erro ao atualizar a venda.");
     }
   };
@@ -93,7 +133,7 @@ export default function EditSale() {
     price: data?.Valor || "",
     condition: data?.Condicao || "Como novo",
     category: data?.NomeCategoria || "Outros",
-    photos: [], // As fotos não vêm como URLs no fetch original?
+    photos: data?.PhotosAsFiles || [], // As fotos não vêm como URLs no fetch original?
   };
 
   return (
@@ -123,56 +163,55 @@ export default function EditSale() {
             {({ values, errors, touched, setFieldValue }) => (
               <Form className="w-full">
                 <p className="text-center text-sm text-gray-500 mb-2">
-                  Mínimo 1 Foto, Máximo 3
-                  {values.photos.length > 0 && ` (${values.photos.length}/3)`}
+                Mínimo 1 Foto, Máximo 3
+                {values.photos.length > 0 && ` (${values.photos.length}/3)`}
+              </p>
+              
+              {errors.photos && touched.photos && (
+                <p className="text-red-500 text-center text-sm mb-4">
+                  {errors.photos}
                 </p>
-
-                {errors.photos && touched.photos && (
-                  <p className="text-red-500 text-center text-sm mb-4">
-                    {errors.photos}
-                  </p>
-                )}
-
-                <div className="images flex flex-row gap-4 justify-center flex-wrap mb-10">
-                  {values.photos.map((photo, index) => (
-                    <div
-                      key={index}
-                      className="relative w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-white rounded-md overflow-hidden border border-gray-200"
-                    >
-                      <img
-                        src={photo || "/placeholder.svg"}
-                        width={200}
-                        height={200}
-                        alt={`Imagem ${index + 1}`}
-                        className="object-cover w-full h-full"
-                      />
-                      <button
-                        type="button"
-                        className="absolute top-2 right-2 bg-gray-800 bg-opacity-50 rounded-full p-1 hover:bg-opacity-70"
-                        onClick={() => {
-                          const newPhotos = [...values.photos];
-                          URL.revokeObjectURL(newPhotos[index]);
-                          newPhotos.splice(index, 1);
-                          setFieldValue("photos", newPhotos);
-                        }}
-                      >
-                        <X className="h-4 w-4 text-white" />
-                      </button>
-                    </div>
-                  ))}
-
-                  {values.photos.length < 3 && (
-                    <div
-                      className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-100 rounded-md flex items-center justify-center border border-dashed border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors"
+              )}
+              
+              <div className="images flex flex-row gap-4 justify-center flex-wrap mb-10">
+                {values.photos.map((photo, index) => (
+                  <div
+                    key={index}
+                    className="relative w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-white rounded-md overflow-hidden border border-gray-200"
+                  >
+                    <img
+                      src={URL.createObjectURL(photo)}
+                      width={200}
+                      height={200}
+                      alt={`Product image ${index + 1}`}
+                      className="object-cover w-full h-full"
+                    />
+                    <button
+                      type="button"
+                      className="absolute top-2 right-2 bg-gray-800 bg-opacity-50 rounded-full p-1 hover:bg-opacity-70"
                       onClick={() => {
-                        if (fileInputRef.current) {
-                          fileInputRef.current.click();
-                        }
+                        const newPhotos = [...values.photos];
+                        newPhotos.splice(index, 1);
+                        setFieldValue("photos", newPhotos);
                       }}
                     >
-                      <Plus className="h-10 w-10 text-gray-400" />
-                    </div>
-                  )}
+                      <X className="h-4 w-4 text-white" />
+                    </button>
+                  </div>
+                ))}
+
+                {values.photos.length < 3 && (
+                  <div
+                    className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-100 rounded-md flex items-center justify-center border border-dashed border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors"
+                    onClick={() => {
+                      if (fileInputRef.current) {
+                        fileInputRef.current.click();
+                      }
+                    }}
+                  >
+                    <Plus className="h-10 w-10 text-gray-400" />
+                  </div>
+                )}
 
                   <input
                     type="file"
@@ -182,15 +221,19 @@ export default function EditSale() {
                     onChange={(e) => {
                       if (e.target.files && e.target.files.length > 0) {
                         const file = e.target.files[0];
-
-                        if (values.photos.length >= 3) {
-                          alert("Máximo de 3 fotos permitido.");
+                    
+                        if (file.size > MAX_FILE_SIZE) {
+                          toast.error("Imagem demasiado grande. Máx 10MB.");
                           return;
                         }
-
-                        const imageUrl = URL.createObjectURL(file);
-                        setFieldValue("photos", [...values.photos, imageUrl]);
-                        e.target.value = "";
+                    
+                        if (values.photos.length >= 3) {
+                          toast.error("Máximo de 3 fotos permitido.");
+                          return;
+                        }
+                    
+                        const newPhotos = [...values.photos, file];
+                        setFieldValue("photos", newPhotos);
                       }
                     }}
                   />

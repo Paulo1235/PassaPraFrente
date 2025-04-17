@@ -1,10 +1,8 @@
 import { z } from 'zod'
-
 import convertUTCToLocalISOString from '../utils/date.js'
 
 const today = new Date()
-
-const localDate = convertUTCToLocalISOString(today)
+const localDate = new Date(convertUTCToLocalISOString(today))
 
 export const loanSchema = z.object({
   title: z.string()
@@ -23,14 +21,8 @@ export const loanSchema = z.object({
     .refine(val => !isNaN(Date.parse(val)), {
       message: 'Data de início inválida'
     })
-    .transform(val => {
-      const date = new Date(val)
-      const localDate = convertUTCToLocalISOString(date)
-      return new Date(localDate)
-    })
-    .refine(date => {
-      return date > new Date(localDate)
-    }, {
+    .transform(val => new Date(convertUTCToLocalISOString(new Date(val))))
+    .refine(date => date > localDate, {
       message: 'A data de início deve ser futura'
     }),
 
@@ -38,20 +30,8 @@ export const loanSchema = z.object({
     .refine(val => !isNaN(Date.parse(val)), {
       message: 'Data de fim inválida'
     })
-    .transform(val => {
-      const date = new Date(val)
-      const localDate = convertUTCToLocalISOString(date)
-      return new Date(localDate)
-    })
-    .refine(date => {
-      return date > new Date(localDate)
-    }, {
+    .transform(val => new Date(convertUTCToLocalISOString(new Date(val))))
+    .refine(date => date > localDate, {
       message: 'A data de fim deve ser futura'
     })
 })
-  .refine(data => {
-    return data.endDate.getTime() > data.startDate.getTime()
-  }, {
-    message: 'A data de fim deve ser depois da data de início',
-    path: ['endDate']
-  })
