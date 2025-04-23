@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 // Form validate with yup
-const loginSchema = yup.object().shape({
+const LoginSchema = yup.object().shape({
   email: yup.string().email("Email Invalido").required("Obrigatorio"),
   password: yup
     .string()
@@ -20,7 +20,7 @@ const UpdatePasswordSchema = yup.object().shape({
     .required("Obrigatorio"),
   confirmPassword: yup
     .string()
-    .min(6, "A palavra-passe tem de ser maior que 6")
+    .oneOf([yup.ref("newPassword"), null], "As palavras-passe têm de coincidir")
     .required("Obrigatorio"),
 });
 
@@ -164,7 +164,7 @@ const CreateProposalLoanSchema = yup.object().shape({
 
 export {
   SendEmailSchema,
-  loginSchema,
+  LoginSchema,
   UpdatePasswordSchema,
   EditAccountSchema,
   CreateSaleSchema,

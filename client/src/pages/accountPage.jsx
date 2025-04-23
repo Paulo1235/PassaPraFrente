@@ -11,7 +11,6 @@ import "../index.css";
 //? Components
 import SideBar from "../components/sideBar";
 import Footer from "../components/footer";
-import Review from "../components/review";
 import ContentAccount from "../components/contentAccount";
 
 //? Icons
@@ -26,11 +25,6 @@ const Account = () => {
   const [userData, setUserData] = useState(null);
   const [userDataNonCompleted, setUserDataNonCompleted] = useState(null);
   const [rating, setRating] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
 
   useEffect(() => {
     const fetchAccountData = async () => {

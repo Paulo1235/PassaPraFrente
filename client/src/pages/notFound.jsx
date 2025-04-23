@@ -16,7 +16,7 @@ const NotFound = () => {
         <title>PassaPraFrente</title>
       </Helmet>
       <TriangleAlert width={300} height={300} />
-      <p className="text-3xl">Pagina nao encontrada!</p>
+      <p className="text-3xl">Página não encontrada!</p>
       <button className="text-2xl mt-5 bg-btnp rounded text-white px-5 py-2" onClick={() => navigate("/index")}>
         Voltar ao inicio
       </button>

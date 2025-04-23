@@ -12,7 +12,7 @@ import Footer from "../components/footer";
 import { NotificationList } from "../components/notificationCard";
 import { Helmet } from "react-helmet";
 
-export default function NotificationsPage() {
+const NotificationsPage = () => {
   const navigate = useNavigate();
   const [notificationsData, setNotificationsData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -142,3 +142,5 @@ export default function NotificationsPage() {
     </div>
   );
 }
+
+export default NotificationsPage;

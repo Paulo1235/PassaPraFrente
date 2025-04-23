@@ -3,15 +3,16 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { toast, ToastContainer } from "react-toastify";
-import { Eye, EyeOff } from "lucide-react";
 import { Helmet } from "react-helmet";
 
-import { loginSchema } from "../../lib/schemas";
+import { Eye, EyeOff } from "lucide-react";
+
+import { LoginSchema } from "../../lib/schemas";
 import { login } from "../../lib/authSlice";
-//? Logo
+
 import logo from "../../images/logoEmpresa.png";
 
-export default function Login() {
+const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function Login() {
       email: "",
       password: "",
     },
-    validationSchema: loginSchema,
+    validationSchema: LoginSchema,
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
@@ -33,18 +34,28 @@ export default function Login() {
           credentials: "include",
         });
         const data = await response.json();
+        
+        if(!data.success)
+        {
+          toast.error(data.message)
+        }
+
         if (!response.ok) throw new Error(data.message || "Login failed");
+
         const userResponse = await fetch(`http://localhost:5000/api/protected-route`, {
           credentials: "include",
         });
-        if (!userResponse.ok) throw new Error("Failed to get user information");
+
         const userData = await userResponse.json();
         dispatch(
           login({ user: { email: values.email, message: userData.message } })
         );
-        navigate("/index");
+        toast.success(`Bem vindo: ${data.message.Nome}`);
+        setTimeout(() => {
+          navigate("/index");
+        }, 3000);
       } catch (err) {
-        toast.error("Login falhou");
+        toast.error(err);
       } finally {
         setIsLoading(false);
       }
@@ -144,12 +155,12 @@ export default function Login() {
               </div>
             </div>
             <div className="flex justify-end">
-              <a
-                href="RecoverPass"
-                className="text-sm text-txts hover:underline"
+              <span
+                onClick={ () => navigate("/recoverpass")}
+                className="text-sm text-txts hover:underline cursor-pointer"
               >
-                Alterar Palavra-Passe
-              </a>
+                Recuperar palavra-passe
+              </span>
             </div>
             <div className="mt-8 space-y-4">
               <button
@@ -166,9 +177,9 @@ export default function Login() {
               </button>
               <p className="text-center text-sm">
                 Novo aqui?{" "}
-                <a href="SignIn" className="text-txtp hover:underline">
+                <span onClick={() => navigate("/signin")} className="text-txtp hover:underline cursor-pointer">
                   Criar Conta
-                </a>
+                </span>
               </p>
             </div>
           </form>
@@ -177,3 +188,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default Login;

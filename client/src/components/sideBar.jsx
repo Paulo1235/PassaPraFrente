@@ -221,10 +221,7 @@ const Sidebar = (props) => {
           </div>
         )}
       </aside>
-
-      {/* Main content wrapper - pushes content to the right when sidebar is open on desktop */}
       <div className={contentWrapperClasses}>
-        {/* Your main content goes here */}
       </div>
     </>
   );

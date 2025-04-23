@@ -2,7 +2,6 @@ import Card from "./card";
 import Footer from "./footer";
 
 const ShopSection = ({ title, items }) => {
-  // Obtém a forma singular do título (removendo o último caractere, assumindo que é um 's')
   const singularTitle = title.slice(0, -1);
 
   return (
@@ -12,14 +11,12 @@ const ShopSection = ({ title, items }) => {
       </p>
 
       {items.length === 0 ? (
-        // Se o array estiver vazio, exibe a mensagem
         <div className="p-1 rounded-lg mx-2 md:mx-10">
           <p className="text-gray-500 text-lg">
             Nenhuma {singularTitle} Disponível
           </p>
         </div>
       ) : (
-        // Se houver itens, renderiza normalmente
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 lg:gap-8 px-2 md:px-4 justify-items-center">
           {items.map((item, index) => (
             <Card

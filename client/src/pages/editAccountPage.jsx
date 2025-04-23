@@ -141,8 +141,8 @@ const EditAccountPage = () => {
 
   if (!userData) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-xl">A carregar dados...</p>
+      <div className="flex bg-bgp h-screen justify-center items-center h-40">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7b892f]"></div>
       </div>
     );
   }

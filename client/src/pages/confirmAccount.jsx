@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
-import logo from "../../images/logoEmpresa.png";
+import logo from "../images/logoEmpresa.png";
 import { useFormik } from "formik";
-import { SendEmailSchema } from "../../lib/schemas";
 import { toast, ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchUserInfo } from "../../lib/authSlice";
+import { fetchUserInfo } from "../lib/authSlice";
 import { Undo2 } from "lucide-react";
 
-import '../../components/css/sidebar.css';
-import '../../index.css';
+import '../components/css/sidebar.css';
+import '../index.css';
 
 const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
-export default function PasswordReset() {
+const ConfirmAccount = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setIsLoading] = useState(false);
@@ -202,3 +201,5 @@ export default function PasswordReset() {
     </div>
   );
 }
+
+export default ConfirmAccount;

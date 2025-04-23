@@ -1,10 +1,8 @@
-"use client"
-
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useParams } from "react-router-dom"
+
 import Review from "../components/review"
 import Footer from "../components/footer"
-import Sidebar from "../components/sideBar"
 
 export default function ReviewPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)

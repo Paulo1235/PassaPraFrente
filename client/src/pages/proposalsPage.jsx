@@ -15,7 +15,7 @@ import Footer from "../components/footer"
 import { Helmet } from "react-helmet"
 import ProposalCardAnnouce from "../components/proposalCardAnnouce"
 
-export default function ProposalsPage() {
+const ProposalsPage = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth)
 
   const [proposalsMade, setProposalsMade] = useState({ sales: [], loans: [] })        // propostas que eu fiz
@@ -290,3 +290,4 @@ export default function ProposalsPage() {
     </div>
   )
 }
+export default ProposalsPage;

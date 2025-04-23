@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Star, X } from "lucide-react";
-import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+
+import { Star, X } from "lucide-react";
 
 const Review = ({ closeModal, reviewId, category }) => {
   const [rating, setRating] = useState(1);

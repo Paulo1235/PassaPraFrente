@@ -3,24 +3,12 @@ import logo from "../../images/logoEmpresa.png";
 import { useFormik } from "formik";
 import { SendEmailSchema } from "../../lib/schemas";
 import { toast, ToastContainer } from "react-toastify";
-
-const BACKEND_URL =
-  process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+import { useNavigate } from "react-router-dom";
 
 export default function PasswordReset() {
-  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setIsLoading] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!email) {
-      setError("O email é obrigatório!");
-    } else {
-      setError("");
-      // Aqui você pode adicionar a lógica para enviar o formulário
-    }
-  };
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -35,7 +23,7 @@ export default function PasswordReset() {
 
       try {
         const response = await fetch(
-          `${BACKEND_URL}/api/users/send-email-password`,
+          `http://localhost:5000/api/users/send-email-password`,
           {
             method: "POST",
             headers: {
@@ -49,6 +37,9 @@ export default function PasswordReset() {
         const data = await response.json();
 
         toast.success("Email enviado com sucesso!");
+        setTimeout(() => {
+            navigate("/");
+          }, 3000 )
 
         if (!response.ok) {
           throw new Error(data.message || "Send Email failed");
@@ -63,6 +54,14 @@ export default function PasswordReset() {
       }
     },
   });
+
+  if (loading) {
+    return (
+      <div className="flex bg-bgp h-screen justify-center items-center h-40">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7b892f]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#E0E5B6]">
@@ -82,12 +81,12 @@ export default function PasswordReset() {
         {/* Right Side (Form) */}
         <div className="w-full md:w-1/2 bg-white rounded-2xl m-4 p-6">
           <h2 className="text-2xl font-medium text-[#73802A] mb-6 text-center">
-            Alterar Palavra-Passe
+            Recuperar palavra-passe
           </h2>
           <p className="text-center mb-8 text-gray-800">
-            Vai ser enviado um email com um link para
+            Vai ser enviado um email
             <br />
-            escrever a nova palavra passe.
+            com a nova palavra passe.
           </p>
 
           <form onSubmit={formik.handleSubmit}>

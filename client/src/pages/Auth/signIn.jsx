@@ -54,7 +54,7 @@ export default function MultiStepForm() {
           : Yup.date(),
     }),
     onSubmit: (values) => {
-      // console.log("Form submitted:", values);
+      //! So aqui e que usamos axios xd
       axios
         .post("http://localhost:5000/api/auth/register", values)
         .then((response) => {

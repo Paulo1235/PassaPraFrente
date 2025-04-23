@@ -12,23 +12,26 @@ import { store } from "./lib/store";
 //? CSS
 import "./index.css";
 
-//? Pages
+//? Login e Registo
 import Login from "./pages/Auth/login";
 import SignIn from "./pages/Auth/signIn";
 import RecoverPass from "./pages/Auth/recoverPassPage";
 import NewPassword from "./pages/Auth/newPasswordPage";
 
+//? Importante
 import Main from "./pages/mainPage";
 import AdminMain from "./pages/adminMainPage";
-import Account from "./pages/accountPage";
-
-import ProtectedRoute from "./pages/ProtectedRoutes/protectedRoute";
-import NotFound from "./pages/notFound";
 import ProposalsPage from "./pages/proposalsPage";
 import NotificationsPage from "./pages/notificationsPage";
 import ReviewPage from "./pages/reviewPage.jsx";
 
-//? Business Processes
+//? Conta
+import Account from "./pages/accountPage";
+import ConfirmAccount from "./pages/confirmAccount.jsx";
+import EditAccountPage from "./pages/editAccountPage";
+
+
+//? Processo de Negocio
 import LookSale from "./pages/BPMN/lookSalePage";
 import LookLoan from "./pages/BPMN/lookLoanPage";
 import LookDraw from "./pages/BPMN/lookDrawPage";
@@ -41,22 +44,23 @@ import EditSale from "./pages/BPMN/editSale";
 import VendaProposta from "./pages/BPMN/vendaProposta";
 import EmprestimoProposta from "./pages/BPMN/emprestimoProposta.jsx";
 
-import ConfirmAccount from "./pages/BPMN/confirmAccount";
-import EditAccountPage from "./pages/editAccountPage";
-
+//* Extra
+import ProtectedRoute from "./pages/ProtectedRoutes/protectedRoute";
 import AdminProtectedRoute from "./pages/ProtectedRoutes/adminProtectedRoute";
+import NotFound from "./pages/notFound";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
 
         {/* Autenticacao e Registo */}
+        <Route path="/" element={<Login />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/recoverpass" element={<RecoverPass />} />
-        <Route path="/newpassword" element={<NewPassword />} />
+        
 
         {/* Admin */}
         <Route
@@ -65,7 +69,10 @@ root.render(
         />
 
         {/* Paginas principais */}
-        <Route path="/index" element={<ProtectedRoute element={<Main />} />} />
+        <Route 
+          path="/index" 
+          element={<ProtectedRoute element={<Main />} />} 
+        />
 
         <Route
           path="/sale/:id"
@@ -122,6 +129,7 @@ root.render(
           element={<ProtectedRoute element={<EmprestimoProposta />} />}
         />
 
+        {/* Conta */}
         <Route
           path="/account"
           element={<ProtectedRoute element={<Account />} />}
@@ -130,6 +138,12 @@ root.render(
           path="/editaccount"
           element={<ProtectedRoute element={<EditAccountPage />} />}
         />
+        
+        <Route 
+          path="/newpassword" 
+          element={<ProtectedRoute element={<NewPassword />} />} 
+        />
+
         <Route
           path="/confirm-account"
           element={<ProtectedRoute element={<ConfirmAccount />} />}
@@ -145,13 +159,16 @@ root.render(
           element={<ProtectedRoute element={<NotificationsPage />} />}
         />
 
+        {/* Review */}
         <Route
           path="/review/user/:category/:id"
           element={<ProtectedRoute element={<ReviewPage />} />}
         />
 
+        {/* Pagina nao encontrada */}
         <Route path="/notfound" element={<NotFound />} />
         <Route path="*" element={<Navigate replace to="/notfound" />} />
+
       </Routes>
     </Router>
   </Provider>
