@@ -62,7 +62,7 @@ class NotificationController {
 
       return response(res, true, StatusCodes.OK, notifications)
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao encontrar as notificações do usuário.')
+      handleError(res, error, 'Ocorreu um erro ao encontrar as notificações do utilizador.')
     }
   }
 

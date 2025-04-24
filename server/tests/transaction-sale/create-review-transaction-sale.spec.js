@@ -64,7 +64,7 @@ describe('Criar Review para Transação de Venda', () => {
     })
   })
 
-  it('não deve permitir review se o usuário não for o comprador', async () => {
+  it('não deve permitir review se o utilizador não for o comprador', async () => {
     const reqData = { id: '1' }
     const bodyData = { review: 'Excelente venda!' }
     const user = { Utilizador_ID: '3' }

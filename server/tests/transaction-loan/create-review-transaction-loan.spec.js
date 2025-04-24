@@ -64,7 +64,7 @@ describe('Criar Review para Transação de Empréstimo', () => {
     })
   })
 
-  it('não deve permitir review se o usuário não for o solicitante', async () => {
+  it('não deve permitir review se o utilizador não for o solicitante', async () => {
     const reqData = { id: '1' }
     const bodyData = { review: 'Serviço bom.' }
     const user = { Utilizador_ID: '3' }

@@ -108,7 +108,7 @@ describe('SaleController', () => {
   })
 
   describe('getCompletedSalesByUser', () => {
-    it('deve retornar vendas completas do usuário', async () => {
+    it('deve retornar vendas completas do utilizador', async () => {
       const userId = 5
       const mockSales = [{ id: 1 }, { id: 2 }]
       const mockSalesWithPhotos = mockSales.map(sale => ({
@@ -133,7 +133,7 @@ describe('SaleController', () => {
   })
 
   describe('getNonCompletedSalesByUser', () => {
-    it('deve retornar vendas não completas do usuário', async () => {
+    it('deve retornar vendas não completas do utilizador', async () => {
       const userId = 5
       const mockSales = [{ id: 1 }, { id: 2 }]
       const mockSalesWithPhotos = mockSales.map(sale => ({
