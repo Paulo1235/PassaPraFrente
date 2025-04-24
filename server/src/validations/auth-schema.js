@@ -5,5 +5,7 @@ export const authSchema = z.object({
   password: z
     .string()
     .min(6, { message: 'A palavra-passe deve ter pelo menos 6 caracteres.' }),
-  confirmPassword: z.string()
+  confirmPassword: z
+    .string()
+    .min(6, { message: 'A confirmação da palavra-passe deve ter pelo menos 6 caracteres.' })
 })

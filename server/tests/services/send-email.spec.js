@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import EmailService from '../src/services/email-service.js'
+import EmailService from '../../src/services/email-service.js'
 import nodemailer from 'nodemailer'
 import ejs from 'ejs'
 

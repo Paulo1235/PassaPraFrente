@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import * as bcrypt from 'bcrypt'
-import { hashPassword, comparePassword } from '../src/utils/password.js'
-import { SALT_ROUNDS } from '../config.js'
+import { hashPassword, comparePassword } from '../../src/utils/password.js'
+import { SALT_ROUNDS } from '../../config.js'
 
 vi.mock('bcrypt')
 
