@@ -88,6 +88,10 @@ class TransactionLoanController {
     try {
       const transaction = await TransactionLoanRepository.getLoanTransactionById(id)
 
+      if (!transaction) {
+        throw new HttpException('Transação não encontrada!', StatusCodes.NOT_FOUND)
+      }
+
       return response(res, true, StatusCodes.OK, transaction)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar a transação.')

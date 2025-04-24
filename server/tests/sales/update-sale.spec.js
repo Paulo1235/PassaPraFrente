@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { StatusCodes } from 'http-status-codes'
+
 import SaleController from '../../src/controllers/sale-controller.js'
 import SaleRepository from '../../src/repositories/sale-repository.js'
 import ItemController from '../../src/controllers/item-controller.js'
 import response from '../../src/utils/response.js'
-import { StatusCodes } from 'http-status-codes'
 
 vi.mock('../../src/repositories/sale-repository.js', () => ({
   default: {
