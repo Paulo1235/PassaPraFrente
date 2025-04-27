@@ -16,5 +16,4 @@ export const saleSchema = z.object({
   price: z
     .number()
     .gte(1, { message: 'O preço deve ser maior ou igual a 1.' })
-    .max(10000, { message: 'O preço não pode ser maior que 10.000.' })
 })

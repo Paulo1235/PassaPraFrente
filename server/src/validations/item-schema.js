@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
 export const itemSchema = z.object({
-  category: z.enum(['Roupas', 'Ferramentas', 'Eletrónicos', 'Brinquedos', 'Mobília'], {
-    errorMap: () => ({ message: "Categoria inválida. Deve ser 'Roupas', 'Ferramentas' ou 'Eletrónicos'" })
+  category: z.enum(['Roupas', 'Ferramentas', 'Eletrónicos', 'Brinquedos', 'Mobilia'], {
+    errorMap: () => ({ message: "Categoria inválida. Deve ser 'Roupas', 'Ferramentas', 'Eletrónicos', 'Brinquedos' ou 'Mobilia'" })
   }),
 
   condition: z.enum(['Novo', 'Quase Novo', 'Usado'], {

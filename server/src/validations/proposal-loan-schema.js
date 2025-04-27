@@ -41,16 +41,17 @@ export const proposalLoanSchema = z.object({
       message: 'A data de fim deve ser futura'
     })
 })
-  .refine(data => data.newEndDate.getTime() > data.newStartDate.getTime(), {
-    message: 'A data de fim deve ser depois da data de início',
-    path: ['endDate']
-  })
-  .refine((data) => {
-    if (data.newStartDate && data.newEndDate) {
-      return data.newEndDate > data.newStartDate
+  .refine(data => {
+    // Verifica se as datas existem e são válidas
+    const startDate = data.newStartDate ? new Date(data.newStartDate) : null
+    const endDate = data.newEndDate ? new Date(data.newEndDate) : null
+
+    if (startDate && endDate) {
+      return endDate.getTime() > startDate.getTime()
     }
+
     return true
   }, {
-    path: ['newEnd'],
-    message: 'A nova data de fim deve ser posterior à nova data de início'
+    message: 'A nova data de fim deve ser posterior à nova data de início',
+    path: ['newEndDate']
   })
