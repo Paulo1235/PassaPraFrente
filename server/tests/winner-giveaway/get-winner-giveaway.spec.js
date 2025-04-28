@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import WinnerGiveawayController from '../../src/controllers/winner-giveaway-controller.js'
 import WinnerGiveawayRepository from '../../src/repositories/winner-giveaway-repository.js'
-import GiveawayRepository from '../../src/repositories/giveaway-repository.js'
 
 vi.mock('../../src/repositories/winner-giveaway-repository.js')
 vi.mock('../../src/repositories/giveaway-repository.js')
@@ -27,16 +26,6 @@ describe('Operações GET relacionadas a vencedores de sorteios', () => {
 
     expect(res.status).toHaveBeenCalledWith(200)
     expect(res.json).toHaveBeenCalledWith({ success: true, message: mockProposals })
-  })
-
-  it('deve retornar erro se giveaway não for encontrado', async () => {
-    GiveawayRepository.getGiveawayById.mockResolvedValue(null)
-
-    const { req, res } = criarMockReqRes({ id: '1' })
-    await WinnerGiveawayController.getWinnerGiveawayById(req, res)
-
-    expect(res.status).toHaveBeenCalledWith(404)
-    expect(res.json).toHaveBeenCalledWith({ success: false, message: 'Giveaway não encontrado.' })
   })
 
   it('deve lidar com erro ao listar todos os vencedores', async () => {

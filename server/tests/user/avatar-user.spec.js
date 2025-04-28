@@ -15,13 +15,7 @@ vi.mock('../../src/utils/response.js', () => ({
   default: vi.fn()
 }))
 
-vi.mock('cloudinary', () => ({
-  v2: {
-    uploader: {
-      upload: vi.fn()
-    }
-  }
-}))
+vi.mock('cloudinary')
 
 describe('UserController.uploadUserAvatar', () => {
   beforeEach(() => {
@@ -54,7 +48,7 @@ describe('UserController.uploadUserAvatar', () => {
     expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Imagem inserida.')
   })
 
-  it('deve responder com erro se upload no banco falhar', async () => {
+  it('deve responder com erro se upload na base de dados falhar', async () => {
     const req = {
       user: { Utilizador_ID: 1 },
       body: { thumbnail: 'base64imagemaqui' }

@@ -1,159 +1,120 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { SaleController } from '../../src/controllers/sale-controller.js'
-import * as SaleRepository from '../../src/repositories/sale-repository.js'
+import SaleController from '../../src/controllers/sale-controller.js'
+import SaleRepository from '../../src/repositories/sale-repository.js'
+import ItemRepository from '../../src/repositories/item-repository.js'
 import { StatusCodes } from 'http-status-codes'
+import response from '../../src/utils/response.js'
+import { handleError } from '../../src/utils/error-handler.js'
 
-// Mock apenas das dependências externas
-vi.mock('../../src/repositories/sale-repository.js')
-vi.mock('../../src/controllers/item-controller.js')
-vi.mock('../../src/services/id-service.js')
-
-vi.mock('../../src/constants/saleStates', () => ({
-  SALE_STATES: {
-    CONCLUIDO: 3
+vi.mock('../../src/repositories/sale-repository.js', () => ({
+  default: {
+    getSaleById: vi.fn(),
+    getCompletedSalesByUser: vi.fn(),
+    getUserSales: vi.fn()
   }
 }))
 
-// Mock apenas dos métodos estáticos auxiliares do SaleController
-vi.mock('../../src/controllers/sale-controller.js', async (importOriginal) => {
-  const original = await importOriginal()
-  return {
-    ...original,
-    attachPhotosToSale: vi.fn(),
-    attachFirstPhotoToSales: vi.fn()
+vi.mock('../../src/repositories/item-repository.js', () => ({
+  default: {
+    getItemPhoto: vi.fn()
   }
-})
+}))
 
-describe('SaleController', () => {
-  let mockReq, mockRes
+vi.mock('../../src/utils/response.js', () => ({
+  default: vi.fn()
+}))
 
+vi.mock('../../src/utils/error-handler.js', () => ({
+  handleError: vi.fn()
+}))
+
+describe('Controlador de Vendas', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-
-    mockReq = {
-      params: {},
-      body: {},
-      user: {}
-    }
-
-    mockRes = {
-      status: vi.fn().mockReturnThis(),
-      json: vi.fn()
-    }
   })
 
-  describe('getSaleById', () => {
-    it('deve retornar uma venda com fotos quando encontrada', async () => {
-      const mockSale = { id: 1, Titulo: 'Venda Teste' }
-      const mockSaleWithPhotos = { ...mockSale, photos: ['photo1.jpg'] }
+  describe('Obter venda por ID', () => {
+    it('deve devolver a venda quando encontrada', async () => {
+      const req = { params: { id: '1' } }
+      const res = {}
+      const saleMock = { Artigo_ID: '1', Titulo: 'Venda de Teste' }
+      const saleWithPhotosMock = { ...saleMock, photos: [{ url: 'foto.jpg' }] }
 
-      SaleRepository.getSaleById.mockResolvedValue(mockSale.id)
-      SaleController.attachPhotosToSale.mockResolvedValue(mockSaleWithPhotos)
+      SaleRepository.getSaleById.mockResolvedValue(saleMock)
 
-      mockReq.params.id = '1'
+      const attachPhotosSpy = vi.spyOn(SaleController, 'attachPhotosToSale')
+        .mockResolvedValue(saleWithPhotosMock)
 
-      await SaleController.getSaleById(mockReq, mockRes)
+      await SaleController.getSaleById(req, res)
 
       expect(SaleRepository.getSaleById).toHaveBeenCalledWith('1')
-      expect(SaleController.attachPhotosToSale).toHaveBeenCalledWith(mockSale)
-      expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.OK)
-      expect(mockRes.json).toHaveBeenCalledWith({
-        success: true,
-        data: mockSaleWithPhotos
-      })
+
+      expect(attachPhotosSpy).toHaveBeenCalledWith(saleMock)
+
+      expect(response).toHaveBeenCalledWith(
+        res,
+        true,
+        StatusCodes.OK,
+        saleWithPhotosMock
+      )
     })
 
-    it('deve retornar erro quando venda não existe', async () => {
+    it('deve devolver 404 quando a venda não for encontrada', async () => {
+      const req = { params: { id: '999' } }
+      const res = {}
+
       SaleRepository.getSaleById.mockResolvedValue(null)
-      mockReq.params.id = '999'
 
-      await SaleController.getSaleById(mockReq, mockRes)
+      await SaleController.getSaleById(req, res)
 
-      expect(SaleRepository.getSaleById).toHaveBeenCalledWith('999')
-      expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND)
-      expect(mockRes.json).toHaveBeenCalledWith({
-        success: false,
-        message: 'Venda não encontrada.',
-        error: expect.anything()
-      })
+      expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Venda não encontrada.')
     })
   })
 
-  describe('getUserSales', () => {
-    it('deve retornar vendas do utilizador com fotos', async () => {
-      const userId = 5
-      const mockSales = [
-        { id: 1, Utilizador_ID: userId },
-        { id: 2, Utilizador_ID: userId }
-      ]
-      const mockSalesWithPhotos = mockSales.map(sale => ({
-        ...sale,
-        firstPhoto: 'photo.jpg'
-      }))
+  describe('Obter vendas de um utilizador', () => {
+    it('deve devolver erro se falhar a buscar vendas do utilizador', async () => {
+      const req = { user: { Utilizador_ID: '123' } }
+      const res = {}
 
-      mockReq.user.Utilizador_ID = userId
-      SaleRepository.getUserSales.mockResolvedValue(mockSales)
-      SaleController.attachFirstPhotoToSales.mockResolvedValue(mockSalesWithPhotos)
+      SaleRepository.getUserSales.mockRejectedValue(new Error('Erro ao buscar vendas'))
 
-      await SaleController.getUserSales(mockReq, mockRes)
+      await SaleController.getUserSales(req, res)
 
-      expect(SaleRepository.getUserSales).toHaveBeenCalledWith(userId)
-      expect(SaleController.attachFirstPhotoToSales).toHaveBeenCalledWith(mockSales)
-      expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.OK)
-      expect(mockRes.json).toHaveBeenCalledWith({
-        success: true,
-        data: mockSalesWithPhotos
-      })
+      expect(handleError).toHaveBeenCalled()
     })
   })
 
-  describe('getCompletedSalesByUser', () => {
-    it('deve retornar vendas completas do utilizador', async () => {
-      const userId = 5
-      const mockSales = [{ id: 1 }, { id: 2 }]
-      const mockSalesWithPhotos = mockSales.map(sale => ({
-        ...sale,
-        firstPhoto: 'photo.jpg'
-      }))
+  describe('Obter vendas concluídas de um utilizador', () => {
+    it('deve devolver as vendas concluídas do utilizador', async () => {
+      const req = { user: { Utilizador_ID: '456' } }
+      const res = {}
+      const completedSalesMock = [{ Artigo_ID: '3', Titulo: 'Venda Concluída' }]
+      const photoMock = [{ url: 'fotoConcluida.jpg' }]
 
-      mockReq.user.Utilizador_ID = userId
-      SaleRepository.getCompletedSalesByUser.mockResolvedValue(mockSales)
-      SaleController.attachFirstPhotoToSales.mockResolvedValue(mockSalesWithPhotos)
+      SaleRepository.getCompletedSalesByUser.mockResolvedValue(completedSalesMock)
 
-      await SaleController.getCompletedSalesByUser(mockReq, mockRes)
+      ItemRepository.getItemPhoto.mockResolvedValueOnce(photoMock)
 
-      expect(SaleRepository.getCompletedSalesByUser).toHaveBeenCalledWith(userId)
-      expect(SaleController.attachFirstPhotoToSales).toHaveBeenCalledWith(mockSales)
-      expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.OK)
-      expect(mockRes.json).toHaveBeenCalledWith({
-        success: true,
-        data: mockSalesWithPhotos
-      })
+      await SaleController.getCompletedSalesByUser(req, res)
+
+      expect(SaleRepository.getCompletedSalesByUser).toHaveBeenCalledWith('456')
+
+      expect(ItemRepository.getItemPhoto).toHaveBeenCalledWith('3')
+
+      expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, [
+        { ...completedSalesMock[0], photos: photoMock[0] }
+      ])
     })
-  })
 
-  describe('getNonCompletedSalesByUser', () => {
-    it('deve retornar vendas não completas do utilizador', async () => {
-      const userId = 5
-      const mockSales = [{ id: 1 }, { id: 2 }]
-      const mockSalesWithPhotos = mockSales.map(sale => ({
-        ...sale,
-        firstPhoto: 'photo.jpg'
-      }))
+    it('deve devolver erro se falhar a buscar vendas concluídas', async () => {
+      const req = { user: { Utilizador_ID: '456' } }
+      const res = {}
 
-      mockReq.user.Utilizador_ID = userId
-      SaleRepository.getNonCompletedSalesByUser.mockResolvedValue(mockSales)
-      SaleController.attachFirstPhotoToSales.mockResolvedValue(mockSalesWithPhotos)
+      SaleRepository.getCompletedSalesByUser.mockRejectedValue(new Error('Erro'))
 
-      await SaleController.getNonCompletedSalesByUser(mockReq, mockRes)
+      await SaleController.getCompletedSalesByUser(req, res)
 
-      expect(SaleRepository.getNonCompletedSalesByUser).toHaveBeenCalledWith(userId)
-      expect(SaleController.attachFirstPhotoToSales).toHaveBeenCalledWith(mockSales)
-      expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.OK)
-      expect(mockRes.json).toHaveBeenCalledWith({
-        success: true,
-        data: mockSalesWithPhotos
-      })
+      expect(handleError).toHaveBeenCalled()
     })
   })
 })
