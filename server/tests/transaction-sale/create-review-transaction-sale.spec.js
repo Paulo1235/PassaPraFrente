@@ -24,11 +24,11 @@ describe('Criar Review para Transação de Venda', () => {
   })
 
   it('deve criar uma review com sucesso', async () => {
-    const reqData = { id: '1' }
-    const bodyData = { review: 'Excelente venda!' }
-    const user = { Utilizador_ID: '2' }
+    const reqData = { id: 1 }
+    const bodyData = { review: 1 }
+    const user = { Utilizador_ID: 2 }
 
-    const transactionMock = { PropostaVendaUtilizador_ID: '2', Nota: 0 }
+    const transactionMock = { PropostaVendaUtilizador_ID: user.Utilizador_ID, Nota: 0 }
 
     TransactionSaleRepository.getSaleTransactionByTransactionId.mockResolvedValue(transactionMock)
     TransactionSaleRepository.updateSaleReview.mockResolvedValue()
@@ -45,11 +45,11 @@ describe('Criar Review para Transação de Venda', () => {
   })
 
   it('não deve permitir review se a transação já foi avaliada', async () => {
-    const reqData = { id: '1' }
-    const bodyData = { review: 'Excelente venda!' }
-    const user = { Utilizador_ID: '2' }
+    const reqData = { id: 1 }
+    const bodyData = { review: 4 }
+    const user = { Utilizador_ID: 2 }
 
-    const transactionMock = { PropostaVendaUtilizador_ID: '2', Nota: 5 }
+    const transactionMock = { PropostaVendaUtilizador_ID: user.Utilizador_ID, Nota: 5 }
 
     TransactionSaleRepository.getSaleTransactionByTransactionId.mockResolvedValue(transactionMock)
 
@@ -65,11 +65,11 @@ describe('Criar Review para Transação de Venda', () => {
   })
 
   it('não deve permitir review se o utilizador não for o comprador', async () => {
-    const reqData = { id: '1' }
-    const bodyData = { review: 'Excelente venda!' }
-    const user = { Utilizador_ID: '3' }
+    const reqData = { id: 1 }
+    const bodyData = { review: 3 }
+    const user = { Utilizador_ID: 3 }
 
-    const transactionMock = { PropostaVendaUtilizador_ID: '2', Nota: 0 }
+    const transactionMock = { PropostaVendaUtilizador_ID: 2, Nota: 0 }
 
     TransactionSaleRepository.getSaleTransactionByTransactionId.mockResolvedValue(transactionMock)
 

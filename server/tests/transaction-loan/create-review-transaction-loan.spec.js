@@ -24,14 +24,14 @@ describe('Criar Review para Transação de Empréstimo', () => {
   })
 
   it('deve criar uma review com sucesso', async () => {
-    const reqData = { id: '1' }
-    const bodyData = { review: 'Ótimo empréstimo!' }
-    const user = { Utilizador_ID: '2' }
+    const reqData = { id: 1 }
+    const bodyData = { review: 2 }
+    const user = { Utilizador_ID: 2 }
 
-    const transactionMock = { PropostaEmprestimoUtilizador_ID: '2', Nota: 0 }
+    const transactionMock = { PropostaEmprestimoUtilizador_ID: user.Utilizador_ID, Nota: 0 }
 
     TransactionLoanRepository.getLoanTransactionByTransactionId.mockResolvedValue(transactionMock)
-    TransactionLoanRepository.updateLoanReview.mockResolvedValue()
+    TransactionLoanRepository.updateLoanReview.mockResolvedValue(true)
 
     const { req, res } = criarMockReqRes(reqData, bodyData, user)
 
@@ -45,11 +45,11 @@ describe('Criar Review para Transação de Empréstimo', () => {
   })
 
   it('não deve permitir review se a transação já foi avaliada', async () => {
-    const reqData = { id: '1' }
-    const bodyData = { review: 'Boa experiência!' }
-    const user = { Utilizador_ID: '2' }
+    const reqData = { id: 1 }
+    const bodyData = { review: 5 }
+    const user = { Utilizador_ID: 2 }
 
-    const transactionMock = { PropostaEmprestimoUtilizador_ID: '2', Nota: 5 }
+    const transactionMock = { PropostaEmprestimoUtilizador_ID: user.Utilizador_ID, Nota: bodyData.review }
 
     TransactionLoanRepository.getLoanTransactionByTransactionId.mockResolvedValue(transactionMock)
 
@@ -64,12 +64,12 @@ describe('Criar Review para Transação de Empréstimo', () => {
     })
   })
 
-  it('não deve permitir review se o utilizador não for o solicitante', async () => {
-    const reqData = { id: '1' }
-    const bodyData = { review: 'Serviço bom.' }
-    const user = { Utilizador_ID: '3' }
+  it('não deve permitir review se o utilizador não for o comprador', async () => {
+    const reqData = { id: 1 }
+    const bodyData = { review: 1 }
+    const user = { Utilizador_ID: 3 }
 
-    const transactionMock = { PropostaEmprestimoUtilizador_ID: '2', Nota: 0 }
+    const transactionMock = { PropostaEmprestimoUtilizador_ID: 2, Nota: 0 }
 
     TransactionLoanRepository.getLoanTransactionByTransactionId.mockResolvedValue(transactionMock)
 
