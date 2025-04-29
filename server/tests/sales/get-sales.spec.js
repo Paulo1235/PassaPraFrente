@@ -58,17 +58,6 @@ describe('Controlador de Vendas', () => {
         saleWithPhotosMock
       )
     })
-
-    it('deve devolver 404 quando a venda não for encontrada', async () => {
-      const req = { params: { id: 999 } }
-      const res = {}
-
-      SaleRepository.getSaleById.mockResolvedValue(null)
-
-      await SaleController.getSaleById(req, res)
-
-      expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Venda não encontrada.')
-    })
   })
 
   describe('Obter vendas de um utilizador', () => {

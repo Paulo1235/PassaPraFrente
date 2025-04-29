@@ -110,7 +110,10 @@ class LoanController {
       }
 
       await LoanRepository.updateLoan(updatedData, id)
-      await ItemController.replaceItemPhotos(updatedData.itemId, data.thumbnails)
+
+      if (data.thumbnails) {
+        await ItemController.replaceItemPhotos(updatedData.itemId, data.thumbnails)
+      }
 
       return response(res, true, StatusCodes.OK, 'Empréstimo atualizado com sucesso.')
     } catch (error) {

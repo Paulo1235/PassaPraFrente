@@ -16,7 +16,7 @@ proposalSaleRouter.get(
   ProposalSaleController.getSaleProposalById
 )
 
-proposalSaleRouter.post(
+proposalSaleRouter.put(
   '/proposal-sales/:id/user/:userId',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,

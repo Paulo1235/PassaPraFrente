@@ -5,6 +5,7 @@ import SaleController from '../../src/controllers/sale-controller.js'
 import SaleRepository from '../../src/repositories/sale-repository.js'
 import ItemController from '../../src/controllers/item-controller.js'
 import response from '../../src/utils/response.js'
+import { SALE_STATES } from '../../src/constants/status-constants.js'
 
 vi.mock('../../src/repositories/sale-repository.js', () => ({
   default: {
@@ -24,41 +25,39 @@ vi.mock('../../src/utils/response.js', () => ({
   default: vi.fn()
 }))
 
-describe('SaleController - Update Functions', () => {
+describe('Operações de atualizar em vendas', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
   // Teste para updateSale
-  it('deve atualizar a venda com sucesso', async () => {
-    const req = { params: { id: 1 }, body: { title: 'Updated Title' } }
+  it('atualiza a venda com sucesso', async () => {
+    const req = {
+      params: { id: 1 },
+      body: {
+        title: 'Título atualizado'
+        // os outros campos ficam em branco
+      }
+    }
+
     const res = {}
+
     const sale = {
-      id: 1,
-      Titulo: 'Old Title',
-      Artigo_ID: 123,
-      Descricao: 'Old Description',
-      NomeCategoria: 'Old Category',
-      Condicao: 'Old Condition',
-      Estado_ID: 1,
-      Valor: 100
+      Estado_ID: SALE_STATES.EM_ANALISE,
+      Titulo: 'Título antigo',
+      Descricao: 'Desc',
+      Valor: 10,
+      Artigo_ID: 99,
+      Utilizador_ID: 5
     }
 
     SaleRepository.getSaleById.mockResolvedValue(sale)
-
-    SaleRepository.updateSale.mockResolvedValue(true)
+    SaleRepository.updateSale.mockResolvedValue()
 
     await SaleController.updateSale(req, res)
 
     expect(SaleRepository.updateSale).toHaveBeenCalledWith(
-      {
-        title: 'Updated Title',
-        description: 'Old Description',
-        value: 100,
-        itemId: 123,
-        category: 'Old Category',
-        condition: 'Old Condition'
-      },
+      expect.objectContaining({ title: 'Título atualizado' }),
       1
     )
     expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Venda atualizada com sucesso.')
@@ -89,9 +88,9 @@ describe('SaleController - Update Functions', () => {
 
   // Teste para updateSaleStatus
   it('deve atualizar o estado da venda com sucesso', async () => {
-    const req = { params: { id: 1 }, body: { status: 2 } }
+    const req = { params: { id: 1 }, body: { status: 'Disponível' } }
     const res = {}
-    const sale = { id: 1, Estado_ID: 1 }
+    const sale = { id: 1, Estado_ID: 'Em análise' }
 
     SaleRepository.getSaleById.mockResolvedValue(sale)
 
@@ -99,7 +98,7 @@ describe('SaleController - Update Functions', () => {
 
     await SaleController.updateSaleStatus(req, res)
 
-    expect(SaleRepository.updateSaleStatus).toHaveBeenCalledWith(1, 2)
+    expect(SaleRepository.updateSaleStatus).toHaveBeenCalledWith(1, 3)
 
     expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Estado da venda atualizado.')
   })

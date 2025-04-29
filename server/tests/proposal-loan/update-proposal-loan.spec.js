@@ -33,8 +33,8 @@ describe('Atualizar Proposta de Empréstimo', () => {
 
   it('deve atualizar o estado da proposta para aceite e criar transação', async () => {
     const reqData = {
-      id: '1',
-      userId: '2'
+      id: 1,
+      userId: 2
     }
 
     const bodyData = {
@@ -46,8 +46,8 @@ describe('Atualizar Proposta de Empréstimo', () => {
     const loanMock = {
       Estado: 'Disponível',
       Titulo: 'Empréstimo Teste',
-      DataInicio: new Date('2023-01-01'),
-      DataFim: new Date('2023-12-31')
+      DataInicio: new Date().toISOString(),
+      DataFim: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // daqui a 7 dias
     }
 
     const proposalMock = { Aceite: 0, NovoValor: 1500, NovaDataInicio: new Date('2023-05-01'), NovaDataFim: new Date('2023-11-30') }
@@ -75,8 +75,8 @@ describe('Atualizar Proposta de Empréstimo', () => {
 
     expect(TransactionLoanController.createTransactionLoan).toHaveBeenCalledWith(
       1500,
-      '2',
-      '1',
+      2,
+      1,
       proposalMock.NovaDataInicio,
       proposalMock.NovaDataFim
     )

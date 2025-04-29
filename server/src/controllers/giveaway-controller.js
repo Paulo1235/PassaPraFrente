@@ -111,6 +111,10 @@ class GiveawayController {
 
       await GiveawayRepository.updateGiveaway(id, updatedData)
 
+      if (data.thumbnails) {
+        await ItemController.replaceItemPhotos(updatedData.itemId, data.thumbnails)
+      }
+
       return response(res, true, StatusCodes.OK, 'Giveaway atualizado com sucesso.')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao atualizar o giveaway.')

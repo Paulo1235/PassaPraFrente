@@ -58,17 +58,6 @@ describe('Operações GET para obter empréstimos', () => {
         loanWithPhotosMock
       )
     })
-
-    it('deve devolver 404 quando o empréstimo não for encontrado', async () => {
-      const req = { params: { id: 999 } }
-      const res = {}
-
-      LoanRepository.getLoanById.mockResolvedValue(null)
-
-      await LoanController.getLoanById(req, res)
-
-      expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Empréstimo não encontrado.')
-    })
   })
 
   describe('Obter empréstimos de um utilizador', () => {

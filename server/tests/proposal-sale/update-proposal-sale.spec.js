@@ -33,8 +33,8 @@ describe('Atualizar Proposta de venda', () => {
 
   it('deve atualizar o estado da proposta para aceite e criar transação', async () => {
     const reqData = {
-      id: '1',
-      userId: '2'
+      id: 1,
+      userId: 2
     }
 
     const bodyData = {

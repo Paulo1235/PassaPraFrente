@@ -16,7 +16,7 @@ function criarMockReqRes (params = {}) {
   return { req, res }
 }
 
-describe('Testando o método drawWinnerGiveaway', () => {
+describe('Testar a função drawWinnerGiveaway', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('deve retornar um vencedor aleatório quando o sorteio estiver encerrado', async () => {
@@ -36,15 +36,16 @@ describe('Testando o método drawWinnerGiveaway', () => {
   })
 
   it('deve lançar erro se o sorteio ainda não tiver terminado', async () => {
-    const giveawayId = '1'
-    const giveaway = { id: giveawayId, DataFim: new Date(Date.now() + 3600000) }
+    const giveawayId = 1
+    const giveaway = { id: giveawayId, DataFim: new Date(Date.now() + 7200000) }
+
     GiveawayRepository.getGiveawayById.mockResolvedValue(giveaway)
 
     await expect(WinnerGiveawayController.drawWinnerGiveaway(giveawayId)).rejects.toBeInstanceOf(HttpException)
   })
 
   it('deve lançar erro se não houver inscrições para o sorteio', async () => {
-    const giveawayId = '1'
+    const giveawayId = 1
     const giveaway = { id: giveawayId, DataFim: new Date() }
     GiveawayRepository.getGiveawayById.mockResolvedValue(giveaway)
     EntryGiveawayRepository.getAllEntriesGiveaway.mockResolvedValue([])

@@ -1,16 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { StatusCodes } from 'http-status-codes'
 
-import SaleController from '../../src/controllers/sale-controller.js'
-import SaleRepository from '../../src/repositories/sale-repository.js'
+import LoanController from '../../src/controllers/loan-controller.js'
+import LoanRepository from '../../src/repositories/loan-repository.js'
 import ItemController from '../../src/controllers/item-controller.js'
 import response from '../../src/utils/response.js'
+import { LOAN_STATES } from '../../src/constants/status-constants.js'
 
-vi.mock('../../src/repositories/sale-repository.js', () => ({
+vi.mock('../../src/repositories/loan-repository.js', () => ({
   default: {
-    getSaleById: vi.fn(),
-    updateSale: vi.fn(),
-    updateSaleStatus: vi.fn()
+    getLoanById: vi.fn(),
+    updateLoan: vi.fn(),
+    updateLoanStatus: vi.fn()
   }
 }))
 
@@ -24,121 +25,121 @@ vi.mock('../../src/utils/response.js', () => ({
   default: vi.fn()
 }))
 
-describe('SaleController - Update Functions', () => {
+describe('Operações de atualizar em empréstimos', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  // Teste para updateSale
-  it('deve atualizar a venda com sucesso', async () => {
-    const req = { params: { id: 1 }, body: { title: 'Updated Title' } }
-    const res = {}
-    const sale = {
-      id: 1,
-      Titulo: 'Old Title',
-      Artigo_ID: 123,
-      Descricao: 'Old Description',
-      NomeCategoria: 'Old Category',
-      Condicao: 'Old Condition',
-      Estado_ID: 1,
-      Valor: 100
+  // Teste para updateLoan
+  it('atualiza o empréstimo com sucesso', async () => {
+    const req = {
+      params: { id: 1 },
+      body: {
+        description: 'Descrição atualizada'
+        // os outros campos ficam em branco
+      }
     }
 
-    SaleRepository.getSaleById.mockResolvedValue(sale)
+    const res = {}
 
-    SaleRepository.updateSale.mockResolvedValue(true)
+    const loan = {
+      Titulo: 'Título antigo',
+      Descricao: 'Desc',
+      Valor: 10,
+      ArtigoArtigo_ID: 99,
+      NomeCategoria: 'Eletrónicos',
+      Condicao: 'Quase Novo',
+      DataInicio: new Date().toISOString(),
+      DataFim: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // daqui a 7 dias
+    }
 
-    await SaleController.updateSale(req, res)
+    LoanRepository.getLoanById.mockResolvedValue(loan)
+    LoanRepository.updateLoan.mockResolvedValue()
 
-    expect(SaleRepository.updateSale).toHaveBeenCalledWith(
-      {
-        title: 'Updated Title',
-        description: 'Old Description',
-        value: 100,
-        itemId: 123,
-        category: 'Old Category',
-        condition: 'Old Condition'
-      },
+    await LoanController.updateLoan(req, res)
+
+    expect(LoanRepository.updateLoan).toHaveBeenCalledWith(
+      expect.objectContaining({ description: 'Descrição atualizada' }),
       1
     )
-    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Venda atualizada com sucesso.')
+    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Empréstimo atualizado com sucesso.')
   })
 
-  it('deve lançar erro se a venda não for encontrada', async () => {
+  it('deve lançar erro se o empréstimo não for encontrada', async () => {
     const req = { params: { id: 99 } }
     const res = {}
 
-    SaleRepository.getSaleById.mockResolvedValue(null)
+    LoanRepository.getLoanById.mockResolvedValue(null)
 
-    await SaleController.updateSale(req, res)
+    await LoanController.updateLoan(req, res)
 
-    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Venda não encontrada.')
+    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Empréstimo não encontrado.')
   })
 
-  it('deve lançar erro se a venda já estiver concluída', async () => {
+  it('deve lançar erro se o empréstimo já estiver concluído', async () => {
     const req = { params: { id: 1 }, body: { title: 'Updated Title' } }
     const res = {}
-    const sale = { id: 1, Estado_ID: 4, Artigo_ID: 123 }
+    const loan = { id: 1, Estado_ID: LOAN_STATES.CONCLUIDO, ArtigoArtigo_ID: 123 }
 
-    SaleRepository.getSaleById.mockResolvedValue(sale)
+    LoanRepository.getLoanById.mockResolvedValue(loan)
 
-    await SaleController.updateSale(req, res)
+    await LoanController.updateLoan(req, res)
 
-    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.BAD_REQUEST, 'Já não é possível alterar esta venda.')
+    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.BAD_REQUEST, 'Já não pode alterar este empréstimo')
   })
 
-  // Teste para updateSaleStatus
-  it('deve atualizar o estado da venda com sucesso', async () => {
-    const req = { params: { id: 1 }, body: { status: 2 } }
+  // Teste para updateLoanStatus
+  it('deve atualizar o estado de empréstimo com sucesso', async () => {
+    const req = { params: { id: 1 }, body: { status: 'Disponível' } }
     const res = {}
-    const sale = { id: 1, Estado_ID: 1 }
+    const loan = { id: 1, EstadoEstado_ID: 'Em análise' }
 
-    SaleRepository.getSaleById.mockResolvedValue(sale)
+    LoanRepository.getLoanById.mockResolvedValue(loan)
 
-    SaleRepository.updateSaleStatus.mockResolvedValue(true)
+    LoanRepository.updateLoanStatus.mockResolvedValue(true)
 
-    await SaleController.updateSaleStatus(req, res)
+    await LoanController.updateLoanStatus(req, res)
 
-    expect(SaleRepository.updateSaleStatus).toHaveBeenCalledWith(1, 2)
+    expect(LoanRepository.updateLoanStatus).toHaveBeenCalledWith(1, 3)
 
-    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Estado da venda atualizado.')
+    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Estado do empréstimo atualizado.')
   })
 
   it('deve lançar erro se o estado for inválido', async () => {
     const req = { params: { id: 1 }, body: { status: 999 } }
     const res = {}
-    const sale = { id: 1 }
+    const loan = { id: 1 }
 
-    SaleRepository.getSaleById.mockResolvedValue(sale)
+    LoanRepository.getLoanById.mockResolvedValue(loan)
 
-    await SaleController.updateSaleStatus(req, res)
+    await LoanController.updateLoanStatus(req, res)
 
-    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar o estado da venda.')
+    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar o estado do empréstimo.')
   })
 
-  // Teste para updateSaleImage
-  it('deve atualizar a imagem da venda com sucesso', async () => {
+  // Teste para updateLoanImage
+  it('deve atualizar a imagem do empréstimo com sucesso', async () => {
     const req = { params: { id: 1 }, body: { index: 0, thumbnail: 'new-thumbnail-url' } }
     const res = {}
-    const sale = { id: 1, Artigo_ID: 123 }
+    const loan = { id: 1, Artigo_ID: 123 }
 
-    SaleRepository.getSaleById.mockResolvedValue(sale)
+    LoanRepository.getLoanById.mockResolvedValue(loan)
     ItemController.updateItemPhoto.mockResolvedValue(true)
 
-    await SaleController.updateSaleImage(req, res)
+    await LoanController.updateLoanImage(req, res)
 
     expect(ItemController.updateItemPhoto).toHaveBeenCalledWith({ itemId: 123, index: 0, thumbnail: 'new-thumbnail-url' })
-    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Imagem de venda atualizada com sucesso.')
+    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Imagem de empréstimo atualizada com sucesso.')
   })
 
-  it('deve lançar erro se a venda não for encontrada ao atualizar imagem', async () => {
+  it('deve lançar erro se o empréstimo não for encontrada ao atualizar imagem', async () => {
     const req = { params: { id: 99 }, body: { index: 0, thumbnail: 'new-thumbnail-url' } }
     const res = {}
 
-    SaleRepository.getSaleById.mockResolvedValue(null)
+    LoanRepository.getLoanById.mockResolvedValue(null)
 
-    await SaleController.updateSaleImage(req, res)
+    await LoanController.updateLoanImage(req, res)
 
-    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Venda não encontrada')
+    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Empréstimo não encontrado.')
   })
 })

@@ -17,7 +17,7 @@ proposalLoanRouter.get(
   ProposalLoanController.getLoanProposalById
 )
 
-proposalLoanRouter.post(
+proposalLoanRouter.put(
   '/proposal-loans/:id/user/:userId',
   AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
