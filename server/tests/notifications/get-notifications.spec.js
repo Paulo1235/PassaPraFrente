@@ -22,7 +22,7 @@ describe('NotificationGetController', () => {
   })
 
   it('deve retornar a notificação por ID', async () => {
-    const req = { params: { id: '1' } }
+    const req = { params: { id: 1 } }
     const res = {}
     const notification = { id: 1, message: 'Notificação 1' }
 
@@ -34,7 +34,7 @@ describe('NotificationGetController', () => {
   })
 
   it('deve retornar erro se notificação não for encontrada', async () => {
-    const req = { params: { id: '999' } }
+    const req = { params: { id: 999 } }
     const res = {}
 
     NotificationRepository.getNotificationById.mockResolvedValue(null)

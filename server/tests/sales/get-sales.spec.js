@@ -60,7 +60,7 @@ describe('Controlador de Vendas', () => {
     })
 
     it('deve devolver 404 quando a venda não for encontrada', async () => {
-      const req = { params: { id: '999' } }
+      const req = { params: { id: 999 } }
       const res = {}
 
       SaleRepository.getSaleById.mockResolvedValue(null)

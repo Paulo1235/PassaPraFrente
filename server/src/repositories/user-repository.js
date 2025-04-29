@@ -1,6 +1,7 @@
 import sql from 'mssql'
 
 import { getConnection } from '../database/db-config.js'
+import { USER_ROLES, VERIFIED_USER } from '../constants/user-constants.js'
 
 class UserRepository {
   static async getUserById (id) {
@@ -48,18 +49,14 @@ class UserRepository {
     return user.rowsAffected[0] > 0
   }
 
-  static async getAllUsers (page, pageSize) {
+  static async getAllUsers () {
     const pool = await getConnection()
-
-    const offset = (page - 1) * pageSize
 
     const users = await pool.request()
       .query(`
         SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail
         FROM Utilizador 
         JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID
-        ORDER BY Utilizador.Utilizador_ID  -- Garantir uma ordenação consistente
-        OFFSET ${offset} ROWS FETCH NEXT ${pageSize} ROWS ONLY
       `)
 
     return users.recordset
@@ -77,10 +74,11 @@ class UserRepository {
         .input('nome', sql.VarChar, input.name)
         .input('dataNasc', sql.Date, input.birthDate)
         .input('contacto', sql.VarChar, input.contact)
+        .input('tipoUtilizador', sql.Int, USER_ROLES.USER)
         .query(`
           INSERT INTO Utilizador (Nome, DataNasc, Contacto, TipoUtilizador_ID)
           OUTPUT INSERTED.Utilizador_ID
-          VALUES (@nome, @dataNasc, @contacto, 1)
+          VALUES (@nome, @dataNasc, @contacto, @tipoUtilizador)
         `)
 
       const userId = user.recordset[0].Utilizador_ID
@@ -89,9 +87,10 @@ class UserRepository {
         .input('email', sql.VarChar, input.email)
         .input('password', sql.VarChar, input.password)
         .input('utilizadorId', sql.Int, userId)
+        .input('confirmarEmail', sql.Int, VERIFIED_USER.UNVERIFIED)
         .query(`
-          INSERT INTO Autenticacao (Email, Password, Utilizador_ID)
-          VALUES (@email, @password, @utilizadorId)
+          INSERT INTO Autenticacao (Email, Password, Utilizador_ID, ConfirmarEmail)
+          VALUES (@email, @password, @utilizadorId, @confirmarEmail)
         `)
 
       await transaction.commit()
@@ -101,16 +100,6 @@ class UserRepository {
       await transaction.rollback()
       console.error('Internal error: ', error.message)
     }
-  }
-
-  static async deleteUser (id) {
-    const pool = await getConnection()
-
-    await pool.request()
-      .input('id', sql.Int, id)
-      .query('DELETE FROM Utilizador WHERE Utilizador_ID = @id')
-
-    return true
   }
 
   static async updateUser (data, id) {
@@ -125,7 +114,8 @@ class UserRepository {
         SET 
           Nome = @name, 
           Contacto = @contact 
-        WHERE Utilizador_ID = @id`)
+        WHERE Utilizador_ID = @id`
+      )
 
     return user.recordset
   }
@@ -133,12 +123,14 @@ class UserRepository {
   static async activateUser (id) {
     const pool = await getConnection()
 
-    const confirmEmailValue = 1
-
     const updatedUser = await pool.request()
       .input('id', sql.Int, id)
-      .input('confirmarEmail', sql.Int, confirmEmailValue)
-      .query('UPDATE Autenticacao SET ConfirmarEmail = @confirmarEmail WHERE Utilizador_ID = @id')
+      .input('confirmarEmail', sql.Int, VERIFIED_USER.VERIFIED)
+      .query(`
+        UPDATE Autenticacao 
+        SET ConfirmarEmail = @confirmarEmail 
+        WHERE Utilizador_ID = @id`
+      )
 
     return updatedUser.rowsAffected[0] > 0
   }

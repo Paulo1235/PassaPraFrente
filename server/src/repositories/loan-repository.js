@@ -2,6 +2,7 @@ import sql from 'mssql'
 
 import { dbConfig, getConnection } from '../database/db-config.js'
 import ItemRepository from './item-repository.js'
+import { LOAN_STATES } from '../constants/status-constants.js'
 
 class LoanRepository {
   static async createLoan (item, data, userId) {
@@ -16,10 +17,11 @@ class LoanRepository {
       .input('dataFim', sql.DateTime, data.endDate)
       .input('userId', sql.Int, userId)
       .input('itemId', sql.Int, item.Artigo_ID)
+      .input('stateId', sql.Int, LOAN_STATES.EM_ANALISE)
       .query(`
         INSERT INTO 
         Emprestimo (Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, ArtigoArtigo_ID, EstadoEstado_ID)
-        VALUES (@titulo, @descricao, @valor, @dataInicio, @dataFim, @userId, @itemId, 1)
+        VALUES (@titulo, @descricao, @valor, @dataInicio, @dataFim, @userId, @itemId, @stateId)
       `)
 
     return loan.rowsAffected[0] > 0

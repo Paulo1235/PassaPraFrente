@@ -2,6 +2,7 @@ import sql from 'mssql'
 
 import { getConnection } from '../database/db-config.js'
 import ItemRepository from './item-repository.js'
+import { GIVEAWAY_STATES } from '../constants/status-constants.js'
 
 class GiveawayRepository {
   static async createGiveaway (item, data, userId) {
@@ -15,7 +16,7 @@ class GiveawayRepository {
       .input('descricao', sql.VarChar, data.description)
       .input('itemId', sql.Int, item.Artigo_ID)
       .input('userId', sql.Int, userId)
-      .input('estadoId', sql.Int, 1)
+      .input('estadoId', sql.Int, GIVEAWAY_STATES.EM_ANALISE)
       .query(`
         INSERT INTO Sorteio (DataInicio, DataFim, Titulo, Descricao, ArtigoArtigo_ID, Utilizador_ID, Estado_ID)
         VALUES (@dataInicio, @dataFim, @titulo, @descricao, @itemId, @userId, @estadoId)

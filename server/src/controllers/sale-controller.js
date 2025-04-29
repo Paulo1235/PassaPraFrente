@@ -28,6 +28,7 @@ class SaleController {
 
   static async getSaleById (req, res) {
     const { id } = req.params
+
     try {
       const sale = await SaleRepository.getSaleById(id)
 

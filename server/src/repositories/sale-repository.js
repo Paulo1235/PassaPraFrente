@@ -2,6 +2,7 @@ import sql from 'mssql'
 
 import { dbConfig, getConnection } from '../database/db-config.js'
 import ItemRepository from './item-repository.js'
+import { SALE_STATES } from '../constants/status-constants.js'
 
 class SaleRepository {
   static async createSale (item, data, userId) {
@@ -14,10 +15,11 @@ class SaleRepository {
       .input('valor', sql.Int, data.price)
       .input('userId', sql.Int, userId)
       .input('itemId', sql.Int, item.Artigo_ID)
+      .input('stateId', sql.Int, SALE_STATES.EM_ANALISE)
       .query(`
         INSERT INTO 
         Venda (Titulo, Descricao, Valor, Utilizador_ID, Artigo_ID, Estado_ID)
-        VALUES (@titulo, @descricao, @valor, @userId, @itemId, 1)
+        VALUES (@titulo, @descricao, @valor, @userId, @itemId, @stateId)
       `)
 
     return sale.rowsAffected[0] > 0
