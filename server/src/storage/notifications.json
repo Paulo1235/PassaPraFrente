@@ -636,5 +636,22 @@
     "link": "http://localhost:3000/review/user/loan/29",
     "read": false,
     "date": "2025-04-30T16:44:34.063Z"
+  },
+  {
+    "id": "f5de1e4e-d725-4dc5-8d28-d0fbd69aa40b",
+    "message": "A sua proposta para Vendo teclado novinho em folha foi aceite",
+    "userId": "6",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T19:40:40.020Z"
+  },
+  {
+    "id": "f92f801d-be50-4c91-b774-8693fd1a52bb",
+    "message": "Avalie o vendedor da venda: Vendo teclado novinho em folha",
+    "userId": "6",
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/54",
+    "read": false,
+    "date": "2025-04-30T19:40:40.692Z"
   }
 ]

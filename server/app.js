@@ -44,7 +44,6 @@ const limiter = rateLimit({
 NODE_ENV === 'development' ? app.use(morgan('dev')) : app.use(morgan('common'))
 
 app.use(cors(corsOptions))
-app.options('*', cors(corsOptions))
 app.use(cookieParser())
 app.use(limiter)
 app.use(helmet())

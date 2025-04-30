@@ -165,7 +165,7 @@ class ProposalSaleController {
         }
       }
 
-      return response(res, true, StatusCodes.OK, sales)
+      return response(res, true, StatusCodes.OK, proposals)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as vendas.')
     }
