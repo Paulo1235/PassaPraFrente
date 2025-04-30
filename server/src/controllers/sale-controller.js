@@ -13,6 +13,7 @@ class SaleController {
     const userId = req.user.Utilizador_ID
     const data = req.body
 
+
     try {
       const item = await ItemController.createItem(data)
 

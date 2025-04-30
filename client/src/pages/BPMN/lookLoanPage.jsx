@@ -82,12 +82,12 @@ function LookLoan() {
         <div className="flex-grow">
           <div className="modal-sale w-[90%] max-w-[1200px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
             <div className="button-back flex justify-end mb-4">
-              <a href="/index">
-                <button className="text-txts flex flex-row gap-2 items-center">
-                  <Undo2 />
-                  <span>Voltar</span>
-                </button>
-              </a>
+            <a href="/index">
+              <button className="text-txts flex flex-row gap-2 items-center">
+                <Undo2 />
+                <span>Voltar</span>
+              </button>
+            </a>
             </div>
 
             <div className="images flex flex-wrap justify-center gap-10 mb-10">

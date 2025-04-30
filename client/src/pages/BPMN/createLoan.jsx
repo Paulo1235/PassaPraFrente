@@ -89,10 +89,12 @@ export default function CreateLoan() {
         <ToastContainer />
         <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex flex-col items-end">
-            <button className="flex flex-row gap-2 items-center hover:underline">
-              <Undo2 className="h-5 w-5" />
-              <span>Voltar</span>
-            </button>
+          <a href="/index">
+              <button className="text-txts flex flex-row gap-2 items-center">
+                <Undo2 />
+                <span>Voltar</span>
+              </button>
+            </a>
           </div>
 
           <h1 className="text-3xl font-medium text-[#CAAD7E] text-center my-6">
