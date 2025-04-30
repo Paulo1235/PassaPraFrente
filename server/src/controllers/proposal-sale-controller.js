@@ -155,7 +155,7 @@ class ProposalSaleController {
     try {
       const sales = await SaleRepository.getUserSales(userId)
 
-      const saleIds = sales.map(sale => sale.Emprestimo_ID)
+      const saleIds = sales.map(sale => sale.Venda_ID)
 
       for (const saleId of saleIds) {
         const proposal = await ProposalSaleRepository.getSaleProposalBySaleId(saleId)

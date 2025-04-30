@@ -1,241 +1,264 @@
-import { useEffect, useState } from "react"
-import { Undo2 } from "lucide-react"
-import { useNavigate } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
-import { fetchUserInfo } from "../lib/authSlice"
-
-//? CSS
-import "../components/css/sidebar.css"
-import "../index.css"
-
-//? Components
-import SideBar from "../components/sideBar"
-import ProposalCard from "../components/proposalCard"
-import Footer from "../components/footer"
-import { Helmet } from "react-helmet"
-import ProposalCardAnnouce from "../components/proposalCardAnnouce"
+import { useEffect, useState } from "react";
+import { Undo2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserInfo } from "../lib/authSlice";
+import SideBar from "../components/sideBar";
+import ProposalCard from "../components/proposalCard";
+import Footer from "../components/footer";
+import { Helmet } from "react-helmet";
+import ProposalCardAnnouce from "../components/proposalCardAnnouce";
+import "../components/css/sidebar.css";
+import "../index.css";
 
 const ProposalsPage = () => {
-  const { user, isAuthenticated } = useSelector((state) => state.auth)
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const [loading, setLoading] = useState({ made: false, received: false });
+  const [proposalsMade, setProposalsMade] = useState({ sales: [], loans: [] });
+  const [proposalsReceived, setProposalsReceived] = useState({ sales: [], loans: [] });
+  const [error, setError] = useState(null);
 
-  const [proposalsMade, setProposalsMade] = useState({ sales: [], loans: [] })        // propostas que eu fiz
-  const [proposalsReceived, setProposalsReceived] = useState({ sales: [], loans: [] }) // propostas que eu recebi
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-
+  // Check authentication and fetch user data
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/")
-      return
+      navigate("/");
+      return;
     }
-    dispatch(fetchUserInfo())
-  }, [isAuthenticated, dispatch, navigate])
+    dispatch(fetchUserInfo());
+  }, [isAuthenticated, dispatch, navigate]);
 
-  // Fetch propostas que EU fiz (Efetuadas)
+  // Clear states when no user
+  useEffect(() => {
+    if (!user?.message?.Utilizador_ID) {
+      setProposalsMade({ sales: [], loans: [] });
+      setProposalsReceived({ sales: [], loans: [] });
+    }
+  }, [user]);
+
+  // Fetch proposals I made (Sent proposals)
   useEffect(() => {
     const fetchProposalsMade = async () => {
       try {
-        const userId = user?.message?.Utilizador_ID
-        if (!userId) return
+        setLoading(prev => ({...prev, made: true}));
+        setError(null);
+        
+        const userId = user?.message?.Utilizador_ID;
+        if (!userId) return;
 
         const fetchSalesProposals = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-sales/user/user`, {
+          const response = await fetch(`http://localhost:5000/api/proposal-sales/user/user?t=${Date.now()}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-          })
+          });
 
-          const data = await response.json()
-          if (!data?.message?.length) return []
+          if (!response.ok) throw new Error("Erro ao buscar propostas de venda");
 
-          const results = await Promise.all(
+          const data = await response.json();
+          if (!data?.message || !Array.isArray(data.message)) return [];
+
+          return await Promise.all(
             data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-              })
-              const saleDetail = await detailRes.json()
-              const item = saleDetail.message || {}
-
+              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}?t=${Date.now()}`, {
+                credentials: 'include',
+                headers: { "Content-Type": "application/json" }
+              });
+              
+              const saleDetail = await detailRes.json();
+              
               return {
-                title: item.Titulo || "Sem título",
-                idVenda: proposal.Venda_ID || "ID",
-                idEmprestimo: "ID",
-                idSorteio: "ID",
+                title: saleDetail.message?.Titulo || "Sem título",
+                Titulo: saleDetail.message?.Titulo || "Sem título",
+                idVenda: proposal.Venda_ID || null,
                 category: "Vendas",
                 price: proposal.NovoValor ?? 0,
-                description: item.Descricao || "Sem descrição",
+                description: saleDetail.message?.Descricao || "Sem descrição",
+                Descricao: saleDetail.message?.Descricao || "Sem descrição",
                 status: proposal.Aceite ?? 0,
                 date: proposal.Data_Criacao || new Date().toISOString(),
-              }
+              };
             })
-          )
-          return results
-        }
+          );
+        };
 
         const fetchLoanProposals = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-loans/user/user`, {
+          const response = await fetch(`http://localhost:5000/api/proposal-loans/user/user?t=${Date.now()}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-          })
+          });
 
-          const data = await response.json()
-          if (!data?.message?.length) return []
+          if (!response.ok) throw new Error("Erro ao buscar propostas de empréstimo");
 
-          const results = await Promise.all(
+          const data = await response.json();
+          if (!data?.message || !Array.isArray(data.message)) return [];
+
+          return await Promise.all(
             data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-              })
-              const loanDetail = await detailRes.json()
-              const item = loanDetail.message || {}
-
+              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}?t=${Date.now()}`, {
+                credentials: 'include',
+                headers: { "Content-Type": "application/json" }
+              });
+              
+              const loanDetail = await detailRes.json();
+              
               return {
-                title: item.Titulo || "Sem título",
-                idVenda: "ID",
-                idEmprestimo: proposal.Emprestimo_ID || "ID",
-                idSorteio: "ID",
+                title: loanDetail.message?.Titulo || "Sem título",
+                Titulo: loanDetail.message?.Titulo || "Sem título",
+                idEmprestimo: proposal.Emprestimo_ID || null,
                 category: "Empréstimos",
                 price: proposal.NovoValor ?? 0,
-                description: item.Descricao || "Sem descrição",
+                description: loanDetail.message?.Descricao || "Sem descrição",
+                Descricao: loanDetail.message?.Descricao || "Sem descrição",
                 status: proposal.Aceite ?? 0,
                 date: proposal.Data_Criacao || new Date().toISOString(),
                 duration: (() => {
-                  const start = new Date(proposal.NovaDataInicio || new Date())
-                  const end = new Date(proposal.NovaDataFim || new Date())
-                  const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24))
-                  return `${diffDays} dia(s)`
+                  const start = new Date(proposal.NovaDataInicio || new Date());
+                  const end = new Date(proposal.NovaDataFim || new Date());
+                  const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+                  return `${diffDays} dia(s)`;
                 })(),
-              }
+              };
             })
-          )
-          return results
-        }
+          );
+        };
 
         const [salesItems, loanItems] = await Promise.all([
           fetchSalesProposals(),
           fetchLoanProposals()
-        ])
+        ]);
 
-        setProposalsMade({ sales: salesItems, loans: loanItems })
-      } catch (error) {
-        console.error("Erro ao buscar propostas efetuadas:", error)
+        setProposalsMade({
+          sales: salesItems.filter(item => item !== null),
+          loans: loanItems.filter(item => item !== null)
+        });
+      } catch (err) {
+        console.error("Erro ao buscar propostas efetuadas:", err);
+        setError("Erro ao carregar propostas efetuadas");
+      } finally {
+        setLoading(prev => ({...prev, made: false}));
       }
-    }
+    };
 
-    if (user?.message?.Utilizador_ID) {
-      fetchProposalsMade()
-    }
-  }, [user])
+    if (user?.message?.Utilizador_ID) fetchProposalsMade();
+  }, [user]);
 
-  // Fetch propostas que EU RECEBI (Recebidas)
+  // Fetch proposals I received
   useEffect(() => {
     const fetchProposalsReceived = async () => {
       try {
-        const userId = user?.message?.Utilizador_ID
-        if (!userId) return
+        setLoading(prev => ({...prev, received: true}));
+        setError(null);
+        
+        const userId = user?.message?.Utilizador_ID;
+        if (!userId) return;
 
         const fetchSalesProposalsAnnounce = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-sales/sales/user`, {
+          const response = await fetch(`http://localhost:5000/api/proposal-sales/sales/user?t=${Date.now()}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-          })
-
-          const data = await response.json()
-          if (!data?.message?.length) return []
-
-          const results = await Promise.all(
+          });
+        
+          if (!response.ok) throw new Error("Erro ao buscar propostas de venda recebidas");
+        
+          const data = await response.json();
+          if (!data?.message || !Array.isArray(data.message)) return [];
+        
+          return await Promise.all(
             data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-              })
-              const saleDetail = await detailRes.json()
-              const item = saleDetail.message || {}
-
+              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}?t=${Date.now()}`, {
+                credentials: 'include',
+                headers: { "Content-Type": "application/json" }
+              });
+              
+              if (!detailRes.ok) {
+                console.error("Falha ao buscar detalhes da venda", detailRes.status);
+                return null;
+              }
+        
+              const saleDetail = await detailRes.json();
+              
               return {
-                title: item.Titulo || "Sem título",
-                idVenda: proposal.Venda_ID || "ID",
-                idEmprestimo: "ID",
-                idSorteio: "ID",
+                title: saleDetail.message?.Titulo || "Sem título",
+                idVenda: proposal.Venda_ID || null,
                 category: "Vendas",
                 price: proposal.NovoValor ?? 0,
-                description: item.Descricao || "Sem descrição",
+                description: saleDetail.message?.Descricao || "Sem descrição",
                 status: proposal.Aceite ?? 0,
                 date: proposal.Data_Criacao || new Date().toISOString(),
-              }
+                proposerId: proposal.Utilizador_ID || null
+              };
             })
-          )
-          return results
-        }
+          );
+        };
 
         const fetchLoanProposalsAnnounce = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-loans/loans/user`, {
+          const response = await fetch(`http://localhost:5000/api/proposal-loans/loans/user?t=${Date.now()}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-          })
+          });
 
-          const data = await response.json()
-          if (!data?.message?.length) return []
+          if (!response.ok) throw new Error("Erro ao buscar propostas de empréstimo recebidas");
 
-          const results = await Promise.all(
+          const data = await response.json();
+          if (!data?.message || !Array.isArray(data.message)) return [];
+
+          return await Promise.all(
             data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-              })
-              const loanDetail = await detailRes.json()
-              const item = loanDetail.message || {}
-
+              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}?t=${Date.now()}`, {
+                credentials: 'include',
+                headers: { "Content-Type": "application/json" }
+              });
+              
+              const loanDetail = await detailRes.json();
+              
               return {
-                title: item.Titulo || "Sem título",
-                idVenda: "ID",
-                idEmprestimo: proposal.Emprestimo_ID || "ID",
-                idSorteio: "ID",
+                title: loanDetail.message?.Titulo || "Sem título",
+                idEmprestimo: proposal.Emprestimo_ID || null,
                 category: "Empréstimos",
                 price: proposal.NovoValor ?? 0,
-                description: item.Descricao || "Sem descrição",
+                description: loanDetail.message?.Descricao || "Sem descrição",
                 status: proposal.Aceite ?? 0,
                 date: proposal.Data_Criacao || new Date().toISOString(),
+                proposerId: proposal.Utilizador_ID || null,
                 duration: (() => {
-                  const start = new Date(proposal.NovaDataInicio || new Date())
-                  const end = new Date(proposal.NovaDataFim || new Date())
-                  const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24))
-                  return `${diffDays} dia(s)`
+                  const start = new Date(proposal.NovaDataInicio || new Date());
+                  const end = new Date(proposal.NovaDataFim || new Date());
+                  const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+                  return `${diffDays} dia(s)`;
                 })(),
-              }
+              };
             })
-          )
-          return results
-        }
+          );
+        };
 
         const [salesItems, loanItems] = await Promise.all([
           fetchSalesProposalsAnnounce(),
           fetchLoanProposalsAnnounce()
-        ])
+        ]);
 
-        setProposalsReceived({ sales: salesItems, loans: loanItems })
-      } catch (error) {
-        console.error("Erro ao buscar propostas recebidas:", error)
+        setProposalsReceived({
+          sales: salesItems.filter(item => item !== null),
+          loans: loanItems.filter(item => item !== null)
+        });
+      } catch (err) {
+        console.error("Erro ao buscar propostas recebidas:", err);
+        setError("Erro ao carregar propostas recebidas");
+      } finally {
+        setLoading(prev => ({...prev, received: false}));
       }
-    }
+    };
 
-    if (user?.message?.Utilizador_ID) {
-      fetchProposalsReceived()
-    }
-  }, [user])
+    if (user?.message?.Utilizador_ID) fetchProposalsReceived();
+  }, [user]);
 
-  const announcingItems = [...proposalsMade.sales, ...proposalsMade.loans]           // Efetuadas
-  const announcingItemsAnnounce = [...proposalsReceived.sales, ...proposalsReceived.loans] // Recebidas
+  const announcingItems = [...proposalsMade.sales, ...proposalsMade.loans];
+  const announcingItemsAnnounce = [...proposalsReceived.sales, ...proposalsReceived.loans];
 
   return (
     <div className="flex h-screen bg-bgp overflow-hidden">
@@ -257,28 +280,57 @@ const ProposalsPage = () => {
           <h1 className="text-2xl font-medium text-txtp">Propostas</h1>
         </div>
 
+        {error && (
+          <div className="mx-6 sm:mx-10 mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
+
         <div className="flex flex-col md:flex-row flex-1 overflow-auto">
+          {/* Received Proposals */}
           <div className="w-full md:w-1/2 p-4 md:p-6 overflow-y-auto">
             <h2 className="text-gray-400 font-semibold mb-4 text-xl">Recebidas</h2>
-            {announcingItemsAnnounce.length > 0 ? (
+            
+            {loading.received ? (
+              <div className="flex justify-center items-center h-32">
+                <p className="text-[#7b892f]">Carregando...</p>
+              </div>
+            ) : announcingItemsAnnounce && announcingItemsAnnounce.length > 0 ? (
               announcingItemsAnnounce.map((item, index) => (
-                <ProposalCardAnnouce key={index} item={item} />
+                <ProposalCardAnnouce 
+                  key={`received-${index}`} 
+                  item={item} 
+                  proposerId={item.proposerId}
+                />
               ))
             ) : (
-              <p className="text-[#7b892f] font-semibold text-lg text-center">Nenhuma proposta ainda.</p>
+              <p className="text-[#7b892f] font-semibold text-lg text-center">
+                Nenhuma proposta recebida.
+              </p>
             )}
           </div>
 
           <div className="hidden md:block w-px bg-[#8b9a41]" />
 
-          <div className="w-full md:w-1/2 p-4 md:p-6 overflow-y-auto flex flex-col">
+          {/* Sent Proposals */}
+          <div className="w-full md:w-1/2 p-4 md:p-6 overflow-y-auto">
             <h2 className="text-gray-400 font-semibold mb-4 text-xl">Efetuadas</h2>
-            {announcingItems.length > 0 ? (
+            
+            {loading.made ? (
+              <div className="flex justify-center items-center h-32">
+                <p className="text-[#7b892f]">Carregando...</p>
+              </div>
+            ) : announcingItems && announcingItems.length > 0 ? (
               announcingItems.map((item, index) => (
-                <ProposalCard key={index} item={item} />
+                <ProposalCard 
+                  key={`made-${index}`} 
+                  item={item} 
+                />
               ))
             ) : (
-              <p className="text-[#7b892f] font-semibold text-lg text-center">Nenhuma proposta ainda.</p>
+              <p className="text-[#7b892f] font-semibold text-lg text-center">
+                Nenhuma proposta efetuada.
+              </p>
             )}
           </div>
         </div>
@@ -288,6 +340,7 @@ const ProposalsPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
+
 export default ProposalsPage;

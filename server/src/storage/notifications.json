@@ -653,5 +653,30 @@
     "link": "http://localhost:3000/review/user/sale/54",
     "read": false,
     "date": "2025-04-30T19:40:40.692Z"
+  },
+  {
+    "id": "3251f7f7-57d0-42a2-a60e-f9746d94de15",
+    "message": "A sua proposta para ararararrarasad foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T21:14:59.159Z"
+  },
+  {
+    "id": "89b32670-465d-4aeb-bbf3-d35b04729cc8",
+    "message": "Avalie o vendedor da venda: ararararrarasad",
+    "userId": "16",
+    "category": "Venda",
+    "link": "http://localhost:3000//review/user/sale/57",
+    "read": false,
+    "date": "2025-04-30T21:14:59.585Z"
+  },
+  {
+    "id": "b92aa5ba-010c-44f4-84be-5b5e72068506",
+    "message": "A sua proposta para Relógio Verde  foi recusada",
+    "userId": "6",
+    "category": "Empréstimo",
+    "read": false,
+    "date": "2025-04-30T21:20:21.345Z"
   }
 ]
