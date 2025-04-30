@@ -4,9 +4,10 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import ProposalLoanRepository from '../repositories/proposal-loan-repository.js'
 import LoanRepository from '../repositories/loan-repository.js'
-import { PROPOSAL_LOAN_STATES } from '../constants/status-constants.js'
+import { LOAN_STATES, PROPOSAL_LOAN_STATES } from '../constants/status-constants.js'
 import TransactionLoanController from './transaction-loan-controller.js'
 import NotificationController from './notification-controller.js'
+import TransactionLoanRepository from '../repositories/transaction-loan-repository.js'
 
 class ProposalLoanController {
   static async createProposalLoan (req, res) {
@@ -26,22 +27,26 @@ class ProposalLoanController {
         throw new HttpException('Não é possível fazer uma proposta para este empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
-      if (loan.DataInicio < new Date()) {
-        return response(res, false, StatusCodes.BAD_REQUEST, 'O empréstimo já começou. Já não é efetuar propostas.')
-      }
+      const proposal = await ProposalLoanRepository.getLoanProposalById(userId, id)
 
-      if (loan.DataFim < new Date()) {
-        return response(res, false, StatusCodes.BAD_REQUEST, 'O empréstimo já terminou. Já não é possível efetuar propostas.')
+      if (proposal) {
+        throw new HttpException('Já fez uma proposta para este empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
       if (loan.Utilizador_ID === userId) {
         throw new HttpException('Não é possível fazer uma proposta para o seu próprio empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
-      const proposal = await ProposalLoanRepository.getLoanProposalById(userId, id)
+      if (newStartDate > newEndDate) {
+        throw new HttpException('A data de início não pode ser depois da data de fim.', StatusCodes.BAD_REQUEST)
+      }
 
-      if (proposal) {
-        throw new HttpException('Já fez uma proposta para este empréstimo.', StatusCodes.BAD_REQUEST)
+      if (loan.DataInicio < new Date()) {
+        throw new HttpException('O empréstimo já começou. Já não é efetuar propostas.', StatusCodes.BAD_REQUEST)
+      }
+
+      if (loan.DataFim < new Date()) {
+        throw new HttpException('O empréstimo já terminou. Já não é possível efetuar propostas.', StatusCodes.BAD_REQUEST)
       }
 
       await ProposalLoanRepository.createProposalLoan(userId, id, newValue, newStartDate, newEndDate, PROPOSAL_LOAN_STATES.EM_ANALISE)
@@ -86,47 +91,66 @@ class ProposalLoanController {
       const loan = await LoanRepository.getLoanById(id)
 
       if (!loan) {
-        throw new HttpException('Não foi possível encontrar o empréstimo.', StatusCodes.NOT_FOUND)
+        throw new HttpException('Empréstimo não encontrado.', StatusCodes.NOT_FOUND)
       }
 
-      if (loan.Estado === 'Concluído') {
-        throw new HttpException('Este empréstimo já foi concluída. Não pode aceitar mais propostas.', StatusCodes.BAD_REQUEST)
+      console.log(loan)
+      console.log(new Date())
+
+      if (loan.Estado === 'Concluído' || loan.DataFim < new Date()) {
+        throw new HttpException('Empréstimo já concluído.', StatusCodes.BAD_REQUEST)
       }
 
       const proposal = await ProposalLoanRepository.getLoanProposalById(userId, id)
 
       if (!proposal) {
-        throw new HttpException('Não foi possível encontrar a proposta', StatusCodes.NOT_FOUND)
-      }
-
-      if (proposal.Aceite === PROPOSAL_LOAN_STATES.ACEITE) {
-        throw new HttpException('Esta proposta já foi aceite.', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Proposta não encontrada', StatusCodes.NOT_FOUND)
       }
 
       await ProposalLoanRepository.updateProposalLoanStatus(userId, id, status)
 
-      const notificationData = {
-        message: `A sua proposta para ${loan.Titulo} foi ${parseInt(status) === PROPOSAL_LOAN_STATES.ACEITE ? 'aceite' : 'recusada'}`,
+      const notificationMessage = parseInt(status) === PROPOSAL_LOAN_STATES.ACEITE
+        ? `A sua proposta para ${loan.Titulo} foi aceite`
+        : `A sua proposta para ${loan.Titulo} foi recusada`
+
+      await NotificationController.createNotification({
+        message: notificationMessage,
         category: 'Empréstimo',
         userId
-      }
+      })
 
-      NotificationController.createNotification(notificationData)
+      console.log(proposal)
 
-      // Se a proposta for aceite, cria diretamente a transação
       if (parseInt(status) === PROPOSAL_LOAN_STATES.ACEITE) {
-        const createdTransaction = await TransactionLoanController.createTransactionLoan(proposal.NovoValor, userId, id, proposal.NovaDataInicio, proposal.NovaDataFim)
+        try {
+          const existingTransaction = await TransactionLoanRepository.getLoanTransactionById(id, userId)
 
-        if (createdTransaction) {
-          return response(res, true, StatusCodes.CREATED, 'Transação criada com sucesso.')
+          if (!existingTransaction) {
+            try {
+              await TransactionLoanController.createTransactionLoan(
+                proposal.NovoValor,
+                userId,
+                id,
+                proposal.NovaDataInicio,
+                proposal.NovaDataFim
+              )
+
+              await LoanRepository.updateLoanStatus(parseInt(id), LOAN_STATES.CONCLUIDO)
+            } catch (transactionError) {
+              console.error('ERRO NA TRANSAÇÃO:', transactionError.message)
+
+              // Reverte o status da proposta em caso de erro
+              await ProposalLoanRepository.updateProposalLoanStatus(userId, id, PROPOSAL_LOAN_STATES.DISPONIVEL)
+            }
+          }
+        } catch (error) {
+          console.error('Erro ao verificar/processar transação:', error)
         }
-
-        return response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao criar a transação ao aceitar a proposta.')
       }
 
-      return response(res, true, StatusCodes.OK, 'Estado da proposta atualizado.')
+      return response(res, true, StatusCodes.OK, 'Proposta atualizada')
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao atualizar o estado da proposta.')
+      handleError(res, error, 'Ocorreu um erro ao atualizar a proposta. Tente novamente mais tarde.')
     }
   }
 

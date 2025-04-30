@@ -74,5 +74,567 @@
     "link": "http://localhost:3000/review/user/sale/44",
     "read": true,
     "date": "2025-04-16T14:02:24.569Z"
+  },
+  {
+    "id": "e2f2eb23-4be3-4e82-8390-b40edae5441f",
+    "message": "Avalie o vendedor da venda: Vendo drone",
+    "userId": 16,
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/45",
+    "read": false,
+    "date": "2025-04-30T14:51:41.784Z"
+  },
+  {
+    "id": "05d0226a-8032-4ac0-bd90-77cebec2cd4a",
+    "message": "A sua proposta para Vendo carro de Hot Wheels foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T14:55:57.015Z"
+  },
+  {
+    "id": "98498b41-ead7-4f29-a113-e70a3f882b46",
+    "message": "A sua proposta para Vendo carro de Hot Wheels foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T14:59:17.024Z"
+  },
+  {
+    "id": "6927216f-caea-432d-ad40-0562c68e6e9e",
+    "message": "A sua proposta para Vendo carro de Hot Wheels foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:00:40.131Z"
+  },
+  {
+    "id": "39620868-b771-4958-b16c-6abe51ee8deb",
+    "message": "A sua proposta para Vendo carro de Hot Wheels foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:00:57.821Z"
+  },
+  {
+    "id": "dc9505e1-1b46-435b-ad6f-04c048960a6e",
+    "message": "A sua proposta para Vendo carro de Hot Wheels foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:02:03.506Z"
+  },
+  {
+    "id": "7c85ec0d-ef5c-41bd-9f48-359459bb2832",
+    "message": "A sua proposta para Vendo carro de Hot Wheels foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:02:57.289Z"
+  },
+  {
+    "id": "1b7ea770-4e55-465a-a61e-787a368d4da1",
+    "message": "A sua proposta para Vendo carro de Hot Wheels foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:03:09.655Z"
+  },
+  {
+    "id": "88f28c24-0a43-4017-a021-31c11a1c00dd",
+    "message": "A sua proposta para Vendo carro de Hot Wheels foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:03:37.344Z"
+  },
+  {
+    "id": "e801d899-1ccd-43d7-81c0-2f7de596670d",
+    "message": "A sua proposta para Vendo casa de bonecas foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:06:11.553Z"
+  },
+  {
+    "id": "0b7c9bdf-709d-4b53-bc2d-db554417b71e",
+    "message": "A sua proposta para Vendo casa de bonecas foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:07:02.096Z"
+  },
+  {
+    "id": "ead9cfd3-3fd9-441d-ac4d-c8eaa8820f81",
+    "message": "A sua proposta para Vendo casa de bonecas foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:08:37.314Z"
+  },
+  {
+    "id": "8bbbe989-60a2-4217-8fa6-f540ea5c6a0c",
+    "message": "A sua proposta para Vendo casa de bonecas foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:09:51.057Z"
+  },
+  {
+    "id": "54f8d564-0081-42f5-bbed-95559f458349",
+    "message": "A sua proposta para Vendo casa de bonecas foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:16:00.987Z"
+  },
+  {
+    "id": "b0c1f637-396b-4d52-b7bb-fa64f25cb41b",
+    "message": "Avalie o vendedor da venda: Vendo casa de bonecas",
+    "userId": "16",
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/47",
+    "read": false,
+    "date": "2025-04-30T15:16:01.579Z"
+  },
+  {
+    "id": "050af67f-d7e4-49f0-a3fd-ede909c68c37",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:25:34.088Z"
+  },
+  {
+    "id": "59ee8ebd-1258-4f01-8845-69151300aeeb",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:26:07.748Z"
+  },
+  {
+    "id": "5c9028da-c9f9-4640-80b4-86e7383dbf4a",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:27:00.030Z"
+  },
+  {
+    "id": "761bcc9d-918f-42ef-bdf4-bd0be6b1a0cd",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:27:08.303Z"
+  },
+  {
+    "id": "3c214e5d-8b17-439b-a8f1-39145de327c7",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:29:35.356Z"
+  },
+  {
+    "id": "fe19984c-622d-4ef5-a714-5aab3a4a7b46",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:29:59.175Z"
+  },
+  {
+    "id": "3726a9e9-3d78-428a-b146-6ec97c08d61f",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:31:40.200Z"
+  },
+  {
+    "id": "616aa015-d6b8-436a-9064-943acc58bb6d",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:31:56.568Z"
+  },
+  {
+    "id": "485d90ba-71c9-4f72-88ab-f0d4c70a4419",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:33:09.375Z"
+  },
+  {
+    "id": "1cf38c10-c1a7-4ff0-bd01-23a4a4c1611c",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:34:02.614Z"
+  },
+  {
+    "id": "fe08b18b-4b00-4eb7-b034-9281a2228efe",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:34:19.933Z"
+  },
+  {
+    "id": "6347bfd2-6f38-461d-80d2-e17e171a6028",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:34:34.154Z"
+  },
+  {
+    "id": "8d7fc660-c346-4d61-9df1-2796ea24a85c",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:34:49.103Z"
+  },
+  {
+    "id": "69fa3fd1-8f24-448b-a652-07c5fc3568fa",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:35:04.575Z"
+  },
+  {
+    "id": "8c704221-c287-49b6-814b-249e6faacd61",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:36:26.880Z"
+  },
+  {
+    "id": "b9f72be8-44d9-42e1-9f70-d8fc5c819035",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:36:52.754Z"
+  },
+  {
+    "id": "d4dd96b9-2bbf-48d7-91ab-8ae0699e98e3",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:37:08.235Z"
+  },
+  {
+    "id": "79b2279f-dba8-4cd3-a4f4-aef657fc6b13",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:39:07.942Z"
+  },
+  {
+    "id": "5f307628-6d13-4c36-9406-eec6fba76286",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:39:20.949Z"
+  },
+  {
+    "id": "eb66e18d-e7a1-42eb-b00d-5ce87ef105bb",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:39:37.610Z"
+  },
+  {
+    "id": "17dd000d-6b8f-48ed-8c76-d57496135b28",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:39:46.969Z"
+  },
+  {
+    "id": "3d19743a-0b5c-461d-87c6-093ffe950f51",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:40:10.232Z"
+  },
+  {
+    "id": "4c5524de-f222-4bce-a153-8fc70381621d",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:40:27.084Z"
+  },
+  {
+    "id": "84edf63f-5601-4a32-b103-a2c6338fbc56",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:41:13.062Z"
+  },
+  {
+    "id": "c262a0d7-923c-4c9d-87b2-a297c1e10380",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:41:27.591Z"
+  },
+  {
+    "id": "e175cf8a-5164-4b36-864c-de12db640605",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:43:00.156Z"
+  },
+  {
+    "id": "2b7c0a9b-762e-4c8f-b717-907aaba52b2a",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:45:51.000Z"
+  },
+  {
+    "id": "4faaaa20-787a-4a61-85d1-a63491e814c6",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:49:11.851Z"
+  },
+  {
+    "id": "710e9236-c5ad-4250-b448-79f8d19462de",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:49:55.903Z"
+  },
+  {
+    "id": "8c66c4f6-9d27-454f-b3ce-223cd42fc578",
+    "message": "A sua proposta para Vendo casa de bonecas 2 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:50:45.283Z"
+  },
+  {
+    "id": "33257444-7628-4e34-aab8-af1a46a91990",
+    "message": "Avalie o vendedor da venda: Vendo casa de bonecas 2",
+    "userId": "16",
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/48",
+    "read": false,
+    "date": "2025-04-30T15:50:45.946Z"
+  },
+  {
+    "id": "dcbf4d03-ce06-4d0a-b4ac-652effd624b8",
+    "message": "A sua proposta para Vendo casa de bonecas 3 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:51:10.779Z"
+  },
+  {
+    "id": "70b6072f-d9d5-4fda-94fc-fae6cbc3dcea",
+    "message": "Avalie o vendedor da venda: Vendo casa de bonecas 3",
+    "userId": "16",
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/49",
+    "read": false,
+    "date": "2025-04-30T15:51:11.321Z"
+  },
+  {
+    "id": "36dee20c-d598-4a40-abcf-c537dbdb99f1",
+    "message": "A sua proposta para Vendo casa de bonecas 4 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:55:10.080Z"
+  },
+  {
+    "id": "4987be63-e563-4046-ab41-05f5d4509ff2",
+    "message": "A sua proposta para Vendo casa de bonecas 4 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:55:23.894Z"
+  },
+  {
+    "id": "9e27e139-de3b-4866-bf6b-34339751ec8e",
+    "message": "Avalie o vendedor da venda: Vendo casa de bonecas 4",
+    "userId": "16",
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/50",
+    "read": false,
+    "date": "2025-04-30T15:55:24.672Z"
+  },
+  {
+    "id": "81da637b-e257-4b53-8f22-a7ef9fd1dc1e",
+    "message": "A sua proposta para Vendo casa de bonecas 5 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T15:59:31.430Z"
+  },
+  {
+    "id": "a2b4b081-da76-4c5c-bbe7-dac9c96b4522",
+    "message": "A sua proposta para Vendo casa de bonecas 6 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T16:07:44.351Z"
+  },
+  {
+    "id": "0c681b3e-b5d9-4582-b1af-9b895d988465",
+    "message": "Avalie o vendedor da venda: Vendo casa de bonecas 6",
+    "userId": "16",
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/51",
+    "read": false,
+    "date": "2025-04-30T16:07:45.224Z"
+  },
+  {
+    "id": "16920127-0c0f-41c1-898c-81b674655553",
+    "message": "A sua proposta para Vendo casa de bonecas 7 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T16:10:06.989Z"
+  },
+  {
+    "id": "2a32236f-3940-4c94-bcb6-f6851acbd896",
+    "message": "A sua proposta para Vendo casa de bonecas 7 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T16:10:20.903Z"
+  },
+  {
+    "id": "69ce02ff-0588-4e52-ad34-a2dcc8eef7e1",
+    "message": "A sua proposta para Vendo casa de bonecas 7 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T16:10:32.621Z"
+  },
+  {
+    "id": "a29470bd-a4ad-4923-8fad-ef49c7e993d2",
+    "message": "A sua proposta para Vendo casa de bonecas 7 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T16:11:11.983Z"
+  },
+  {
+    "id": "40099825-1757-4a9e-9d75-5f75fcc7e36c",
+    "message": "A sua proposta para Vendo casa de bonecas 7 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T16:11:28.449Z"
+  },
+  {
+    "id": "0435cbb9-f4f8-4fb7-9d54-faf7025232e3",
+    "message": "A sua proposta para Vendo casa de bonecas 7 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T16:11:35.555Z"
+  },
+  {
+    "id": "38072bbd-d8c3-423f-8378-aa07b00a21a5",
+    "message": "Avalie o vendedor da venda: Vendo casa de bonecas 7",
+    "userId": "16",
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/52",
+    "read": false,
+    "date": "2025-04-30T16:11:36.167Z"
+  },
+  {
+    "id": "70b53129-e870-4c27-bfe8-bbc54fd0474d",
+    "message": "A sua proposta para Vendo casa de bonecas 8 foi aceite",
+    "userId": "16",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-04-30T16:12:39.279Z"
+  },
+  {
+    "id": "3fafb257-c556-48ab-8c0a-74300ae54ab9",
+    "message": "Avalie o vendedor da venda: Vendo casa de bonecas 8",
+    "userId": "16",
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/53",
+    "read": false,
+    "date": "2025-04-30T16:12:39.922Z"
+  },
+  {
+    "id": "cdacd4a8-ed96-4bb9-b6ff-4c7b48c31d6b",
+    "message": "A sua proposta para Carrão amarelão foi aceite",
+    "userId": "16",
+    "category": "Empréstimo",
+    "read": false,
+    "date": "2025-04-30T16:38:51.079Z"
+  },
+  {
+    "id": "a2740338-7791-411f-9753-a2b2978b1a59",
+    "message": "A sua proposta para Carrão amarelão foi aceite",
+    "userId": "16",
+    "category": "Empréstimo",
+    "read": false,
+    "date": "2025-04-30T16:40:32.324Z"
+  },
+  {
+    "id": "19f4fa41-e2a9-4a69-b4fb-d7db6ce147e4",
+    "message": "A sua proposta para Carrão amarelão foi aceite",
+    "userId": "16",
+    "category": "Empréstimo",
+    "read": false,
+    "date": "2025-04-30T16:41:54.499Z"
+  },
+  {
+    "id": "7a1a4584-8ea7-4c09-b97e-d910759bc2ae",
+    "message": "A sua proposta para Carrão amarelão foi aceite",
+    "userId": "16",
+    "category": "Empréstimo",
+    "read": false,
+    "date": "2025-04-30T16:42:21.719Z"
+  },
+  {
+    "id": "4f52a95d-81c0-49b4-808a-abee972eb256",
+    "message": "Avalie o vendedor do empréstimo: Carrão amarelão",
+    "userId": "16",
+    "category": "Empréstimo",
+    "link": "http://localhost:3000/review/user/loan/28",
+    "read": false,
+    "date": "2025-04-30T16:42:22.211Z"
+  },
+  {
+    "id": "8677f89d-3bd0-4d6d-91d5-3382b5cb0f2a",
+    "message": "Avalie o vendedor do empréstimo: Carrão amarelão",
+    "userId": 16,
+    "category": "Empréstimo",
+    "link": "http://localhost:3000/review/user/loan/29",
+    "read": false,
+    "date": "2025-04-30T16:44:34.063Z"
   }
 ]

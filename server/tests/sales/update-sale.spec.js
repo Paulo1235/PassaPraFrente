@@ -77,7 +77,7 @@ describe('Operações de atualizar em vendas', () => {
   it('deve lançar erro se a venda já estiver concluída', async () => {
     const req = { params: { id: 1 }, body: { title: 'Updated Title' } }
     const res = {}
-    const sale = { id: 1, Estado_ID: 4, Artigo_ID: 123 }
+    const sale = { id: 1, Estado_ID: SALE_STATES.CONCLUIDO, Artigo_ID: 123 }
 
     SaleRepository.getSaleById.mockResolvedValue(sale)
 
@@ -90,7 +90,7 @@ describe('Operações de atualizar em vendas', () => {
   it('deve atualizar o estado da venda com sucesso', async () => {
     const req = { params: { id: 1 }, body: { status: 'Disponível' } }
     const res = {}
-    const sale = { id: 1, Estado_ID: 'Em análise' }
+    const sale = { id: 1, Estado: 'Em análise' }
 
     SaleRepository.getSaleById.mockResolvedValue(sale)
 
@@ -98,7 +98,7 @@ describe('Operações de atualizar em vendas', () => {
 
     await SaleController.updateSaleStatus(req, res)
 
-    expect(SaleRepository.updateSaleStatus).toHaveBeenCalledWith(1, 3)
+    expect(SaleRepository.updateSaleStatus).toHaveBeenCalledWith(1, SALE_STATES.DISPONIVEL)
 
     expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Estado da venda atualizado.')
   })

@@ -41,14 +41,8 @@ class TransactionSaleController {
     }
   }
 
-  static async createTransactionSale (finalValue, userId, id, res) {
+  static async createTransactionSale (finalValue, userId, id) {
     try {
-      const existsTransaction = await TransactionSaleRepository.getSaleTransactionById(id, userId)
-
-      if (existsTransaction) {
-        return
-      }
-
       const transaction = await TransactionSaleRepository.createTransactionSale(finalValue, userId, id)
 
       if (transaction) {

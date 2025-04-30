@@ -25,7 +25,7 @@ describe('EntryGiveawayController - createEntryGiveaway', () => {
   }
 
   const mockReq = {
-    params: { giveawayId: '1' },
+    params: { giveawayId: 1 },
     user: { Utilizador_ID: 2 }
   }
 

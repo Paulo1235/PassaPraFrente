@@ -61,15 +61,15 @@ describe('Atualizar Proposta de venda', () => {
 
     await ProposalSaleController.updateProposalSaleStatus(req, res)
 
-    expect(SaleRepository.getSaleById).toHaveBeenCalledWith('1')
+    expect(SaleRepository.getSaleById).toHaveBeenCalledWith(1)
 
-    expect(ProposalSaleRepository.updateProposalSaleStatus).toHaveBeenCalledWith('2', '1', PROPOSAL_SALE_STATES.ACEITE)
+    expect(ProposalSaleRepository.updateProposalSaleStatus).toHaveBeenCalledWith(2, 1, PROPOSAL_SALE_STATES.ACEITE)
 
     expect(NotificationController.createNotification).toHaveBeenCalled()
 
-    expect(TransactionSaleController.createTransactionSale).toHaveBeenCalledWith(150, '2', '1')
+    expect(TransactionSaleController.createTransactionSale).toHaveBeenCalledWith(150, 2, 1)
 
     expect(res.status).toHaveBeenCalledWith(200)
-    expect(res.json).toHaveBeenCalledWith({ success: true, message: 'Estado da proposta atualizado.' })
+    expect(res.json).toHaveBeenCalledWith({ success: true, message: 'Proposta atualizada' })
   })
 })

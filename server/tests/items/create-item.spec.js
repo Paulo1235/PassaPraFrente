@@ -24,7 +24,9 @@ describe('Criar Item', () => {
     const uploadedImage = { public_id: 'img1', secure_url: 'url1' }
 
     ItemRepository.createItem.mockResolvedValue(createdItem)
+
     ItemRepository.uploadItemPhoto.mockResolvedValue(true)
+
     cloudinary.v2.uploader.upload.mockResolvedValue(uploadedImage)
 
     const result = await ItemController.createItem(data)

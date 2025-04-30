@@ -41,9 +41,9 @@ describe('Transações de Empréstimo - Busca por ID', () => {
   })
 
   it('deve retornar a transação de empréstimo por ID com sucesso', async () => {
-    const reqData = { id: '1', userId: '2' }
-    const user = { Utilizador_ID: '2' }
-    const transactionMock = { EmprestimoVenda_ID: 1, Valor: 1500, Utilizador_ID: '2' }
+    const reqData = { id: 1, userId: 2 }
+    const user = { Utilizador_ID: 2 }
+    const transactionMock = { EmprestimoVenda_ID: 1, Valor: 1500, Utilizador_ID: 2 }
 
     TransactionLoanRepository.getLoanTransactionById.mockResolvedValue(transactionMock)
 
@@ -59,8 +59,8 @@ describe('Transações de Empréstimo - Busca por ID', () => {
   })
 
   it('deve retornar erro caso a transação de empréstimo não seja encontrada', async () => {
-    const reqData = { id: '1', userId: '2' }
-    const user = { Utilizador_ID: '2' }
+    const reqData = { id: 1, userId: 2 }
+    const user = { Utilizador_ID: 2 }
 
     TransactionLoanRepository.getLoanTransactionById.mockResolvedValue(null)
 

@@ -55,7 +55,7 @@ describe('Operações GET em sorteios', () => {
       ])
     })
     it('deve devolver erro se falhar a buscar sorteios do utilizador', async () => {
-      const req = { user: { Utilizador_ID: '123' } }
+      const req = { user: { Utilizador_ID: 123 } }
       const res = {}
 
       GiveawayRepository.getAvailableGiveaways.mockRejectedValue(new Error('Erro ao buscar vendas'))

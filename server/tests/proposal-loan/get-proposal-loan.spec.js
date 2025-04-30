@@ -30,7 +30,7 @@ describe('Propostas de empréstimo - Obtenção de propostas', () => {
   })
 
   it('Deve retornar uma proposta específica com sucesso', async () => {
-    const req = { params: { userId: '1', loanId: '2' } }
+    const req = { params: { userId: 1, loanId: 2 } }
     const res = criarMockRes()
     const proposal = { id: 1 }
     ProposalLoanRepository.getLoanProposalById.mockResolvedValue(proposal)

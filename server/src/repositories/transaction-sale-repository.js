@@ -6,6 +6,8 @@ class TransactionSaleRepository {
   static async createTransactionSale (finalValue, userId, id) {
     const pool = await getConnection()
 
+    console.log(finalValue, userId, id)
+
     const transaction = await pool
       .request()
       .input('valorFinal', sql.Real, finalValue)
@@ -16,6 +18,8 @@ class TransactionSaleRepository {
         OUTPUT Inserted.TransacaoVenda_ID
         VALUES (@valorFinal, 0, @userId, @saleId)
     `)
+
+    console.log(transaction.recordset[0])
 
     return transaction.recordset[0]
   }
@@ -36,6 +40,9 @@ class TransactionSaleRepository {
   static async getSaleTransactionById (saleId, userId) {
     const pool = await getConnection()
 
+    console.log('chega')
+    console.log(saleId, userId)
+
     const transaction = await pool
       .request()
       .input('saleId', sql.Int, saleId)
@@ -45,6 +52,8 @@ class TransactionSaleRepository {
         FROM TransacaoVenda
         WHERE PropostaVendaVenda_ID = @saleId AND PropostaVendaUtilizador_ID = @userId
       `)
+
+    console.log('chegou aqui')
 
     return transaction.recordset[0]
   }

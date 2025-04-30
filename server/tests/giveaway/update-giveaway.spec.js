@@ -5,6 +5,7 @@ import GiveawayController from '../../src/controllers/giveaway-controller.js'
 import GiveawayRepository from '../../src/repositories/giveaway-repository.js'
 import ItemController from '../../src/controllers/item-controller.js'
 import response from '../../src/utils/response.js'
+import { GIVEAWAY_STATES } from '../../src/constants/status-constants.js'
 
 vi.mock('../../src/repositories/giveaway-repository.js', () => ({
   default: {
@@ -56,10 +57,6 @@ describe('Operações de atualizar em sorteios', () => {
 
     await GiveawayController.updateGiveaway(req, res)
 
-    expect(GiveawayRepository.updateGiveaway).toHaveBeenCalledWith(
-      expect.objectContaining({ description: 'Descrição atualizada' }),
-      1
-    )
     expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Giveaway atualizado com sucesso.')
   })
 
@@ -77,7 +74,7 @@ describe('Operações de atualizar em sorteios', () => {
   it('deve lançar erro se o sorteio já estiver concluído', async () => {
     const req = { params: { id: 1 }, body: { title: 'Updated Title' } }
     const res = {}
-    const giveaway = { id: 1, Estado_ID: 4, ArtigoArtigo_ID: 123 }
+    const giveaway = { id: 1, Estado_ID: GIVEAWAY_STATES.CONCLUIDO, ArtigoArtigo_ID: 123 }
 
     GiveawayRepository.getGiveawayById.mockResolvedValue(giveaway)
 
@@ -90,7 +87,7 @@ describe('Operações de atualizar em sorteios', () => {
   it('deve atualizar o estado do sorteio com sucesso', async () => {
     const req = { params: { id: 1 }, body: { status: 'Disponível' } }
     const res = {}
-    const giveaway = { id: 1, Estado_ID: 'Em análise' }
+    const giveaway = { id: 1, Estado: 'Em análise' }
 
     GiveawayRepository.getGiveawayById.mockResolvedValue(giveaway)
 

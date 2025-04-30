@@ -20,9 +20,9 @@ describe('Testar a função drawWinnerGiveaway', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('deve retornar um vencedor aleatório quando o sorteio estiver encerrado', async () => {
-    const giveawayId = '1'
+    const giveawayId = 1
     const giveaway = { id: giveawayId, DataFim: new Date() }
-    const entries = [{ UtilizadorUtilizador_ID: '10' }, { UtilizadorUtilizador_ID: '20' }]
+    const entries = [{ UtilizadorUtilizador_ID: 10 }, { UtilizadorUtilizador_ID: 20 }]
 
     GiveawayRepository.getGiveawayById.mockResolvedValue(giveaway)
     EntryGiveawayRepository.getAllEntriesGiveaway.mockResolvedValue(entries)
@@ -32,7 +32,7 @@ describe('Testar a função drawWinnerGiveaway', () => {
 
     const winnerId = await WinnerGiveawayController.drawWinnerGiveaway(giveawayId)
 
-    expect(winnerId).toBe('10')
+    expect(winnerId).toBe(10)
   })
 
   it('deve lançar erro se o sorteio ainda não tiver terminado', async () => {
@@ -56,7 +56,7 @@ describe('Testar a função drawWinnerGiveaway', () => {
   })
 
   it('deve lançar erro se o sorteio não for encontrado', async () => {
-    const giveawayId = '1'
+    const giveawayId = 1
     GiveawayRepository.getGiveawayById.mockResolvedValue(null)
 
     const { req, res } = criarMockReqRes({ id: giveawayId })

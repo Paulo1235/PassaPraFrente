@@ -6,7 +6,7 @@ vi.mock('../../src/repositories/winner-giveaway-repository.js')
 vi.mock('../../src/repositories/giveaway-repository.js')
 
 function criarMockReqRes (params = {}) {
-  const req = { params, user: { Utilizador_ID: '10' }, body: { review: 5 } }
+  const req = { params, user: { Utilizador_ID: 10 }, body: { review: 5 } }
   const res = {
     status: vi.fn().mockReturnThis(),
     json: vi.fn()

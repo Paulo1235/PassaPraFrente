@@ -7,8 +7,8 @@ vi.mock('../../src/repositories/entry-giveaway-repository.js')
 
 function criarMockReqRes (params = {}) {
   const req = {
-    params: { giveawayId: '1', ...params },
-    user: { Utilizador_ID: '10' }
+    params: { giveawayId: 1 },
+    user: { Utilizador_ID: 10 }
   }
   const res = {
     status: vi.fn().mockReturnThis(),
@@ -21,7 +21,7 @@ describe('Testando o método getEntryGiveawayById', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('deve retornar a inscrição com sucesso', async () => {
-    const entry = { giveawayId: '1', userId: '10', entryDate: new Date().toISOString() }
+    const entry = { giveawayId: 1, userId: 10, entryDate: new Date().toISOString() }
     EntryGiveawayRepository.getEntryGiveawayById.mockResolvedValue(entry)
 
     const { req, res } = criarMockReqRes()
@@ -38,7 +38,7 @@ describe('Testando o método getEntryGiveawayById', () => {
   it('deve retornar 404 se inscrição não for encontrada', async () => {
     EntryGiveawayRepository.getEntryGiveawayById.mockResolvedValue(null)
 
-    const { req, res } = criarMockReqRes({ giveawayId: '1' })
+    const { req, res } = criarMockReqRes({ giveawayId: 1 })
     await EntryGiveawayController.getEntryGiveawayById(req, res)
 
     expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND)

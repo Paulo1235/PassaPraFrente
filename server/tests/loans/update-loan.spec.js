@@ -92,7 +92,7 @@ describe('Operações de atualizar em empréstimos', () => {
   it('deve atualizar o estado de empréstimo com sucesso', async () => {
     const req = { params: { id: 1 }, body: { status: 'Disponível' } }
     const res = {}
-    const loan = { id: 1, EstadoEstado_ID: 'Em análise' }
+    const loan = { id: 1, Estado: 'Em análise' }
 
     LoanRepository.getLoanById.mockResolvedValue(loan)
 

@@ -35,9 +35,9 @@ describe('Controlador de Vendas', () => {
 
   describe('Obter venda por ID', () => {
     it('deve devolver a venda quando encontrada', async () => {
-      const req = { params: { id: '1' } }
+      const req = { params: { id: 1 } }
       const res = {}
-      const saleMock = { Artigo_ID: '1', Titulo: 'Venda de Teste' }
+      const saleMock = { Artigo_ID: 1, Titulo: 'Venda de Teste' }
       const saleWithPhotosMock = { ...saleMock, photos: [{ url: 'foto.jpg' }] }
 
       SaleRepository.getSaleById.mockResolvedValue(saleMock)
@@ -47,7 +47,7 @@ describe('Controlador de Vendas', () => {
 
       await SaleController.getSaleById(req, res)
 
-      expect(SaleRepository.getSaleById).toHaveBeenCalledWith('1')
+      expect(SaleRepository.getSaleById).toHaveBeenCalledWith(1)
 
       expect(attachPhotosSpy).toHaveBeenCalledWith(saleMock)
 
@@ -62,7 +62,7 @@ describe('Controlador de Vendas', () => {
 
   describe('Obter vendas de um utilizador', () => {
     it('deve devolver erro se falhar a buscar vendas do utilizador', async () => {
-      const req = { user: { Utilizador_ID: '123' } }
+      const req = { user: { Utilizador_ID: 123 } }
       const res = {}
 
       SaleRepository.getUserSales.mockRejectedValue(new Error('Erro ao buscar vendas'))
@@ -75,9 +75,9 @@ describe('Controlador de Vendas', () => {
 
   describe('Obter vendas concluídas de um utilizador', () => {
     it('deve devolver as vendas concluídas do utilizador', async () => {
-      const req = { user: { Utilizador_ID: '456' } }
+      const req = { user: { Utilizador_ID: 456 } }
       const res = {}
-      const completedSalesMock = [{ Artigo_ID: '3', Titulo: 'Venda Concluída' }]
+      const completedSalesMock = [{ Artigo_ID: 3, Titulo: 'Venda Concluída' }]
       const photoMock = [{ url: 'fotoConcluida.jpg' }]
 
       SaleRepository.getCompletedSalesByUser.mockResolvedValue(completedSalesMock)
@@ -86,9 +86,9 @@ describe('Controlador de Vendas', () => {
 
       await SaleController.getCompletedSalesByUser(req, res)
 
-      expect(SaleRepository.getCompletedSalesByUser).toHaveBeenCalledWith('456')
+      expect(SaleRepository.getCompletedSalesByUser).toHaveBeenCalledWith(456)
 
-      expect(ItemRepository.getItemPhoto).toHaveBeenCalledWith('3')
+      expect(ItemRepository.getItemPhoto).toHaveBeenCalledWith(3)
 
       expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, [
         { ...completedSalesMock[0], photos: photoMock[0] }
@@ -96,7 +96,7 @@ describe('Controlador de Vendas', () => {
     })
 
     it('deve devolver erro se falhar a buscar vendas concluídas', async () => {
-      const req = { user: { Utilizador_ID: '456' } }
+      const req = { user: { Utilizador_ID: 456 } }
       const res = {}
 
       SaleRepository.getCompletedSalesByUser.mockRejectedValue(new Error('Erro'))

@@ -22,15 +22,19 @@ describe('Criar vencedor de sorteio', () => {
   })
 
   it('deve criar o vencedor se tudo estiver correto', async () => {
-    const giveaway = { Sorteio_ID: '1', Titulo: 'Sorteio Top', DataFim: new Date(Date.now() - 1000) }
+    const giveaway = { Sorteio_ID: 1, Titulo: 'Sorteio Top', DataFim: new Date(Date.now() - 1000) }
 
     WinnerGiveawayRepository.getWinnerGiveawayById.mockResolvedValue(null)
+
     GiveawayRepository.getGiveawayById.mockResolvedValue(giveaway)
-    WinnerGiveawayController.drawWinnerGiveaway = vi.fn().mockResolvedValue('10')
+
+    WinnerGiveawayController.drawWinnerGiveaway = vi.fn().mockResolvedValue(10)
+
     WinnerGiveawayRepository.createWinnerGiveaway.mockResolvedValue()
+
     GiveawayRepository.updateGiveawayStatus.mockResolvedValue()
 
-    const { req, res } = criarMockReqRes({ id: '1' })
+    const { req, res } = criarMockReqRes({ id: 1 })
 
     await WinnerGiveawayController.createWinnerGiveaway(req, res)
 
@@ -40,7 +44,7 @@ describe('Criar vencedor de sorteio', () => {
 
   it('não deve criar se já existir vencedor', async () => {
     WinnerGiveawayRepository.getWinnerGiveawayById.mockResolvedValue({})
-    const { req, res } = criarMockReqRes({ id: '1' })
+    const { req, res } = criarMockReqRes({ id: 1 })
 
     await WinnerGiveawayController.createWinnerGiveaway(req, res)
 

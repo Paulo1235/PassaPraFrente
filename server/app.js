@@ -4,7 +4,6 @@ import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
-import compression from 'compression'
 import swaggerUi from 'swagger-ui-express'
 import StatusCodes from 'http-status-codes'
 
@@ -49,7 +48,6 @@ app.options('*', cors(corsOptions))
 app.use(cookieParser())
 app.use(limiter)
 app.use(helmet())
-app.use(compression())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ limit: '50mb', extended: true }))
 

@@ -42,13 +42,8 @@ class TransactionLoanController {
   }
 
   static async createTransactionLoan (finalValue, userId, id, finalNewDate, finalEndDate) {
+    console.log(finalValue, userId, id, finalNewDate, finalEndDate)
     try {
-      const existsTransaction = await TransactionLoanRepository.getLoanTransactionById(id, userId)
-
-      if (existsTransaction) {
-        return
-      }
-
       const transaction = await TransactionLoanRepository.createTransactionLoan(finalValue, userId, id, finalNewDate, finalEndDate)
 
       if (transaction) {

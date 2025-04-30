@@ -4,6 +4,7 @@ import TransactionLoanController from '../../src/controllers/transaction-loan-co
 import LoanRepository from '../../src/repositories/loan-repository.js'
 import ProposalLoanRepository from '../../src/repositories/proposal-loan-repository.js'
 import TransactionLoanRepository from '../../src/repositories/transaction-loan-repository.js'
+import { PROPOSAL_LOAN_STATES } from '../../src/constants/status-constants.js'
 
 vi.mock('../../src/repositories/loan-repository.js')
 vi.mock('../../src/repositories/proposal-loan-repository.js')
@@ -31,12 +32,12 @@ describe('Transações de Empréstimo - Criação de transação', () => {
   })
 
   it('deve criar uma transação de empréstimo com sucesso', async () => {
-    const reqData = { id: '1' }
+    const reqData = { id: 1 }
     const bodyData = { status: 'Aceite' }
-    const user = { Utilizador_ID: '2' }
+    const user = { Utilizador_ID: 2 }
 
-    const loanMock = { Estado: 'Disponível', Valor: 1500, Utilizador_ID: '3' }
-    const proposalMock = { Aceite: 1 }
+    const loanMock = { Estado: 'Disponível', Valor: 1500, Utilizador_ID: 3 }
+    const proposalMock = { Aceite: PROPOSAL_LOAN_STATES.ACEITE }
 
     LoanRepository.getLoanById.mockResolvedValue(loanMock)
     ProposalLoanRepository.createProposalLoan.mockResolvedValue(proposalMock)

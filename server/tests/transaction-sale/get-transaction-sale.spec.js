@@ -39,9 +39,9 @@ describe('Obter Transações de Venda', () => {
   })
 
   it('deve retornar a transação de venda por ID com sucesso', async () => {
-    const reqData = { id: '1', userId: '2' }
-    const user = { Utilizador_ID: '2' }
-    const transactionMock = { TransacaoVenda_ID: 1, Valor: 1500, Utilizador_ID: '2' }
+    const reqData = { id: 1, userId: 2 }
+    const user = { Utilizador_ID: 2 }
+    const transactionMock = { TransacaoVenda_ID: 1, Valor: 1500, Utilizador_ID: 2 }
 
     TransactionSaleRepository.getSaleTransactionById.mockResolvedValue(transactionMock)
 
@@ -57,8 +57,8 @@ describe('Obter Transações de Venda', () => {
   })
 
   it('deve retornar erro caso a transação de venda não seja encontrada', async () => {
-    const reqData = { id: '1', userId: '2' }
-    const user = { Utilizador_ID: '2' }
+    const reqData = { id: 1, userId: 2 }
+    const user = { Utilizador_ID: 2 }
 
     TransactionSaleRepository.getSaleTransactionById.mockResolvedValue(null)
 

@@ -19,11 +19,13 @@ describe('Review do vencedor de sorteio', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('deve criar review com sucesso se for o vencedor', async () => {
-    GiveawayRepository.getGiveawayById.mockResolvedValue({ Sorteio_ID: '1' })
-    WinnerGiveawayRepository.getWinnerGiveawayById.mockResolvedValue({ InscricaoSorteioUtilizadorUtilizador_ID: '123', Nota: 0 })
+    GiveawayRepository.getGiveawayById.mockResolvedValue({ Sorteio_ID: 1 })
+
+    WinnerGiveawayRepository.getWinnerGiveawayById.mockResolvedValue({ InscricaoSorteioUtilizadorUtilizador_ID: 123, Nota: 0 })
+
     WinnerGiveawayRepository.updateGiveawayReview.mockResolvedValue()
 
-    const { req, res } = criarMockReqRes({ id: '1' }, { review: 4 }, { Utilizador_ID: '123' })
+    const { req, res } = criarMockReqRes({ id: 1 }, { review: 4 }, { Utilizador_ID: 123 })
 
     await WinnerGiveawayController.createReviewWinnerGiveaway(req, res)
 
@@ -33,9 +35,9 @@ describe('Review do vencedor de sorteio', () => {
 
   it('deve falhar se utilizador não for o vencedor', async () => {
     GiveawayRepository.getGiveawayById.mockResolvedValue({})
-    WinnerGiveawayRepository.getWinnerGiveawayById.mockResolvedValue({ InscricaoSorteioUtilizadorUtilizador_ID: '999', Nota: 0 })
+    WinnerGiveawayRepository.getWinnerGiveawayById.mockResolvedValue({ InscricaoSorteioUtilizadorUtilizador_ID: 999, Nota: 0 })
 
-    const { req, res } = criarMockReqRes({ id: '1' }, { review: 5 }, { Utilizador_ID: '123' })
+    const { req, res } = criarMockReqRes({ id: 1 }, { review: 5 }, { Utilizador_ID: 123 })
 
     await WinnerGiveawayController.createReviewWinnerGiveaway(req, res)
 

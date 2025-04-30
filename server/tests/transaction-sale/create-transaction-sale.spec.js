@@ -4,6 +4,7 @@ import SaleRepository from '../../src/repositories/sale-repository.js'
 import ProposalSaleRepository from '../../src/repositories/proposal-sale-repository.js'
 import TransactionSaleRepository from '../../src/repositories/transaction-sale-repository.js'
 import { StatusCodes } from 'http-status-codes'
+import { PROPOSAL_SALE_STATES } from '../../src/constants/status-constants.js'
 
 vi.mock('../../src/repositories/sale-repository.js')
 vi.mock('../../src/repositories/proposal-sale-repository.js')
@@ -29,12 +30,12 @@ describe('Criar Transação de Venda', () => {
   })
 
   it('deve criar uma transação com sucesso', async () => {
-    const reqData = { id: '1' }
+    const reqData = { id: 1 }
     const bodyData = { status: 'Aceite' }
-    const user = { Utilizador_ID: '2' }
+    const user = { Utilizador_ID: 2 }
 
-    const saleMock = { Estado: 'Disponível', Valor: 1500, Utilizador_ID: '3' }
-    const proposalMock = { Aceite: 1 }
+    const saleMock = { Estado: 'Disponível', Valor: 1500, Utilizador_ID: 3 }
+    const proposalMock = { Aceite: PROPOSAL_SALE_STATES.ACEITE }
 
     SaleRepository.getSaleById.mockResolvedValue(saleMock)
     ProposalSaleRepository.createProposalSale.mockResolvedValue(proposalMock)
@@ -52,9 +53,9 @@ describe('Criar Transação de Venda', () => {
   })
 
   it('não deve criar transação se a venda estiver concluída', async () => {
-    const reqData = { id: '1' }
-    const user = { Utilizador_ID: '2' }
-    const saleMock = { Estado: 'Concluído', Valor: 1500, Utilizador_ID: '3' }
+    const reqData = { id: 1 }
+    const user = { Utilizador_ID: 2 }
+    const saleMock = { Estado: 'Concluído', Valor: 1500, Utilizador_ID: 3 }
 
     SaleRepository.getSaleById.mockResolvedValue(saleMock)
 

@@ -35,7 +35,7 @@ describe('Obter Items', () => {
     const item = { Artigo_ID: 1, Nome: 'Item 1' }
     ItemRepository.getItemById.mockResolvedValue(item)
 
-    const { req, res } = criarMockReqRes({ id: '1' })
+    const { req, res } = criarMockReqRes({ id: 1 })
     await ItemController.getItemById(req, res)
 
     expect(res.status).toHaveBeenCalledWith(StatusCodes.OK)
@@ -45,7 +45,7 @@ describe('Obter Items', () => {
   it('deve retornar 404 se item não for encontrado', async () => {
     ItemRepository.getItemById.mockResolvedValue(null)
 
-    const { req, res } = criarMockReqRes({ id: '1' })
+    const { req, res } = criarMockReqRes({ id: 1 })
     await ItemController.getItemById(req, res)
 
     expect(res.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND)

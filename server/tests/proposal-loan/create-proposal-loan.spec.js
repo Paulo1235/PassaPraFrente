@@ -11,7 +11,7 @@ const criaReqRes = (overrides = {}) => {
     req: {
       body: { price: 1000, newStartDate: '2025-06-01', newEndDate: '2025-07-01' },
       user: { Utilizador_ID: 1 },
-      params: { id: '10' },
+      params: { id: 10 },
       ...overrides.req
     },
     res: {

@@ -5,8 +5,9 @@ import response from '../utils/response.js'
 import ProposalSaleRepository from '../repositories/proposal-sale-repository.js'
 import SaleRepository from '../repositories/sale-repository.js'
 import TransactionSaleController from './transaction-sale-controller.js'
-import { PROPOSAL_SALE_STATES } from '../constants/status-constants.js'
+import { PROPOSAL_SALE_STATES, SALE_STATES } from '../constants/status-constants.js'
 import NotificationController from './notification-controller.js'
+import TransactionSaleRepository from '../repositories/transaction-sale-repository.js'
 
 class ProposalSaleController {
   static async createProposalSale (req, res) {
@@ -79,41 +80,59 @@ class ProposalSaleController {
       const sale = await SaleRepository.getSaleById(id)
 
       if (!sale) {
-        throw new HttpException('Não foi possível encontrar a venda.', StatusCodes.NOT_FOUND)
+        throw new HttpException('Venda não encontrada.', StatusCodes.NOT_FOUND)
       }
 
       if (sale.Estado === 'Concluído') {
-        throw new HttpException('Esta venda já foi concluída. Não pode aceitar mais propostas.', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Venda já concluída.', StatusCodes.BAD_REQUEST)
       }
 
       const proposal = await ProposalSaleRepository.getSaleProposalById(userId, id)
 
       if (!proposal) {
-        throw new HttpException('Não foi possível encontrar a proposta', StatusCodes.NOT_FOUND)
-      }
-
-      if (proposal.Aceite === PROPOSAL_SALE_STATES.ACEITE) {
-        throw new HttpException('Esta proposta já foi aceite.', StatusCodes.BAD_REQUEST)
+        throw new HttpException('Proposta não encontrada', StatusCodes.NOT_FOUND)
       }
 
       await ProposalSaleRepository.updateProposalSaleStatus(userId, id, status)
 
-      const notificationData = {
-        message: `A sua proposta para ${sale.Titulo} foi ${parseInt(status) === PROPOSAL_SALE_STATES.ACEITE ? 'aceite' : 'recusada'}`,
+      const notificationMessage = parseInt(status) === PROPOSAL_SALE_STATES.ACEITE
+        ? `A sua proposta para ${sale.Titulo} foi aceite`
+        : `A sua proposta para ${sale.Titulo} foi recusada`
+
+      await NotificationController.createNotification({
+        message: notificationMessage,
         category: 'Venda',
         userId
-      }
+      })
 
-      NotificationController.createNotification(notificationData)
-
-      // Se a proposta for aceite, cria diretamente a transação
       if (parseInt(status) === PROPOSAL_SALE_STATES.ACEITE) {
-        await TransactionSaleController.createTransactionSale(proposal.NovoValor, userId, id)
+        try {
+          const existingTransaction = await TransactionSaleRepository.getSaleTransactionById(id, userId)
+
+          if (!existingTransaction) {
+            try {
+              await TransactionSaleController.createTransactionSale(
+                proposal.NovoValor,
+                userId,
+                id
+              )
+
+              await SaleRepository.updateSaleStatus(parseInt(id), SALE_STATES.CONCLUIDO)
+            } catch (transactionError) {
+              console.error('ERRO NA TRANSAÇÃO:', transactionError.message)
+
+              // Reverte o status da proposta em caso de erro
+              await ProposalSaleRepository.updateProposalSaleStatus(userId, id, PROPOSAL_SALE_STATES.DISPONIVEL)
+            }
+          }
+        } catch (error) {
+          console.error('Erro ao verificar/processar transação:', error)
+        }
       }
 
-      return response(res, true, StatusCodes.OK, 'Estado da proposta atualizado.')
+      return response(res, true, StatusCodes.OK, 'Proposta atualizada')
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao atualizar o estado da proposta.')
+      handleError(res, error, 'Ocorreu um erro ao atualizar a proposta. Tente novamente mais tarde.')
     }
   }
 

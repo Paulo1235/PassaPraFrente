@@ -6,6 +6,7 @@ import { comparePassword } from '../../src/utils/password.js'
 import { sendToken, createActivationToken } from '../../src/utils/jwt.js'
 import jwt from 'jsonwebtoken'
 import { StatusCodes } from 'http-status-codes'
+import { VERIFIED_USER } from '../../src/constants/user-constants.js'
 
 vi.mock('../../src/repositories/user-repository.js')
 vi.mock('../../src/services/email-service.js')
@@ -90,7 +91,7 @@ describe('AuthController', () => {
 
     it('deve retornar erro se a conta já estiver ativada', async () => {
       req.user = { Utilizador_ID: 1 }
-      UserRepository.getUserById.mockResolvedValue({ ConfirmarEmail: 1 })
+      UserRepository.getUserById.mockResolvedValue({ ConfirmarEmail: VERIFIED_USER.VERIFIED })
 
       await AuthController.activateUser(req, res)
 

@@ -5,6 +5,7 @@ import { ACCESS_TOKEN_SECRET_KEY } from '../../config.js'
 import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import UserRepository from '../repositories/user-repository.js'
+import { VERIFIED_USER } from '../constants/user-constants.js'
 
 class AuthMiddleware {
   static async isAuthenticated (req, res, next) {
@@ -42,7 +43,7 @@ class AuthMiddleware {
       return response(res, false, StatusCodes.NOT_FOUND, 'Utilizador não encontrado.')
     }
 
-    if (user.ConfirmarEmail !== 1) {
+    if (user.ConfirmarEmail !== VERIFIED_USER.VERIFIED) {
       return response(res, false, StatusCodes.UNAUTHORIZED, 'A sua conta não está verificada.')
     }
 
@@ -82,7 +83,7 @@ class AuthMiddleware {
       }
 
       if (age < 18) {
-        throw new HttpException('Não tem Não tem idade suficiente para realizar esta tarefa!', StatusCodes.UNAUTHORIZED)
+        throw new HttpException('Não tem idade suficiente para realizar esta tarefa!', StatusCodes.UNAUTHORIZED)
       }
 
       next()
