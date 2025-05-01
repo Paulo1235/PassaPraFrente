@@ -1,8 +1,7 @@
 import express from 'express'
 
-import AuthController from '../controllers/auth-controller.js'
 import AuthMiddleware from '../middlewares/auth-middleware.js'
-import ProposalMiddleware from '../middlewares/owner-middleware.js'
+import OwnerMiddleware from '../middlewares/owner-middleware.js'
 import { giveawaySchema } from '../validations/giveaway-schema.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import GiveawayController from '../controllers/giveaway-controller.js'
@@ -12,7 +11,6 @@ const giveawayRouter = express.Router()
 
 giveawayRouter.post(
   '/giveaways/create',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.isAdult,
@@ -23,14 +21,12 @@ giveawayRouter.post(
 
 giveawayRouter.get(
   '/giveaways/id/:id',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   GiveawayController.getGiveawayById
 )
 
 giveawayRouter.get(
   '/giveaways',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.authorizedRoles(['admin']),
@@ -39,24 +35,21 @@ giveawayRouter.get(
 
 giveawayRouter.get(
   '/giveaways/available',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   GiveawayController.getAvailableGiveaways
 )
 
 giveawayRouter.get(
   '/giveaways/pending',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   GiveawayController.getPendingGiveaways
 )
 
 giveawayRouter.put(
   '/giveaways/id/:id',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  ProposalMiddleware.isOwnerGiveaway,
+  OwnerMiddleware.isOwnerGiveaway,
   validateSchema(giveawaySchema, true),
   validateSchema(itemSchema, true),
   GiveawayController.updateGiveaway
@@ -64,7 +57,6 @@ giveawayRouter.put(
 
 giveawayRouter.get(
   '/giveaways/user',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   GiveawayController.getUserGiveaways
@@ -72,25 +64,14 @@ giveawayRouter.get(
 
 giveawayRouter.patch(
   '/giveaways/update-status/:id',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.authorizedRoles(['admin']),
   GiveawayController.updateGiveawayStatus
 )
 
-giveawayRouter.patch(
-  '/giveaways/update-image/:id',
-  AuthController.refreshAccessToken,
-  AuthMiddleware.isAuthenticated,
-  AuthMiddleware.isVerified,
-  ProposalMiddleware.isOwnerGiveaway,
-  GiveawayController.updateGiveawayImage
-)
-
 giveawayRouter.get(
   '/giveaways/non-completed',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   GiveawayController.getNonCompletedGiveawaysByUser
@@ -98,7 +79,6 @@ giveawayRouter.get(
 
 giveawayRouter.get(
   '/giveaways/completed',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   GiveawayController.getCompletedGiveawaysByUser

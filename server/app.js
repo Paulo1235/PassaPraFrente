@@ -25,6 +25,7 @@ import giveawayRouter from './src/routes/giveaway-routes.js'
 import entryGiveawayRouter from './src/routes/entry-giveaway-routes.js'
 import winnerGiveawayRouter from './src/routes/winner-giveaway-routes.js'
 import notificationRouter from './src/routes/notification-routes.js'
+import { configureCloudinary } from './src/services/cloudinary-service.js'
 
 const app = express()
 
@@ -39,6 +40,8 @@ const limiter = rateLimit({
   windowMs: WINDOWMS,
   message: 'Demasiados pedidos, tente novamente mais tarde!'
 })
+
+configureCloudinary()
 
 // Middlewares
 NODE_ENV === 'development' ? app.use(morgan('dev')) : app.use(morgan('common'))

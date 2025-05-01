@@ -3,7 +3,6 @@ import { StatusCodes } from 'http-status-codes'
 
 import GiveawayController from '../../src/controllers/giveaway-controller.js'
 import GiveawayRepository from '../../src/repositories/giveaway-repository.js'
-import ItemController from '../../src/controllers/item-controller.js'
 import response from '../../src/utils/response.js'
 import { GIVEAWAY_STATES } from '../../src/constants/status-constants.js'
 
@@ -12,12 +11,6 @@ vi.mock('../../src/repositories/giveaway-repository.js', () => ({
     getGiveawayById: vi.fn(),
     updateGiveaway: vi.fn(),
     updateGiveawayStatus: vi.fn()
-  }
-}))
-
-vi.mock('../../src/controllers/item-controller.js', () => ({
-  default: {
-    updateItemPhoto: vi.fn()
   }
 }))
 
@@ -110,31 +103,5 @@ describe('Operações de atualizar em sorteios', () => {
     await GiveawayController.updateGiveawayStatus(req, res)
 
     expect(response).toHaveBeenCalledWith(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar o estado do sorteio.')
-  })
-
-  // Teste para updateGiveawayImage
-  it('deve atualizar a imagem do sorteio com sucesso', async () => {
-    const req = { params: { id: 1 }, body: { index: 0, thumbnail: 'new-thumbnail-url' } }
-    const res = {}
-    const giveaway = { id: 1, Artigo_ID: 123 }
-
-    GiveawayRepository.getGiveawayById.mockResolvedValue(giveaway)
-    ItemController.updateItemPhoto.mockResolvedValue(true)
-
-    await GiveawayController.updateGiveawayImage(req, res)
-
-    expect(ItemController.updateItemPhoto).toHaveBeenCalledWith({ itemId: 123, index: 0, thumbnail: 'new-thumbnail-url' })
-    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Imagem de sorteio atualizado com sucesso.')
-  })
-
-  it('deve lançar erro se o sorteio não for encontrado ao atualizar imagem', async () => {
-    const req = { params: { id: 99 }, body: { index: 0, thumbnail: 'new-thumbnail-url' } }
-    const res = {}
-
-    GiveawayRepository.getGiveawayById.mockResolvedValue(null)
-
-    await GiveawayController.updateGiveawayImage(req, res)
-
-    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Sorteio não encontrado.')
   })
 })

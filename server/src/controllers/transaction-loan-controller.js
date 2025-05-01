@@ -25,7 +25,7 @@ class TransactionLoanController {
         throw new HttpException('Não pode pedir o seu próprio empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
-      if (loan.Estado === 'Concluído') {
+      if (loan.Estado === 'Concluído' || loan.Estado === 'Em análise' || loan.Estado === 'Rejeitado') {
         throw new HttpException('Já não pode criar uma transação neste empréstimo.', StatusCodes.BAD_REQUEST)
       }
 
@@ -42,12 +42,11 @@ class TransactionLoanController {
   }
 
   static async createTransactionLoan (finalValue, userId, id, finalNewDate, finalEndDate) {
-    console.log(finalValue, userId, id, finalNewDate, finalEndDate)
     try {
       const transaction = await TransactionLoanRepository.createTransactionLoan(finalValue, userId, id, finalNewDate, finalEndDate)
 
       if (transaction) {
-        await LoanRepository.updateLoanStatus(parseInt(id), LOAN_STATES.CONCLUIDO)
+        await LoanRepository.updateLoanStatus(id, LOAN_STATES.CONCLUIDO)
 
         const loan = await LoanRepository.getLoanById(id)
 

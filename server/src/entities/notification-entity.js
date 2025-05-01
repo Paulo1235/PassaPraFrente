@@ -1,5 +1,6 @@
 class Notification {
   constructor ({ id, message, userId, category, link = undefined, read = false, date = new Date().toISOString() }) {
+    if (!id) throw new Error('Id é obrigatório.')
     if (!message) throw new Error('Mensagem é obrigatória.')
     if (!userId) throw new Error('UserId é obrigatório.')
     if (!category) throw new Error('Categoria é obrigatória.')

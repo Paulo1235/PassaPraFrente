@@ -1,15 +1,16 @@
 import sql from 'mssql'
 
 import { dbConfig, getConnection } from '../database/db-config.js'
-import IdService from '../services/id-service.js'
+import ConditionRepository from './condition-repository.js'
+import CategoryRepository from './category-repository.js'
 
 class ItemRepository {
   static async createItem (condition, category) {
     const pool = await getConnection(dbConfig)
 
-    const condicaoId = await IdService.getConditionById(condition)
+    const condicaoId = await ConditionRepository.getConditionById(condition)
 
-    const categoriaId = await IdService.getCategoryById(category)
+    const categoriaId = await CategoryRepository.getCategoryById(category)
 
     const item = await pool
       .request()
@@ -67,9 +68,9 @@ class ItemRepository {
   }
 
   static async updateItem (category, condition, id, transaction) {
-    const condicaoId = await IdService.getConditionById(condition)
+    const condicaoId = await ConditionRepository.getConditionById(condition)
 
-    const categoriaId = await IdService.getCategoryById(category)
+    const categoriaId = await CategoryRepository.getCategoryById(category)
 
     const updatedItem = await transaction
       .request()
@@ -116,22 +117,6 @@ class ItemRepository {
       `)
 
     return avatar.recordset
-  }
-
-  static async updateItemPhoto (id, publicId, url) {
-    const pool = await getConnection()
-
-    const updatedAvatar = await pool
-      .request()
-      .input('id', sql.Int, id)
-      .input('publicId', sql.VarChar, publicId)
-      .input('url', sql.VarChar, url).query(`
-        UPDATE Imagem
-        SET PublicID = @publicId, Url = @url
-        WHERE ArtigoArtigo_ID = @id
-      `)
-
-    return updatedAvatar.rowsAffected[0] > 0
   }
 }
 

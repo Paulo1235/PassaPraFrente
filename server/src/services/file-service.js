@@ -1,10 +1,11 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { createRequire } from 'node:module'
+import { DIRNAME } from '../../config.js'
 
 const require = createRequire(import.meta.url)
 
-const NOTIFICATIONS_FILE = path.join(process.cwd(), 'src', 'storage', 'notifications.json')
+const NOTIFICATIONS_FILE = path.join(DIRNAME, 'src/storage/notifications.json')
 
 class FileService {
   static readJSON (filePath) {
@@ -16,7 +17,7 @@ class FileService {
   static readFile () {
     const data = fs.readFileSync(NOTIFICATIONS_FILE, 'utf-8')
 
-    return JSON.parse(data || '[]')
+    return JSON.parse(data || [])
   }
 
   static writeFile (data) {

@@ -33,14 +33,12 @@ authRouter.get(
 
 authRouter.post(
   '/auth/send-activation-email',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthController.sendAccountActivationEmail
 )
 
 authRouter.post(
   '/auth/activate-user',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthController.activateUser
 )

@@ -8,6 +8,7 @@ import response from '../utils/response.js'
 import { ACCESS_TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY } from '../../config.js'
 import UserRepository from '../repositories/user-repository.js'
 import EmailService from '../services/email-service.js'
+import { VERIFIED_USER } from '../constants/user-constants.js'
 
 /**
  * Este Controller atua como intermediário entre os pedidos do utilizador e os repositórios.
@@ -78,12 +79,10 @@ class AuthController {
         throw new HttpException('Email ou palavra-passe inválidos.', StatusCodes.UNAUTHORIZED)
       }
 
-      const { Password: _, ...publicUser } = user
-
       // Envia os tokens criados
-      sendToken(publicUser, res)
+      sendToken(user, res)
 
-      return response(res, true, StatusCodes.OK, publicUser)
+      return response(res, true, StatusCodes.OK, user)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao fazer login. Tente novamente mais tarde.')
     }
@@ -122,9 +121,6 @@ class AuthController {
     const emailData = { user, activationCode }
 
     try {
-      // Prepara e envia o email de ativação
-      await EmailService.prepareEmailContent('activation-mail.ejs', emailData)
-
       await EmailService.sendEmail({
         email: user.Email,
         subject: 'Ativação de conta',
@@ -153,12 +149,13 @@ class AuthController {
     const id = req.user.Utilizador_ID
 
     const activationToken = req.headers['x-activation-token']
+
     const { activationCode } = req.body
 
     try {
       const user = await UserRepository.getUserById(id)
 
-      if (user.ConfirmarEmail === 1) {
+      if (user.ConfirmarEmail === VERIFIED_USER.VERIFIED) {
         throw new HttpException('Conta já ativada.', StatusCodes.BAD_REQUEST)
       }
 
@@ -188,15 +185,15 @@ class AuthController {
     try {
       // Verifica se o refresh token existe
       if (!refreshToken) {
-        throw new HttpException('Não foi possível encontrar a sessão. Tente mais tarde', StatusCodes.UNAUTHORIZED)
+        throw new HttpException('Não foi possível efetuar a autenticação.', StatusCodes.UNAUTHORIZED)
       }
 
       // Verifica se o refresh token ainda é válido
       const payload = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET_KEY)
 
-      // Verifica a expiração ou outros problemas com a sessão
+      // Verifica a expiração ou outros problemas
       if (!payload) {
-        throw new HttpException('Sessão expirada. Faça login novamente.', StatusCodes.UNAUTHORIZED)
+        throw new HttpException('Autenticação expirada. Faça login novamente.', StatusCodes.UNAUTHORIZED)
       }
 
       const user = await UserRepository.getUserById(payload.id)
@@ -208,7 +205,7 @@ class AuthController {
 
       next()
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao renovar sua sessão. Tente novamente mais tarde.')
+      handleError(res, error, 'Ocorreu um erro ao efetuar a autenticação. Tente novamente mais tarde.')
     }
   }
 }

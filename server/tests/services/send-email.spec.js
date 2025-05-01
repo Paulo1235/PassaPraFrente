@@ -36,13 +36,4 @@ describe('EmailService', () => {
     expect(ejs.renderFile).toHaveBeenCalled()
     expect(sendMail).toHaveBeenCalled()
   })
-
-  it('renderiza template com prepareEmailContent', async () => {
-    ejs.renderFile.mockResolvedValue('<p>Olá</p>')
-
-    const result = await EmailService.prepareEmailContent('template.ejs', { nome: 'Maria' })
-
-    expect(result).toBe('<p>Olá</p>')
-    expect(ejs.renderFile).toHaveBeenCalled()
-  })
 })

@@ -94,9 +94,6 @@ class ProposalLoanController {
         throw new HttpException('Empréstimo não encontrado.', StatusCodes.NOT_FOUND)
       }
 
-      console.log(loan)
-      console.log(new Date())
-
       if (loan.Estado === 'Concluído' || loan.DataFim < new Date()) {
         throw new HttpException('Empréstimo já concluído.', StatusCodes.BAD_REQUEST)
       }
@@ -118,8 +115,6 @@ class ProposalLoanController {
         category: 'Empréstimo',
         userId
       })
-
-      console.log(proposal)
 
       if (parseInt(status) === PROPOSAL_LOAN_STATES.ACEITE) {
         try {

@@ -4,9 +4,6 @@ import { PORT, NAME } from './config.js'
 
 import { checkDatabaseConnection } from './src/database/connection.js'
 import { closeConnection, getConnection } from './src/database/db-config.js'
-import { configureCloudinary } from './src/services/cloudinary-service.js'
-
-configureCloudinary()
 
 app.listen(PORT, async () => {
   console.log(

@@ -3,10 +3,10 @@ import { StatusCodes } from 'http-status-codes'
 import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 import LoanRepository from '../repositories/loan-repository.js'
-import IdService from '../services/id-service.js'
 import ItemController from './item-controller.js'
 import ItemRepository from '../repositories/item-repository.js'
 import { LOAN_STATES } from '../constants/status-constants.js'
+import StateRepository from '../repositories/state-repository.js'
 
 class LoanController {
   static async createLoan (req, res) {
@@ -146,7 +146,7 @@ class LoanController {
         throw new HttpException('Não foi possível encontrar o empréstimo.', StatusCodes.NOT_FOUND)
       }
 
-      const stateId = await IdService.getStateById(status)
+      const stateId = await StateRepository.getStateById(status)
 
       if (!stateId) {
         throw new HttpException('Estado inválido.', StatusCodes.BAD_REQUEST)
@@ -157,33 +157,6 @@ class LoanController {
       return response(res, true, StatusCodes.OK, 'Estado do empréstimo atualizado.')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao atualizar o estado do empréstimo.')
-    }
-  }
-
-  static async updateLoanImage (req, res) {
-    const { id } = req.params
-    const { index, thumbnail } = req.body
-
-    try {
-      const loan = await LoanRepository.getLoanById(id)
-
-      if (!loan) {
-        throw new HttpException('Empréstimo não encontrado.', StatusCodes.NOT_FOUND)
-      }
-
-      const itemId = loan.Artigo_ID
-
-      const data = {
-        itemId,
-        index,
-        thumbnail
-      }
-
-      await ItemController.updateItemPhoto(data)
-
-      return response(res, true, StatusCodes.OK, 'Imagem de empréstimo atualizada com sucesso.')
-    } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao atualizar uma das imagens de empréstimo.')
     }
   }
 

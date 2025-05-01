@@ -22,7 +22,7 @@ class UserController {
       const user = await UserRepository.getUserById(id)
 
       if (!user) {
-        return response(res, true, StatusCodes.NOT_FOUND, 'Utilizador não encontrado.')
+        throw new HttpException('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
       }
 
       return response(res, true, StatusCodes.OK, user)
@@ -69,7 +69,7 @@ class UserController {
       const user = await UserRepository.getUserByEmail(email)
 
       if (!user) {
-        return response(res, true, StatusCodes.OK, {})
+        throw new HttpException('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
       }
 
       return response(res, true, StatusCodes.OK, user)
@@ -117,7 +117,7 @@ class UserController {
     const { email } = req.body
 
     try {
-      const user = await UserRepository.getUserByEmail(email)
+      const user = await UserRepository.existsUserByEmail(email)
 
       if (!user) {
         throw new HttpException('Email inválido.', StatusCodes.NOT_FOUND)
@@ -126,8 +126,6 @@ class UserController {
       const newPassword = await PasswordService.generateAndStoreNewPassword(user.Utilizador_ID)
 
       const emailData = { user, newPassword }
-
-      await EmailService.prepareEmailContent('new-password.ejs', emailData)
 
       await EmailService.sendEmail({
         email: user.Email,
@@ -142,36 +140,11 @@ class UserController {
     }
   }
 
-  static async uploadUserAvatar (req, res) {
+  static async saveUserAvatar (req, res) {
     const id = req.user.Utilizador_ID
     const { thumbnail } = req.body
 
     try {
-      const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
-        folder: 'users'
-      })
-
-      const uploadSuccess = await UserRepository.uploadUserAvatar(id, myCloud.public_id, myCloud.url)
-
-      if (uploadSuccess) {
-        return response(res, true, StatusCodes.OK, 'Imagem inserida.')
-      }
-
-      return response(res, false, StatusCodes.BAD_REQUEST, 'Ocorreu um erro ao inserir a imagem.')
-    } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao fazer upload da imagem.')
-    }
-  }
-
-  static async updateUserAvatar (req, res) {
-    const id = req.user.Utilizador_ID
-    const { thumbnail } = req.body
-
-    try {
-      if (!thumbnail || !thumbnail.startsWith('data:image')) {
-        return response(res, false, StatusCodes.BAD_REQUEST, 'Imagem inválida. Certifique-se de que é uma imagem em base64.')
-      }
-
       const userAvatar = await UserRepository.getUserAvatar(id)
 
       if (userAvatar?.PublicID) {
@@ -211,6 +184,7 @@ class UserController {
 
       for (const sale of sales) {
         const transactionSale = await TransactionSaleRepository.getTransactionBySaleId(sale.Venda_ID)
+
         if (transactionSale && transactionSale.Nota > 0) {
           totalReviews += transactionSale.Nota
           totalItems += 1
@@ -219,6 +193,7 @@ class UserController {
 
       for (const loan of loans) {
         const transactionLoan = await TransactionLoanRepository.getTransactionByLoanId(loan.Emprestimo_ID)
+
         if (transactionLoan && transactionLoan.Nota > 0) {
           totalReviews += transactionLoan.Nota
           totalItems += 1
@@ -227,6 +202,7 @@ class UserController {
 
       for (const giveaway of giveaways) {
         const winnerGiveaway = await WinnerGiveawayRepository.getWinnerGiveawayById(giveaway.Sorteio_ID)
+
         if (winnerGiveaway && winnerGiveaway.Nota > 0) {
           totalReviews += winnerGiveaway.Nota
           totalItems += 1

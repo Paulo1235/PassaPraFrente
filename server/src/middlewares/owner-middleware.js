@@ -5,7 +5,7 @@ import SaleRepository from '../repositories/sale-repository.js'
 import LoanRepository from '../repositories/loan-repository.js'
 import GiveawayRepository from '../repositories/giveaway-repository.js'
 
-class ProposalMiddleware {
+class OwnerMiddleware {
   static async isOwnerSale (req, res, next) {
     const userId = req.user.Utilizador_ID
     const { id } = req.params
@@ -68,4 +68,4 @@ class ProposalMiddleware {
   }
 }
 
-export default ProposalMiddleware
+export default OwnerMiddleware

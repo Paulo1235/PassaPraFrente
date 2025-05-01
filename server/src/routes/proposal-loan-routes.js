@@ -2,16 +2,14 @@ import express from 'express'
 
 import AuthMiddleware from '../middlewares/auth-middleware.js'
 import ProposalLoanController from '../controllers/proposal-loan-controller.js'
-import AuthController from '../controllers/auth-controller.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import { proposalLoanSchema } from '../validations/proposal-loan-schema.js'
-import ProposalMiddleware from '../middlewares/owner-middleware.js'
+import OwnerMiddleware from '../middlewares/owner-middleware.js'
 
 const proposalLoanRouter = express.Router()
 
 proposalLoanRouter.get(
   '/proposal-loans/:id',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   ProposalLoanController.getLoanProposalById
@@ -19,16 +17,14 @@ proposalLoanRouter.get(
 
 proposalLoanRouter.put(
   '/proposal-loans/:id/user/:userId',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  ProposalMiddleware.isOwnerLoan,
+  OwnerMiddleware.isOwnerLoan,
   ProposalLoanController.updateProposalLoanStatus
 )
 
 proposalLoanRouter.get(
   '/proposal-loans',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.authorizedRoles(['admin']),
@@ -36,7 +32,6 @@ proposalLoanRouter.get(
 )
 proposalLoanRouter.post(
   '/proposal-loans/create/:id',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.isAdult,
@@ -45,7 +40,6 @@ proposalLoanRouter.post(
 )
 proposalLoanRouter.get(
   '/proposal-loans/user/user',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.authorizedRoles(['admin']),
@@ -53,7 +47,6 @@ proposalLoanRouter.get(
 )
 proposalLoanRouter.get(
   '/proposal-loans/loans/user',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   ProposalLoanController.getAllProposalEntriesByLoan

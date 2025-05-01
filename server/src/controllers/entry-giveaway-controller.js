@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes'
 
 import response from '../utils/response.js'
-import { handleError } from '../utils/error-handler.js'
+import { handleError, HttpException } from '../utils/error-handler.js'
 import EntryGiveawayRepository from '../repositories/entry-giveaway-repository.js'
 import GiveawayRepository from '../repositories/giveaway-repository.js'
 
@@ -22,17 +22,21 @@ class EntryGiveawayController {
       const giveaway = await GiveawayRepository.getGiveawayById(giveawayId)
 
       if (!giveaway) {
-        return response(res, false, StatusCodes.NOT_FOUND, 'Sorteio não encontrado.')
+        throw new HttpException('Sorteio não encontrado', StatusCodes.NOT_FOUND)
+      }
+
+      if (giveaway.DataInicio > new Date()) {
+        throw new HttpException('O sorteio ainda não começou. Não é possível inscrever-se.', StatusCodes.BAD_REQUEST)
       }
 
       if (giveaway.DataFim < new Date()) {
-        return response(res, false, StatusCodes.BAD_REQUEST, 'O sorteio já terminou. Já não é possível inscrever-se.')
+        throw new HttpException('O sorteio já terminou. Já não é possível inscrever-se.', StatusCodes.BAD_REQUEST)
       }
 
       const existingEntry = await EntryGiveawayRepository.getEntryGiveawayById(giveawayId, userId)
 
       if (existingEntry) {
-        return response(res, false, StatusCodes.BAD_REQUEST, 'Já está inscrito neste sorteio.')
+        throw new HttpException('Já está inscrito neste sorteio.', StatusCodes.BAD_REQUEST)
       }
 
       await EntryGiveawayRepository.createEntryGiveaway(data)
@@ -51,7 +55,7 @@ class EntryGiveawayController {
       const giveaway = await EntryGiveawayRepository.getEntryGiveawayById(giveawayId, userId)
 
       if (!giveaway) {
-        return response(res, false, StatusCodes.NOT_FOUND, 'Inscrição não encontrada.')
+        throw new HttpException('Inscrição não encontrada.', StatusCodes.NOT_FOUND)
       }
 
       return response(res, true, StatusCodes.OK, giveaway)
@@ -72,7 +76,7 @@ class EntryGiveawayController {
     }
   }
 
-  static getAllEntryGiveawaysByGiveaway = async (req, res) => {
+  static async getAllEntryGiveawaysByGiveaway (req, res) {
     const { giveawayId } = req.params
 
     try {

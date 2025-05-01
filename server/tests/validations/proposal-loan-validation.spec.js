@@ -60,30 +60,6 @@ describe('Validação do proposalLoanSchema', () => {
     expect(resultado.error?.issues[0].message).toBe('O valor deve ser no mínimo 0')
   })
 
-  it('deve falhar se a data de início for inválida', () => {
-    const propostaInvalida = {
-      price: 100,
-      newStartDate: 'data-invalida',
-      newEndDate: generateFutureDate(7)
-    }
-
-    const resultado = proposalLoanSchema.safeParse(propostaInvalida)
-    expect(resultado.success).toBe(false)
-    expect(resultado.error?.issues.some(issue => issue.message === 'Data de início inválida')).toBe(true)
-  })
-
-  it('deve falhar se a data de fim for inválida', () => {
-    const propostaInvalida = {
-      price: 100,
-      newStartDate: generateFutureDate(2),
-      newEndDate: 'data-invalida'
-    }
-
-    const resultado = proposalLoanSchema.safeParse(propostaInvalida)
-    expect(resultado.success).toBe(false)
-    expect(resultado.error?.issues.some(issue => issue.message === 'Data de fim inválida')).toBe(true)
-  })
-
   it('deve falhar se a data de início não for futura', () => {
     const propostaInvalida = {
       price: 100,

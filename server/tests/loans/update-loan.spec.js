@@ -3,7 +3,6 @@ import { StatusCodes } from 'http-status-codes'
 
 import LoanController from '../../src/controllers/loan-controller.js'
 import LoanRepository from '../../src/repositories/loan-repository.js'
-import ItemController from '../../src/controllers/item-controller.js'
 import response from '../../src/utils/response.js'
 import { LOAN_STATES } from '../../src/constants/status-constants.js'
 
@@ -12,12 +11,6 @@ vi.mock('../../src/repositories/loan-repository.js', () => ({
     getLoanById: vi.fn(),
     updateLoan: vi.fn(),
     updateLoanStatus: vi.fn()
-  }
-}))
-
-vi.mock('../../src/controllers/item-controller.js', () => ({
-  default: {
-    updateItemPhoto: vi.fn()
   }
 }))
 
@@ -115,31 +108,5 @@ describe('Operações de atualizar em empréstimos', () => {
     await LoanController.updateLoanStatus(req, res)
 
     expect(response).toHaveBeenCalledWith(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar o estado do empréstimo.')
-  })
-
-  // Teste para updateLoanImage
-  it('deve atualizar a imagem do empréstimo com sucesso', async () => {
-    const req = { params: { id: 1 }, body: { index: 0, thumbnail: 'new-thumbnail-url' } }
-    const res = {}
-    const loan = { id: 1, Artigo_ID: 123 }
-
-    LoanRepository.getLoanById.mockResolvedValue(loan)
-    ItemController.updateItemPhoto.mockResolvedValue(true)
-
-    await LoanController.updateLoanImage(req, res)
-
-    expect(ItemController.updateItemPhoto).toHaveBeenCalledWith({ itemId: 123, index: 0, thumbnail: 'new-thumbnail-url' })
-    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Imagem de empréstimo atualizada com sucesso.')
-  })
-
-  it('deve lançar erro se o empréstimo não for encontrada ao atualizar imagem', async () => {
-    const req = { params: { id: 99 }, body: { index: 0, thumbnail: 'new-thumbnail-url' } }
-    const res = {}
-
-    LoanRepository.getLoanById.mockResolvedValue(null)
-
-    await LoanController.updateLoanImage(req, res)
-
-    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Empréstimo não encontrado.')
   })
 })

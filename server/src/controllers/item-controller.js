@@ -77,42 +77,6 @@ class ItemController {
     }
   }
 
-  static async updateItemPhoto (data) {
-    const { index, thumbnail, itemId } = data
-
-    try {
-      const item = await ItemRepository.getItemById(itemId)
-
-      if (!item) {
-        throw new HttpException('Item não existe.', StatusCodes.NOT_FOUND)
-      }
-
-      const itemPhotos = await ItemRepository.getItemPhoto(itemId)
-
-      const oldImage = itemPhotos[index]
-
-      if (!oldImage) {
-        throw new HttpException('Imagem não encontrada', StatusCodes.NOT_FOUND)
-      }
-
-      if (oldImage) {
-        await cloudinary.v2.uploader.destroy(oldImage.PublicID)
-
-        const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
-          folder: 'items',
-          width: 123,
-          height: 118
-        })
-
-        const updated = await ItemRepository.updateItemPhoto(itemId, myCloud.public_id, myCloud.secure_url)
-
-        return updated
-      }
-    } catch (error) {
-      throw new HttpException('Não foi possível atualizar a imagem do item', StatusCodes.INTERNAL_SERVER_ERROR)
-    }
-  }
-
   static async replaceItemPhotos (itemId, newThumbnails) {
     const uploadedResults = []
 
@@ -130,6 +94,7 @@ class ItemController {
 
       for (const photo of currentPhotos) {
         await cloudinary.v2.uploader.destroy(photo.PublicID)
+
         await ItemRepository.deleteItemPhotoByPublicId(itemId, photo.PublicID)
       }
 

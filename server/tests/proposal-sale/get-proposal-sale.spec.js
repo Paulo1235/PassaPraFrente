@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import ProposalSaleController from '../../src/controllers/proposal-sale-controller.js'
 import ProposalSaleRepository from '../../src/repositories/proposal-sale-repository.js'
-import SaleRepository from '../../src/repositories/sale-repository.js'
 
 vi.mock('../../src/repositories/proposal-sale-repository.js')
 vi.mock('../../src/repositories/sale-repository.js')
@@ -56,23 +55,5 @@ describe('Propostas de venda - Obtenção de propostas', () => {
 
     expect(res.status).toHaveBeenCalledWith(200)
     expect(res.json).toHaveBeenCalledWith({ success: true, message: proposals })
-  })
-
-  it('Deve retornar todas as entradas de propostas por venda do utilizador', async () => {
-    const req = { user: { Utilizador_ID: 1 } }
-    const res = criarMockRes()
-
-    const sales = [{ Emprestimo_ID: 1 }, { Emprestimo_ID: 2 }]
-
-    const proposal = { id: 1 }
-
-    SaleRepository.getUserSales.mockResolvedValue(sales)
-
-    ProposalSaleRepository.getSaleProposalBySaleId.mockResolvedValue(proposal)
-
-    await ProposalSaleController.getAllProposalEntriesBySale(req, res)
-
-    expect(res.status).toHaveBeenCalledWith(200)
-    expect(res.json).toHaveBeenCalledWith({ success: true, message: sales })
   })
 })

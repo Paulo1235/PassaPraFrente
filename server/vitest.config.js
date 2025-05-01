@@ -5,7 +5,6 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['tests/**/*.test.js', 'tests/**/*.spec.js'],
-    setupFiles: ['./src/utils/setup-tests.js'],
     coverage: {
       all: true,
       include: ['./tests/**/*'],

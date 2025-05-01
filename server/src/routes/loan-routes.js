@@ -5,8 +5,7 @@ import { loanSchema } from '../validations/loan-schema.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import LoanController from '../controllers/loan-controller.js'
 import AuthMiddleware from '../middlewares/auth-middleware.js'
-import ProposalMiddleware from '../middlewares/owner-middleware.js'
-import AuthController from '../controllers/auth-controller.js'
+import OwnerMiddleware from '../middlewares/owner-middleware.js'
 
 const loanRouter = express.Router()
 
@@ -18,7 +17,6 @@ loanRouter.get(
 
 loanRouter.get(
   '/loans',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.authorizedRoles(['admin']),
@@ -26,19 +24,16 @@ loanRouter.get(
 )
 loanRouter.get(
   '/loans/available',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   LoanController.getAvailableLoans
 )
 loanRouter.get(
   '/loans/pending',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   LoanController.getPendingLoans
 )
 loanRouter.post(
   '/loans/create',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.isAdult,
@@ -48,7 +43,6 @@ loanRouter.post(
 )
 loanRouter.get(
   '/loans/user',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   LoanController.getUserLoans,
   AuthMiddleware.isVerified
@@ -56,7 +50,6 @@ loanRouter.get(
 
 loanRouter.patch(
   '/loans/update-status/:id',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.authorizedRoles(['admin']),
@@ -65,26 +58,15 @@ loanRouter.patch(
 
 loanRouter.put(
   '/loans/update/:id',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  ProposalMiddleware.isOwnerLoan,
+  OwnerMiddleware.isOwnerLoan,
   validateSchema(loanSchema, true),
   LoanController.updateLoan
 )
 
-loanRouter.patch(
-  '/loans/update-image/:id',
-  AuthController.refreshAccessToken,
-  AuthMiddleware.isAuthenticated,
-  AuthMiddleware.isVerified,
-  ProposalMiddleware.isOwnerLoan,
-  LoanController.updateLoanImage
-)
-
 loanRouter.get(
   '/loans/non-completed',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   LoanController.getNonCompletedLoansByUser
@@ -92,7 +74,6 @@ loanRouter.get(
 
 loanRouter.get(
   '/loans/completed',
-  AuthController.refreshAccessToken,
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   LoanController.getCompletedLoansByUser

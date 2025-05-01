@@ -44,7 +44,7 @@ describe('EntryGiveawayController - createEntryGiveaway', () => {
     expect(mockRes.status).toHaveBeenCalledWith(StatusCodes.NOT_FOUND)
     expect(mockRes.json).toHaveBeenCalledWith({
       success: false,
-      message: 'Sorteio não encontrado.'
+      message: 'Sorteio não encontrado'
     })
   })
 

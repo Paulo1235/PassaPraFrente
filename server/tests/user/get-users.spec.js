@@ -68,7 +68,7 @@ describe('UserController', () => {
       await UserController.getUserByEmail(req, res)
 
       expect(UserRepository.getUserByEmail).toHaveBeenCalledWith('nonexistent@example.com')
-      expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, {})
+      expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Utilizador não encontrado.')
     })
   })
 
@@ -96,7 +96,7 @@ describe('UserController', () => {
 
     expect(UserRepository.getUserById).toHaveBeenCalledWith(999)
 
-    expect(response).toHaveBeenCalledWith(res, true, 404, 'Utilizador não encontrado.')
+    expect(response).toHaveBeenCalledWith(res, false, 404, 'Utilizador não encontrado.')
   })
 
   it('deve retornar utilizador com avatar se o avatar estiver presente', async () => {

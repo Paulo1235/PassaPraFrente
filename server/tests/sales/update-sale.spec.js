@@ -3,7 +3,6 @@ import { StatusCodes } from 'http-status-codes'
 
 import SaleController from '../../src/controllers/sale-controller.js'
 import SaleRepository from '../../src/repositories/sale-repository.js'
-import ItemController from '../../src/controllers/item-controller.js'
 import response from '../../src/utils/response.js'
 import { SALE_STATES } from '../../src/constants/status-constants.js'
 
@@ -12,12 +11,6 @@ vi.mock('../../src/repositories/sale-repository.js', () => ({
     getSaleById: vi.fn(),
     updateSale: vi.fn(),
     updateSaleStatus: vi.fn()
-  }
-}))
-
-vi.mock('../../src/controllers/item-controller.js', () => ({
-  default: {
-    updateItemPhoto: vi.fn()
   }
 }))
 
@@ -113,31 +106,5 @@ describe('Operações de atualizar em vendas', () => {
     await SaleController.updateSaleStatus(req, res)
 
     expect(response).toHaveBeenCalledWith(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao atualizar o estado da venda.')
-  })
-
-  // Teste para updateSaleImage
-  it('deve atualizar a imagem da venda com sucesso', async () => {
-    const req = { params: { id: 1 }, body: { index: 0, thumbnail: 'new-thumbnail-url' } }
-    const res = {}
-    const sale = { id: 1, Artigo_ID: 123 }
-
-    SaleRepository.getSaleById.mockResolvedValue(sale)
-    ItemController.updateItemPhoto.mockResolvedValue(true)
-
-    await SaleController.updateSaleImage(req, res)
-
-    expect(ItemController.updateItemPhoto).toHaveBeenCalledWith({ itemId: 123, index: 0, thumbnail: 'new-thumbnail-url' })
-    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Imagem de venda atualizada com sucesso.')
-  })
-
-  it('deve lançar erro se a venda não for encontrada ao atualizar imagem', async () => {
-    const req = { params: { id: 99 }, body: { index: 0, thumbnail: 'new-thumbnail-url' } }
-    const res = {}
-
-    SaleRepository.getSaleById.mockResolvedValue(null)
-
-    await SaleController.updateSaleImage(req, res)
-
-    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Venda não encontrada')
   })
 })

@@ -31,10 +31,6 @@ class EmailService {
 
     await transporter.sendMail(mailOptions)
   }
-
-  static async prepareEmailContent (template, data) {
-    return await ejs.renderFile(path.join(DIRNAME, `src/mails/${template}`), data)
-  }
 }
 
 export default EmailService
