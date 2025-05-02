@@ -52,11 +52,13 @@ const ContentAccount = (props) => {
                                 key={`complete-${index}`}
                                 name={item.name}
                                 size={item.size}
+                                condition={item.condition}
                                 value={item.value}
                                 category={title}
                                 idVenda={item.idVenda}
                                 idEmprestimo={item.idEmprestimo}
                                 idSorteio={item.idSorteio}
+                                image = {item.image}
                                 isCompleted={true}
                             />
                         ))}

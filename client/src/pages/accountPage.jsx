@@ -176,6 +176,7 @@ const Account = () => {
         // console.log(userDataNonCompleted);
         setUserData(userData);
         setUserDataNonCompleted(userDataNonCompleted);
+        console.log(userData)
       } catch (error) {
         console.error("Error fetching shop data:", error);
       }
