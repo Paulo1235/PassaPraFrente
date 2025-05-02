@@ -10,7 +10,7 @@ describe('Testando integração com o Cloudinary', () => {
   it('deve fazer upload de uma imagem e retornar a URL correta', async () => {
     const imageBuffer = Buffer.from('image data')
 
-    const response = await cloudinary.v2.uploader.upload_stream((error, result) => {
+    const response = cloudinary.v2.uploader.upload_stream((error, result) => {
       if (error) {
         throw new Error('Erro no upload')
       }

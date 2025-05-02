@@ -105,10 +105,9 @@ describe('AuthController', () => {
       jwt.verify.mockReturnValue({ id: 1 })
       UserRepository.getUserById.mockResolvedValue({ id: 1 })
 
-      await AuthController.refreshAccessToken(req, res, next)
+      await AuthController.refreshAccessToken(req, res)
 
       expect(sendToken).toHaveBeenCalled()
-      expect(next).toHaveBeenCalled()
     })
 
     it('deve retornar erro se o refresh token estiver ausente', async () => {

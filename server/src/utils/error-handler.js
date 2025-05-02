@@ -11,7 +11,7 @@ class HttpException extends Error {
 }
 
 const handleError = (res, error, defaultMessage) => {
-  console.log(chalk.red.bold('Erro interno: '), chalk.yellow(error.message))
+  console.error(chalk.red.bold('Erro interno: '), chalk.yellow(error.message))
 
   if (error instanceof HttpException) {
     return response(res, false, error.statusCodes, error.message)

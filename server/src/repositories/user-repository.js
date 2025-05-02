@@ -54,7 +54,7 @@ class UserRepository {
 
     const users = await pool.request()
       .query(`
-        SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail
+        SELECT Utilizador.Utilizador_ID, Nome, DataNasc, Contacto, TipoUtilizador_ID, Email, ConfirmarEmail
         FROM Utilizador 
         JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID
       `)
@@ -219,7 +219,7 @@ class UserRepository {
     const user = await pool.request()
       .input('id', sql.Int, id)
       .query(`
-        SELECT Utilizador.Utilizador_ID, Nome, DataNasc, ImagemURL, Contacto, TipoUtilizador.TipoUtilizador_ID, Email, ConfirmarEmail, PublicID, Url, TipoUtilizador.TipoUtilizador
+        SELECT Utilizador.Utilizador_ID, Nome, DataNasc, Contacto, TipoUtilizador.TipoUtilizador_ID, Email, ConfirmarEmail, PublicID, Url, TipoUtilizador.TipoUtilizador
         FROM Utilizador 
         JOIN Autenticacao ON Utilizador.Utilizador_ID = Autenticacao.Utilizador_ID
         JOIN TipoUtilizador ON TipoUtilizador.TipoUtilizador_ID = Utilizador.TipoUtilizador_ID

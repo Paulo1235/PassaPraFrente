@@ -6,7 +6,7 @@ import { checkDatabaseConnection } from './src/database/connection.js'
 import { closeConnection, getConnection } from './src/database/db-config.js'
 
 app.listen(PORT, async () => {
-  console.log(
+  console.info(
     chalk.green.bold(`\nApp '${NAME}' está a correr.`) + '\n' +
     chalk.blue.underline(`Ativo em: http://localhost:${PORT}`)
   )

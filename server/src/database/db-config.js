@@ -23,7 +23,7 @@ export const getConnection = async () => {
 
     return pool
   } catch (error) {
-    console.log(chalk.red.bold('Erro interno: '), chalk.yellow(error.message))
+    console.info(chalk.red.bold('Erro interno: '), chalk.yellow(error.message))
   }
 }
 
@@ -31,8 +31,8 @@ export const closeConnection = async (pool) => {
   try {
     await pool?.close()
 
-    console.log('Conexão fechada com sucesso.')
+    console.info('Conexão fechada com sucesso.')
   } catch (error) {
-    console.log(chalk.red.bold('Erro interno: '), chalk.yellow(error.message))
+    console.info(chalk.red.bold('Erro interno: '), chalk.yellow(error.message))
   }
 }

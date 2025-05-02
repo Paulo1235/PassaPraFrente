@@ -25,6 +25,10 @@ class EntryGiveawayController {
         throw new HttpException('Sorteio não encontrado', StatusCodes.NOT_FOUND)
       }
 
+      if (userId === giveaway.Utilizador_ID) {
+        throw new HttpException('Não é possível inscrever-se no seu próprio sorteio.', StatusCodes.BAD_REQUEST)
+      }
+
       if (giveaway.DataInicio > new Date()) {
         throw new HttpException('O sorteio ainda não começou. Não é possível inscrever-se.', StatusCodes.BAD_REQUEST)
       }

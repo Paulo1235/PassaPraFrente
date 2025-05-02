@@ -179,7 +179,7 @@ class AuthController {
    * @param {Object} res - O objeto de resposta utilizado para enviar a resposta.
    * @param {Function} next - Função de middleware para a próxima ação.
    */
-  static async refreshAccessToken (req, res, next) {
+  static async refreshAccessToken (req, res) {
     const refreshToken = req.cookies?.refreshToken
 
     try {
@@ -202,8 +202,6 @@ class AuthController {
 
       // Gera novos tokens de acesso e refresh
       sendToken(user, res)
-
-      next()
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao efetuar a autenticação. Tente novamente mais tarde.')
     }

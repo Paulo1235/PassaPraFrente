@@ -5,5 +5,22 @@
     "userId": 6,
     "read": true,
     "date": "2025-04-05T20:00:52.392Z"
+  },
+  {
+    "id": "1eae4c7d-e1ab-45b0-a4e5-f632dc9f9b96",
+    "message": "A sua proposta para Vendo casa de bonecas 8 foi aceite",
+    "userId": "12",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-05-01T19:28:56.255Z"
+  },
+  {
+    "id": "23aa2d41-7811-4b2d-a8bf-81e2337efbf1",
+    "message": "Avalie o vendedor da venda: Vendo casa de bonecas 8",
+    "userId": "12",
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/59",
+    "read": false,
+    "date": "2025-05-01T19:28:56.794Z"
   }
 ]
