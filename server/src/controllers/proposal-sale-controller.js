@@ -99,10 +99,13 @@ class ProposalSaleController {
         ? `A sua proposta para ${sale.Titulo} foi aceite`
         : `A sua proposta para ${sale.Titulo} foi recusada`
 
+      console.log(notificationMessage)
+      console.log(parseInt(status) === PROPOSAL_SALE_STATES.ACEITE)
+
       await NotificationController.createNotification({
         message: notificationMessage,
         category: 'Venda',
-        userId
+        userId: parseInt(userId)
       })
 
       if (parseInt(status) === PROPOSAL_SALE_STATES.ACEITE) {
