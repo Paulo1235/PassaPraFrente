@@ -7,7 +7,6 @@ import TransactionLoanRepository from '../repositories/transaction-loan-reposito
 import LoanRepository from '../repositories/loan-repository.js'
 import ProposalLoanRepository from '../repositories/proposal-loan-repository.js'
 import NotificationController from './notification-controller.js'
-import { FRONTEND_URL } from '../../config.js'
 
 class TransactionLoanController {
   static async createDirectTransactionLoan (req, res) {
@@ -54,7 +53,7 @@ class TransactionLoanController {
           message: `Avalie o vendedor do empréstimo: ${loan.Titulo}`,
           userId,
           category: 'Empréstimo',
-          link: `${FRONTEND_URL}/review/user/loan/${transaction.TransacaoEmprestimo_ID}`
+          link: `/review/user/loan/${transaction.TransacaoEmprestimo_ID}`
         }
 
         NotificationController.createNotification(notificationData)
