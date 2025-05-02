@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import Card from "./card";
 import Footer from "./footer";
+
+//? CSS
 import "../index.css";
 
 const ShopSection = ({ title, items }) => {
@@ -10,7 +12,7 @@ const ShopSection = ({ title, items }) => {
     <div className="bg-bgp flex flex-col">
       <section className="mt-4 w-full px-4 md:px-8 lg:px-10 max-w-7xl mx-auto"> {/* Reduzido mt-8 para mt-4 */}
         {/* Header da seção */}
-        <h2 className="text-[#73802A] text-2xl md:text-3xl font-medium mb-4 md:mb-6"> {/* Reduzido mb-6 para mb-4 */}
+        <h2 className="text-[#73802A] text-2xl md:text-3xl md:text-start text-center font-medium mb-4 md:mb-6"> {/* Reduzido mb-6 para mb-4 */}
           {title}
         </h2>
 
@@ -22,7 +24,7 @@ const ShopSection = ({ title, items }) => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"> {/* Reduzido gap-6 para gap-4 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:place-items-start place-items-center"> {/* Reduzido gap-6 para gap-4 */}
             {items.map((item, index) => (
               <Card
                 mainPage={true}
