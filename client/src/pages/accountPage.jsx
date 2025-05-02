@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchUserInfo } from "../lib/authSlice"; // Import the action
+import { fetchUserInfo } from "../lib/authSlice";
 
 //? CSS
 import "../components/css/sidebar.css";
@@ -25,127 +25,79 @@ const Account = () => {
   const [userData, setUserData] = useState(null);
   const [userDataNonCompleted, setUserDataNonCompleted] = useState(null);
   const [rating, setRating] = useState(0);
+  const [showCompleted, setShowCompleted] = useState(false); // NEW STATE
 
   useEffect(() => {
     const fetchAccountData = async () => {
       try {
-        const responseSales = await fetch(
-          "http://localhost:5000/api/sales/completed",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
+        const endpoints = [
+          "sales/completed",
+          "loans/completed",
+          "giveaways/completed",
+          "sales/non-completed",
+          "loans/non-completed",
+          "giveaways/non-completed",
+          "users/my-reviews",
+        ];
+
+        const [
+          resSales,
+          resLoans,
+          resGiveaways,
+          resSalesNC,
+          resLoansNC,
+          resGiveawaysNC,
+          resRating,
+        ] = await Promise.all(
+          endpoints.map((endpoint) =>
+            fetch(`http://localhost:5000/api/${endpoint}`, {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+            })
+          )
         );
 
-        const responseLoans = await fetch(
-          "http://localhost:5000/api/loans/completed",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
+        if (!resSales.ok || !resLoans.ok || !resGiveaways.ok)
+          throw new Error("Erro ao buscar dados");
 
-        const responseGiveaways = await fetch(
-          "http://localhost:5000/api/giveaways/completed",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
+        const [
+          dataSales,
+          dataLoans,
+          dataGiveaways,
+          dataSalesNC,
+          dataLoansNC,
+          dataGiveawaysNC,
+          dataRating,
+        ] = await Promise.all([
+          resSales.json(),
+          resLoans.json(),
+          resGiveaways.json(),
+          resSalesNC.json(),
+          resLoansNC.json(),
+          resGiveawaysNC.json(),
+          resRating.json(),
+        ]);
 
-        const responseSalesNonCompleted = await fetch(
-          "http://localhost:5000/api/sales/non-completed",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
-
-        const responseLoansNonCompleted = await fetch(
-          "http://localhost:5000/api/loans/non-completed",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
-
-        const responseGiveawaysNonCompleted = await fetch(
-          "http://localhost:5000/api/giveaways/non-completed",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
-
-        const responseRating = await fetch(
-          "http://localhost:5000/api/users/my-reviews",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
-
-        if (!responseSales.ok || !responseGiveaways.ok || !responseLoans.ok) {
-          throw new Error("Failed to fetch shop data");
-        }
-
-        const dataSales = await responseSales.json();
-        const dataLoans = await responseLoans.json();
-        const dataGiveaways = await responseGiveaways.json();
-
-        const dataSalesNonCompleted = await responseSalesNonCompleted.json();
-        const dataLoansNonCompleted = await responseLoansNonCompleted.json();
-        const dataGiveawaysNonCompleted = await responseGiveawaysNonCompleted.json();
-
-        const dataRating = await responseRating.json();
-
-        // console.log(dataRating)
-        console.log(dataSalesNonCompleted)
-        // console.log(dataLoans)
-        // console.log(dataGiveaways)
-
-        // Set the rating value from backend
         setRating(dataRating.message || 0);
 
-        const transformItems = (items, category) => {
-          return items.message.map((item) => ({
+        const transformItems = (items, category) =>
+          items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
             size: item.Descricao || item.description || "Sem descrição",
             condition: item.Condicao || item.condition || "Sem condição",
-            value: item.Valor || item.Valor || 0,
+            value: item.Valor || 0,
             idVenda: item.Venda_ID || "ID",
             idEmprestimo: item.Emprestimo_ID || "ID",
             idSorteio: item.Sorteio_ID || "ID",
             image: item.photos,
             category,
           }));
-        };
 
-        const userData = {
+        setUserData({
           sales: {
-            title: "Vendas",
-            items: transformItems(dataSales, "Vendas"),
+            title: "Compras",
+            items: transformItems(dataSales, "Compras"),
           },
           loans: {
             title: "Emprestimos",
@@ -155,30 +107,24 @@ const Account = () => {
             title: "Sorteios",
             items: transformItems(dataGiveaways, "Sorteios"),
           },
-        };
+        });
 
-        const userDataNonCompleted = {
+        setUserDataNonCompleted({
           sales: {
-            title: "Vendas",
-            items: transformItems(dataSalesNonCompleted, "Vendas"),
+            title: "Compras",
+            items: transformItems(dataSalesNC, "Compras"),
           },
           loans: {
             title: "Emprestimos",
-            items: transformItems(dataLoansNonCompleted, "Emprestimos"),
+            items: transformItems(dataLoansNC, "Emprestimos"),
           },
           giveaways: {
             title: "Sorteios",
-            items: transformItems(dataGiveawaysNonCompleted, "Sorteios"),
+            items: transformItems(dataGiveawaysNC, "Sorteios"),
           },
-        };
-
-        // console.log(userData);
-        // console.log(userDataNonCompleted);
-        setUserData(userData);
-        setUserDataNonCompleted(userDataNonCompleted);
-        console.log(userData)
+        });
       } catch (error) {
-        console.error("Error fetching shop data:", error);
+        console.error("Erro ao carregar dados:", error);
       }
     };
 
@@ -192,20 +138,11 @@ const Account = () => {
     dispatch(fetchUserInfo());
   }, [isAuthenticated, dispatch, navigate]);
 
-  //? Renderiza as estrelas do rating
   const renderStars = () => {
     const stars = [];
-
     for (let i = 1; i <= 5; i++) {
-      if (i <= rating) {
-        // Filled star
-        stars.push(<Star fill="yellow" />);
-      } else {
-        // Empty star
-        stars.push(<Star fill="black" />);
-      }
+      stars.push(<Star key={i} fill={i <= rating ? "yellow" : "black"} />);
     }
-
     return stars;
   };
 
@@ -219,6 +156,7 @@ const Account = () => {
       <div className="md:sticky md:top-0 md:h-screen">
         <SideBar canAdd={true} Home={true} Account={true} LogOut={true} />
       </div>
+
       <div className="App w-full overflow-x-hidden flex flex-col flex-grow">
         <div className="left mx-2 md:ml-10 lg:ml-20 mt-6 md:mt-10 flex flex-col px-4 md:px-6">
           <p className="text-2xl md:text-3xl text-[#73802A] text-center md:text-start">
@@ -249,18 +187,14 @@ const Account = () => {
 
               <div className="icons mt-6 md:mt-0 md:ml-6 lg:ml-10 xl:ml-20 flex flex-row md:flex-col justify-center gap-4 md:gap-3">
                 <div
-                  onClick={() => {
-                    navigate("/editaccount");
-                  }}
+                  onClick={() => navigate("/editaccount")}
                   className="edit flex flex-row items-center cursor-pointer text-txts"
                 >
                   <UserPen className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
                   <span className="ml-2 text-sm md:text-base">Editar</span>
                 </div>
                 <div
-                  onClick={() => {
-                    navigate("/notifications");
-                  }}
+                  onClick={() => navigate("/notifications")}
                   className="edit flex flex-row items-center cursor-pointer text-txtp"
                 >
                   <Bell className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
@@ -270,9 +204,7 @@ const Account = () => {
                 </div>
                 <div
                   className="proposals flex flex-row items-center cursor-pointer text-txtp"
-                  onClick={() => {
-                    navigate("/proposals");
-                  }}
+                  onClick={() => navigate("/proposals")}
                 >
                   <HandHelping className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
                   <span className="ml-2 text-sm md:text-base">Propostas</span>
@@ -281,25 +213,53 @@ const Account = () => {
             </div>
           </div>
         </div>
+
+        {/* Pagination Toggle */}
         {userData && (
-          <>
+          <div className="flex flex-col px-4 md:px-6 mt-6">
+            <div className="flex justify-center gap-4 mb-6">
+              <button
+                className={`px-4 py-2 rounded ${
+                  !showCompleted ? "bg-[#73802A] text-white" : "bg-gray-200"
+                }`}
+                onClick={() => setShowCompleted(false)}
+              >
+                Em Andamento
+              </button>
+              <button
+                className={`px-4 py-2 rounded ${
+                  showCompleted ? "bg-[#73802A] text-white" : "bg-gray-200"
+                }`}
+                onClick={() => setShowCompleted(true)}
+              >
+                Concluídos
+              </button>
+            </div>
+
             <ContentAccount
-              title="Vendas"
-              completedItems={userData.sales.items}
-              incompleteItems={userDataNonCompleted.sales.items}
+              title="Compras"
+              completedItems={showCompleted ? userData.sales.items : []}
+              incompleteItems={
+                !showCompleted ? userDataNonCompleted.sales.items : []
+              }
             />
             <ContentAccount
-              title="Emprestimos"
-              completedItems={userData.loans.items}
-              incompleteItems={userDataNonCompleted.loans.items}
+              title="Empréstimos"
+              completedItems={showCompleted ? userData.loans.items : []}
+              incompleteItems={
+                !showCompleted ? userDataNonCompleted.loans.items : []
+              }
             />
             <ContentAccount
               title="Sorteios"
-              completedItems={userData.giveaways.items}
-              incompleteItems={userDataNonCompleted.giveaways.items}
+              completedItems={showCompleted ? userData.giveaways.items : []}
+              incompleteItems={
+                !showCompleted ? userDataNonCompleted.giveaways.items : []
+              }
             />
-          </>
+          </div>
         )}
+
         <div className="mt-auto w-full">
           <Footer />
         </div>

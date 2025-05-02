@@ -126,8 +126,13 @@ export default function EditLoan() {
     }
   };
 
-  if (isLoading)
-    return <p className="text-center mt-10">A carregar dados...</p>;
+  if (isLoading) {
+    return (
+      <div className="flex bg-bgp h-screen justify-center items-center h-40">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#7b892f]"></div>
+      </div>
+    );
+  }
 
   const initialValues = {
     title: data?.Titulo || "",
