@@ -160,9 +160,12 @@ class SaleRepository {
       .request()
       .input('userId', sql.Int, userId)
       .query(`
-        SELECT * 
+        SELECT Venda_ID, Titulo, Descricao, Valor, Utilizador_ID, Venda.Estado_ID, Estado.Estado, Venda.Artigo_ID, Condicao, NomeCategoria
         FROM Venda
         JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
+        JOIN Artigo ON Artigo.Artigo_ID = Venda.Artigo_ID
+        JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
+        JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
         WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
       `)
 
@@ -176,9 +179,12 @@ class SaleRepository {
       .request()
       .input('userId', sql.Int, userId)
       .query(`
-        SELECT * 
+        SELECT Venda_ID, Titulo, Descricao, Valor, Utilizador_ID, Venda.Estado_ID, Estado.Estado, Venda.Artigo_ID, Condicao, NomeCategoria
         FROM Venda
         JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
+        JOIN Artigo ON Artigo.Artigo_ID = Venda.Artigo_ID
+        JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
+        JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
         WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
       `)
 

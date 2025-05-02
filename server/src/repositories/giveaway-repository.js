@@ -160,9 +160,12 @@ class GiveawayRepository {
       .request()
       .input('userId', sql.Int, userId)
       .query(`
-        SELECT * 
+        SELECT Sorteio_ID, Titulo, Descricao, DataInicio, DataFim, Utilizador_ID, Sorteio.ArtigoArtigo_ID, Estado.Estado, Condicao, NomeCategoria
         FROM Sorteio
         JOIN Estado ON Estado.Estado_ID = Sorteio.Estado_ID
+        JOIN Artigo ON Artigo.Artigo_ID = Sorteio.ArtigoArtigo_ID
+        JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
+        JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
         WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
       `)
 
@@ -176,9 +179,12 @@ class GiveawayRepository {
       .request()
       .input('userId', sql.Int, userId)
       .query(`
-        SELECT * 
+        SELECT Sorteio_ID, Titulo, Descricao, DataInicio, DataFim, Utilizador_ID, Sorteio.ArtigoArtigo_ID, Estado.Estado, Condicao, NomeCategoria
         FROM Sorteio
         JOIN Estado ON Estado.Estado_ID = Sorteio.Estado_ID
+        JOIN Artigo ON Artigo.Artigo_ID = Sorteio.ArtigoArtigo_ID
+        JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
+        JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
         WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
       `)
 

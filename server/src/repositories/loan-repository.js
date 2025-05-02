@@ -166,9 +166,12 @@ class LoanRepository {
       .request()
       .input('userId', sql.Int, userId)
       .query(`
-        SELECT * 
+        SELECT Emprestimo_ID, Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, Emprestimo.ArtigoArtigo_ID, Estado, Condicao, NomeCategoria
         FROM Emprestimo
         JOIN Estado ON Estado.Estado_ID = Emprestimo.EstadoEstado_ID
+        JOIN Artigo ON Artigo.Artigo_ID = Emprestimo.ArtigoArtigo_ID
+        JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
+        JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
         WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
       `)
 
@@ -182,9 +185,12 @@ class LoanRepository {
       .request()
       .input('userId', sql.Int, userId)
       .query(`
-        SELECT * 
+        SELECT Emprestimo_ID, Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, Emprestimo.ArtigoArtigo_ID, Estado, Condicao, NomeCategoria
         FROM Emprestimo
         JOIN Estado ON Estado.Estado_ID = Emprestimo.EstadoEstado_ID
+        JOIN Artigo ON Artigo.Artigo_ID = Emprestimo.ArtigoArtigo_ID
+        JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
+        JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
         WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
       `)
 

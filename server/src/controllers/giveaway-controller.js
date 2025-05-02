@@ -201,7 +201,7 @@ class GiveawayController {
     const giveawaysWithPhotos = []
 
     for (const giveaway of giveaways) {
-      const photos = await ItemRepository.getItemPhoto(giveaway.Artigo_ID)
+      const photos = await ItemRepository.getItemPhoto(giveaway.ArtigoArtigo_ID)
 
       const firstPhoto = photos.length > 0 ? photos[0] : null
 
