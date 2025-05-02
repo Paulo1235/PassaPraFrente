@@ -31,5 +31,21 @@
     "link": "/review/user/sale/60",
     "read": false,
     "date": "2025-05-02T15:25:53.336Z"
+  },
+  {
+    "id": "f72da67d-cedf-4ad7-892d-6ed8eae7ecfa",
+    "message": "A sua proposta para Mg Zr 1.4 foi aceite",
+    "userId": "22",
+    "category": "Venda",
+    "read": false,
+    "date": "2025-05-02T20:19:55.738Z"
+  },
+  {
+    "id": "0b127552-5301-4453-a644-7be5e14553a1",
+    "message": "A sua proposta para Mg Zr 1.4 foi aceite",
+    "userId": 22,
+    "category": "Venda",
+    "read": false,
+    "date": "2025-05-02T20:21:51.226Z"
   }
 ]

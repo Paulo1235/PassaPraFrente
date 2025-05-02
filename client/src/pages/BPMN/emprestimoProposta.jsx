@@ -150,71 +150,61 @@ export default function EmprestimoProposta() {
           >
             {({ errors, touched }) => (
               <Form className="w-full space-y-6">
-                {/* Produto Info Card */}
-                <div className="bg-[#FFFAEE] rounded-xl p-6 border border-gray-200">
-                  <div className="flex items-center gap-3 mb-4 text-[#73802A] border-b border-[#24251D]">
-                    <ShoppingBag className="h-6 w-6 mb-2" />
-                    <h2 className="text-xl font-semibold mb-2">
-                      Detalhes do Produto
-                    </h2>
-                  </div>
+{/* Produto Info Card */}
+<div className="bg-[#FFFAEE] rounded-xl p-6 border border-gray-200">
+  <div className="flex items-center gap-3 mb-4 text-[#73802A] border-b border-[#24251D]">
+    <ShoppingBag className="h-6 w-6 mb-2" />
+    <h2 className="text-xl font-semibold mb-2">Detalhes do Produto</h2>
+  </div>
 
-                  <div className="flex flex-col md:flex-row gap-6">
-                    {/* Imagem do Produto */}
-                    <div className="w-full md:w-1/3 flex-shrink-0">
-                      <div className="relative rounded-lg overflow-hidden bg-white border border-gray-200 aspect-square">
-                        {productImage ? (
-                          <img
-                            src={productImage}
-                            alt={data?.Titulo || "Imagem do produto"}
-                            width={300}
-                            height={300}
-                            className="object-cover w-full h-full"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                            <ImageIcon className="h-16 w-16 text-gray-300" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
+  <div className="flex flex-col md:flex-row gap-6 justify-center items-center"> {/* Aqui foi adicionado justify-center e items-center */}
+    {/* Imagem do Produto */}
+    <div className="w-full md:w-1/3 flex-shrink-0">
+      <div className="relative rounded-lg overflow-hidden bg-white border border-gray-200 aspect-square">
+        {productImage ? (
+          <img
+            src={productImage}
+            alt={data?.Titulo || "Imagem do produto"}
+            width={300}
+            height={300}
+            className="object-cover w-full h-full"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-100">
+            <ImageIcon className="h-16 w-16 text-gray-300" />
+          </div>
+        )}
+      </div>
+    </div>
 
-                    {/* Detalhes do Produto */}
-                    <div className="w-full md:w-2/3 space-y-4 text-[#4F4535]">
-                      <div>
-                        <h3 className="text-sm font-bold text-[#73802A]">
-                          Título
-                        </h3>
-                        <p className="text-lg font-medium">
-                          {data?.Titulo || "teste"}
-                        </p>
-                      </div>
+    {/* Detalhes do Produto */}
+    <div className="w-full md:w-2/3 space-y-4 text-[#4F4535]">
+      <div>
+        <h3 className="text-sm font-bold text-[#73802A]">Título</h3>
+        <p className="text-lg font-medium">{data?.Titulo || "teste"}</p>
+      </div>
 
-                      <div>
-                        <h3 className="text-sm font-bold text-[#73802A]">
-                          Descrição
-                        </h3>
-                        <p>{data?.Descricao || "teste"}</p>
-                      </div>
+      <div>
+        <h3 className="text-sm font-bold text-[#73802A]">Descrição</h3>
+        <p>{data?.Descricao || "teste"}</p>
+      </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <h3 className="text-sm font-bold text-[#73802A]">
-                            Condição
-                          </h3>
-                          <p>{data?.Condicao || "teste"}</p>
-                        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <h3 className="text-sm font-bold text-[#73802A]">Condição</h3>
+          <p>{data?.Condicao || "teste"}</p>
+        </div>
 
-                        <div>
-                          <h3 className="text-sm font-bold text-[#73802A]">
-                            Categoria
-                          </h3>
-                          <p>{data?.NomeCategoria || "teste"}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        <div>
+          <h3 className="text-sm font-bold text-[#73802A]">Categoria</h3>
+          <p>{data?.NomeCategoria || "teste"}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
                 {/* Proposta Card */}
                 <div className="bg-[#FFFAEE] rounded-xl p-6 border border-gray-200">

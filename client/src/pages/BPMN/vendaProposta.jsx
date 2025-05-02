@@ -133,10 +133,11 @@ export default function VendaProposta() {
             {({ values, errors, touched }) => (
               <Form className="w-full space-y-6">
                 {/* Produto Info Card */}
+                {/* Produto Info Card */}
                 <div className="bg-[#FFFAEE] rounded-xl p-6 border border-gray-200">
-                  <div className="flex items-center gap-3 mb-4 text-[#73802A] border-b border-[#24251D]">
-                    <ShoppingBag className="h-6 w-6 mb-2" />
-                    <h2 className="text-xl font-semibold mb-2">
+                  <div className="flex items-center gap-3 mb-4 text-[#73802A] border-b border-[#24251D] pb-2">
+                    <ShoppingBag className="h-6 w-6" />
+                    <h2 className="text-xl font-semibold">
                       Detalhes do Produto
                     </h2>
                   </div>
@@ -161,14 +162,14 @@ export default function VendaProposta() {
                       </div>
                     </div>
 
-                    {/* Detalhes do Produto */}
-                    <div className="w-full md:w-2/3 space-y-4 text-[#4F4535]">
+                    {/* Detalhes do Produto Centralizados */}
+                    <div className="w-full md:w-2/3 flex flex-col justify-center space-y-4 text-[#4F4535]">
                       <div>
-                        <h3 className="text-sm font-bold text-[#73802A]">
+                        <h3 className="text-xl font-bold text-[#73802A]">
                           Título
                         </h3>
-                        <p className="text-lg font-medium">
-                          {data?.Titulo || "teste"}
+                        <p className="text-l font-medium">
+                          {data?.Titulo || "Título não encontrado"}
                         </p>
                       </div>
 
@@ -176,29 +177,26 @@ export default function VendaProposta() {
                         <h3 className="text-sm font-bold text-[#73802A]">
                           Descrição
                         </h3>
-                        <p>{data?.Descricao || "teste"}</p>
+                        <p>{data?.Descricao || "Descrição não encontrada"}</p>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="text-sm grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <h3 className="text-sm font-bold text-[#73802A]">
-                            Condição
-                          </h3>
-                          <p>{data?.Condicao || "teste"}</p>
+                          <h3 className="font-bold text-[#73802A]">Condição</h3>
+                          <p>{data?.Condicao || "Condição não encontrada"}</p>
                         </div>
 
                         <div>
-                          <h3 className="text-sm font-bold text-[#73802A]">
+                          <h3 className="font-bold text-[#73802A]">
                             Categoria
                           </h3>
-                          <p>{data?.NomeCategoria || "teste"}</p>
+                          <p>{data?.NomeCategoria || "Categoria não encontrada"}</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Proposta Card */}
                 <div className="bg-[#FFFAEE] rounded-xl p-6">
                   <h2 className="text-xl font-semibold text-[#73802A] mb-4 border-b border-[#24251D] pb-2">
                     A sua Proposta
