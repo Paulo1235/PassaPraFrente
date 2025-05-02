@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Card from "./card";
 import Footer from "./footer";
 
@@ -9,7 +10,7 @@ const ShopSection = ({ title, items }) => {
       <p className="text-[#73802A] text-center md:text-start text-2xl md:text-3xl ml-2 md:ml-10 mb-3 md:mb-5">
         {title}:
       </p>
-
+      
       {items.length === 0 ? (
         <div className="p-1 rounded-lg mx-2 md:mx-10">
           <p className="text-gray-500 text-lg">
@@ -23,7 +24,7 @@ const ShopSection = ({ title, items }) => {
               mainPage={true}
               key={`card-${title}-${index}`}
               name={item.name}
-              size={item.size}
+              description={item.description}
               value={item.value}
               category={title}
               image={item.foto}
@@ -39,6 +40,9 @@ const ShopSection = ({ title, items }) => {
 };
 
 const Shop = ({ shopData }) => {
+  useEffect(() => (
+    console.log(shopData)
+  ))
   return (
     <div className="App min-h-screen w-full overflow-x-hidden flex flex-col">
       {Object.values(shopData).map((section, index) => (

@@ -66,7 +66,7 @@ const Main = () => {
         const transformItems = (items, category) => {
           return items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
-            size: item.Descricao || item.description || "Sem descrição",
+            description: item.Descricao || item.description || "Sem descrição",
             value: item.Valor || item.Valor || "N/A",
             idVenda: item.Venda_ID || "ID",
             idEmprestimo: item.Emprestimo_ID || "ID",
@@ -78,8 +78,8 @@ const Main = () => {
 
         const shopData = {
           sales: {
-            title: "Vendas",
-            items: transformItems(dataSales, "Vendas"),
+            title: "Compras",
+            items: transformItems(dataSales, "Compras"),
           },
           loans: {
             title: "Emprestimos",

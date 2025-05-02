@@ -140,30 +140,33 @@ const Sidebar = (props) => {
           {props.Home && (
             <button
               type="button"
+              onClick={() => navigate("/index")}
               className="text-[#ADADAD] bg-[#FFFAEE] hover:bg-[#D4CFC3]/90 focus:ring-4 focus:outline-none focus:ring-[#FFFAEE]/50 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
             >
               <Home className="w-6 h-6 mr-3 text-[#ADADAD]" />
-              <a href="/index">Inicial</a>
+              Inicial
             </button>
           )}
 
           {props.Account && (
             <button
               type="button"
+              onClick={() => navigate("/account")}
               className="text-[#ADADAD] bg-[#FFFAEE] hover:bg-[#D4CFC3]/90 focus:ring-4 focus:outline-none focus:ring-[#FFFAEE]/50 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
             >
               <User className="w-6 h-6 mr-3 text-[#ADADAD]" />
-              <a href="/account">Conta</a>
+              Conta
             </button>
           )}
 
           {user?.message?.TipoUtilizador == "admin" && (
             <button
               type="button"
+              onClick={() => navigate("/indexadmin")}
               className="text-[#ADADAD] bg-[#FFFAEE] hover:bg-[#D4CFC3]/90 focus:ring-4 focus:outline-none focus:ring-[#FFFAEE]/50 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
             >
               <ShieldUser className="w-6 h-6 mr-3 text-[#ADADAD]" />
-              <a href="/indexadmin">Admin</a>
+              Admin
             </button>
           )}
         </nav>

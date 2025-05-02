@@ -30,7 +30,7 @@ describe('AuthController', () => {
   })
 
   describe('loginUser', () => {
-    it('deve retornar erro se email ou senha estiverem incorretos', async () => {
+    it('deve retornar erro se email estiver incorreto', async () => {
       req.body = { email: 'email', password: '123' }
       UserRepository.getUserByEmail.mockResolvedValue(null)
 
