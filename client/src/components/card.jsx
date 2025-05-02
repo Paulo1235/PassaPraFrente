@@ -7,8 +7,9 @@ const Card = (props) => {
   const [imageError, setImageError] = useState(false)
 
   const handleCardClick = () => {
+    console.log(props.category);
     if (props.mainPage == true) {
-      if (props.category === "Vendas" && props.Estado !== "Concluído") {
+      if (props.category === "Compras" && props.Estado !== "Concluído") {
         navigate(`/sale/${props.idVenda}`)
       } else if (props.category === "Emprestimos") {
         navigate(`/loan/${props.idEmprestimo}`)
@@ -17,7 +18,7 @@ const Card = (props) => {
       }
     } else if (props.isCompleted == true) {
     } else {
-      if (props.category === "Vendas") {
+      if (props.category === "Compras") {
         navigate(`/editsale/${props.idVenda}`)
       } else if (props.category === "Emprestimos") {
         navigate(`/editloan/${props.idEmprestimo}`)
