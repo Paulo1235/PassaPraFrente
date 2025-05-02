@@ -29,7 +29,7 @@
     "userId": 22,
     "category": "Venda",
     "link": "/review/user/sale/60",
-    "read": false,
+    "read": true,
     "date": "2025-05-02T15:25:53.336Z"
   },
   {
@@ -45,7 +45,7 @@
     "message": "A sua proposta para Mg Zr 1.4 foi aceite",
     "userId": 22,
     "category": "Venda",
-    "read": false,
+    "read": true,
     "date": "2025-05-02T20:21:51.226Z"
   },
   {
