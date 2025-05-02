@@ -10,7 +10,7 @@ const ShopSection = ({ title, items }) => {
 
   return (
     <div className="bg-bgp flex flex-col">
-      <section className="mt-4 w-full px-4 md:px-8 lg:px-10 max-w-7xl mx-auto"> {/* Reduzido mt-8 para mt-4 */}
+      <section className="mt-4 w-full px-4 md:px-8 lg:px-10 max-w-7xl mx-4"> {/* Reduzido mt-8 para mt-4 */}
         {/* Header da seção */}
         <h2 className="text-[#73802A] text-2xl md:text-3xl md:text-start text-center font-medium mb-4 md:mb-6"> {/* Reduzido mb-6 para mb-4 */}
           {title}

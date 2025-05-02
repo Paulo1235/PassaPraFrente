@@ -88,12 +88,10 @@ const convertToBase64 = (file) => {
         <ToastContainer />
         <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex flex-col items-end">
-            <a href="/index">
-              <button className="flex flex-row gap-2 items-center hover:underline">
+              <button className="flex flex-row gap-2 items-center hover:underline" onClick={() => navigate("/index")}>
                 <Undo2 className="h-5 w-5" />
                 <span>Voltar</span>
               </button>
-            </a>
           </div>
 
           <h1 className="text-3xl font-medium text-[#CAAD7E] text-center my-6">
