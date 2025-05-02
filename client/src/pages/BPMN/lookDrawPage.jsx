@@ -65,7 +65,7 @@ function LookDraw(props) {
         },
         credentials: "include",
       });
-      const result = await response.json(); // <- trocado de `data` para `result`
+      const result = await response.json();
       // console.log(result.message);
       if(result.message == "Inscrição criada com sucesso.")
         toast.success("Entrou no sorteio com sucesso!")
@@ -87,12 +87,10 @@ function LookDraw(props) {
       <div className="App w-full flex flex-col">
         <div className="modal-sale w-[90%] max-w-[1200px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex justify-end mb-4">
-          <a href="/index">
-              <button className="text-txts flex flex-row gap-2 items-center">
+              <button className="text-txts flex flex-row gap-2 items-center" onClick={() => navigate("/index")}>
                 <Undo2 />
                 <span>Voltar</span>
               </button>
-            </a>
           </div>
           <div className="images flex flex-wrap justify-center gap-10 mb-10">
           {data.photos && data.photos.map((photo, index) => (

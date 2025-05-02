@@ -12,7 +12,7 @@ const ProposalCard = ({ item }) => {
   const getStatusText = (status) => {
     if (status === undefined) return "Pendente";
 
-    console.log(status)
+    console.log(item.Date)
 
     switch (status) {
       case 1:

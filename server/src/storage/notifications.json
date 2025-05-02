@@ -47,5 +47,39 @@
     "category": "Venda",
     "read": false,
     "date": "2025-05-02T20:21:51.226Z"
+  },
+  {
+    "id": "5ff60ec7-0b39-4933-b173-b5f9c3a2df93",
+    "message": "A sua proposta para roda roda e volta a virar foi aceite",
+    "userId": 27,
+    "category": "Venda",
+    "read": false,
+    "date": "2025-05-02T20:52:34.935Z"
+  },
+  {
+    "id": "77c16bde-ffd8-4d56-af2a-30657cfaadf0",
+    "message": "Avalie o vendedor da venda: roda roda e volta a virar",
+    "userId": 27,
+    "category": "Venda",
+    "link": "/review/user/sale/70",
+    "read": false,
+    "date": "2025-05-02T20:52:35.393Z"
+  },
+  {
+    "id": "0e32c70f-e1f4-455b-99d4-b3d21035442b",
+    "message": "A sua proposta para Vendo cadeira usada foi aceite",
+    "userId": 27,
+    "category": "Venda",
+    "read": false,
+    "date": "2025-05-02T20:57:46.496Z"
+  },
+  {
+    "id": "c62ceaee-d105-4878-9da9-dbceeceb68cf",
+    "message": "Avalie o vendedor da venda: Vendo cadeira usada",
+    "userId": 27,
+    "category": "Venda",
+    "link": "/review/user/sale/71",
+    "read": false,
+    "date": "2025-05-02T20:57:46.942Z"
   }
 ]
