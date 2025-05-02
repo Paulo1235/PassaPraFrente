@@ -60,6 +60,8 @@ class NotificationController {
     try {
       const notifications = await NotificationRepository.getUserNotifications(userId)
 
+      notifications.sort((a, b) => new Date(b.date) - new Date(a.date))
+
       return response(res, true, StatusCodes.OK, notifications)
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao encontrar as notificações do utilizador.')

@@ -29,7 +29,7 @@
     "userId": 22,
     "category": "Venda",
     "link": "/review/user/sale/60",
-    "read": false,
+    "read": true,
     "date": "2025-05-02T15:25:53.336Z"
   },
   {
@@ -45,7 +45,33 @@
     "message": "A sua proposta para Mg Zr 1.4 foi aceite",
     "userId": 22,
     "category": "Venda",
-    "read": false,
+    "read": true,
     "date": "2025-05-02T20:21:51.226Z"
+  },
+  {
+    "id": "2ffd4195-85d2-44d0-9e9b-87e179c038f0",
+    "message": "Avalie o vendedor da venda: da boa 69€ a grama",
+    "userId": 22,
+    "category": "Venda",
+    "link": "/review/user/sale/66",
+    "read": true,
+    "date": "2025-05-02T20:31:42.885Z"
+  },
+  {
+    "id": "c9ccee7a-c797-462c-b82c-cc671cd03445",
+    "message": "A sua proposta para Uma flor para uma flor foi aceite",
+    "userId": 22,
+    "category": "Venda",
+    "read": true,
+    "date": "2025-05-02T20:35:36.337Z"
+  },
+  {
+    "id": "223ae76c-732e-4bbc-8666-6ef20431e1ec",
+    "message": "Avalie o vendedor da venda: Uma flor para uma flor",
+    "userId": 22,
+    "category": "Venda",
+    "link": "/review/user/sale/68",
+    "read": true,
+    "date": "2025-05-02T20:35:36.800Z"
   }
 ]
