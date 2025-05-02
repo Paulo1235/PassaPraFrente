@@ -6,10 +6,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { EditAccountSchema } from "../lib/schemas";
 import { Helmet } from "react-helmet";
 
+//? CSS
 import "../components/css/sidebar.css";
 import "react-toastify/dist/ReactToastify.css";
 import "../index.css";
 
+import pessoaIco from "../images/pessoaIco.svg"
+
+//? Components
 import Sidebar from "../components/sideBar";
 
 import { Undo2 } from "lucide-react";
@@ -19,7 +23,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const EditAccountPage = () => {
   const [userData, setUserData] = useState(null);
   const [profileImage, setProfileImage] = useState(
-    "/placeholder.svg?height=120&width=120"
+    pessoaIco
   );
   const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -169,7 +173,7 @@ const EditAccountPage = () => {
         <div className="max-w-md mx-auto">
           <div className="flex flex-col items-center mb-10">
             <div className="relative">
-              <div className="w-[175px] h-[175px] rounded-full overflow-hidden bg-[#e6c9b3]">
+              <div className="w-[175px] h-[175px] rounded-full overflow-hidden bg-btnp">
                 <img
                   src={profileImage || "/placeholder.svg"}
                   className="object-cover w-full h-full"

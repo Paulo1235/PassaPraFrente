@@ -25,6 +25,7 @@ const ShopSection = ({ title, items }) => {
               key={`card-${title}-${index}`}
               name={item.name}
               description={item.description}
+              condition={item.condition}
               value={item.value}
               category={title}
               image={item.foto}

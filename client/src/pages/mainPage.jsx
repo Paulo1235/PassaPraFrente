@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 
 //? CSS
 import "../components/css/sidebar.css";
@@ -63,11 +63,14 @@ const Main = () => {
         const dataLoans = await responseLoans.json();
         const dataGiveaways = await responseGiveaways.json();
 
+        console.log(dataGiveaways);
+
         const transformItems = (items, category) => {
           return items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
             description: item.Descricao || item.description || "Sem descrição",
-            value: item.Valor || item.Valor || "N/A",
+            condition: item.Condicao || item.condition || "Sem condição",
+            value: item.Valor || item.Valor || 0,
             idVenda: item.Venda_ID || "ID",
             idEmprestimo: item.Emprestimo_ID || "ID",
             idSorteio: item.Sorteio_ID || "ID",
@@ -82,8 +85,8 @@ const Main = () => {
             items: transformItems(dataSales, "Compras"),
           },
           loans: {
-            title: "Emprestimos",
-            items: transformItems(dataLoans, "Emprestimos"),
+            title: "Empréstimos",
+            items: transformItems(dataLoans, "Empréstimos"),
           },
           giveaways: {
             title: "Sorteios",
@@ -91,6 +94,7 @@ const Main = () => {
           },
         };
         setShopData(shopData);
+        console.log(shopData);
       } catch (error) {
         console.error("Error fetching shop data:", error);
       } finally {

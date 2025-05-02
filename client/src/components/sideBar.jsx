@@ -198,7 +198,7 @@ const Sidebar = (props) => {
                     onClick={() => handleOptionSelect("/createloan")}
                     className="block w-full text-left px-4 py-2 text-[#ADADAD] hover:bg-[#FFFAEE] text-lg"
                   >
-                    Emprestimo
+                    Empréstimo
                   </button>
                   <button
                     onClick={() => handleOptionSelect("/createdraw")}

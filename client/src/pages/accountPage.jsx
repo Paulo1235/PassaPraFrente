@@ -116,13 +116,12 @@ const Account = () => {
 
         const dataSalesNonCompleted = await responseSalesNonCompleted.json();
         const dataLoansNonCompleted = await responseLoansNonCompleted.json();
-        const dataGiveawaysNonCompleted =
-          await responseGiveawaysNonCompleted.json();
+        const dataGiveawaysNonCompleted = await responseGiveawaysNonCompleted.json();
 
         const dataRating = await responseRating.json();
 
         // console.log(dataRating)
-        // console.log(dataSales)
+        console.log(dataSalesNonCompleted)
         // console.log(dataLoans)
         // console.log(dataGiveaways)
 
@@ -133,11 +132,12 @@ const Account = () => {
           return items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
             size: item.Descricao || item.description || "Sem descrição",
-            value: item.Valor || item.Valor || "N/A",
+            condition: item.Condicao || item.condition || "Sem condição",
+            value: item.Valor || item.Valor || 0,
             idVenda: item.Venda_ID || "ID",
             idEmprestimo: item.Emprestimo_ID || "ID",
             idSorteio: item.Sorteio_ID || "ID",
-            photos: item.photos?.Url,
+            image: item.photos,
             category,
           }));
         };

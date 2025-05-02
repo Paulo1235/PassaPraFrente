@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import pessoaIco from "../images/pessoaIco.svg"
 import { useNavigate } from "react-router-dom"
 
@@ -6,12 +6,16 @@ const Card = (props) => {
   const navigate = useNavigate()
   const [imageError, setImageError] = useState(false)
 
+  useEffect(() => {
+    console.log(props.condition)
+  }, [])
+
   const handleCardClick = () => {
     console.log(props.category);
     if (props.mainPage == true) {
       if (props.category === "Compras" && props.Estado !== "Concluído") {
         navigate(`/sale/${props.idVenda}`)
-      } else if (props.category === "Emprestimos") {
+      } else if (props.category === "Empréstimos") {
         navigate(`/loan/${props.idEmprestimo}`)
       } else if (props.category === "Sorteios") {
         navigate(`/draw/${props.idSorteio}`)
@@ -20,7 +24,7 @@ const Card = (props) => {
     } else {
       if (props.category === "Compras") {
         navigate(`/editsale/${props.idVenda}`)
-      } else if (props.category === "Emprestimos") {
+      } else if (props.category === "Empréstimos") {
         navigate(`/editloan/${props.idEmprestimo}`)
       } else if (props.category === "Sorteios") {
         navigate(`/editdraw/${props.idSorteio}`)
@@ -50,19 +54,10 @@ const Card = (props) => {
       <div className="p-4">
         <h3 className="font-semibold text-base mb-1 truncate">{props.name}</h3>
         <p className="text-sm text-gray-600 mb-3 line-clamp-2 overflow-hidden">
-          {props.description ? `Descrição: ${props.description}` : "Sem descrição"}
+          {props.condition ? `Condição: ${props.condition}` : "Sem condição"}
         </p>
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold">{props.value}€</span>
-          {props.Estado && (
-            <span
-              className={`text-xs px-2 py-1 rounded-full ${
-                props.Estado === "Concluído" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
-              }`}
-            >
-              {props.Estado}
-            </span>
-          )}
         </div>
       </div>
     </div>

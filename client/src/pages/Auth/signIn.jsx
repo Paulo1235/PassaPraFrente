@@ -44,7 +44,7 @@ export default function MultiStepForm() {
           ? Yup.string()
               .matches(
                 /^\+351(91|92|93|96)\d{7}$/,
-                "O número de telefone deve começar com +351 e ser portugues oh burro"
+                "O número de telefone deve começar com +351 e ser portugues"
               )
               .required("Número de telefone é obrigatório")
           : Yup.string(),
@@ -53,20 +53,31 @@ export default function MultiStepForm() {
           ? Yup.date().required("Data de nascimento é obrigatória")
           : Yup.date(),
     }),
-    onSubmit: (values) => {
-      //! So aqui e que usamos axios xd
-      axios
-        .post("http://localhost:5000/api/auth/register", values)
-        .then((response) => {
-          toast.success("Conta criada com sucesso!");
-          setTimeout(() => {
-            navigate("/");
-          }, 5000);
-        })
-        .catch((error) => {
-          toast.error("Erro ao criar conta. Tente novamente.");
-          console.error("Error:", error);
+    onSubmit: async (values) => {
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/register", {
+          method: "POST",
+          body: JSON.stringify(values),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
         });
+      
+        const data = await response.json();
+      
+        if (!response.ok) {
+          throw new Error(data.message || "Erro ao criar conta");
+        }
+      
+        toast.success("Conta criada com sucesso!");
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } catch (error) {
+        toast.error(error.message || "Erro ao criar conta. Tente novamente.");
+        console.error("Error:", error);
+      }
     },
   });
 

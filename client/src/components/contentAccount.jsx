@@ -9,7 +9,7 @@ const ContentAccount = (props) => {
         incompleteItems = [] 
     } = props || {};
 
-    // useEffect(()=>{console.log(props)}, [])
+    useEffect(()=>{console.log(props)}, [])
 
     const hasCompletedItems = Array.isArray(completedItems) && completedItems.length > 0;
     const hasIncompleteItems = Array.isArray(incompleteItems) && incompleteItems.length > 0;
@@ -29,11 +29,12 @@ const ContentAccount = (props) => {
                                 name={item.name}
                                 size={item.size}
                                 value={item.value}
+                                condition={item.condition}
                                 category={title}
                                 idVenda={item.idVenda}
                                 idEmprestimo={item.idEmprestimo}
                                 idSorteio={item.idSorteio}
-                                image = {item.photos}
+                                image = {item.image}
                                 isCompleted={false}
                             />
                         ))}

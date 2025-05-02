@@ -73,7 +73,10 @@ export default function CreateSale() {
       }
 
       toast.success("Venda criada com sucesso.")
-      navigate("/index")
+      setTimeout(() => {
+        navigate("/index")
+      }, 2000) // Redireciona após 2 segundos
+        
     } catch (error) {
       toast.error(error.message || "Erro desconhecido.")
       console.error("Erro ao enviar os dados:", error)

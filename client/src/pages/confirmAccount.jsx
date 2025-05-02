@@ -14,8 +14,6 @@ const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
 const ConfirmAccount = () => {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
   const [loading, setIsLoading] = useState(false);
   const [showCodeForm, setShowCodeForm] = useState(false);
   const [activationToken, setActivationToken] = useState("");
@@ -33,7 +31,6 @@ const ConfirmAccount = () => {
       // console.log("Enviando valores do form:", values);
       const activationCode = values.activationCode;
 
-      setError("");
       setIsLoading(true);
 
       try {
@@ -54,8 +51,11 @@ const ConfirmAccount = () => {
         }
 
         toast.success("Conta verificada com sucesso!");
+        setTimeout(() => {
+          navigate("/account");
+        }, 2000);
+
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Erro na verificação");
         toast.error("Erro ao verificar o código!");
       } finally {
         setIsLoading(false);
@@ -65,7 +65,6 @@ const ConfirmAccount = () => {
 
   const handleSendEmail = async () => {
     setIsLoading(true);
-    setError("");
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/auth/send-activation-email`, {
@@ -84,10 +83,10 @@ const ConfirmAccount = () => {
       }
 
       toast.success("Email enviado com sucesso!");
-      setActivationToken(data.activationToken); // <- token recebido e guardado
+      setActivationToken(data.activationToken);
       setShowCodeForm(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao enviar o email");
+
       toast.error("Erro ao enviar o email!");
     } finally {
       setIsLoading(false);
