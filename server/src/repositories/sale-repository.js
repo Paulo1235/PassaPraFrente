@@ -63,7 +63,7 @@ class SaleRepository {
     const availableSales = await pool
       .request()
       .query(`
-        SELECT Venda_ID, Titulo, Descricao, Valor, Utilizador_ID, Venda.Estado_ID, Estado.Estado
+        SELECT Venda_ID, Titulo, Descricao, Valor, Utilizador_ID, Venda.Estado_ID, Estado.Estado, Artigo_ID
         FROM Venda
         JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
         WHERE Estado = 'Disponível'

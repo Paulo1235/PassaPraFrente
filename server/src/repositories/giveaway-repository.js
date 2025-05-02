@@ -63,7 +63,7 @@ class GiveawayRepository {
     const availableGiveaways = await pool
       .request()
       .query(`
-        SELECT * 
+        SELECT Sorteio_ID, Titulo, Descricao, DataInicio, DataFim, Utilizador_ID, ArtigoArtigo_ID, Estado
         FROM Sorteio
         JOIN Estado ON Estado.Estado_ID = Sorteio.Estado_ID
         WHERE Estado = 'Disponível'

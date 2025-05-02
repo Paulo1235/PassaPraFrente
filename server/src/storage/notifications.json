@@ -22,5 +22,14 @@
     "link": "http://localhost:3000/review/user/sale/59",
     "read": false,
     "date": "2025-05-01T19:28:56.794Z"
+  },
+  {
+    "id": "93e9830c-68be-4bbf-b5b6-a90d337dcd90",
+    "message": "Avalie o vendedor da venda: Carrinho de Mão",
+    "userId": 22,
+    "category": "Venda",
+    "link": "http://localhost:3000/review/user/sale/60",
+    "read": false,
+    "date": "2025-05-02T15:25:53.336Z"
   }
 ]
