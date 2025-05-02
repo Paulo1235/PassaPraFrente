@@ -121,7 +121,7 @@ const Main = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row">
+    <div className="bg-bgp flex flex-col md:flex-row">
       <Helmet>
         <title>Loja</title>
       </Helmet>
