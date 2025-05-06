@@ -22,7 +22,6 @@ export default function MultiStepForm() {
       name: "",
       contact: "",
       birthDate: null,
-      imageUrl: "https://www.google.com",
     },
     validationSchema: Yup.object({
       email: Yup.string()

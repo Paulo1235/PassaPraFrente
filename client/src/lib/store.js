@@ -6,7 +6,6 @@ import authReducer from "./authSlice";
 // Helper function to get the token from cookies
 const getTokenFromCookies = () => {
   const match = document.cookie.match(/(^| )accessToken=([^;]+)/);
-  console.log(match)
   return match ? match[2] : null;
 };
 
@@ -14,13 +13,20 @@ const getTokenFromCookies = () => {
 const decodeToken = (token) => {
   if (!token) return null;
 
-  // Split the token into its parts (header, payload, signature)
   const base64Url = token.split('.')[1];  
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');  // Decode base64 URL encoding
   const decodedData = JSON.parse(atob(base64));  // Decode and parse the base64 string into a JSON object
   
-  console.log("Decoded token data:", decodedData);  // Log the decoded data to verify
-  return decodedData;  // Return decoded user data
+  return decodedData;
+};
+
+// Helper function to check if the token is expired
+const isTokenExpired = (token) => {
+  const decodedToken = decodeToken(token);
+  if (!decodedToken) return true;
+
+  const expirationDate = decodedToken.exp * 1000;
+  return Date.now() > expirationDate;
 };
 
 export const store = configureStore({
@@ -35,7 +41,11 @@ export function ReduxProvider({ children }) {
     // Check for existing token on mount
     const token = getTokenFromCookies();
 
-    if (token) {
+    if (token && isTokenExpired(token)) {
+      // Token expired, logout and remove it from cookies
+      document.cookie = "accessToken=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
+      store.dispatch({ type: "auth/logout" });
+    } else if (token) {
       const decodedUser = decodeToken(token); // Decode the user data from the token
 
       if (decodedUser) {

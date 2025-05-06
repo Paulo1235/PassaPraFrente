@@ -20,6 +20,12 @@ const Main = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+
+    if (!isAuthenticated) {
+      navigate("/");
+      return;
+    }
+
     const fetchShopData = async () => {
       try {
         const responseSales = await fetch(
@@ -103,11 +109,6 @@ const Main = () => {
     };
 
     fetchShopData();
-
-    if (!isAuthenticated) {
-      navigate("/");
-      return;
-    }
   }, [isAuthenticated, dispatch, navigate]);
 
   if (!isAuthenticated) return null;
