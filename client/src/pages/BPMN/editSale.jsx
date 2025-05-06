@@ -16,11 +16,10 @@ export default function EditSale() {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [data, setData] = useState(null);
   const fileInputRef = useRef(null);
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
   const [isLoading, setIsLoading] = useState(true);
 
   const convertToBase64 = (file) => {
@@ -82,12 +81,12 @@ export default function EditSale() {
     }
 
     fetchData();
-  }, [isAuthenticated, navigate, id]);
+  }, [isAuthenticated, navigate, id, dispatch]);
+
+  if (!isAuthenticated) return null;
 
   const handleSubmit = async (values) => {
     try {
-      setIsSubmitting(true)
-
       // Converter todas as fotos para base64
       const base64Promises = values.photos.map((photo) => convertToBase64(photo))
       const photoUrls = await Promise.all(base64Promises)

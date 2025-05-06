@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Undo2, Plus, X, Calendar } from "lucide-react";
+import { Undo2, Plus, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
 import { CreateLoanSchema } from "../../lib/schemas";
 
 import '../../components/css/sidebar.css';
@@ -11,9 +12,21 @@ import '../../index.css';
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 
 export default function CreateLoan() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
   const fileInputRef = useRef(null)
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      if (!isAuthenticated) {
+        navigate("/");
+        return;
+      }
+    }, [isAuthenticated, dispatch, navigate]);
+  
+  if (!isAuthenticated) return null;
+  
 
   // Initial form values
   const initialValues = {
@@ -41,9 +54,7 @@ export default function CreateLoan() {
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      setIsSubmitting(true)
-
-      // Converter todas as fotos para base64
+      
       const base64Promises = values.photos.map((photo) => convertToBase64(photo))
       const photoUrls = await Promise.all(base64Promises)
       const loanData = {

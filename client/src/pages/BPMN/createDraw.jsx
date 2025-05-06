@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Undo2, Plus, X } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { CreateDrawSchema } from "../../lib/schemas";
 
 import '../../components/css/sidebar.css';
@@ -11,10 +12,21 @@ import '../../index.css';
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 
 export default function CreateDraw() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-    const fileInputRef = useRef(null)
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
+  const fileInputRef = useRef(null)
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+      if (!isAuthenticated) {
+        navigate("/");
+        return;
+      }
+    }, [isAuthenticated, dispatch, navigate]);
+  
+    if (!isAuthenticated) return null;
 
   // Initial form values
   const initialValues = {

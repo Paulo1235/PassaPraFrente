@@ -10,9 +10,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import SideBar from '../../components/sideBar';
 import Footer from '../../components/footer';
 
-//? Logo
-import logo from '../../images/logoEmpresa.png';
-
 //? CSS
 import '../../components/css/sidebar.css';
 import '../../index.css';

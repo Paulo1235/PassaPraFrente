@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Undo2, Plus, X } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
@@ -12,12 +12,20 @@ import "../../index.css";
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export default function CreateSale() {
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+      return;
+    }
+  }, [isAuthenticated, dispatch, navigate]);
+
+  if (!isAuthenticated) return null;
 
   // Initial form values
   const initialValues = {
@@ -42,8 +50,6 @@ export default function CreateSale() {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      setIsSubmitting(true);
-
       // Converter todas as fotos para base64
       const base64Promises = values.photos.map((photo) =>
         convertToBase64(photo)
@@ -84,7 +90,6 @@ export default function CreateSale() {
       console.error("Erro ao enviar os dados:", error);
     } finally {
       setSubmitting(false);
-      setIsSubmitting(false);
     }
   };
 

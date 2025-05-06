@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useFormik } from "formik";
-import logo from "../../images/logoEmpresa.png";
 import * as Yup from "yup";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+
+import logo from "../../images/logoEmpresa.png";
 
 export default function MultiStepForm() {
   const [step, setStep] = useState(1);

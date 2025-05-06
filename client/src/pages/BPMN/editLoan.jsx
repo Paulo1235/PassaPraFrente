@@ -1,5 +1,5 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Undo2, Plus, X, Calendar } from "lucide-react";
+import { Undo2, Plus, X } from "lucide-react";
 import { CreateLoanSchema } from "../../lib/schemas";
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,11 +15,11 @@ export default function EditLoan() {
   const { id } = useParams();
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [data, setData] = useState(null);
+  
   const fileInputRef = useRef(null);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -61,8 +61,7 @@ export default function EditLoan() {
         );
 
         const result = await response.json();
-        // console.log(result.message);
-        setData(result.message); // Ajusta conforme estrutura do retorno
+        setData(result.message);
         if (result.message?.Imagens?.length > 0) {
           const photoFiles = await result.message.Imagens.map((img, index) =>
             convertBase64ToFile(img, `foto${index + 1}.jpg`)          
@@ -82,12 +81,12 @@ export default function EditLoan() {
     }
 
     fetchData();
-  }, [isAuthenticated, navigate, id]);
+  }, [isAuthenticated, dispatch, navigate, id]);
+
+  if (!isAuthenticated) return null;
 
   const handleSubmit = async (values) => {
     try {
-      setIsSubmitting(true)
-
       // Converter todas as fotos para base64
       const base64Promises = values.photos.map((photo) => convertToBase64(photo))
       const photoUrls = await Promise.all(base64Promises)

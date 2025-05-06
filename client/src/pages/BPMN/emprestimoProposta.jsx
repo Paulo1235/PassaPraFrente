@@ -1,14 +1,7 @@
-"use client";
-
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import {
-  Undo2,
-  ArrowRight,
-  ShoppingBag,
-  Image as ImageIcon,
-} from "lucide-react";
+import { Undo2, ArrowRight, ShoppingBag, Image as ImageIcon} from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -16,7 +9,6 @@ import { CreateProposalLoanSchema } from "../../lib/schemas"
 
 import "../../components/css/sidebar.css";
 import "../../index.css";
-import { Helmet } from "react-helmet";
 
 export default function EmprestimoProposta() {
   const { id } = useParams();

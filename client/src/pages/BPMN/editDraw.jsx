@@ -1,5 +1,5 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Undo2, Plus, X, Calendar } from "lucide-react";
+import { Undo2, Plus, X } from "lucide-react";
 import { CreateDrawSchema } from "../../lib/schemas";
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,12 +15,11 @@ export default function EditDraw() {
   const { id } = useParams();
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [data, setData] = useState(null);
+  
   const fileInputRef = useRef(null);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -84,12 +83,12 @@ export default function EditDraw() {
     }
 
     fetchData();
-  }, [isAuthenticated, navigate, id]);
+  }, [isAuthenticated, dispatch, navigate, id]);
+
+  if (!isAuthenticated) return null;
 
   const handleSubmit = async (values) => {
     try {
-      setIsSubmitting(true)
-
       // Converter todas as fotos para base64
       const base64Promises = values.photos.map((photo) => convertToBase64(photo))
       const photoUrls = await Promise.all(base64Promises)
@@ -121,7 +120,7 @@ export default function EditDraw() {
       }
 
       const result = await response.json();
-      // console.log("Venda atualizada:", result);
+
       toast.success("Sorteio atualizado com sucesso!");
       setTimeout(() => {
         navigate("/index");
