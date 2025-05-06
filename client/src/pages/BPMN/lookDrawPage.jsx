@@ -38,6 +38,24 @@ function LookDraw(props) {
         const data = await response.json();
         // console.log(data.message);
         setData(data.message);
+        //! Colocar numa função num ficheiro a parte
+        const dateStart = new Date(data.message.DataInicio);
+        const dateEnd = new Date(data.message.DataFim);
+        
+        // Exemplo: 28 de junho de 2025 às 11:30
+        const options = {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "UTC", // ou altere para "Europe/Lisbon" se quiser hora local de Portugal
+        };
+        
+        const formattedDateStart = dateStart.toLocaleString("pt-PT", options);
+        const formattedDateEnd = dateEnd.toLocaleString("pt-PT", options);
+        data.message.DataInicio = formattedDateStart;
+        data.message.DataFim = formattedDateEnd;
       } catch (error) {
         console.error("Error fetching data:", error);
       }
