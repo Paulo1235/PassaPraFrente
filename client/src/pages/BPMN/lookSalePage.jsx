@@ -64,14 +64,23 @@ function LookSale() {
       console.log(result.message);
       if(result.message == "Transação criada com sucesso.") {
         toast.success("Transação criada com sucesso!");
+        setTimeout(() => {
+          navigate("/index");
+        }, 2000);
       }	
       else
       {
         toast.error(result.message);
+        setTimeout(() => {
+          navigate("/index");
+        }, 2000);
       }
     } catch (error) {
       console.error("Error creating transaction:", error);
       toast.error(error);
+      setTimeout(() => {
+        navigate("/index");
+      }, 2000);
     }
   }
 

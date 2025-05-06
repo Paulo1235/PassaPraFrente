@@ -17,7 +17,7 @@ userRouter.get('/users/id/:id',
 userRouter.put(
   '/users/update',
   AuthMiddleware.isAuthenticated,
-  AuthMiddleware.isVerified,
+  // AuthMiddleware.isVerified,
   validateSchema(userSchema, true),
   UserController.updateUser
 )

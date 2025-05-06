@@ -40,7 +40,6 @@ proposalSaleRouter.get(
   '/proposal-sales/user/user',
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  AuthMiddleware.authorizedRoles(['admin']),
   ProposalSaleController.getSaleProposalsByUser
 )
 proposalSaleRouter.get(

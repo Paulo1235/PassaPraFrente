@@ -1,0 +1,2 @@
+### Obter propostas de empréstimo do utilizador
+GET http://localhost:5000/api/proposal-loans/user/user

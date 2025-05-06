@@ -42,7 +42,6 @@ proposalLoanRouter.get(
   '/proposal-loans/user/user',
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
-  AuthMiddleware.authorizedRoles(['admin']),
   ProposalLoanController.getLoanProposalsByUser
 )
 proposalLoanRouter.get(

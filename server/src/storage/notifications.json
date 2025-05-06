@@ -81,5 +81,14 @@
     "link": "/review/user/sale/71",
     "read": false,
     "date": "2025-05-02T20:57:46.942Z"
+  },
+  {
+    "id": "2e9607fc-ecf5-42f7-b956-7cb89569323f",
+    "message": "Avalie o vendedor do empréstimo: Corta Relva",
+    "userId": 26,
+    "category": "Empréstimo",
+    "link": "/review/user/loan/31",
+    "read": false,
+    "date": "2025-05-06T15:08:32.443Z"
   }
 ]

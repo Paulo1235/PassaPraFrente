@@ -49,7 +49,7 @@ const ProposalsPage = () => {
         if (!userId) return;
 
         const fetchSalesProposals = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-sales/user/user?t=${Date.now()}`, {
+          const response = await fetch(`http://localhost:5000/api/proposal-sales/user/user`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -62,7 +62,7 @@ const ProposalsPage = () => {
 
           return await Promise.all(
             data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}?t=${Date.now()}`, {
+              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}}`, {
                 credentials: 'include',
                 headers: { "Content-Type": "application/json" }
               });
@@ -85,7 +85,7 @@ const ProposalsPage = () => {
         };
 
         const fetchLoanProposals = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-loans/user/user?t=${Date.now()}`, {
+          const response = await fetch(`http://localhost:5000/api/proposal-loans/user/user`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -98,7 +98,7 @@ const ProposalsPage = () => {
 
           return await Promise.all(
             data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}?t=${Date.now()}`, {
+              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}`, {
                 credentials: 'include',
                 headers: { "Content-Type": "application/json" }
               });
@@ -157,7 +157,7 @@ const ProposalsPage = () => {
         if (!userId) return;
 
         const fetchSalesProposalsAnnounce = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-sales/sales/user?t=${Date.now()}`, {
+          const response = await fetch(`http://localhost:5000/api/proposal-sales/sales/user`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -170,7 +170,7 @@ const ProposalsPage = () => {
         
           return await Promise.all(
             data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}?t=${Date.now()}`, {
+              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}`, {
                 credentials: 'include',
                 headers: { "Content-Type": "application/json" }
               });
@@ -197,7 +197,7 @@ const ProposalsPage = () => {
         };
 
         const fetchLoanProposalsAnnounce = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-loans/loans/user?t=${Date.now()}`, {
+          const response = await fetch(`http://localhost:5000/api/proposal-loans/loans/user`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -210,7 +210,7 @@ const ProposalsPage = () => {
 
           return await Promise.all(
             data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}?t=${Date.now()}`, {
+              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}`, {
                 credentials: 'include',
                 headers: { "Content-Type": "application/json" }
               });

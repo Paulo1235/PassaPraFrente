@@ -26,8 +26,8 @@ const UpdatePasswordSchema = yup.object().shape({
 
 const EditAccountSchema = yup.object().shape({
   name: yup.string().required("O nome é obrigatório"),
-  phone: yup.string().required("O telefone é obrigatório"),
-  // address: yup.string().required("A morada é obrigatória"),
+  phone:  yup.string().matches(/^\+351(91|92|93|96)\d{7}$/,"O número deve começar com +351 e ser português")
+              .required("Contacto é obrigatório")
 });
 
 const CreateSaleSchema = yup.object().shape({

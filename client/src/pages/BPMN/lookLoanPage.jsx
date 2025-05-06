@@ -59,11 +59,20 @@ function LookLoan() {
       const result = await response.json();
       if (result.message === "Transação criada com sucesso.") {
         toast.success("Transação criada com sucesso!");
+        setTimeout(() => {
+          navigate("/index");
+        }, 2000);
       } else {
         toast.error(result.message);
+        setTimeout(() => {
+          navigate("/index");
+        }, 2000);
       }
     } catch (error) {
       toast.error(error.message || "Erro ao criar transação.");
+      setTimeout(() => {
+        navigate("/index");
+      }, 2000);
     }
   };
 

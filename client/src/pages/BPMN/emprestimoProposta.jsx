@@ -51,7 +51,7 @@ export default function EmprestimoProposta() {
 
   const handleSubmit = async (values) => {
     // setIsLoading(true);
-    console.log(values.dataInicio)
+    console.log(values)
     try {
       const response = await fetch(
         `http://localhost:5000/api/proposal-loans/create/${id}`,
@@ -135,7 +135,7 @@ export default function EmprestimoProposta() {
         {/* Content */}
         <div className="p-6 md:p-8">
           <Formik
-            enableReinitialize
+            // enableReinitialize
             initialValues={initialValues}
             validationSchema={CreateProposalLoanSchema}
             onSubmit={handleSubmit}
