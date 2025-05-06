@@ -22,7 +22,7 @@ const SignIn = () => {
       confirmPassword: "",
       name: "",
       contact: "",
-      birthDate: "",
+      birthDate: null,
     },
     validationSchema: Yup.object({
       email: Yup.string()

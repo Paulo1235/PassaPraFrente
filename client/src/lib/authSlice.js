@@ -9,54 +9,58 @@ const getTokenFromCookies = () => {
   return match ? match[2] : null;
 };
 
+// Helper function to decode the JWT token manually
+const decodeToken = (token) => {
+  if (!token) return null;
+
+  const base64Url = token.split('.')[1];  
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');  // Decode base64 URL encoding
+  const decodedData = JSON.parse(atob(base64));  // Decode and parse the base64 string into a JSON object
+  
+  return decodedData;
+};
+
+// Helper function to check if the token is expired
+const isTokenExpired = (token) => {
+  const decodedToken = decodeToken(token);
+  if (!decodedToken) return true;
+
+  const expirationDate = decodedToken.exp * 1000;
+  return Date.now() > expirationDate;
+};
+
 export const fetchUserInfo = createAsyncThunk("auth/fetchUserInfo", async (_, { rejectWithValue }) => {
   const token = getTokenFromCookies();
-  // console.log("Token from cookies:", token); // Log the token
-  if (!token) return rejectWithValue("No token available");
+  if (!token || isTokenExpired(token)) return rejectWithValue("Token expired");
 
   try {
     const response = await axios.get(`${BACKEND_URL}/api/users/me`, {
       withCredentials: true, // Include credentials in the request
     });
-    // console.log("Fetched user info:", response.data); // Log the user info
     return response.data;
   } catch (error) {
-    // console.error("Error fetching user info:", error); // Log the error
     return rejectWithValue(error.response?.data || "Failed to fetch full user info");
   }
 });
 
-
-// Helper function to decode the JWT token without external libraries
-const decodeToken = (token) => {
-  if (!token) return null;
-
-  // Split the token into its parts (header, payload, signature)
-  const base64Url = token.split('.')[1];  
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');  // Decode base64 URL encoding
-  const decodedData = JSON.parse(atob(base64));  // Decode and parse the base64 string into a JSON object
-  
-  console.log("Decoded token data:", decodedData);  // Log the decoded data to verify
-  return decodedData;  // Return decoded user data
-};
-
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    //? Quando a pagina e iniciada mostra isto
-    //userId: decodeToken(getTokenFromCookies()), // Decode id from token on initial load
-    //user: fetchUserInfo(),
-    isAuthenticated: !!getTokenFromCookies(), // Check if token exists in cookies
+    isAuthenticated: !!getTokenFromCookies(),
+    userId: decodeToken(getTokenFromCookies()),
+    user: null,
+    status: null,
+    error: null,
   },
   reducers: {
-    //? Quando atualiza a pagina, mostra isto
-    login: (state) => {
-      state.userId = decodeToken(getTokenFromCookies()); // Decode id from token all the time
+    login: (state, action) => {
+      state.userId = action.payload;
       state.isAuthenticated = true;
     },
     logout: (state) => {
       state.userId = null;
       state.isAuthenticated = false;
+      state.user = null;
     },
   },
   extraReducers: (builder) => {
@@ -71,6 +75,11 @@ const authSlice = createSlice({
       .addCase(fetchUserInfo.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+        // Logout if token expired
+        if (action.payload === "Token expired") {
+          state.isAuthenticated = false;
+          state.userId = null;
+        }
       });
   },
 });
