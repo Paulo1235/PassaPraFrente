@@ -33,19 +33,19 @@ export default function EditLoan() {
   //   })
   // }
 
-  // const convertBase64ToFile = (base64, fileName) => {
-  //   const arr = base64.split(',')
-  //   const mime = arr[0].match(/:(.*?);/)[1]
-  //   const bstr = atob(arr[1])
-  //   let n = bstr.length
-  //   const u8arr = new Uint8Array(n)
+  const convertBase64ToFile = (base64, fileName) => {
+    const arr = base64.split(',')
+    const mime = arr[0].match(/:(.*?);/)[1]
+    const bstr = atob(arr[1])
+    let n = bstr.length
+    const u8arr = new Uint8Array(n)
   
-  //   while (n--) {
-  //     u8arr[n] = bstr.charCodeAt(n)
-  //   }
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
   
-  //   return new File([u8arr], fileName, { type: mime })
-  // }
+    return new File([u8arr], fileName, { type: mime })
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,20 +62,24 @@ export default function EditLoan() {
         );
 
         const result = await response.json();
-        setData(result.message);
-        // if (result.message?.Imagens?.length > 0) {
-        //   const photoFiles = await result.message.Imagens.map((img, index) =>
-        //     convertBase64ToFile(img, `foto${index + 1}.jpg`)          
-        //   )
-        //   result.message.PhotosAsFiles = await Promise.all(photoFiles)
-        // }
-        setIsLoading(false);
+
+      if (result.message?.Imagens?.length > 0) {
+        const photoFiles = await Promise.all(
+          result.message.Imagens.map((img, index) =>
+            convertBase64ToFile(img, `foto${index + 1}.jpg`)
+          )
+        );
+        result.message.PhotosAsFiles = photoFiles;
+        console.log(photoFiles)
+      }
+      setData(result.message); // <- AGORA sim, depois de já ter PhotosAsFiles
+      setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
         setIsLoading(false);
       }
     };
-
+    
     if (!isAuthenticated) {
       navigate("/");
       return;
@@ -89,9 +93,10 @@ export default function EditLoan() {
   const handleSubmit = async (values) => {
     try {
       // Converter todas as fotos para base64
+      console.log(values)
       const base64Promises = values.photos.map((photo) => convertToBase64(photo))
       const photoUrls = await Promise.all(base64Promises)
-
+      console.log(photoUrls)
       const response = await fetch(`http://localhost:5000/api/loans/update/${id}`, {
         method: "PUT",
         headers: {
@@ -146,7 +151,7 @@ export default function EditLoan() {
     endDate: data?.DataFim
       ? new Date(data.DataFim).toISOString().slice(0, 16)
       : "",
-      photos: data?.PhotosAsFiles || [], // Ainda precisas tratar isto se estiveres a lidar com imagens reais
+    photos: data?.PhotosAsFiles || [], // Ainda precisas tratar isto se estiveres a lidar com imagens reais
   };
 
   return (
@@ -313,7 +318,7 @@ export default function EditLoan() {
                         <Field
                           id="price"
                           name="price"
-                          type="text"
+                          type="number"
                           className={`w-full p-2 border ${
                             errors.price && touched.price
                               ? "border-red-500"
@@ -347,8 +352,7 @@ export default function EditLoan() {
                         } rounded-md appearance-none bg-white`}
                       >
                         <option value="Novo">Novo</option>
-                        <option value="Como novo">Como novo</option>
-                        <option value="Bom Estado">Bom Estado</option>
+                        <option value="Quase Novo">Quase Novo</option>
                         <option value="Usado">Usado</option>
                       </Field>
                       <ErrorMessage
