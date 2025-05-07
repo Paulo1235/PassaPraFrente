@@ -6,7 +6,6 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 export default function PasswordReset() {
-  const [error, setError] = useState("");
   const [loading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -17,8 +16,7 @@ export default function PasswordReset() {
     validationSchema: SendEmailSchema,
     onSubmit: async (values) => {
       const { email } = values;
-
-      setError("");
+      
       setIsLoading(true);
 
       try {
@@ -47,7 +45,6 @@ export default function PasswordReset() {
 
         // Show success notification
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Send Email failed");
         toast.error("Erro ao enviar o email!");
       } finally {
         setIsLoading(false);

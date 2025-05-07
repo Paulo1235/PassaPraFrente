@@ -6,6 +6,8 @@ import { CreateSaleSchema } from "../../lib/schemas";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import { convertToBase64 } from "../../lib/utils";
+
 import "../../components/css/sidebar.css";
 import "../../index.css";
 
@@ -38,22 +40,10 @@ export default function CreateSale() {
     photoUrls: [], // Array para armazenar as URLs base64
   };
 
-  // Função para converter arquivo para base64
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       // Converter todas as fotos para base64
-      const base64Promises = values.photos.map((photo) =>
-        convertToBase64(photo)
-      );
+      const base64Promises = values.photos.map((photo) => convertToBase64(photo));
       const photoUrls = await Promise.all(base64Promises);
 
       // Criar o objeto de dados com as URLs base64
@@ -96,8 +86,8 @@ export default function CreateSale() {
   return (
     <div className="flex flex-row">
       <ToastContainer />
-      <div className="App w-screen flex flex-col">
-        <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
+      <div className="bg-bgp w-screen flex flex-col">
+        <div className="w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex flex-col items-end">
             <button
               className="flex flex-row gap-2 items-center hover:underline"

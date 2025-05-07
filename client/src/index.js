@@ -41,8 +41,8 @@ import CreateDraw from "./pages/BPMN/createDraw";
 import EditDraw from "./pages/BPMN/editDraw";
 import EditLoan from "./pages/BPMN/editLoan";
 import EditSale from "./pages/BPMN/editSale";
-import VendaProposta from "./pages/BPMN/vendaProposta";
-import EmprestimoProposta from "./pages/BPMN/emprestimoProposta.jsx";
+import SaleProposal from "./pages/BPMN/saleProposal.jsx";
+import LoanProposal from "./pages/BPMN/loanProposal.jsx";
 
 //* Extra
 import ProtectedRoute from "./pages/ProtectedRoutes/protectedRoute";
@@ -121,12 +121,12 @@ root.render(
 
         <Route
           path="/saleproposal/:id"
-          element={<ProtectedRoute element={<VendaProposta />} />}
+          element={<ProtectedRoute element={<SaleProposal />} />}
         />
 
         <Route
           path="/loanproposal/:id"
-          element={<ProtectedRoute element={<EmprestimoProposta />} />}
+          element={<ProtectedRoute element={<LoanProposal />} />}
         />
 
         {/* Conta */}

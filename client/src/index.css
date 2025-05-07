@@ -6,48 +6,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
-/*
- ? Cores do figma
-*/
-:root {
-  --background: #E0E5B6;
-  --background-secondary: #24251D;
-
-  --button: #73802A;
-  --button-secondary: #CAAD7E;
-
-  --gray: #ADADAD;
-  --red: #FF0000;
-  --white: #FFFAEE;
-}
 
 body{
   font-family: "Raleway", sans-serif;
 }
-
-.App {
-  background-color: var(--background);
-  /* height: 100vh; /*Ocupa 100% da altura da tela */
-
-  font-family: "Raleway", sans-serif;
-
-  user-select: none;
-}
-
-.black-rectangle{
-  background-color: var(--background-secondary);
-  border-radius: 64px;
-  width: 1423px;
-  height: 721px;
-}
-
-.white-rectangle{
-  background-color: var(--white);
-  width: 500px;
-  height: 480px;
-  border-radius: 64px;
-}
-
 
 .text{
   color: var(--button);
@@ -55,15 +17,6 @@ body{
 
 .text-error{
   color: red;
-}
-
-.btn-login{
-  background-color: var(--button-secondary);
-  color: white;
-
-  border-radius: 64px;
-  width: 335px;
-  height: 61px;
 }
 
 .texbox{

@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateDrawSchema } from "../../lib/schemas";
 
+import { convertToBase64 } from "../../lib/utils";
+
 import '../../components/css/sidebar.css';
 import '../../index.css';
 
@@ -40,16 +42,6 @@ export default function CreateDraw() {
     photoUrls: [],
   };
   
-// Função para converter arquivo para base64
-const convertToBase64 = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = (error) => reject(error)
-  })
-}
-
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -96,9 +88,9 @@ const convertToBase64 = (file) => {
 
   return (
     <div className="flex flex-row">
-      <div className="App w-screen flex flex-col">
+      <div className="bg-bgp w-screen flex flex-col">
         <ToastContainer />
-        <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
+        <div className="w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex flex-col items-end">
               <button className="flex flex-row gap-2 items-center hover:underline" onClick={() => navigate("/index")}>
                 <Undo2 className="h-5 w-5" />

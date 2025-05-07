@@ -1,25 +1,36 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Undo2, ArrowRight, ShoppingBag, Image as ImageIcon} from "lucide-react";
+import {
+  Undo2,
+  ArrowRight,
+  ShoppingBag,
+  Image as ImageIcon,
+} from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { CreateProposalLoanSchema } from "../../lib/schemas"
+import { CreateProposalLoanSchema } from "../../lib/schemas";
+
+import { formatDateProposal } from "../../lib/utils";
 
 import "../../components/css/sidebar.css";
 import "../../index.css";
 
-export default function EmprestimoProposta() {
+const LoanProposal = () =>  {
   const { id } = useParams();
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [data, setData] = useState(null);
-  const productImage = data?.photos[0].Url || null;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading] = useState(false);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const response = await fetch(
@@ -36,22 +47,15 @@ export default function EmprestimoProposta() {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
-        // console.log(data);
+
         setData(data.message);
       } catch (error) {}
     };
 
     fetchData();
-
-    if (!isAuthenticated) {
-      navigate("/");
-      return;
-    }
   }, [isAuthenticated, navigate, id, dispatch]);
 
   const handleSubmit = async (values) => {
-    // setIsLoading(true);
-    console.log(values)
     try {
       const response = await fetch(
         `http://localhost:5000/api/proposal-loans/create/${id}`,
@@ -69,20 +73,17 @@ export default function EmprestimoProposta() {
         }
       );
       const data = await response.json();
-      console.log(data.message);
-
-      // console.log(values);
-
+      
       if (data.message === "Proposta de empréstimo criada com sucesso.") {
         toast.success("Proposta enviada com sucesso!");
         setTimeout(() => {
           navigate("/index");
-        }, 5000); // Redireciona após 2 segundos
+        }, 5000);
       } else {
-        toast.error(data.message);
+        toast.error("Erro ao enviar proposta. Tente novamente mais tarde.");
         setTimeout(() => {
           navigate("/index");
-        }, 5000); // Redireciona após 2 segundos
+        }, 5000);
       }
     } catch (error) {
       console.error("Error submitting proposal:", error);
@@ -91,20 +92,13 @@ export default function EmprestimoProposta() {
     }
   };
 
-  //? Função para formatar a data no formato "YYYY-MM-DDTHH:MM"
-  function formatDatetimeLocal(datetimeString) {
-    if (!datetimeString) return "";
-    const date = new Date(datetimeString);
-    const offset = date.getTimezoneOffset();
-    const localDate = new Date(date.getTime() - offset * 60000);
-    return localDate.toISOString().slice(0, 16); // Formato "YYYY-MM-DDTHH:MM"
-  }
-
   const initialValues = {
     price: data?.Valor || 0,
-    dataInicio: formatDatetimeLocal(data?.DataInicio) || "",
-    dataFim: formatDatetimeLocal(data?.DataFim) || "",
+    dataInicio: formatDateProposal(data?.DataInicio) || "",
+    dataFim: formatDateProposal(data?.DataFim) || "",
   };
+
+  if (!isAuthenticated) return null;
 
   if (isLoading)
     return (
@@ -135,68 +129,79 @@ export default function EmprestimoProposta() {
         {/* Content */}
         <div className="p-6 md:p-8">
           <Formik
-            // enableReinitialize
+            enableReinitialize
             initialValues={initialValues}
             validationSchema={CreateProposalLoanSchema}
             onSubmit={handleSubmit}
           >
             {({ errors, touched }) => (
               <Form className="w-full space-y-6">
-{/* Produto Info Card */}
-<div className="bg-[#FFFAEE] rounded-xl p-6 border border-gray-200">
-  <div className="flex items-center gap-3 mb-4 text-[#73802A] border-b border-[#24251D]">
-    <ShoppingBag className="h-6 w-6 mb-2" />
-    <h2 className="text-xl font-semibold mb-2">Detalhes do Produto</h2>
-  </div>
+                {/* Produto Info Card */}
+                <div className="bg-[#FFFAEE] rounded-xl p-6 border border-gray-200">
+                  <div className="flex items-center gap-3 mb-4 text-[#73802A] border-b border-[#24251D]">
+                    <ShoppingBag className="h-6 w-6 mb-2" />
+                    <h2 className="text-xl font-semibold mb-2">
+                      Detalhes do Produto
+                    </h2>
+                  </div>
 
-  <div className="flex flex-col md:flex-row gap-6 justify-center items-center"> {/* Aqui foi adicionado justify-center e items-center */}
-    {/* Imagem do Produto */}
-    <div className="w-full md:w-1/3 flex-shrink-0">
-      <div className="relative rounded-lg overflow-hidden bg-white border border-gray-200 aspect-square">
-        {productImage ? (
-          <img
-            src={productImage}
-            alt={data?.Titulo || "Imagem do produto"}
-            width={300}
-            height={300}
-            className="object-cover w-full h-full"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-100">
-            <ImageIcon className="h-16 w-16 text-gray-300" />
-          </div>
-        )}
-      </div>
-    </div>
+                  <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
+                    {" "}
+                    {/* Aqui foi adicionado justify-center e items-center */}
+                    {/* Imagem do Produto */}
+                    <div className="w-full md:w-1/3 flex-shrink-0">
+                      <div className="relative rounded-lg overflow-hidden bg-white border border-gray-200 aspect-square">
+                        {data?.photos[0].Url ? (
+                          <img
+                            src={data?.photos[0].Url || null}
+                            alt={data?.Titulo || "Imagem do produto"}
+                            width={300}
+                            height={300}
+                            className="object-cover w-full h-full"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                            <ImageIcon className="h-16 w-16 text-gray-300" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {/* Detalhes do Produto */}
+                    <div className="w-full md:w-2/3 space-y-4 text-[#4F4535]">
+                      <div>
+                        <h3 className="text-sm font-bold text-[#73802A]">
+                          Título
+                        </h3>
+                        <p className="text-lg font-medium">
+                          {data?.Titulo || "teste"}
+                        </p>
+                      </div>
 
-    {/* Detalhes do Produto */}
-    <div className="w-full md:w-2/3 space-y-4 text-[#4F4535]">
-      <div>
-        <h3 className="text-sm font-bold text-[#73802A]">Título</h3>
-        <p className="text-lg font-medium">{data?.Titulo || "teste"}</p>
-      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-[#73802A]">
+                          Descrição
+                        </h3>
+                        <p>{data?.Descricao || "teste"}</p>
+                      </div>
 
-      <div>
-        <h3 className="text-sm font-bold text-[#73802A]">Descrição</h3>
-        <p>{data?.Descricao || "teste"}</p>
-      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <h3 className="text-sm font-bold text-[#73802A]">
+                            Condição
+                          </h3>
+                          <p>{data?.Condicao || "teste"}</p>
+                        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <h3 className="text-sm font-bold text-[#73802A]">Condição</h3>
-          <p>{data?.Condicao || "teste"}</p>
-        </div>
-
-        <div>
-          <h3 className="text-sm font-bold text-[#73802A]">Categoria</h3>
-          <p>{data?.NomeCategoria || "teste"}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
+                        <div>
+                          <h3 className="text-sm font-bold text-[#73802A]">
+                            Categoria
+                          </h3>
+                          <p>{data?.NomeCategoria || "teste"}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 {/* Proposta Card */}
                 <div className="bg-[#FFFAEE] rounded-xl p-6 border border-gray-200">
@@ -316,3 +321,5 @@ export default function EmprestimoProposta() {
     </div>
   );
 }
+
+export default LoanProposal;	

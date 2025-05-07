@@ -9,7 +9,7 @@ import "../index.css";
 
 //? Components
 import SideBar from "../components/sideBar";
-import Shop from "../components/shop";
+import ContentMain from "../components/contentMain";
 
 const Main = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -69,8 +69,6 @@ const Main = () => {
         const dataLoans = await responseLoans.json();
         const dataGiveaways = await responseGiveaways.json();
 
-        console.log(dataGiveaways);
-
         const transformItems = (items, category) => {
           return items.message.map((item) => ({
             name: item.Titulo || item.title || "Sem título",
@@ -100,7 +98,6 @@ const Main = () => {
           },
         };
         setShopData(shopData);
-        console.log(shopData);
       } catch (error) {
         console.error("Error fetching shop data:", error);
       } finally {
@@ -129,7 +126,7 @@ const Main = () => {
       <div className="md:sticky md:top-0 md:h-screen">
         <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
       </div>
-      <Shop shopData={shopData} />
+      <ContentMain shopData={shopData} />
     </div>
   );
 };

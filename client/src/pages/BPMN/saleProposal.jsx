@@ -14,7 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { Helmet } from "react-helmet";
 
-export default function VendaProposta() {
+const SaleProposal = () => {
   const { id } = useParams();
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [data, setData] = useState(null);
@@ -99,8 +99,6 @@ export default function VendaProposta() {
     price: data?.Valor || 0,
   };
 
-  const productImage = data?.photos[0].Url || null;
-
   return (
     <div className="min-h-screen bg-[#E0E5B6] py-8 px-4 font-sans">
       <Helmet>
@@ -148,7 +146,7 @@ export default function VendaProposta() {
                       <div className="relative rounded-lg overflow-hidden bg-white border border-gray-200 aspect-square">
                         {productImage ? (
                           <img
-                            src={productImage}
+                            src={data?.photos[0].Url || null}
                             alt={data?.Titulo || "Imagem do produto"}
                             width={300}
                             height={300}
@@ -260,3 +258,5 @@ export default function VendaProposta() {
     </div>
   );
 }
+
+export default SaleProposal;

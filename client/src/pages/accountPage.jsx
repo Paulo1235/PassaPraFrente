@@ -157,7 +157,7 @@ const Account = () => {
         <SideBar canAdd={true} Home={true} Account={true} LogOut={true} />
       </div>
 
-      <div className="App w-full overflow-x-hidden flex flex-col flex-grow">
+      <div className="bg-bgp w-full overflow-x-hidden flex flex-col flex-grow">
         <div className="left mx-2 md:ml-10 lg:ml-20 mt-6 md:mt-10 flex flex-col px-4 md:px-6">
           <p className="text-2xl md:text-3xl text-[#73802A] text-center md:text-start">
             Conta

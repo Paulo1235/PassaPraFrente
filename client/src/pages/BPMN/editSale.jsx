@@ -21,29 +21,29 @@ export default function EditSale() {
   const navigate = useNavigate();
   
   const [isLoading, setIsLoading] = useState(true);
+  //! Acho que nao funciona ainda
+  // const convertToBase64 = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader()
+  //     reader.readAsDataURL(file)
+  //     reader.onload = () => resolve(reader.result)
+  //     reader.onerror = (error) => reject(error)
+  //   })
+  // }
 
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result)
-      reader.onerror = (error) => reject(error)
-    })
-  }
-
-  const convertBase64ToFile = (base64, fileName) => {
-    const arr = base64.split(',')
-    const mime = arr[0].match(/:(.*?);/)[1]
-    const bstr = atob(arr[1])
-    let n = bstr.length
-    const u8arr = new Uint8Array(n)
+  // const convertBase64ToFile = (base64, fileName) => {
+  //   const arr = base64.split(',')
+  //   const mime = arr[0].match(/:(.*?);/)[1]
+  //   const bstr = atob(arr[1])
+  //   let n = bstr.length
+  //   const u8arr = new Uint8Array(n)
   
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n)
-    }
+  //   while (n--) {
+  //     u8arr[n] = bstr.charCodeAt(n)
+  //   }
   
-    return new File([u8arr], fileName, { type: mime })
-  }
+  //   return new File([u8arr], fileName, { type: mime })
+  // }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,12 +62,12 @@ export default function EditSale() {
         const result = await response.json();
         // console.log(result.message);
         setData(result.message); // Ajusta conforme estrutura do retorno
-        if (result.message?.Imagens?.length > 0) {
-          const photoFiles = await result.message.Imagens.map((img, index) =>
-            convertBase64ToFile(img, `foto${index + 1}.jpg`)          
-          )
-          result.message.PhotosAsFiles = await Promise.all(photoFiles)
-        }
+        // if (result.message?.Imagens?.length > 0) {
+        //   const photoFiles = await result.message.Imagens.map((img, index) =>
+        //     convertBase64ToFile(img, `foto${index + 1}.jpg`)          
+        //   )
+        //   result.message.PhotosAsFiles = await Promise.all(photoFiles)
+        // }
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
@@ -88,8 +88,8 @@ export default function EditSale() {
   const handleSubmit = async (values) => {
     try {
       // Converter todas as fotos para base64
-      const base64Promises = values.photos.map((photo) => convertToBase64(photo))
-      const photoUrls = await Promise.all(base64Promises)
+      // const base64Promises = values.photos.map((photo) => convertToBase64(photo))
+      // const photoUrls = await Promise.all(base64Promises)
 
       const response = await fetch(`http://localhost:5000/api/sales/id/${id}`, {
         method: "PUT",
@@ -143,7 +143,7 @@ export default function EditSale() {
   return (
     <div className="flex flex-row">
       <ToastContainer />
-      <div className="App w-screen flex flex-col">
+      <div className="bg-bgp w-screen flex flex-col">
         <div className="modal-sale w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex flex-col items-end">
             <a href="/account">

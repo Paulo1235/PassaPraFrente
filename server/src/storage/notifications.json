@@ -88,7 +88,7 @@
     "userId": 26,
     "category": "Empréstimo",
     "link": "/review/user/loan/31",
-    "read": false,
+    "read": true,
     "date": "2025-05-06T15:08:32.443Z"
   }
 ]

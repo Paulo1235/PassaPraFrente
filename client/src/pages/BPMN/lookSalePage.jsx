@@ -91,15 +91,15 @@ function LookSale() {
       </Helmet>
       <ToastContainer />
       <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
-      <div className="App w-full flex flex-col">
-        <div className="modal-sale w-[90%] max-w-[1200px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
+      <div className="bg-bgp w-full flex flex-col">
+        <div className="w-[90%] max-w-[1200px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex justify-end mb-4">
               <button className="text-txts flex flex-row gap-2 items-center" onClick={() => navigate("/index")}>
                 <Undo2 />
                 <span>Voltar</span>
               </button>
           </div>
-          <div className="images flex flex-wrap justify-center gap-10 mb-10">
+          <div className="flex flex-wrap justify-center gap-10 mb-10">
           {data.photos && data.photos.map((photo, index) => (
               <img
                 key={index}
@@ -134,7 +134,7 @@ function LookSale() {
                 </div>
               </div>
             </div>
-            <div className="right flex flex-col gap-4 w-full md:w-1/3">
+            <div className="flex flex-col gap-4 w-full md:w-1/3">
               <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center justify-center">
                 <span className="text-xl text-white" onClick={createTransaction}>Comprar Agora</span>
               </button>

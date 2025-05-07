@@ -8,7 +8,7 @@ const Review = ({ closeModal, reviewId, category }) => {
   const [rating, setRating] = useState(1);
   const navigate = useNavigate();
   const submitAvaliation = async () => {
-    if (category == "sale") {
+    if (category === "sale") {
       try {
         const result = await fetch(
           `http://localhost:5000/api/transaction-sales/review/${reviewId}`,
@@ -26,7 +26,7 @@ const Review = ({ closeModal, reviewId, category }) => {
           }
         );
         const data = await result.json();
-        if(data.message == "Review da venda criada com sucesso.")
+        if(data.message === "Review da venda criada com sucesso.")
           {
             toast.success("Review da venda criada com sucesso.");
             setTimeout(() => {
@@ -44,7 +44,7 @@ const Review = ({ closeModal, reviewId, category }) => {
       }
     }
 
-    if (category == "loan") {
+    if (category === "loan") {
       try {
         const result = await fetch(
           `http://localhost:5000/api/transaction-loans/review/${reviewId}`,
@@ -62,7 +62,7 @@ const Review = ({ closeModal, reviewId, category }) => {
           }
         );
         const data = await result.json();
-        if(data.message == "Review do empréstimo criada com sucesso.")
+        if(data.message === "Review do empréstimo criada com sucesso.")
         {
           toast.success("Review do empréstimo criada com sucesso.");
           setTimeout(() => {
@@ -80,9 +80,10 @@ const Review = ({ closeModal, reviewId, category }) => {
       }
     }
 
-    if (category == "giveaway") {
+    if (category === "giveaway") {
       try {
-        const result = await fetch(
+        //? Foi retirada o const result, pois não estava a ser utilizado
+        await fetch(
           `http://localhost:5000/api/winner-giveaway/review/${reviewId}`,
           {
             method: "PATCH",

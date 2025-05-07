@@ -10,7 +10,7 @@ export default function Footer() {
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-3 text-[#73802A]"></h3>
+              {/* <h3 className="text-lg font-semibold mb-3 text-[#73802A]"></h3> */}
               <ul className="space-y-2">
                 <li>
                 </li>

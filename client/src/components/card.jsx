@@ -1,40 +1,36 @@
-import { useEffect, useState } from "react"
-import pessoaIco from "../images/pessoaIco.svg"
-import { useNavigate } from "react-router-dom"
+import { useState } from "react";
+import pessoaIco from "../images/pessoaIco.svg";
+import { useNavigate } from "react-router-dom";
 
 const Card = (props) => {
-  const navigate = useNavigate()
-  const [imageError, setImageError] = useState(false)
-
-  useEffect(() => {
-    console.log(props.condition)
-  }, [])
+  const navigate = useNavigate();
+  const [imageError, setImageError] = useState(false);
 
   const handleCardClick = () => {
-    console.log(props.category);
     if (props.mainPage == true) {
       if (props.category === "Compras" && props.Estado !== "Concluído") {
-        navigate(`/sale/${props.idVenda}`)
+        navigate(`/sale/${props.idVenda}`);
       } else if (props.category === "Empréstimos") {
-        navigate(`/loan/${props.idEmprestimo}`)
+        navigate(`/loan/${props.idEmprestimo}`);
       } else if (props.category === "Sorteios") {
-        navigate(`/draw/${props.idSorteio}`)
+        navigate(`/draw/${props.idSorteio}`);
       }
     } else if (props.isCompleted == true) {
+      //? Isto serve para quando o utilizador clica no cartão de um item que já foi concluído, nao podendo editar
     } else {
       if (props.category === "Compras") {
-        navigate(`/editsale/${props.idVenda}`)
+        navigate(`/editsale/${props.idVenda}`);
       } else if (props.category === "Empréstimos") {
-        navigate(`/editloan/${props.idEmprestimo}`)
+        navigate(`/editloan/${props.idEmprestimo}`);
       } else if (props.category === "Sorteios") {
-        navigate(`/editdraw/${props.idSorteio}`)
+        navigate(`/editdraw/${props.idSorteio}`);
       }
     }
-  }
+  };
 
   const handleImageError = () => {
-    setImageError(true)
-  }
+    setImageError(true);
+  };
 
   return (
     <div
@@ -61,7 +57,7 @@ const Card = (props) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Card
+export default Card;

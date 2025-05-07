@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 
+import { formatDate } from '../../lib/utils';
+
 //? Components
 import SideBar from '../../components/sideBar';
 import Footer from '../../components/footer';
@@ -34,21 +36,10 @@ function LookLoan() {
         
         const dateStart = new Date(data.message.DataInicio);
         const dateEnd = new Date(data.message.DataFim);
-        
-        // Exemplo: 28 de junho de 2025 às 11:30
-        const options = {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          timeZone: "UTC", // ou altere para "Europe/Lisbon" se quiser hora local de Portugal
-        };
-        
-        const formattedDateStart = dateStart.toLocaleString("pt-PT", options);
-        const formattedDateEnd = dateEnd.toLocaleString("pt-PT", options);
-        data.message.DataInicio = formattedDateStart;
-        data.message.DataFim = formattedDateEnd;
+
+        //? Formata a data
+        data.message.DataInicio = formatDate(dateStart);
+        data.message.DataFim = formatDate(dateEnd);
         
         setData(data.message);
       } catch (error) {
@@ -102,9 +93,9 @@ function LookLoan() {
         <title>Empréstimo</title>
       </Helmet>
       <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
-      <div className="App w-full flex flex-col">
+      <div className="bg-bgp w-full flex flex-col">
         <div className="flex-grow">
-          <div className="modal-sale w-[90%] max-w-[1200px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
+          <div className="w-[90%] max-w-[1200px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
             <div className="button-back flex justify-end mb-4">
               <button className="text-txts flex flex-row gap-2 items-center" onClick={() => navigate("/index")}>
                 <Undo2 />
@@ -112,7 +103,7 @@ function LookLoan() {
               </button>
             </div>
 
-            <div className="images flex flex-wrap justify-center gap-10 mb-10">
+            <div className="flex flex-wrap justify-center gap-10 mb-10">
               {data.photos && data.photos.map((photo, index) => (
                 <img
                   key={index}
@@ -124,7 +115,7 @@ function LookLoan() {
             </div>
 
             <section className="flex flex-wrap justify-between">
-              <div className="left flex flex-col w-full md:w-1/2 mb-6">
+              <div className="flex flex-col w-full md:w-1/2 mb-6">
                 <p className="text-2xl mb-2">
                   Titulo: <span className="text-lg text-black">{data.Titulo}</span>
                 </p>
@@ -154,7 +145,7 @@ function LookLoan() {
                 </div>
               </div>
 
-              <div className="right flex flex-col gap-4 w-full md:w-1/3">
+              <div className="flex flex-col gap-4 w-full md:w-1/3">
                 <button className="bg-[#CAAD7E] rounded-lg px-4 py-2 flex items-center justify-center">
                   <span className="text-xl text-white" onClick={createTransaction}>Pedir Agora</span>
                 </button>

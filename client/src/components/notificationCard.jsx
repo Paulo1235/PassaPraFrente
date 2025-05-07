@@ -34,9 +34,9 @@ export const NotificationCard = ({ notification, onMarkAsRead }) => {
                 <div className="flex-1">
                     <div className="flex justify-between items-start">
                         <p className={`font-medium ${notification.read ? "text-txtp" : "text-[#7b892f]"}`}>
-                            <a onClick={() => notification.read ? toast.warn("Nenhum link disponivel") : navigate(notification.link)} className="hover:underline cursor-pointer">
+                            <button onClick={() => notification.read ? toast.warn("Nenhum link disponivel") : navigate(notification.link)} className="hover:underline cursor-pointer bg-transparent border-none p-0 text-left">
                             {notification.message}
-                            </a>
+                            </button>
                         </p>
                         {!notification.read && onMarkAsRead && (
                             <button

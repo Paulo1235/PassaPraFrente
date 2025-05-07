@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import pessoaIco from '../images/pessoaIco.svg';
 import { ToastContainer, toast } from "react-toastify";
 import { Trash2, Check } from "lucide-react";
