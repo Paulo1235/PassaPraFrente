@@ -117,7 +117,7 @@ class UserController {
     const { email } = req.body
 
     try {
-      const user = await UserRepository.existsUserByEmail(email)
+      const user = await UserRepository.getUserByEmail(email)
 
       if (!user) {
         throw new HttpException('Email inválido.', StatusCodes.NOT_FOUND)

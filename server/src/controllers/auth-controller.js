@@ -202,6 +202,8 @@ class AuthController {
 
       // Gera novos tokens de acesso e refresh
       sendToken(user, res)
+
+      return response(res, true, StatusCodes.OK, 'Autenticação prolongada.')
     } catch (error) {
       handleError(res, error, 'Ocorreu um erro ao efetuar a autenticação. Tente novamente mais tarde.')
     }
