@@ -7,7 +7,7 @@ const Card = (props) => {
   const [imageError, setImageError] = useState(false);
 
   const handleCardClick = () => {
-    if (props.mainPage == true) {
+    if (props.mainPage === true) {
       if (props.category === "Compras" && props.Estado !== "Concluído") {
         navigate(`/sale/${props.idVenda}`);
       } else if (props.category === "Empréstimos") {
@@ -15,7 +15,7 @@ const Card = (props) => {
       } else if (props.category === "Sorteios") {
         navigate(`/draw/${props.idSorteio}`);
       }
-    } else if (props.isCompleted == true) {
+    } else if (props.isCompleted === true) {
       //? Isto serve para quando o utilizador clica no cartão de um item que já foi concluído, nao podendo editar
     } else {
       if (props.category === "Compras") {
