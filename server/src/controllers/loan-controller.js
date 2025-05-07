@@ -87,6 +87,7 @@ class LoanController {
   static async updateLoan (req, res) {
     const { id } = req.params
     const data = req.body
+
     try {
       const existingLoan = await LoanRepository.getLoanById(id)
 

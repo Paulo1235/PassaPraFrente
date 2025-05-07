@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { loanSchema } from '../../src/validations/loan-schema.js'
+import { createLoanSchema } from '../../src/validations/loan-schema.js'
 
 // Função para gerar datas futuras
 const generateFutureDate = (daysAhead = 1) => {
@@ -15,7 +15,7 @@ const generatePastDate = (daysBehind = 1) => {
   return date.toISOString()
 }
 
-describe('Validação do loanSchema', () => {
+describe('Validação do createLoanSchema', () => {
   it('deve validar um objeto de empréstimo correto', () => {
     const emprestimoValido = {
       title: 'Empréstimo de livro',
@@ -25,7 +25,7 @@ describe('Validação do loanSchema', () => {
       endDate: generateFutureDate(10)
     }
 
-    const resultado = loanSchema.safeParse(emprestimoValido)
+    const resultado = createLoanSchema.safeParse(emprestimoValido)
     expect(resultado.success).toBe(true)
   })
 
@@ -38,7 +38,7 @@ describe('Validação do loanSchema', () => {
       endDate: generateFutureDate(10)
     }
 
-    const resultado = loanSchema.safeParse(emprestimoInvalido)
+    const resultado = createLoanSchema.safeParse(emprestimoInvalido)
     expect(resultado.success).toBe(false)
     expect(resultado.error?.issues[0].message).toBe('A descrição deve ter no máximo 255 caracteres')
   })
@@ -52,7 +52,7 @@ describe('Validação do loanSchema', () => {
       endDate: generateFutureDate(10)
     }
 
-    const resultado = loanSchema.safeParse(emprestimoInvalido)
+    const resultado = createLoanSchema.safeParse(emprestimoInvalido)
     expect(resultado.success).toBe(false)
     expect(resultado.error?.issues[0].message).toBe('O preço deve ser no mínimo 1')
   })
@@ -66,9 +66,9 @@ describe('Validação do loanSchema', () => {
       endDate: generateFutureDate(10)
     }
 
-    const resultado = loanSchema.safeParse(emprestimoInvalido)
+    const resultado = createLoanSchema.safeParse(emprestimoInvalido)
     expect(resultado.success).toBe(false)
-    expect(resultado.error?.issues[0].message).toBe('Data de início inválida')
+    expect(resultado.error?.issues[0].message).toBe('Data inválida')
   })
 
   it('deve falhar se a data de fim for inválida', () => {
@@ -80,9 +80,9 @@ describe('Validação do loanSchema', () => {
       endDate: 'data-invalida'
     }
 
-    const resultado = loanSchema.safeParse(emprestimoInvalido)
+    const resultado = createLoanSchema.safeParse(emprestimoInvalido)
     expect(resultado.success).toBe(false)
-    expect(resultado.error?.issues[0].message).toBe('Data de fim inválida')
+    expect(resultado.error?.issues[0].message).toBe('Data inválida')
   })
 
   it('deve falhar se a data de início não for futura', () => {
@@ -94,7 +94,7 @@ describe('Validação do loanSchema', () => {
       endDate: generateFutureDate(10)
     }
 
-    const resultado = loanSchema.safeParse(emprestimoInvalido)
+    const resultado = createLoanSchema.safeParse(emprestimoInvalido)
     expect(resultado.success).toBe(false)
     expect(resultado.error?.issues.some(issue => issue.message === 'A data de início deve ser futura')).toBe(true)
   })
@@ -108,7 +108,7 @@ describe('Validação do loanSchema', () => {
       endDate: generatePastDate(1)
     }
 
-    const resultado = loanSchema.safeParse(emprestimoInvalido)
+    const resultado = createLoanSchema.safeParse(emprestimoInvalido)
     expect(resultado.success).toBe(false)
     expect(resultado.error?.issues.some(issue => issue.message === 'A data de fim deve ser futura')).toBe(true)
   })

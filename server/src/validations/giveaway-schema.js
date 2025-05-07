@@ -1,12 +1,17 @@
 import { z } from 'zod'
-
 import convertUTCToLocalISOString from '../utils/date.js'
 
 const today = new Date()
+const localDate = new Date(convertUTCToLocalISOString(today))
 
-const localDate = convertUTCToLocalISOString(today)
+const baseDateSchema = z.string()
+  .refine(val => !isNaN(Date.parse(val)), {
+    message: 'Data inválida'
+  })
+  .transform(val => new Date(convertUTCToLocalISOString(new Date(val))))
 
-export const giveawaySchema = z.object({
+// Schema base com todos os campos em comum
+const baseGiveawaySchema = z.object({
   title: z.string()
     .trim()
     .min(1, { message: 'O título é obrigatório' })
@@ -16,33 +21,17 @@ export const giveawaySchema = z.object({
     .min(10, { message: 'A descrição deve ter pelo menos 10 caracteres' })
     .max(255, { message: 'A descrição deve ter no máximo 255 caracteres' }),
 
-  startDate: z.string()
-    .refine(val => !isNaN(Date.parse(val)), {
-      message: 'Data de início inválida'
-    })
-    .transform(val => {
-      const date = new Date(val)
-      const localDate = convertUTCToLocalISOString(date)
-      return new Date(localDate)
-    })
-    .refine(date => {
-      return date > new Date(localDate)
-    }, {
-      message: 'A data de início deve ser futura'
-    }),
-
-  endDate: z.string()
-    .refine(val => !isNaN(Date.parse(val)), {
-      message: 'Data de fim inválida'
-    })
-    .transform(val => {
-      const date = new Date(val)
-      const localDate = convertUTCToLocalISOString(date)
-      return new Date(localDate)
-    })
-    .refine(date => {
-      return date > new Date(localDate)
-    }, {
-      message: 'A data de fim deve ser futura'
-    })
+  startDate: baseDateSchema,
+  endDate: baseDateSchema
 })
+
+export const createGiveawaySchema = baseGiveawaySchema.extend({
+  startDate: baseDateSchema.refine(date => date > localDate, {
+    message: 'A data de início deve ser futura'
+  }),
+  endDate: baseDateSchema.refine(date => date > localDate, {
+    message: 'A data de fim deve ser futura'
+  })
+})
+
+export const updateGiveawaySchema = baseGiveawaySchema

@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { itemSchema } from '../validations/item-schema.js'
-import { loanSchema } from '../validations/loan-schema.js'
+import { createLoanSchema, updateLoanSchema } from '../validations/loan-schema.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import LoanController from '../controllers/loan-controller.js'
 import AuthMiddleware from '../middlewares/auth-middleware.js'
@@ -37,7 +37,7 @@ loanRouter.post(
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.isAdult,
-  validateSchema(loanSchema, false),
+  validateSchema(createLoanSchema, false),
   validateSchema(itemSchema, false),
   LoanController.createLoan
 )
@@ -61,7 +61,7 @@ loanRouter.put(
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   OwnerMiddleware.isOwnerLoan,
-  validateSchema(loanSchema, true),
+  validateSchema(updateLoanSchema, true),
   LoanController.updateLoan
 )
 

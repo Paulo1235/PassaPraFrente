@@ -2,7 +2,7 @@ import express from 'express'
 
 import AuthMiddleware from '../middlewares/auth-middleware.js'
 import OwnerMiddleware from '../middlewares/owner-middleware.js'
-import { giveawaySchema } from '../validations/giveaway-schema.js'
+import { createGiveawaySchema, updateGiveawaySchema } from '../validations/giveaway-schema.js'
 import { validateSchema } from '../utils/validate-schema.js'
 import GiveawayController from '../controllers/giveaway-controller.js'
 import { itemSchema } from '../validations/item-schema.js'
@@ -14,7 +14,7 @@ giveawayRouter.post(
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   AuthMiddleware.isAdult,
-  validateSchema(giveawaySchema, false),
+  validateSchema(createGiveawaySchema, false),
   validateSchema(itemSchema, false),
   GiveawayController.createGiveaway
 )
@@ -50,7 +50,7 @@ giveawayRouter.put(
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   OwnerMiddleware.isOwnerGiveaway,
-  validateSchema(giveawaySchema, true),
+  validateSchema(updateGiveawaySchema, true),
   validateSchema(itemSchema, true),
   GiveawayController.updateGiveaway
 )
