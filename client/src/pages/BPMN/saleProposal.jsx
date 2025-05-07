@@ -144,7 +144,7 @@ const SaleProposal = () => {
                     {/* Imagem do Produto */}
                     <div className="w-full md:w-1/3 flex-shrink-0">
                       <div className="relative rounded-lg overflow-hidden bg-white border border-gray-200 aspect-square">
-                        {productImage ? (
+                        {data?.photos[0].Url ? (
                           <img
                             src={data?.photos[0].Url || null}
                             alt={data?.Titulo || "Imagem do produto"}

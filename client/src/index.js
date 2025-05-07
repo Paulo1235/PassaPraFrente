@@ -47,6 +47,7 @@ import LoanProposal from "./pages/BPMN/loanProposal.jsx";
 //* Extra
 import ProtectedRoute from "./pages/ProtectedRoutes/protectedRoute";
 import AdminProtectedRoute from "./pages/ProtectedRoutes/adminProtectedRoute";
+import Layout from "./pages/layout.jsx";
 import NotFound from "./pages/notFound";
 
 
@@ -60,7 +61,7 @@ root.render(
         <Route path="/" element={<Login />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/recoverpass" element={<RecoverPass />} />
-        
+        <Route path="/layout" element={<Layout />} />
 
         {/* Admin */}
         <Route

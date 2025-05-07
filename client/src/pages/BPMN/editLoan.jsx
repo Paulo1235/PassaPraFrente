@@ -8,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 import '../../components/css/sidebar.css';
 import '../../index.css';
+import { convertToBase64 } from "../../lib/utils";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 
@@ -88,8 +89,8 @@ export default function EditLoan() {
   const handleSubmit = async (values) => {
     try {
       // Converter todas as fotos para base64
-      // const base64Promises = values.photos.map((photo) => convertToBase64(photo))
-      // const photoUrls = await Promise.all(base64Promises)
+      const base64Promises = values.photos.map((photo) => convertToBase64(photo))
+      const photoUrls = await Promise.all(base64Promises)
 
       const response = await fetch(`http://localhost:5000/api/loans/update/${id}`, {
         method: "PUT",
