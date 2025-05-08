@@ -83,7 +83,7 @@ const Review = ({ closeModal, reviewId, category }) => {
     if (category === "giveaway") {
       try {
         //? Foi retirada o const result, pois não estava a ser utilizado
-        await fetch(
+        const result = await fetch(
           `http://localhost:5000/api/winner-giveaway/review/${reviewId}`,
           {
             method: "PATCH",
@@ -98,8 +98,21 @@ const Review = ({ closeModal, reviewId, category }) => {
             ),
           }
         );
+        const data = await result.json();
+        if(data.message === "Review do sorteio efetuada com sucesso.")
+        {
+          toast.success("Review do sorteio efetuada com sucesso.");
+          setTimeout(() => {
+            navigate("/index");
+          }, 2000);
+        }else
+        {
+          toast.error(data.message)
+          setTimeout(() => {
+            navigate("/index");
+          }, 2000);
+        }
       } catch (error) {
-        // console.log(error)
       }
     }
   };
