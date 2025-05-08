@@ -5,7 +5,6 @@ import Footer from "./footer";
 import "../index.css";
 
 const ContentMainSection = ({ title, items }) => {
-  const singularTitle = title.slice(0, -1);
 
   return (
     <div className="bg-bgp flex flex-col">
@@ -19,25 +18,15 @@ const ContentMainSection = ({ title, items }) => {
         {items.length === 0 ? (
           <div className="bg-bgp p-4 rounded-lg border border-gray-200">
             <p className="text-gray-600 text-center text-lg">
-              Nenhum {singularTitle.toLowerCase()} disponível
+              Sem {title.toLowerCase()} disponíveis no momento.
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:place-items-start place-items-center">
-            {items.map((item, index) => {
-              const key =
-                item.idVenda && item.idVenda !== "ID"
-                  ? `venda-${item.idVenda}`
-                  : item.idEmprestimo && item.idEmprestimo !== "ID"
-                  ? `emprestimo-${item.idEmprestimo}`
-                  : item.idSorteio && item.idSorteio !== "ID"
-                  ? `sorteio-${item.idSorteio}`
-                  : `item-${title}-${index}`;
-
+            {items.map((item) => {
               return (
                 <Card
                   mainPage={true}
-                  key={key}
                   name={item.name}
                   description={item.description}
                   condition={item.condition}
@@ -59,11 +48,10 @@ const ContentMainSection = ({ title, items }) => {
 
 const ContentMain = ({ shopData }) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <main className="flex-1 py-4">
         {Object.values(shopData).map((section, index) => (
           <ContentMainSection
-            key={`shop-section-${index}`}
             title={section.title}
             items={section.items}
           />

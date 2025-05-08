@@ -1,24 +1,11 @@
-"use client";
-
-import React from "react";
 import { Bell, Check } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../lib/utils";
 
 export const NotificationCard = ({ notification, onMarkAsRead }) => {
     
     const navigate = useNavigate();
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return new Intl.DateTimeFormat("pt-PT", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-        }).format(date);
-    };
 
     return (
         <div

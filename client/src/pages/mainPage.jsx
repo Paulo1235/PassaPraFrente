@@ -25,7 +25,7 @@ const Main = () => {
       navigate("/");
       return;
     }
-
+    
     const fetchShopData = async () => {
       try {
         const responseSales = await fetch(
