@@ -38,7 +38,7 @@ const NotificationsPage = () => {
         }
 
         const data = await response.json();
-        // console.log(data);
+        console.log(data);
         setNotificationsData(data);
         setError(null);
       } catch (error) {
@@ -75,7 +75,7 @@ const NotificationsPage = () => {
         setNotificationsData({
           ...notificationsData,
           message: notificationsData.message.map((notification) =>
-            notification.id === notificationId
+            notification.Notificacao_ID === notificationId
               ? { ...notification, read: true }
               : notification
           ),

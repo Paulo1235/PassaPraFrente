@@ -6,9 +6,7 @@ import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 
 class NotificationController {
-  static async createNotification (req, res) {
-    const notificationData = req.body
-
+  static async createNotification (notificationData) {
     try {
       const user = await UserRepository.getUserById(notificationData.userId)
 
@@ -16,15 +14,11 @@ class NotificationController {
         throw new HttpException('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
       }
 
-      const success = await NotificationRepository.createNotification(notificationData)
+      await NotificationRepository.createNotification(notificationData)
 
-      if (!success) {
-        throw new HttpException('Falha ao criar notificação.', StatusCodes.BAD_REQUEST)
-      }
-
-      return response(res, true, StatusCodes.CREATED, 'Notificação criada com sucesso!')
+      return true
     } catch (error) {
-      handleError(res, error, 'Erro ao criar notificação.')
+      console.error('Erro ao criar notificação:', error)
     }
   }
 
@@ -64,28 +58,6 @@ class NotificationController {
       return response(res, true, StatusCodes.OK, notifications)
     } catch (error) {
       handleError(res, error, 'Erro ao encontrar notificações do utilizador.')
-    }
-  }
-
-  static async getUnreadNotifications (req, res) {
-    const userId = req.user.Utilizador_ID
-
-    try {
-      const unread = await NotificationRepository.getUnreadNotificationsByUser(userId)
-      return response(res, true, StatusCodes.OK, unread)
-    } catch (error) {
-      handleError(res, error, 'Erro ao encontrar notificações não lidas.')
-    }
-  }
-
-  static async getReadNotifications (req, res) {
-    const userId = req.user.Utilizador_ID
-
-    try {
-      const read = await NotificationRepository.getReadNotificationsByUser(userId)
-      return response(res, true, StatusCodes.OK, read)
-    } catch (error) {
-      handleError(res, error, 'Erro ao encontrar notificações lidas.')
     }
   }
 

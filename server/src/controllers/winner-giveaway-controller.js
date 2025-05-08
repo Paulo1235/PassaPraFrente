@@ -36,6 +36,8 @@ class WinnerGiveawayController {
       const notificationData = {
         message: `Avalie o vendedor do sorteio: ${giveaway.Titulo}`,
         userId: winnerId,
+        read: 0,
+        date: new Date(),
         category: 'Sorteio',
         link: `/review/user/giveaway/${giveaway.Sorteio_ID}`
       }
