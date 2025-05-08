@@ -75,6 +75,27 @@ describe('Criar proposta de venda', () => {
     expect(res.json).toHaveBeenCalledWith({ success: false, message: 'Já fez uma proposta para esta venda.' })
   })
 
+  it('não deve permitir proposta se a venda não estiver disponível', async () => {
+    const estadosInvalidos = ['Concluído', 'Em análise', 'Rejeitado']
+
+    for (const estado of estadosInvalidos) {
+      const { req, res } = criaReqRes()
+
+      SaleRepository.getSaleById.mockResolvedValue({
+        Estado: estado,
+        Utilizador_ID: 2
+      })
+
+      await ProposalSaleController.createProposalSale(req, res)
+
+      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        message: 'Não é possível fazer uma proposta para esta venda.'
+      })
+    }
+  })
+
   it('deve devolver erro se a venda não existir', async () => {
     const { req, res } = criaReqRes()
 

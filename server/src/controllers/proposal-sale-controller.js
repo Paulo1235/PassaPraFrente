@@ -23,7 +23,6 @@ class ProposalSaleController {
         throw new HttpException('Venda não encontrada.', StatusCodes.NOT_FOUND)
       }
 
-      // Manipular datas será melhor neste caso
       if (sale.Estado === 'Concluído' || sale.Estado === 'Em análise' || sale.Estado === 'Rejeitado') {
         throw new HttpException('Não é possível fazer uma proposta para esta venda.', StatusCodes.BAD_REQUEST)
       }
