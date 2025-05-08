@@ -78,36 +78,6 @@ class NotificationRepository {
 
     return updatedNotification.rowsAffected[0] > 0
   }
-
-  static async getUnreadNotificationsByUser (userId) {
-    const pool = await getConnection(dbConfig)
-
-    const unreadNotifications = await pool
-      .request()
-      .input('userId', sql.Int, userId)
-      .query(`
-        SELECT Notificacao_ID, Mensagem, Categoria, Link, Lida, Data
-        FROM Notificacao
-        WHERE Utilizador_ID = @userId AND Lida = 0
-      `)
-
-    return unreadNotifications.recordset
-  }
-
-  static async getReadNotificationsByUser (userId) {
-    const pool = await getConnection(dbConfig)
-
-    const readNotifications = await pool
-      .request()
-      .input('userId', sql.Int, userId)
-      .query(`
-        SELECT Notificacao_ID, Mensagem, Categoria, Link, Lida, Data
-        FROM Notificacao
-        WHERE Utilizador_ID = @userId AND Lida = 1
-      `)
-
-    return readNotifications.recordset
-  }
 }
 
 export default NotificationRepository

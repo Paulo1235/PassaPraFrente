@@ -1,30 +1,30 @@
-import { randomUUID } from 'node:crypto'
 import { StatusCodes } from 'http-status-codes'
 
 import NotificationRepository from '../repositories/notification-repository.js'
-import { handleError, HttpException } from '../utils/error-handler.js'
 import UserRepository from '../repositories/user-repository.js'
+import { handleError, HttpException } from '../utils/error-handler.js'
 import response from '../utils/response.js'
 
 class NotificationController {
-  static async createNotification (notificationData) {
-    const id = randomUUID()
-
-    const notification = {
-      ...notificationData,
-      id
-    }
+  static async createNotification (req, res) {
+    const notificationData = req.body
 
     try {
       const user = await UserRepository.getUserById(notificationData.userId)
 
       if (!user) {
-        return
+        throw new HttpException('Utilizador não encontrado.', StatusCodes.NOT_FOUND)
       }
 
-      NotificationRepository.createNotification(notification)
+      const success = await NotificationRepository.createNotification(notificationData)
+
+      if (!success) {
+        throw new HttpException('Falha ao criar notificação.', StatusCodes.BAD_REQUEST)
+      }
+
+      return response(res, true, StatusCodes.CREATED, 'Notificação criada com sucesso!')
     } catch (error) {
-      throw new HttpException('Erro ao criar notificação', StatusCodes.INTERNAL_SERVER_ERROR)
+      handleError(res, error, 'Erro ao criar notificação.')
     }
   }
 
@@ -40,17 +40,16 @@ class NotificationController {
 
       return response(res, true, StatusCodes.OK, notification)
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao encontrar a notificação.')
+      handleError(res, error, 'Erro ao encontrar notificação.')
     }
   }
 
   static async getAllNotifications (req, res) {
     try {
       const notifications = await NotificationRepository.getAllNotifications()
-
       return response(res, true, StatusCodes.OK, notifications)
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao encontrar as notificações.')
+      handleError(res, error, 'Erro ao encontrar todas as notificações.')
     }
   }
 
@@ -60,11 +59,33 @@ class NotificationController {
     try {
       const notifications = await NotificationRepository.getUserNotifications(userId)
 
-      notifications.sort((a, b) => new Date(b.date) - new Date(a.date))
+      notifications.sort((a, b) => new Date(b.Data) - new Date(a.Data))
 
       return response(res, true, StatusCodes.OK, notifications)
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao encontrar as notificações do utilizador.')
+      handleError(res, error, 'Erro ao encontrar notificações do utilizador.')
+    }
+  }
+
+  static async getUnreadNotifications (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const unread = await NotificationRepository.getUnreadNotificationsByUser(userId)
+      return response(res, true, StatusCodes.OK, unread)
+    } catch (error) {
+      handleError(res, error, 'Erro ao encontrar notificações não lidas.')
+    }
+  }
+
+  static async getReadNotifications (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const read = await NotificationRepository.getReadNotificationsByUser(userId)
+      return response(res, true, StatusCodes.OK, read)
+    } catch (error) {
+      handleError(res, error, 'Erro ao encontrar notificações lidas.')
     }
   }
 
@@ -79,15 +100,15 @@ class NotificationController {
         throw new HttpException('Notificação não encontrada.', StatusCodes.NOT_FOUND)
       }
 
-      if (userId !== notification.userId) {
+      if (userId !== notification.Utilizador_ID) {
         throw new HttpException('Utilizador não autorizado.', StatusCodes.UNAUTHORIZED)
       }
 
       await NotificationRepository.markAsRead(id)
 
-      return response(res, true, StatusCodes.OK, notification)
+      return response(res, true, StatusCodes.OK, 'Notificação marcada como lida.')
     } catch (error) {
-      handleError(res, error, 'Ocorreu um erro ao marcar a notificação como lida.')
+      handleError(res, error, 'Erro ao marcar notificação como lida.')
     }
   }
 }
