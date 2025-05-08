@@ -1,41 +1,82 @@
-import Notification from '../entities/notification-entity.js'
-import FileService from '../services/file-service.js'
+import sql from 'mssql'
+import { dbConfig, getConnection } from '../database/db-config.js'
 
 class NotificationRepository {
-  static createNotification (data) {
-    const notification = new Notification(data)
+  static async createNotification (data) {
+    const pool = await getConnection(dbConfig)
 
-    FileService.save(notification)
+    const notification = await pool
+      .request()
+      .input('message', sql.VarChar, data.message)
+      .input('category', sql.VarChar, data.category)
+      .input('link', sql.VarChar, data.link)
+      .input('read', sql.Bit, data.read)
+      .input('date', sql.DateTime, data.date)
+      .input('userId', sql.Int, data.userId)
+      .query(`
+        INSERT INTO Notificacao (Mensagem, Categoria, Link, Lida, Data, Utilizador_ID)
+        VALUES (@message, @category, @link, @read, @date, @userId)
+      `)
 
-    return notification
+    return notification.rowsAffected[0] > 0
   }
 
-  static getNotificationById (id) {
-    const notification = FileService.get(id)
+  static async getNotificationById (id) {
+    const pool = await getConnection(dbConfig)
 
-    return notification
+    const notification = await pool
+      .request()
+      .input('id', sql.Int, id)
+      .query(`
+        SELECT Notificacao_ID, Mensagem, Categoria, Link, Lida, Data, Utilizador_ID
+        FROM Notificacao
+        WHERE Notificacao_ID = @id
+      `)
+
+    return notification.recordset[0]
   }
 
-  static getAllNotifications () {
-    const notifications = FileService.getAll()
+  static async getAllNotifications () {
+    const pool = await getConnection(dbConfig)
 
-    return notifications
+    const notifications = await pool
+      .request()
+      .query(`
+        SELECT * 
+        FROM Notificacao
+      `)
+
+    return notifications.recordset
   }
 
-  static getUserNotifications (userId) {
-    const notifications = FileService.getAll()
+  static async getUserNotifications (userId) {
+    const pool = await getConnection(dbConfig)
 
-    return notifications.filter(notification => notification.userId === userId)
+    const userNotifications = await pool
+      .request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        SELECT Notificacao_ID, Mensagem, Categoria, Link, Lida, Data
+        FROM Notificacao
+        WHERE Utilizador_ID = @userId
+      `)
+
+    return userNotifications.recordset
   }
 
-  static markAsRead (id) {
-    const notification = FileService.get(id)
+  static async markAsRead (id) {
+    const pool = await getConnection(dbConfig)
 
-    notification.read = true
+    const updatedNotification = await pool
+      .request()
+      .input('id', sql.Int, id)
+      .query(`
+        UPDATE Notificacao
+        SET Lida = 1
+        WHERE Notificacao_ID = @id
+      `)
 
-    FileService.save(notification)
-
-    return notification
+    return updatedNotification.rowsAffected[0] > 0
   }
 }
 

@@ -101,6 +101,8 @@ class ProposalSaleController {
 
       await NotificationController.createNotification({
         message: notificationMessage,
+        read: 0,
+        date: new Date(),
         category: 'Venda',
         userId: parseInt(userId)
       })

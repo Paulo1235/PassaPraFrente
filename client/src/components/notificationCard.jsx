@@ -23,24 +23,24 @@ export const NotificationCard = ({ notification, onMarkAsRead }) => {
     return (
         <div
             className={`mb-4 p-4 rounded-lg border ${
-                notification.read ? "bg-white border-gray-200" : "bg-[#f5f7e8] border-[#7b892f]"
+                notification.Lida ? "bg-white border-gray-200" : "bg-[#f5f7e8] border-[#7b892f]"
             } shadow-sm transition-all hover:shadow-md`}
         >
             <ToastContainer />
             <div className="flex items-start">
                 <div className="mr-3 mt-1">
-                    <Bell className={`h-5 w-5 ${notification.read ? "text-gray-400" : "text-[#7b892f]"}`} />
+                    <Bell className={`h-5 w-5 ${notification.Lida ? "text-gray-400" : "text-[#7b892f]"}`} />
                 </div>
                 <div className="flex-1">
                     <div className="flex justify-between items-start">
-                        <p className={`font-medium ${notification.read ? "text-txtp" : "text-[#7b892f]"}`}>
-                            <button onClick={() => notification.read ? toast.warn("Nenhum link disponivel") : navigate(notification.link)} className="hover:underline cursor-pointer bg-transparent border-none p-0 text-left">
-                            {notification.message}
+                        <p className={`font-medium ${notification.Lida ? "text-txtp" : "text-[#7b892f]"}`}>
+                            <button onClick={() => notification.Lida ? toast.warn("Nenhum link disponivel") : navigate(notification.Link)} className="hover:underline cursor-pointer bg-transparent border-none p-0 text-left">
+                            {notification.Mensagem}
                             </button>
                         </p>
-                        {!notification.read && onMarkAsRead && (
+                        {!notification.Lida && onMarkAsRead && (
                             <button
-                                onClick={() => {onMarkAsRead(notification.id);}}
+                                onClick={() => {onMarkAsRead(notification.Notificacao_ID);}}
                                 className="ml-2 p-1 text-[#7b892f] hover:bg-[#f0f2e0] rounded-full"
                                 title="Marcar como lida"
                             >
@@ -48,7 +48,7 @@ export const NotificationCard = ({ notification, onMarkAsRead }) => {
                             </button>
                         )}
                     </div>
-                    <p className="text-sm text-gray-500 mt-1">{formatDate(notification.date)}</p>
+                    <p className="text-sm text-gray-500 mt-1">{formatDate(notification.Data)}</p>
                 </div>
             </div>
         </div>
@@ -63,7 +63,7 @@ export const NotificationList = ({ notifications, onMarkAsRead }) => {
     return (
         <div className="space-y-2">
             {notifications.map((notification) => (
-                <NotificationCard key={notification.id} notification={notification} onMarkAsRead={onMarkAsRead} />
+                <NotificationCard key={notification.Notificacao_ID} notification={notification} onMarkAsRead={onMarkAsRead} />
             ))}
         </div>
     );

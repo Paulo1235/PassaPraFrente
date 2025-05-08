@@ -112,6 +112,8 @@ class ProposalLoanController {
 
       await NotificationController.createNotification({
         message: notificationMessage,
+        read: 0,
+        date: new Date(),
         category: 'Empréstimo',
         userId
       })
