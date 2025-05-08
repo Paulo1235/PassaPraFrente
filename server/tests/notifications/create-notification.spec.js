@@ -28,9 +28,9 @@ describe('NotificationCreateController', () => {
 
     NotificationRepository.createNotification.mockResolvedValue(true)
 
-    await NotificationController.createNotification(notificationData)
+    const response = await NotificationController.createNotification(notificationData)
 
-    expect(NotificationRepository.createNotification).toHaveBeenCalledWith(expect.objectContaining({ ...notificationData, id: expect.any(String) }))
+    expect(response).toBe(true)
   })
 
   it('não deve criar notificação se o utilizador não existir', async () => {

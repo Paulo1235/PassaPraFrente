@@ -37,7 +37,7 @@ describe('Operações GET em sorteios', () => {
     it('deve devolver os sorteios disponíveis', async () => {
       const req = { user: { Utilizador_ID: 456 } }
       const res = {}
-      const uncompletedGiveawaysMock = [{ Artigo_ID: 3, Titulo: 'Sorteio Concluída' }]
+      const uncompletedGiveawaysMock = [{ ArtigoArtigo_ID: 3, Titulo: 'Sorteio Concluída' }]
       const photoMock = [{ url: 'fotoConcluida.jpg' }]
 
       GiveawayRepository.getNonCompletedGiveawaysByUser.mockResolvedValue(uncompletedGiveawaysMock)
@@ -70,7 +70,7 @@ describe('Operações GET em sorteios', () => {
     it('deve devolver os sorteios não completos do utilizador', async () => {
       const req = { user: { Utilizador_ID: 456 } }
       const res = {}
-      const uncompletedGiveawaysMock = [{ Artigo_ID: 3, Titulo: 'Sorteio Concluída' }]
+      const uncompletedGiveawaysMock = [{ ArtigoArtigo_ID: 3, Titulo: 'Sorteio Concluída' }]
       const photoMock = [{ url: 'fotoConcluida.jpg' }]
 
       GiveawayRepository.getNonCompletedGiveawaysByUser.mockResolvedValue(uncompletedGiveawaysMock)

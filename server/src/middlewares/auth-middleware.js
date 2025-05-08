@@ -57,7 +57,7 @@ class AuthMiddleware {
       const role = await UserRepository.getUserRole(id)
 
       if (!roles.includes(role.TipoUtilizador)) {
-        return response(res, true, StatusCodes.UNAUTHORIZED, 'Não tem acesso a esta rota.')
+        return response(res, false, StatusCodes.UNAUTHORIZED, 'Não está autorizado a executar esta operação.')
       }
 
       next()
