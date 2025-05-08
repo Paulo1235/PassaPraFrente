@@ -23,7 +23,7 @@ describe('NotificationMarkReadController', () => {
   it('deve marcar a notificação como lida com sucesso', async () => {
     const req = { user: { Utilizador_ID: 1 }, params: { id: 1 } }
     const res = {}
-    const notification = { id: 1, userId: 1, message: 'Notificação 1' }
+    const notification = { id: 1, Utilizador_ID: 1, message: 'Notificação 1' }
 
     NotificationRepository.getNotificationById.mockResolvedValue(notification)
 
@@ -32,7 +32,8 @@ describe('NotificationMarkReadController', () => {
     await NotificationController.markAsRead(req, res)
 
     expect(NotificationRepository.markAsRead).toHaveBeenCalledWith(1)
-    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, notification)
+
+    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Notificação marcada como lida.')
   })
 
   it('deve retornar erro se a notificação não for encontrada', async () => {

@@ -77,7 +77,7 @@ describe('UserController.sendNewPasswordEmail', () => {
 
     await UserController.sendNewPasswordEmail(req, res)
 
-    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.INTERNAL_SERVER_ERROR, 'Ocorreu um erro ao enviar o email para a sua conta.')
+    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.NOT_FOUND, 'Email inválido.')
   })
 
   it('deve retornar erro se falhar ao enviar o email', async () => {
