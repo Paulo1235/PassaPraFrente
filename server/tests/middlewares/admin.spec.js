@@ -20,7 +20,7 @@ describe('Testes de cargos autorizados', () => {
     vi.clearAllMocks()
   })
 
-  it('deve permitir acesso se o papel for autorizado', async () => {
+  it('deve permitir acesso se o cargo for autorizado', async () => {
     const { req, res, next } = criaReqResNext(123)
 
     UserRepository.getUserRole.mockResolvedValue({ TipoUtilizador: 'admin' })
