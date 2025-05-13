@@ -114,7 +114,7 @@ const AdminMain = () => {
       <div className="md:sticky md:top-0 md:h-screen">
         <SideBar canAdd={false} Home={true} Account={true} LogOut={true} />
       </div>
-      <div className="App w-full overflow-x-auto flex flex-col">
+      <div className="bg-bgp w-full overflow-x-auto flex flex-col">
         <h1 className="text-center mt-16 md:mt-10 text-4xl text-txtp">Pedidos de anuncios</h1>
         <div className="flex flex-col md:flex-row px-4 md:px-6 flex-grow text-center md:text-start">
           <ContentAdmin data={adminData} />
