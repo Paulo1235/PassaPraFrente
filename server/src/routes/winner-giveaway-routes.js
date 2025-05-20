@@ -33,7 +33,7 @@ winnerGiveawayRouter.get(
 )
 
 winnerGiveawayRouter.get(
-  '/winner-giveaway/user/:userId',
+  '/winner-giveaway/user',
   AuthMiddleware.isAuthenticated,
   AuthMiddleware.isVerified,
   WinnerGiveawayController.getAllWinnersGiveawaysByUserId
