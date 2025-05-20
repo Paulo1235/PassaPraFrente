@@ -87,7 +87,7 @@ class WinnerGiveawayController {
   }
 
   static async getAllWinnersGiveawaysByUserId (req, res) {
-    const { userId } = req.params
+    const userId = req.user.Utilizador_ID
 
     try {
       const winnersGiveaways = await WinnerGiveawayRepository.getAllWinnersGiveawaysByUserId(userId)
