@@ -56,14 +56,10 @@ const TransactionHistory = () => {
 
               // Transform sales data to our transaction format
               const salesTransactions = salesData.map((sale) => ({
-                id: `S-${sale.TransacaoVenda_ID || sale.id || Date.now()}`,
                 date: sale.DataTransacao || sale.createdAt || new Date().toISOString(),
                 description: sale.Titulo || sale.name || "Venda",
                 amount: sale.ValorFinal || sale.value || 0,
-                type: "entrada",
                 category: sale.NomeCategoria || sale.category || "Vendas",
-                seller: sale.Nome || "",
-                note: sale.Nota || null,
                 transactionType: "Compra", // Add transaction type
               }))
 
@@ -105,14 +101,10 @@ const TransactionHistory = () => {
 
               // Transform loans data to our transaction format
               const loansTransactions = loansData.map((loan) => ({
-                id: `L-${loan.TransacaoEmprestimo_ID || loan.id || Date.now()}`,
                 date: loan.DataTransacao || loan.createdAt || new Date().toISOString(),
                 description: loan.Titulo || loan.name || "Empréstimo",
                 amount: loan.ValorFinal || loan.value || 0,
-                type: "saida",
                 category: loan.NomeCategoria || loan.category || "Empréstimos",
-                seller: loan.Nome || "",
-                note: loan.Nota || null,
                 transactionType: "Emprestimo", // Add transaction type
               }))
 
@@ -154,14 +146,10 @@ const TransactionHistory = () => {
 
               // Transform giveaways data to our transaction format
               const giveawaysTransactions = giveawaysData.map((giveaway) => ({
-                id: `G-${giveaway.TransacaoSorteio_ID || giveaway.id || Date.now()}`,
                 date: giveaway.DataTransacao || giveaway.createdAt || new Date().toISOString(),
                 description: giveaway.Titulo || giveaway.name || "Sorteio",
                 amount: giveaway.ValorFinal || giveaway.value || 0,
-                type: "entrada",
                 category: giveaway.NomeCategoria || "Sorteios",
-                seller: giveaway.Nome || "",
-                note: giveaway.Nota || null,
                 transactionType: "Sorteio", // Add transaction type
               }))
 
@@ -331,7 +319,7 @@ const TransactionHistory = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Buscar por descrição ou ID"
+                  placeholder="Buscar por descrição"
                   className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#73802A] focus:border-[#73802A]"
                 />
               </div>
@@ -401,24 +389,6 @@ const TransactionHistory = () => {
                         <div className="flex items-center">
                           <span>Data</span>
                           {sortConfig?.key === "date" && (
-                            <span className="ml-1">
-                              {sortConfig.direction === "asc" ? (
-                                <ChevronUp className="w-4 h-4" />
-                              ) : (
-                                <ChevronDown className="w-4 h-4" />
-                              )}
-                            </span>
-                          )}
-                        </div>
-                      </th>
-                      <th
-                        scope="col"
-                        className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                        onClick={() => requestSort("id")}
-                      >
-                        <div className="flex items-center">
-                          <span>ID</span>
-                          {sortConfig?.key === "id" && (
                             <span className="ml-1">
                               {sortConfig.direction === "asc" ? (
                                 <ChevronUp className="w-4 h-4" />
@@ -511,9 +481,6 @@ const TransactionHistory = () => {
                             <Calendar className="w-4 h-4 mr-2 text-gray-400" />
                             {formatDate(transaction.date)}
                           </div>
-                        </td>
-                        <td className="hidden sm:table-cell px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {transaction.id}
                         </td>
                         <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
