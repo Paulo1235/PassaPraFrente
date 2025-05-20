@@ -57,11 +57,12 @@ class GiveawayRepository {
     return giveaways.recordset
   }
 
-  static async getAvailableGiveaways () {
+  static async getAvailableGiveaways (userId) {
     const pool = await getConnection()
 
     const availableGiveaways = await pool
       .request()
+      .input('userId', sql.Int, userId)
       .query(`
         SELECT Sorteio_ID, Titulo, Descricao, DataInicio, DataFim, Utilizador_ID, Sorteio.ArtigoArtigo_ID, Estado, Condicao, NomeCategoria
         FROM Sorteio
@@ -69,7 +70,7 @@ class GiveawayRepository {
         JOIN Artigo ON Artigo.Artigo_ID = Sorteio.ArtigoArtigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado = 'Disponível'
+        WHERE Estado = 'Disponível' AND Sorteio.Utilizador_ID <> @userId
       `)
 
     return availableGiveaways.recordset

@@ -61,8 +61,10 @@ class GiveawayController {
   }
 
   static async getAvailableGiveaways (req, res) {
+    const userId = req.user.Utilizador_ID
+
     try {
-      const giveaways = await GiveawayRepository.getAvailableGiveaways()
+      const giveaways = await GiveawayRepository.getAvailableGiveaways(userId)
 
       const giveawaysWithPhotos = await GiveawayController.attachFirstPhotoToGiveaways(giveaways)
 

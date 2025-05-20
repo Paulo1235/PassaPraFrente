@@ -60,11 +60,12 @@ class LoanRepository {
     return loans.recordset
   }
 
-  static async getAvailableLoans () {
+  static async getAvailableLoans (userId) {
     const pool = await getConnection(dbConfig)
 
     const availableLoans = await pool
       .request()
+      .input('userId', sql.Int, userId)
       .query(`
         SELECT Emprestimo_ID, Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, Emprestimo.ArtigoArtigo_ID, Estado, Condicao, NomeCategoria
         FROM Emprestimo
@@ -72,7 +73,7 @@ class LoanRepository {
         JOIN Artigo ON Artigo.Artigo_ID = Emprestimo.ArtigoArtigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado.Estado = 'Disponível'
+        WHERE Estado = 'Disponível' AND Emprestimo.Utilizador_ID <> @userId
       `)
 
     return availableLoans.recordset

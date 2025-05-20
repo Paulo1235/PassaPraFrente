@@ -57,11 +57,12 @@ class SaleRepository {
     return sales.recordset
   }
 
-  static async getAvailableSales () {
+  static async getAvailableSales (userId) {
     const pool = await getConnection(dbConfig)
 
     const availableSales = await pool
       .request()
+      .input('userId', sql.Int, userId)
       .query(`
         SELECT Venda_ID, Titulo, Descricao, Valor, Utilizador_ID, Venda.Estado_ID, Estado.Estado, Venda.Artigo_ID, Condicao, NomeCategoria
         FROM Venda
@@ -69,7 +70,7 @@ class SaleRepository {
         JOIN Artigo ON Artigo.Artigo_ID = Venda.Artigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado = 'Disponível'
+        WHERE Estado = 'Disponível' AND Venda.Utilizador_ID <> @userId
       `)
 
     return availableSales.recordset

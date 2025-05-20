@@ -52,11 +52,9 @@ class AuthMiddleware {
 
   static authorizedRoles (roles) {
     return async (req, res, next) => {
-      const id = req.user.Utilizador_ID
+      const role = req.user.TipoUtilizador
 
-      const role = await UserRepository.getUserRole(id)
-
-      if (!roles.includes(role.TipoUtilizador)) {
+      if (!roles.includes(role)) {
         return response(res, false, StatusCodes.UNAUTHORIZED, 'Não está autorizado a executar esta operação.')
       }
 

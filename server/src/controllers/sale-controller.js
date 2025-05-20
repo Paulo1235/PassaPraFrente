@@ -57,8 +57,10 @@ class SaleController {
   }
 
   static async getAvailableSales (req, res) {
+    const userId = req.user.Utilizador_ID
+
     try {
-      const sales = await SaleRepository.getAvailableSales()
+      const sales = await SaleRepository.getAvailableSales(userId)
 
       const salesWithPhotos = await SaleController.attachFirstPhotoToSales(sales)
 

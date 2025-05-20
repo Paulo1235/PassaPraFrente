@@ -61,8 +61,10 @@ class LoanController {
   }
 
   static async getAvailableLoans (req, res) {
+    const userId = req.user.Utilizador_ID
+
     try {
-      const loans = await LoanRepository.getAvailableLoans()
+      const loans = await LoanRepository.getAvailableLoans(userId)
 
       const loansWithPhotos = await LoanController.attachFirstPhotoToLoans(loans)
 
