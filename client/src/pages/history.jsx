@@ -286,6 +286,14 @@ const TransactionHistory = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-bgp">
+      {/* Mobile sidebar toggle button */}
+      <button
+        onClick={toggleSidebar}
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-[#73802A] text-white rounded-md shadow-md"
+        aria-label="Toggle sidebar"
+      >
+        {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+      </button>
 
       {/* Sidebar - hidden on mobile, shown when toggled */}
       <div
@@ -295,6 +303,14 @@ const TransactionHistory = () => {
       >
         <Sidebar canAdd={true} Home={true} Account={true} LogOut={false} />
       </div>
+
+      {/* Overlay for mobile when sidebar is open */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
 
       {/* Main content */}
       <div className="flex flex-col flex-grow w-full md:ml-0">
@@ -451,6 +467,24 @@ const TransactionHistory = () => {
                       </th>
                       <th
                         scope="col"
+                        className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                        onClick={() => requestSort("amount")}
+                      >
+                        <div className="flex items-center">
+                          <span>Preço</span>
+                          {sortConfig?.key === "amount" && (
+                            <span className="ml-1">
+                              {sortConfig.direction === "asc" ? (
+                                <ChevronUp className="w-4 h-4" />
+                              ) : (
+                                <ChevronDown className="w-4 h-4" />
+                              )}
+                            </span>
+                          )}
+                        </div>
+                      </th>
+                      <th
+                        scope="col"
                         className="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                         onClick={() => requestSort("category")}
                       >
@@ -488,6 +522,15 @@ const TransactionHistory = () => {
                         </td>
                         <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           <div className="truncate max-w-[120px] sm:max-w-none">{transaction.description}</div>
+                        </td>
+                        <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <span>
+                            {transaction.amount.toLocaleString("pt-PT", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                            €
+                          </span>
                         </td>
                         <td className="hidden md:table-cell px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {transaction.category}
