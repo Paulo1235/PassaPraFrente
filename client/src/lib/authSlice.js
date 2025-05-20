@@ -3,29 +3,27 @@ import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
-// Helper function to get the token from cookies
-const getTokenFromCookies = () => {
+export const getTokenFromCookies = () => {
   const match = document.cookie.match(/(^| )accessToken=([^;]+)/);
   return match ? match[2] : null;
 };
 
-// Helper function to decode the JWT token manually
-const decodeToken = (token) => {
+export const decodeToken = (token) => {
   if (!token) return null;
 
   const base64Url = token.split('.')[1];  
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');  // Decode base64 URL encoding
-  const decodedData = JSON.parse(atob(base64));  // Decode and parse the base64 string into a JSON object
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const decodedData = JSON.parse(atob(base64));
   
   return decodedData;
 };
 
-// Helper function to check if the token is expired
-const isTokenExpired = (token) => {
+export const isTokenExpired = (token) => {
   const decodedToken = decodeToken(token);
   if (!decodedToken) return true;
 
   const expirationDate = decodedToken.exp * 1000;
+  
   return Date.now() > expirationDate;
 };
 
@@ -35,7 +33,7 @@ export const fetchUserInfo = createAsyncThunk("auth/fetchUserInfo", async (_, { 
 
   try {
     const response = await axios.get(`${BACKEND_URL}/api/users/me`, {
-      withCredentials: true, // Include credentials in the request
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
@@ -54,7 +52,8 @@ const authSlice = createSlice({
   },
   reducers: {
     login: (state, action) => {
-      state.userId = action.payload;
+      state.user = action.payload;
+      state.userId = action.payload.userId;
       state.isAuthenticated = true;
     },
     logout: (state) => {
@@ -75,7 +74,7 @@ const authSlice = createSlice({
       .addCase(fetchUserInfo.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-        // Logout if token expired
+
         if (action.payload === "Token expired") {
           state.isAuthenticated = false;
           state.userId = null;

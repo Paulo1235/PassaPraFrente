@@ -10,7 +10,7 @@
     "PASSWORD": "",
     "SERVER_NAME": "",
     "DATABASE": "",
-    "PORTDB": ,
+    "PORTDB": "",
     "INSTANCENAME": ""
   },
   "EMAIL": {
@@ -23,5 +23,17 @@
   "RATE_LIMIT": {
     "MAX": 30,
     "WINDOWMS": 600000
+  },
+  "TOKEN": {
+    "ACCESS_TOKEN_SECRET_KEY": "",
+    "REFRESH_TOKEN_SECRET_KEY": "",
+    "ACCESS_TOKEN_EXPIRE": "",
+    "REFRESH_TOKEN_EXPIRE": "",
+    "ACTIVATION_CODE_EXPIRE": ""
+  },
+  "CLOUDINARY": {
+    "NAME": "",
+    "API_KEY": "",
+    "API_SECRET": ""
   }
 }

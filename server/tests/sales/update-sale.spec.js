@@ -5,6 +5,8 @@ import SaleController from '../../src/controllers/sale-controller.js'
 import SaleRepository from '../../src/repositories/sale-repository.js'
 import response from '../../src/utils/response.js'
 import { SALE_STATES } from '../../src/constants/status-constants.js'
+import UserRepository from '../../src/repositories/user-repository.js'
+import AuthMiddleware from '../../src/middlewares/auth-middleware.js'
 
 vi.mock('../../src/repositories/sale-repository.js', () => ({
   default: {
@@ -13,6 +15,8 @@ vi.mock('../../src/repositories/sale-repository.js', () => ({
     updateSaleStatus: vi.fn()
   }
 }))
+
+vi.mock('../../src/repositories/user-repository.js')
 
 vi.mock('../../src/utils/response.js', () => ({
   default: vi.fn()
@@ -94,6 +98,45 @@ describe('Operações de atualizar em vendas', () => {
     expect(SaleRepository.updateSaleStatus).toHaveBeenCalledWith(1, SALE_STATES.DISPONIVEL)
 
     expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Estado da venda atualizado.')
+  })
+
+  it('deve atualizar o estado da venda com sucesso se o utilizador é admin', async () => {
+    const req = { params: { id: 1 }, body: { status: 'Disponível' }, user: { Utilizador_ID: 3 } }
+    const res = {}
+    const next = vi.fn()
+    const sale = { id: 1, Estado: 'Em análise' }
+
+    UserRepository.getUserRole.mockResolvedValue({ TipoUtilizador: 'admin' })
+
+    const middleware = AuthMiddleware.authorizedRoles(['admin'])
+
+    await middleware(req, res, next)
+
+    SaleRepository.getSaleById.mockResolvedValue(sale)
+
+    SaleRepository.updateSaleStatus.mockResolvedValue(true)
+
+    await SaleController.updateSaleStatus(req, res)
+
+    expect(SaleRepository.updateSaleStatus).toHaveBeenCalledWith(1, SALE_STATES.DISPONIVEL)
+
+    expect(response).toHaveBeenCalledWith(res, true, StatusCodes.OK, 'Estado da venda atualizado.')
+  })
+
+  it('deve atualizar o estado da venda com sucesso se o utilizador é não admin', async () => {
+    const req = { params: { id: 1 }, body: { status: 'Disponível' }, user: { Utilizador_ID: 3 } }
+    const res = {}
+    const next = vi.fn()
+
+    UserRepository.getUserRole.mockResolvedValue({ TipoUtilizador: 'user' })
+
+    const middleware = AuthMiddleware.authorizedRoles(['admin'])
+
+    await middleware(req, res, next)
+
+    expect(SaleRepository.updateSaleStatus).not.toHaveBeenCalled()
+
+    expect(response).toHaveBeenCalledWith(res, false, StatusCodes.UNAUTHORIZED, 'Não está autorizado a executar esta operação.')
   })
 
   it('deve lançar erro se o estado for inválido', async () => {

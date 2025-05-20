@@ -34,13 +34,8 @@ const Login = () => {
         setIsLoading(false);
         return;
       }
-
-      const userResponse = await fetch(`http://localhost:5000/api/protected-route`, {
-        credentials: "include",
-      });
-
-      const userData = await userResponse.json();
-      dispatch(login({ user: { email: values.email, message: userData.message } }));
+      
+      dispatch(login({ user: { email: values.email, message: data.message } }));
 
       toast.success(`Bem vindo: ${data.message.Nome}`);
       setTimeout(() => navigate("/index"), 3000);
