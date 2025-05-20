@@ -113,7 +113,7 @@ class TransactionLoanRepository {
         WHERE PropostaEmprestimoUtilizador_ID = @userId
       `)
 
-    return transaction.recordset[0]
+    return transaction.recordset
   }
 }
 

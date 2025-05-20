@@ -201,7 +201,7 @@ const SaleProposal = () => {
                   </h2>
 
                   <p className="text-gray-600 mb-6 italic">
-                    Ao enviar esta proposta, o comprador poderá aceitar ou
+                    Ao enviar esta proposta, o vendedor poderá aceitar ou
                     recusar o preço oferecido.
                   </p>
 

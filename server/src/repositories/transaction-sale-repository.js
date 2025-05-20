@@ -111,7 +111,7 @@ class TransactionSaleRepository {
         WHERE PropostaVendaUtilizador_ID = @userId
       `)
 
-    return transaction.recordset[0]
+    return transaction.recordset
   }
 }
 
