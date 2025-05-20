@@ -8,27 +8,25 @@ import { CreateDrawSchema } from "../../lib/schemas";
 
 import { convertToBase64 } from "../../lib/utils";
 
-import '../../components/css/sidebar.css';
-import '../../index.css';
+import "../../components/css/sidebar.css";
+import "../../index.css";
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export default function CreateDraw() {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
-  const fileInputRef = useRef(null)
+  const fileInputRef = useRef(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-      if (!isAuthenticated) {
-        navigate("/");
-        return;
-      }
-    }, [isAuthenticated, dispatch, navigate]);
-  
-    if (!isAuthenticated) return null;
+    if (!isAuthenticated) {
+      navigate("/");
+      return;
+    }
+  }, [isAuthenticated, dispatch, navigate]);
 
   // Initial form values
   const initialValues = {
@@ -41,12 +39,14 @@ export default function CreateDraw() {
     photos: [],
     photoUrls: [],
   };
-  
+
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const base64Promises = values.photos.map((photo) => convertToBase64(photo))
-      const photoUrls = await Promise.all(base64Promises)
+      const base64Promises = values.photos.map((photo) =>
+        convertToBase64(photo)
+      );
+      const photoUrls = await Promise.all(base64Promises);
       const drawData = {
         title: values.title,
         description: values.description,
@@ -55,7 +55,7 @@ export default function CreateDraw() {
         condition: values.condition,
         category: values.category,
         thumbnails: photoUrls,
-      }
+      };
 
       const response = await fetch(
         "http://localhost:5000/api/giveaways/create",
@@ -92,10 +92,13 @@ export default function CreateDraw() {
         <ToastContainer />
         <div className="w-full max-w-[1500px] h-auto min-h-[800px] bg-[#FFFAEE] mx-auto my-10 rounded-xl flex flex-col p-6">
           <div className="button-back flex flex-col items-end">
-              <button className="flex flex-row hover:underline" onClick={() => navigate("/index")}>
-                <Undo2 className="h-5 w-5" />
-                <span>Voltar</span>
-              </button>
+            <button
+              className="flex flex-row hover:underline"
+              onClick={() => navigate("/index")}
+            >
+              <Undo2 className="h-5 w-5" />
+              <span>Voltar</span>
+            </button>
           </div>
 
           <h1 className="text-3xl font-medium text-[#CAAD7E] text-center my-6">
@@ -135,9 +138,9 @@ export default function CreateDraw() {
                         type="button"
                         className="absolute top-2 right-2 bg-gray-800 bg-opacity-50 rounded-full p-1 hover:bg-opacity-70"
                         onClick={() => {
-                          const newPhotos = [...values.photos]
-                          newPhotos.splice(index, 1)
-                          setFieldValue("photos", newPhotos)
+                          const newPhotos = [...values.photos];
+                          newPhotos.splice(index, 1);
+                          setFieldValue("photos", newPhotos);
                         }}
                       >
                         <X className="h-4 w-4 text-white" />
@@ -149,7 +152,7 @@ export default function CreateDraw() {
                     <div
                       className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-gray-100 rounded-md flex items-center justify-center border border-dashed border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors"
                       onClick={() => {
-                        fileInputRef.current?.click()
+                        fileInputRef.current?.click();
                       }}
                     >
                       <Plus className="h-10 w-10 text-gray-400" />
@@ -162,21 +165,21 @@ export default function CreateDraw() {
                     className="hidden"
                     accept="image/*"
                     onChange={(e) => {
-                      const file = e.target.files?.[0]
-                      if (!file) return
+                      const file = e.target.files?.[0];
+                      if (!file) return;
 
                       if (file.size > MAX_FILE_SIZE) {
-                        toast.error("Imagem demasiado grande. Máx 10MB.")
-                        return
+                        toast.error("Imagem demasiado grande. Máx 10MB.");
+                        return;
                       }
 
                       if (values.photos.length >= 3) {
-                        toast.error("Máximo de 3 fotos permitido.")
-                        return
+                        toast.error("Máximo de 3 fotos permitido.");
+                        return;
                       }
 
-                      const newPhotos = [...values.photos, file]
-                      setFieldValue("photos", newPhotos)
+                      const newPhotos = [...values.photos, file];
+                      setFieldValue("photos", newPhotos);
                     }}
                   />
                 </div>
@@ -295,11 +298,11 @@ export default function CreateDraw() {
                             : "border-gray-300"
                         } rounded-md appearance-none bg-white`}
                       >
-                      <option value="Brinquedos">Brinquedos</option>
-                      <option value="Eletrónicos">Eletrónicos</option>
-                      <option value="Ferramentas">Ferramentas</option>
-                      <option value="Mobilia">Mobilia</option>
-                      <option value="Roupas">Roupas</option>
+                        <option value="Brinquedos">Brinquedos</option>
+                        <option value="Eletrónicos">Eletrónicos</option>
+                        <option value="Ferramentas">Ferramentas</option>
+                        <option value="Mobilia">Mobilia</option>
+                        <option value="Roupas">Roupas</option>
                       </Field>
                       <ErrorMessage
                         name="category"
