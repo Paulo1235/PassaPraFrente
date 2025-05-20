@@ -155,7 +155,7 @@ const Sidebar = (props) => {
               className="text-[#ADADAD] bg-[#FFFAEE] hover:bg-[#D4CFC3]/90 focus:ring-4 focus:outline-none focus:ring-[#FFFAEE]/50 font-medium rounded-lg text-xl px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
             >
               <User className="w-6 h-6 mr-3 text-[#ADADAD]" />
-              Conta
+              A Minha Conta
             </button>
           )}
 
@@ -175,7 +175,7 @@ const Sidebar = (props) => {
           <div className="relative mb-48" ref={dropdownRef}>
             <button
               onClick={handleAddButtonClick}
-              className="bg-btns hover:bg-[#c4a884] rounded-lg px-4 py-2 mt-4 flex items-center"
+              className="bg-btns hover:bg-[#c4a884] font-medium rounded-lg text-xl px-12 py-2.5 text-center flex items-center"
             >
               <span className="text-xl text-white">Adicionar</span>
               <ChevronDown
