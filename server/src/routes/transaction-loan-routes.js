@@ -38,4 +38,11 @@ transactionLoanRouter.patch(
   TransactionLoanController.createReviewTransactionLoan
 )
 
+transactionLoanRouter.get(
+  '/transaction-loans/user/user',
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  TransactionLoanController.getLoanTransactionByUserId
+)
+
 export default transactionLoanRouter

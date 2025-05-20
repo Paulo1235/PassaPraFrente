@@ -38,4 +38,11 @@ transactionSaleRouter.patch(
   TransactionSaleController.createReviewTransactionSale
 )
 
+transactionSaleRouter.get(
+  '/transaction-sales/user',
+  AuthMiddleware.isAuthenticated,
+  AuthMiddleware.isVerified,
+  TransactionSaleController.getSaleTransactionByUserId
+)
+
 export default transactionSaleRouter

@@ -93,6 +93,18 @@ class TransactionSaleController {
     }
   }
 
+  static async getSaleTransactionByUserId (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const transactions = await TransactionSaleRepository.getSaleTransactionByUserId(userId)
+
+      return response(res, true, StatusCodes.OK, transactions)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar as transações do utilizador.')
+    }
+  }
+
   static async createReviewTransactionSale (req, res) {
     const review = req.body.review
 

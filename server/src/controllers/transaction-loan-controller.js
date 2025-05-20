@@ -93,6 +93,18 @@ class TransactionLoanController {
     }
   }
 
+  static async getLoanTransactionByUserId (req, res) {
+    const userId = req.user.Utilizador_ID
+
+    try {
+      const transactions = await TransactionLoanRepository.getLoanTransactionByUserId(userId)
+
+      return response(res, true, StatusCodes.OK, transactions)
+    } catch (error) {
+      handleError(res, error, 'Ocorreu um erro ao encontrar as transações do utilizador.')
+    }
+  }
+
   static async createReviewTransactionLoan (req, res) {
     const review = req.body.review
 

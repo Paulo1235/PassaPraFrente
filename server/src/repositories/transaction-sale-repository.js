@@ -94,6 +94,25 @@ class TransactionSaleRepository {
 
     return transaction.recordset[0]
   }
+
+  static async getSaleTransactionByUserId (userId) {
+    const pool = await getConnection()
+
+    const transaction = await pool
+      .request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        SELECT TransacaoVenda_ID, ValorFinal, Nota, PropostaVendaUtilizador_ID, PropostaVendaVenda_ID, Venda.Titulo, Venda.Descricao, Categoria.NomeCategoria, Utilizador.Utilizador_ID, Utilizador.Nome
+        FROM TransacaoVenda
+        JOIN Venda ON Venda.Venda_ID = TransacaoVenda.PropostaVendaVenda_ID
+        JOIN Utilizador ON Utilizador.Utilizador_ID = TransacaoVenda.PropostaVendaUtilizador_ID
+        JOIN Artigo ON Artigo.Artigo_ID = Venda.Artigo_ID
+        JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
+        WHERE PropostaVendaUtilizador_ID = @userId
+      `)
+
+    return transaction.recordset[0]
+  }
 }
 
 export default TransactionSaleRepository

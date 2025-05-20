@@ -51,8 +51,12 @@ class WinnerGiveawayRepository {
       .request()
       .input('userId', sql.Int, userId)
       .query(`
-        SELECT * 
-        FROM VencedorSorteio 
+        SELECT VencedorSorteio_ID, Nota, InscricaoSorteioUtilizadorUtilizador_ID, InscricaoSorteioSorteioSorteio_ID, Sorteio.Titulo, Sorteio.Descricao, Categoria.NomeCategoria, Utilizador.Utilizador_ID, Utilizador.Nome 
+        FROM VencedorSorteio
+        JOIN Sorteio ON Sorteio.Sorteio_ID = VencedorSorteio.InscricaoSorteioSorteioSorteio_ID
+        JOIN Utilizador ON Utilizador.Utilizador_ID = Sorteio.Utilizador_ID
+        JOIN Artigo ON Artigo.Artigo_ID = Sorteio.ArtigoArtigo_ID
+        JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         WHERE InscricaoSorteioUtilizadorUtilizador_ID = @userId
       `)
 

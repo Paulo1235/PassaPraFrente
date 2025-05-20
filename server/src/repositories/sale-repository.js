@@ -31,7 +31,7 @@ class SaleRepository {
     const sale = await pool.request()
       .input('id', sql.Int, id)
       .query(`
-        SELECT Venda_ID, Titulo, Descricao, Valor, NomeCategoria, Condicao, Contacto, Venda.Utilizador_ID, Venda.Artigo_ID, Venda.Estado_ID, Estado.Estado
+        SELECT Venda_ID, Titulo, Descricao, Valor, NomeCategoria, Condicao, Contacto, Venda.Utilizador_ID, Venda.Artigo_ID, Venda.Estado_ID, Estado.Estado, Utilizador.Nome
         FROM Venda
         JOIN Utilizador ON Utilizador.Utilizador_ID = Venda.Utilizador_ID
         JOIN Artigo ON Artigo.Artigo_ID = Venda.Artigo_ID

@@ -96,6 +96,25 @@ class TransactionLoanRepository {
 
     return transaction.recordset[0]
   }
+
+  static async getLoanTransactionByUserId (userId) {
+    const pool = await getConnection()
+
+    const transaction = await pool
+      .request()
+      .input('userId', sql.Int, userId)
+      .query(`
+        SELECT TransacaoEmprestimo_ID, ValorFinal, Nota, PropostaEmprestimoUtilizador_ID, PropostaEmprestimoEmprestimo_ID, Emprestimo.Titulo, Emprestimo.Descricao, Categoria.NomeCategoria, Utilizador.Utilizador_ID, Utilizador.Nome
+        FROM TransacaoEmprestimo
+        JOIN Emprestimo ON Emprestimo.Emprestimo_ID = TransacaoEmprestimo.PropostaEmprestimoEmprestimo_ID
+        JOIN Utilizador ON Utilizador.Utilizador_ID = TransacaoEmprestimo.PropostaEmprestimoUtilizador_ID
+        JOIN Artigo ON Artigo.Artigo_ID = Emprestimo.ArtigoArtigo_ID
+        JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
+        WHERE PropostaEmprestimoUtilizador_ID = @userId
+      `)
+
+    return transaction.recordset[0]
+  }
 }
 
 export default TransactionLoanRepository

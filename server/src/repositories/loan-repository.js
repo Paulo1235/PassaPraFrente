@@ -34,7 +34,7 @@ class LoanRepository {
       .input('id', sql.Int, id)
       .query(`
         SELECT Emprestimo_ID, Titulo, Descricao, DataInicio, DataFim, Valor, NomeCategoria, Condicao, 
-        Contacto, Emprestimo.Utilizador_ID, Emprestimo.ArtigoArtigo_ID, Emprestimo.EstadoEstado_ID, Estado.Estado
+        Contacto, Emprestimo.Utilizador_ID, Emprestimo.ArtigoArtigo_ID, Emprestimo.EstadoEstado_ID, Estado.Estado, Utilizador.Nome
         FROM Emprestimo
         JOIN Utilizador ON Utilizador.Utilizador_ID = Emprestimo.Utilizador_ID
         JOIN Artigo ON Artigo.Artigo_ID = Emprestimo.ArtigoArtigo_ID

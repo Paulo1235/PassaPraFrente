@@ -32,7 +32,7 @@ class GiveawayRepository {
       .request()
       .input('id', sql.Int, id)
       .query(`
-        SELECT Sorteio_ID, DataFim, DataInicio, Titulo, Descricao, NomeCategoria, Condicao, Contacto, Sorteio.Utilizador_ID, Estado_ID, Artigo_ID
+        SELECT Sorteio_ID, DataFim, DataInicio, Titulo, Descricao, NomeCategoria, Condicao, Contacto, Sorteio.Utilizador_ID, Estado_ID, Artigo_ID, Utilizador.Nome
         FROM Sorteio
         JOIN Utilizador ON Utilizador.Utilizador_ID = Sorteio.Utilizador_ID
         JOIN Artigo ON Artigo.Artigo_ID = Sorteio.ArtigoArtigo_ID
@@ -127,7 +127,9 @@ class GiveawayRepository {
   static async getUserGiveaways (userId) {
     const pool = await getConnection()
 
-    const giveaways = await pool.request().input('userId', sql.Int, userId)
+    const giveaways = await pool
+      .request()
+      .input('userId', sql.Int, userId)
       .query(`
         SELECT * 
         FROM Sorteio
