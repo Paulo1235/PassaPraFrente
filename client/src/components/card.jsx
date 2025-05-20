@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react"
 import pessoaIco from "../images/pessoaIco.svg"
 import { useNavigate } from "react-router-dom"
@@ -34,10 +36,10 @@ const Card = (props) => {
 
   return (
     <div className="group relative cursor-pointer" onClick={handleCardClick}>
-      <div className="h-64 w-full overflow-hidden rounded-md bg-gray-200">
+      <div className="h-64 w-full overflow-hidden rounded-md">
         <img
           src={props.image?.Url && !imageError ? props.image.Url : pessoaIco}
-          className="h-full w-64 object-cover group-hover:opacity-75 transition-opacity duration-300"
+          className="h-full w-full object-cover group-hover:opacity-75 transition-opacity duration-300"
           alt={props.name || "Item image"}
           onError={handleImageError}
           loading="lazy"

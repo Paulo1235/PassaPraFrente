@@ -15,7 +15,7 @@ import ContentAccount from "../components/contentAccount";
 
 //? Icons
 import ProfilePicture from "../images/default-avatar.jpg";
-import { Bell, HandHelping, Star, UserPen } from "lucide-react";
+import { Bell, HandHelping, NotebookText, Star, UserPen } from "lucide-react";
 
 const Account = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -208,6 +208,13 @@ const Account = () => {
                 >
                   <HandHelping className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
                   <span className="ml-2 text-sm md:text-base">Propostas</span>
+                </div>
+                <div
+                  className="proposals flex flex-row items-center cursor-pointer text-txtp"
+                  onClick={() => navigate("/history")}
+                >
+                  <NotebookText className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
+                  <span className="ml-2 text-sm md:text-base">Historico</span>
                 </div>
               </div>
             </div>

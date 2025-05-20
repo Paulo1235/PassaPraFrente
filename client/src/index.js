@@ -24,12 +24,12 @@ import AdminMain from "./pages/adminMainPage";
 import ProposalsPage from "./pages/proposalsPage";
 import NotificationsPage from "./pages/notificationsPage";
 import ReviewPage from "./pages/reviewPage.jsx";
+import TransactionHistory from "./pages/history.jsx";
 
 //? Conta
 import Account from "./pages/accountPage";
 import ConfirmAccount from "./pages/confirmAccount.jsx";
 import EditAccountPage from "./pages/editAccountPage";
-
 
 //? Processo de Negocio
 import LookSale from "./pages/BPMN/lookSalePage";
@@ -50,13 +50,11 @@ import AdminProtectedRoute from "./pages/ProtectedRoutes/adminProtectedRoute";
 import Layout from "./pages/layout.jsx";
 import NotFound from "./pages/notFound";
 
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <Router>
       <Routes>
-
         {/* Autenticacao e Registo */}
         <Route path="/" element={<Login />} />
         <Route path="/signin" element={<SignIn />} />
@@ -70,10 +68,7 @@ root.render(
         />
 
         {/* Paginas principais */}
-        <Route 
-          path="/index" 
-          element={<ProtectedRoute element={<Main />} />} 
-        />
+        <Route path="/index" element={<ProtectedRoute element={<Main />} />} />
 
         <Route
           path="/sale/:id"
@@ -139,10 +134,10 @@ root.render(
           path="/editaccount"
           element={<ProtectedRoute element={<EditAccountPage />} />}
         />
-        
-        <Route 
-          path="/newpassword" 
-          element={<ProtectedRoute element={<NewPassword />} />} 
+
+        <Route
+          path="/newpassword"
+          element={<ProtectedRoute element={<NewPassword />} />}
         />
 
         <Route
@@ -160,6 +155,11 @@ root.render(
           element={<ProtectedRoute element={<NotificationsPage />} />}
         />
 
+        <Route
+          path="/history"
+          element={<ProtectedRoute element={<TransactionHistory />} />}
+        />
+
         {/* Review */}
         <Route
           path="/review/user/:category/:id"
@@ -169,7 +169,6 @@ root.render(
         {/* Pagina nao encontrada */}
         <Route path="/notfound" element={<NotFound />} />
         <Route path="*" element={<Navigate replace to="/notfound" />} />
-
       </Routes>
     </Router>
   </Provider>
