@@ -1,62 +1,70 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import pessoaIco from "../images/pessoaIco.svg"
-import { useNavigate } from "react-router-dom"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import pessoaIco from "../images/pessoaIco.svg";
 
-const Card = (props) => {
-  const navigate = useNavigate()
-  const [imageError, setImageError] = useState(false)
+const Card = ({
+  mainPage,
+  idVenda,
+  idEmprestimo,
+  idSorteio,
+  Estado,
+  isCompleted,
+  category,
+  image,
+  name,
+  condition,
+  value,
+}) => {
+  const navigate = useNavigate();
+  const [imageError, setImageError] = useState(false);
 
   const handleCardClick = () => {
-    if (props.mainPage === true) {
-      if (props.idVenda !== null && props.Estado !== "Concluído") {
-        navigate(`/sale/${props.idVenda}`)
-      } else if (props.idEmprestimo !== null) {
-        navigate(`/loan/${props.idEmprestimo}`)
-      } else if (props.idSorteio !== null) {
-        navigate(`/draw/${props.idSorteio}`)
+    if (mainPage) {
+      if (idVenda !== null && Estado !== "Concluído") {
+        navigate(`/sale/${idVenda}`);
+      } else if (idEmprestimo !== null) {
+        navigate(`/loan/${idEmprestimo}`);
+      } else if (idSorteio !== null) {
+        navigate(`/draw/${idSorteio}`);
       }
-    } else if (props.isCompleted === true) {
-      //? Isto serve para quando o utilizador clica no cartão de um item que já foi concluído, nao podendo editar
-    } else {
-      if (props.category === "Compras") {
-        navigate(`/editsale/${props.idVenda}`)
-      } else if (props.category === "Empréstimos") {
-        navigate(`/editloan/${props.idEmprestimo}`)
-      } else if (props.category === "Sorteios") {
-        navigate(`/editdraw/${props.idSorteio}`)
+    } else if (!isCompleted) {
+      if (category === "Compras") {
+        navigate(`/editsale/${idVenda}`);
+      } else if (category === "Empréstimos") {
+        navigate(`/editloan/${idEmprestimo}`);
+      } else if (category === "Sorteios") {
+        navigate(`/editdraw/${idSorteio}`);
       }
     }
-  }
+  };
 
-  const handleImageError = () => {
-    setImageError(true)
-  }
+  const handleImageError = () => setImageError(true);
 
   return (
-    <div className="group relative cursor-pointer" onClick={handleCardClick}>
-      <div className="h-64 w-full overflow-hidden rounded-md">
+    <div
+      onClick={handleCardClick}
+      className="group relative cursor-pointer overflow-hidden rounded-lg bg-white shadow hover:shadow-md transition-shadow duration-300"
+    >
+      {/* Imagem com altura fixa, largura total e corte para caber */}
+      <div className="w-full h-48 bg-gray-50">
         <img
-          src={props.image?.Url && !imageError ? props.image.Url : pessoaIco}
-          className="h-full w-full object-cover group-hover:opacity-75 transition-opacity duration-300"
-          alt={props.name || "Item image"}
+          src={image?.Url && !imageError ? image.Url : pessoaIco}
+          alt={name || "Imagem do item"}
           onError={handleImageError}
           loading="lazy"
+          className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-75"
         />
       </div>
-      <div className="mt-4 flex justify-between">
-        <div>
-          <h3 className="text-sm text-gray-700">
-            <span aria-hidden="true" className="absolute inset-0"></span>
-            {props.name}
-          </h3>
-          <p className="mt-1 text-sm text-gray-500">{props.condition ? props.condition : "Sem condição"}</p>
-        </div>
-        <p className="text-sm font-medium text-gray-900">{props.value}€</p>
+
+      <div className="p-4">
+        <h3 className="text-base font-semibold text-gray-800">{name}</h3>
+        <p className="text-sm text-gray-500">{condition || "Sem condição"}</p>
+        <p className="mt-1 text-sm font-bold text-gray-900">{value}€</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Card
+export default Card;

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Undo2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 //? CSS
@@ -11,12 +10,14 @@ import SideBar from "../components/sideBar";
 import Footer from "../components/footer";
 import { NotificationList } from "../components/notificationCard";
 import { Helmet } from "react-helmet";
+import NavbarAccount from "../components/navbarAccount"; // Importação adicionada
 
 const NotificationsPage = () => {
   const navigate = useNavigate();
   const [notificationsData, setNotificationsData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState("notifications"); // Estado para controlar a aba ativa
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -94,14 +95,8 @@ const NotificationsPage = () => {
       <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
-        {/* Botão fixo no topo direito */}
-        <button
-          className="absolute top-4 right-4 sm:top-6 sm:right-10 flex items-center text-txts z-10"
-          onClick={() => navigate("/account")}
-        >
-          <Undo2 />
-          <span className="ml-1">Voltar</span>
-        </button>
+        {/* NavbarAccount adicionado aqui */}
+        <NavbarAccount activeTab={activeTab} setActiveTab={setActiveTab} />
 
         {/* Cabeçalho */}
         <div className="p-6 sm:p-10 pb-0">

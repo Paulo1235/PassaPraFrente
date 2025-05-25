@@ -76,16 +76,16 @@ const FilterDropdown = ({ label, options, value, onChange, clearFilter }) => {
   return (
     <div className="relative mb-4">
       <div className="flex items-center justify-between mb-2">
-        <label className="text-sm font-medium text-gray-700">{label}</label>
+        <label className="text-sm font-medium text-gray-500">{label}</label>
         {value && (
-          <button onClick={clearFilter} className="text-xs text-gray-500 hover:text-gray-700">
+          <button onClick={clearFilter} className="text-xs text-txts hover:text-gray-700">
             Limpar
           </button>
         )}
       </div>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+        className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-txts bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
       >
         <span>{value ? options.find((opt) => opt.value === value)?.label : "Selecionar"}</span>
         <ChevronDown className="w-4 h-4 ml-2" />
@@ -198,12 +198,12 @@ const ContentMain = ({ shopData, activeFilters = {}, onFilterChange, onClearAllF
   return (
     <div className="flex flex-col w-full">
       {/* Topbar com botão de filtros e busca */}
-      <div className="sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm">
+      <div className="sticky top-0 z-20 bg-bgp border-b border-txtp shadow-sm">
         <div className="px-4 py-3 md:px-6 lg:px-8 flex items-center justify-between">
           {/* Botão de filtros */}
           <button
             onClick={() => setIsFilterSidebarOpen(!isFilterSidebarOpen)}
-            className="text-gray-600 hover:text-[#73802A] flex items-center"
+            className="text-txtp hover:text-txts flex items-center"
           >
             <SlidersHorizontal className="w-5 h-5 mr-2" />
             Filtros
@@ -218,15 +218,15 @@ const ContentMain = ({ shopData, activeFilters = {}, onFilterChange, onClearAllF
               type="text"
               value={searchQuery}
               onChange={handleSearchChange}
-              placeholder="Buscar por nome ou descrição"
-              className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#73802A] focus:border-[#73802A]"
+              placeholder="Pesquisar..."
+              className="pl-10 pr-4 py-2 w-full border border-txtp rounded-md focus:outline-none focus:ring-1 focus:ring-[#73802A] focus:border-[#73802A]"
             />
           </div>
         </div>
 
         {/* Seção de filtros condicional */}
         {isFilterSidebarOpen && (
-          <div className="px-4 py-4 border-t border-gray-200 bg-gray-50 grid md:grid-cols-3 gap-4">
+          <div className="px-4 py-4 border-t border-txtp bg-bgp grid md:grid-cols-3 gap-4">
             <FilterDropdown
               label="Categoria"
               options={categories}
@@ -278,3 +278,5 @@ const ContentMain = ({ shopData, activeFilters = {}, onFilterChange, onClearAllF
 }
 
 export default ContentMain
+
+

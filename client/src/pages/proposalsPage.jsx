@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Undo2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUserInfo } from "../lib/authSlice";
@@ -8,6 +7,7 @@ import ProposalCard from "../components/proposalCard";
 import Footer from "../components/footer";
 import { Helmet } from "react-helmet";
 import ProposalCardAnnouce from "../components/proposalCardAnnouce";
+import NavbarAccount from "../components/navbarAccount"; // Importação adicionada
 import "../components/css/sidebar.css";
 import "../index.css";
 
@@ -17,6 +17,7 @@ const ProposalsPage = () => {
   const [proposalsMade, setProposalsMade] = useState({ sales: [], loans: [] });
   const [proposalsReceived, setProposalsReceived] = useState({ sales: [], loans: [] });
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState("proposals"); // Estado para controlar a aba ativa
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -268,13 +269,8 @@ const ProposalsPage = () => {
       <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
-        <button
-          className="absolute top-4 right-4 sm:top-6 sm:right-10 flex items-center text-txts z-10"
-          onClick={() => navigate("/account")}
-        >
-          <Undo2 />
-          <span className="ml-1">Voltar</span>
-        </button>
+        {/* NavbarAccount adicionado aqui */}
+        <NavbarAccount activeTab={activeTab} setActiveTab={setActiveTab} />
 
         <div className="p-6 sm:p-10 pb-0">
           <h1 className="text-2xl font-medium text-txtp">Propostas</h1>

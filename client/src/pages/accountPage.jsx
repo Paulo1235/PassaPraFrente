@@ -12,10 +12,11 @@ import "../index.css";
 import SideBar from "../components/sideBar";
 import Footer from "../components/footer";
 import ContentAccount from "../components/contentAccount";
+import NavbarAccount from "../components/navbarAccount";
 
 //? Icons
 import ProfilePicture from "../images/default-avatar.jpg";
-import { Bell, HandHelping, NotebookText, Star, UserPen } from "lucide-react";
+import { Star } from "lucide-react";
 
 const Account = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -25,7 +26,8 @@ const Account = () => {
   const [userData, setUserData] = useState(null);
   const [userDataNonCompleted, setUserDataNonCompleted] = useState(null);
   const [rating, setRating] = useState(0);
-  const [showCompleted, setShowCompleted] = useState(false); // NEW STATE
+  const [showCompleted, setShowCompleted] = useState(false);
+  const [activeTab, setActiveTab] = useState("account");
 
   useEffect(() => {
     const fetchAccountData = async () => {
@@ -141,7 +143,15 @@ const Account = () => {
   const renderStars = () => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
-      stars.push(<Star key={i} fill={i <= rating ? "yellow" : "black"} />);
+      stars.push(
+        <Star
+          key={i}
+          fill={i <= rating ? "#D4AF37" : "#E5E5E5"}
+          stroke="transparent"
+          size={25}
+          className="star-icon"
+        />
+      );
     }
     return stars;
   };
@@ -158,69 +168,71 @@ const Account = () => {
       </div>
 
       <div className="bg-bgp w-full overflow-x-hidden flex flex-col flex-grow">
+        {/* Novo componente NavbarAccount */}
+        <NavbarAccount activeTab={activeTab} setActiveTab={setActiveTab} />
+
         <div className="left mx-2 md:ml-10 lg:ml-20 mt-6 md:mt-10 flex flex-col px-4 md:px-6">
-          <p className="text-2xl md:text-3xl text-[#73802A] text-center md:text-start">
+          <p className="text-2xl md:text-3xl text-[#73802A] text-center md:text-start mb-6">
             Conta
           </p>
-          <div className="flex flex-col md:flex-row md:items-center">
-            <div className="account mt-6 md:mt-10 flex flex-col md:flex-row">
+
+          {/* Layout para mobile (coluna) */}
+          <div className="flex flex-col items-center gap-4 md:hidden">
+            {/* Imagem */}
+            <img
+              src={user?.message.Url || ProfilePicture}
+              className="rounded-full w-32 h-32 object-cover"
+              alt="Profile"
+            />
+
+            {/* Nome e email */}
+            <div className="text-center">
+              <h1 className="text-xl text-[#73802A]">{user?.message.Nome}</h1>
+              <p className="text-sm mt-1 text-gray-600">
+                {user?.message.Email}
+              </p>
+            </div>
+
+            {/* Rating */}
+            <div className="flex flex-col items-center mt-2">
+              <div className="flex gap-1">{renderStars()}</div>
+              <p className="text-sm mt-1">Avaliação</p>
+            </div>
+          </div>
+
+          {/* Layout para desktop (linha com rating centralizado) */}
+          <div className="hidden md:flex md:flex-row items-center gap-6">
+            {/* Imagem */}
+            <div className="flex-shrink-0">
               <img
                 src={user?.message.Url || ProfilePicture}
-                className="rounded-full w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 xl:w-[182px] xl:h-[182px] object-cover mx-auto md:mx-0"
-                alt="account-logo"
+                className="rounded-full w-40 h-40 object-cover"
+                alt="Profile"
               />
-              <div className="info mt-4 md:mt-0 md:ml-4 lg:ml-10 flex flex-col justify-center text-center md:text-left">
-                <p className="text-xl md:text-2xl lg:text-3xl text-[#73802A]">
+            </div>
+
+            {/* Container principal */}
+            <div className="relative w-full flex items-center">
+              {/* Nome e email */}
+              <div className="flex flex-col">
+                <h1 className="text-2xl text-[#73802A]">
                   {user?.message.Nome}
-                </p>
-                <p className="md:ml-2 lg:ml-5 mt-2 text-sm md:text-base">
+                </h1>
+                <p className="text-sm mt-1 text-gray-600">
                   {user?.message.Email}
                 </p>
               </div>
 
-              <div className="rating mt-4 md:mt-0 md:ml-6 lg:ml-20 xl:ml-60 flex flex-col items-center md:items-start">
-                <div className="flex flex-row items-center justify-center md:justify-start gap-1 md:gap-2">
-                  {renderStars()}
-                </div>
-                <p className="mx-auto my-1 text-center">Rating</p>
-              </div>
-
-              <div className="icons mt-6 md:mt-0 md:ml-6 lg:ml-10 xl:ml-20 flex flex-row md:flex-col justify-center gap-4 md:gap-3">
-                <div
-                  onClick={() => navigate("/editaccount")}
-                  className="edit flex flex-row items-center cursor-pointer text-txts"
-                >
-                  <UserPen className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
-                  <span className="ml-2 text-sm md:text-base">Editar</span>
-                </div>
-                <div
-                  onClick={() => navigate("/notifications")}
-                  className="edit flex flex-row items-center cursor-pointer text-txtp"
-                >
-                  <Bell className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
-                  <span className="ml-2 text-sm md:text-base">
-                    Notificações
-                  </span>
-                </div>
-                <div
-                  className="proposals flex flex-row items-center cursor-pointer text-txtp"
-                  onClick={() => navigate("/proposals")}
-                >
-                  <HandHelping className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
-                  <span className="ml-2 text-sm md:text-base">Propostas</span>
-                </div>
-                <div
-                  className="proposals flex flex-row items-center cursor-pointer text-txtp"
-                  onClick={() => navigate("/history")}
-                >
-                  <NotebookText className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 xl:w-[35px] xl:h-[35px]" />
-                  <span className="ml-2 text-sm md:text-base">Historico</span>
+              {/* Rating - centralizado no espaço restante */}
+              <div className="absolute left-1/2 right-4 transform -translate-x-1/2">
+                <div className="flex flex-col items-center">
+                  <div className="flex gap-1">{renderStars()}</div>
+                  <p className="text-sm mt-1">Avaliação</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
         {/* Pagination Toggle */}
         {userData && (
           <div className="flex flex-col px-4 md:px-6 mt-6">

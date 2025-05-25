@@ -1,15 +1,14 @@
-"use client"
-
 import { useEffect, useState } from "react"
-import { Search, Filter, ChevronDown, ChevronUp, Calendar, Menu, X } from "lucide-react"
+import { Search, Filter, ChevronDown, ChevronUp, Calendar } from "lucide-react"
 import Footer from "../components/footer"
 import Sidebar from "../components/sideBar"
+import NavbarAccount from "../components/navbarAccount" // Importação adicionada
 
 const TransactionHistory = () => {
   const [transactions, setTransactions] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState("history") // Estado para controlar a aba ativa
 
   const [searchQuery, setSearchQuery] = useState("")
   const [filterOpen, setFilterOpen] = useState(false)
@@ -255,55 +254,16 @@ const TransactionHistory = () => {
     }
   }
 
-  // Toggle sidebar for mobile
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen)
-  }
-
-  // Close sidebar when clicking outside on mobile
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsSidebarOpen(false)
-      }
-    }
-
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
-
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-bgp">
-      {/* Mobile sidebar toggle button */}
-      <button
-        onClick={toggleSidebar}
-        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-[#73802A] text-white rounded-md shadow-md"
-        aria-label="Toggle sidebar"
-      >
-        {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
-      </button>
-
-      {/* Sidebar - hidden on mobile, shown when toggled */}
-      <div
-        className={`${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 fixed md:relative z-40 h-full transition-transform duration-300 ease-in-out`}
-      >
-        <Sidebar canAdd={true} Home={true} Account={true} LogOut={false} />
-      </div>
-
-      {/* Overlay for mobile when sidebar is open */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        ></div>
-      )}
-
-      {/* Main content */}
+      <Sidebar canAdd={true} Home={true} Account={true} LogOut={false} />
+      
       <div className="flex flex-col flex-grow w-full md:ml-0">
+        {/* NavbarAccount adicionado aqui */}
+        <NavbarAccount activeTab={activeTab} setActiveTab={setActiveTab} />
+
         {/* Header */}
-        <div className="pt-16 md:pt-6 px-4">
+        <div className="pt-6 px-4">
           <h1 className="text-2xl font-semibold text-[#73802A] text-center">Histórico de Transações</h1>
         </div>
 
