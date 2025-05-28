@@ -7,22 +7,23 @@ import ProposalCard from "../components/proposalCard";
 import Footer from "../components/footer";
 import { Helmet } from "react-helmet";
 import ProposalCardAnnouce from "../components/proposalCardAnnouce";
-import NavbarAccount from "../components/navbarAccount"; // Importação adicionada
+import NavbarAccount from "../components/navbarAccount";
 import "../components/css/sidebar.css";
 import "../index.css";
 
 const ProposalsPage = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState({ made: false, received: false });
-  const [proposalsMade, setProposalsMade] = useState({ sales: [], loans: [] });
-  const [proposalsReceived, setProposalsReceived] = useState({ sales: [], loans: [] });
+  const [proposalsMade, setProposalsMade] = useState([]);
+  const [proposalsReceived, setProposalsReceived] = useState([]);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("proposals"); // Estado para controlar a aba ativa
+  const [activeTab, setActiveTab] = useState("proposals");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Check authentication and fetch user data
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/");
@@ -31,249 +32,151 @@ const ProposalsPage = () => {
     dispatch(fetchUserInfo());
   }, [isAuthenticated, dispatch, navigate]);
 
-  // Clear states when no user
   useEffect(() => {
     if (!user?.message?.Utilizador_ID) {
-      setProposalsMade({ sales: [], loans: [] });
-      setProposalsReceived({ sales: [], loans: [] });
+      setProposalsMade([]);
+      setProposalsReceived([]);
     }
   }, [user]);
 
-  // Fetch proposals I made (Sent proposals)
   useEffect(() => {
-    const fetchProposalsMade = async () => {
+    const fetchProposals = async () => {
       try {
-        setLoading(prev => ({...prev, made: true}));
+        setLoading({ made: true, received: true });
         setError(null);
-        
+
         const userId = user?.message?.Utilizador_ID;
         if (!userId) return;
 
-        const fetchSalesProposals = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-sales/user/user`, {
+        const fetchProposalList = async (url, type, isReceived = false) => {
+          const res = await fetch(url, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
           });
+          if (!res.ok) throw new Error("Erro ao buscar propostas");
+          const data = await res.json();
 
-          if (!response.ok) throw new Error("Erro ao buscar propostas de venda");
+          return await Promise.all(data.message.map(async (proposal) => {
+            const id = type === "sales" ? proposal.Venda_ID : proposal.Emprestimo_ID;
+            const endpoint = type === "sales" ? "sales" : "loans";
+            const detailRes = await fetch(`http://localhost:5000/api/${endpoint}/id/${id}`, {
+              credentials: 'include',
+              headers: { "Content-Type": "application/json" }
+            });
+            const detail = await detailRes.json();
 
-          const data = await response.json();
-          if (!data?.message || !Array.isArray(data.message)) return [];
-
-          return await Promise.all(
-            data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}}`, {
-                credentials: 'include',
-                headers: { "Content-Type": "application/json" }
-              });
-              
-              const saleDetail = await detailRes.json();
-              
-              return {
-                title: saleDetail.message?.Titulo || "Sem título",
-                Titulo: saleDetail.message?.Titulo || "Sem título",
-                idVenda: proposal.Venda_ID || null,
-                category: "Vendas",
-                price: proposal.NovoValor ?? 0,
-                description: saleDetail.message?.Descricao || "Sem descrição",
-                Descricao: saleDetail.message?.Descricao || "Sem descrição",
-                status: proposal.Aceite ?? 0,
-                date: proposal.Data_Criacao || new Date().toISOString(),
-              };
-            })
-          );
+            return {
+              title: detail.message?.Titulo || "Sem título",
+              category: type === "sales" ? "Vendas" : "Empréstimos",
+              price: proposal.NovoValor ?? 0,
+              description: detail.message?.Descricao || "Sem descrição",
+              status: proposal.Aceite,
+              date: proposal.Data_Criacao,
+              rawDate: new Date(proposal.Data_Criacao),
+              proposerId: isReceived ? proposal.Utilizador_ID : undefined,
+              ...(type === "sales"
+                ? { idVenda: proposal.Venda_ID }
+                : {
+                    idEmprestimo: proposal.Emprestimo_ID,
+                    duration: `${Math.ceil((new Date(proposal.NovaDataFim) - new Date(proposal.NovaDataInicio)) / (1000 * 60 * 60 * 24))} dia(s)`
+                  })
+            };
+          }));
         };
 
-        const fetchLoanProposals = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-loans/user/user`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          });
-
-          if (!response.ok) throw new Error("Erro ao buscar propostas de empréstimo");
-
-          const data = await response.json();
-          if (!data?.message || !Array.isArray(data.message)) return [];
-
-          return await Promise.all(
-            data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}`, {
-                credentials: 'include',
-                headers: { "Content-Type": "application/json" }
-              });
-              
-              const loanDetail = await detailRes.json();
-              
-              return {
-                title: loanDetail.message?.Titulo || "Sem título",
-                Titulo: loanDetail.message?.Titulo || "Sem título",
-                idEmprestimo: proposal.Emprestimo_ID || null,
-                category: "Empréstimos",
-                price: proposal.NovoValor ?? 0,
-                description: loanDetail.message?.Descricao || "Sem descrição",
-                Descricao: loanDetail.message?.Descricao || "Sem descrição",
-                status: proposal.Aceite ?? 0,
-                date: proposal.Data_Criacao || new Date().toISOString(),
-                duration: (() => {
-                  const start = new Date(proposal.NovaDataInicio || new Date());
-                  const end = new Date(proposal.NovaDataFim || new Date());
-                  const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-                  return `${diffDays} dia(s)`;
-                })(),
-              };
-            })
-          );
-        };
-
-        const [salesItems, loanItems] = await Promise.all([
-          fetchSalesProposals(),
-          fetchLoanProposals()
+        const [madeSales, madeLoans, recSales, recLoans] = await Promise.all([
+          fetchProposalList("http://localhost:5000/api/proposal-sales/user/user", "sales"),
+          fetchProposalList("http://localhost:5000/api/proposal-loans/user/user", "loans"),
+          fetchProposalList("http://localhost:5000/api/proposal-sales/sales/user", "sales", true),
+          fetchProposalList("http://localhost:5000/api/proposal-loans/loans/user", "loans", true)
         ]);
 
-        setProposalsMade({
-          sales: salesItems.filter(item => item !== null),
-          loans: loanItems.filter(item => item !== null)
-        });
+        setProposalsMade([...madeSales, ...madeLoans]);
+        setProposalsReceived([...recSales, ...recLoans]);
+
       } catch (err) {
-        console.error("Erro ao buscar propostas efetuadas:", err);
-        setError("Erro ao carregar propostas efetuadas");
+        console.error("Erro:", err);
+        setError("Erro ao carregar propostas");
       } finally {
-        setLoading(prev => ({...prev, made: false}));
+        setLoading({ made: false, received: false });
       }
     };
 
-    if (user?.message?.Utilizador_ID) fetchProposalsMade();
+    if (user?.message?.Utilizador_ID) fetchProposals();
   }, [user]);
 
-  // Fetch proposals I received
-  useEffect(() => {
-    const fetchProposalsReceived = async () => {
-      try {
-        setLoading(prev => ({...prev, received: true}));
-        setError(null);
-        
-        const userId = user?.message?.Utilizador_ID;
-        if (!userId) return;
+  const filterAndSortProposals = (proposals) => {
+    let filtered = [...proposals];
 
-        const fetchSalesProposalsAnnounce = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-sales/sales/user`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          });
-        
-          if (!response.ok) throw new Error("Erro ao buscar propostas de venda recebidas");
-        
-          const data = await response.json();
-          if (!data?.message || !Array.isArray(data.message)) return [];
-        
-          return await Promise.all(
-            data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/sales/id/${proposal.Venda_ID}`, {
-                credentials: 'include',
-                headers: { "Content-Type": "application/json" }
-              });
-              
-              if (!detailRes.ok) {
-                console.error("Falha ao buscar detalhes da venda", detailRes.status);
-                return null;
-              }
-        
-              const saleDetail = await detailRes.json();
-              
-              return {
-                title: saleDetail.message?.Titulo || "Sem título",
-                idVenda: proposal.Venda_ID || null,
-                category: "Vendas",
-                price: proposal.NovoValor ?? 0,
-                description: saleDetail.message?.Descricao || "Sem descrição",
-                status: proposal.Aceite ?? 0,
-                date: proposal.Data_Criacao || new Date().toISOString(),
-                proposerId: proposal.Utilizador_ID || null
-              };
-            })
-          );
-        };
+    if (statusFilter !== "all") {
+      filtered = filtered.filter(p => {
+        const status = p.status;
+        if (statusFilter === "pending") return status === 1;
+        if (statusFilter === "accepted") return status === 2;
+        if (statusFilter === "rejected") return status === 3;
+        return true;
+      });
+    }
 
-        const fetchLoanProposalsAnnounce = async () => {
-          const response = await fetch(`http://localhost:5000/api/proposal-loans/loans/user`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          });
+    if (categoryFilter !== "all") {
+      const catMap = { sales: "Vendas", loans: "Empréstimos" };
+      filtered = filtered.filter(p => p.category === catMap[categoryFilter]);
+    }
 
-          if (!response.ok) throw new Error("Erro ao buscar propostas de empréstimo recebidas");
+    filtered.sort((a, b) => b.rawDate - a.rawDate);
 
-          const data = await response.json();
-          if (!data?.message || !Array.isArray(data.message)) return [];
+    return filtered;
+  };
 
-          return await Promise.all(
-            data.message.map(async (proposal) => {
-              const detailRes = await fetch(`http://localhost:5000/api/loans/id/${proposal.Emprestimo_ID}`, {
-                credentials: 'include',
-                headers: { "Content-Type": "application/json" }
-              });
-              
-              const loanDetail = await detailRes.json();
-              
-              return {
-                title: loanDetail.message?.Titulo || "Sem título",
-                idEmprestimo: proposal.Emprestimo_ID || null,
-                category: "Empréstimos",
-                price: proposal.NovoValor ?? 0,
-                description: loanDetail.message?.Descricao || "Sem descrição",
-                status: proposal.Aceite ?? 0,
-                date: proposal.Data_Criacao || new Date().toISOString(),
-                proposerId: proposal.Utilizador_ID || null,
-                duration: (() => {
-                  const start = new Date(proposal.NovaDataInicio || new Date());
-                  const end = new Date(proposal.NovaDataFim || new Date());
-                  const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-                  return `${diffDays} dia(s)`;
-                })(),
-              };
-            })
-          );
-        };
+  const filteredMade = filterAndSortProposals(proposalsMade);
+  const filteredReceived = filterAndSortProposals(proposalsReceived);
 
-        const [salesItems, loanItems] = await Promise.all([
-          fetchSalesProposalsAnnounce(),
-          fetchLoanProposalsAnnounce()
-        ]);
-
-        setProposalsReceived({
-          sales: salesItems.filter(item => item !== null),
-          loans: loanItems.filter(item => item !== null)
-        });
-      } catch (err) {
-        console.error("Erro ao buscar propostas recebidas:", err);
-        setError("Erro ao carregar propostas recebidas");
-      } finally {
-        setLoading(prev => ({...prev, received: false}));
-      }
-    };
-
-    if (user?.message?.Utilizador_ID) fetchProposalsReceived();
-  }, [user]);
-
-  const announcingItems = [...proposalsMade.sales, ...proposalsMade.loans];
-  const announcingItemsAnnounce = [...proposalsReceived.sales, ...proposalsReceived.loans];
+  if (!isAuthenticated) return null;
 
   return (
-    <div className="flex h-screen bg-bgp overflow-hidden">
-      <Helmet>
-        <title>Propostas</title>
-      </Helmet>
-      <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
-
-      <div className="flex-1 flex flex-col overflow-hidden relative">
-        {/* NavbarAccount adicionado aqui */}
+    <div className="bg-bgp flex flex-col md:flex-row min-h-screen">
+      <Helmet><title>Propostas</title></Helmet>
+      <div className="md:sticky md:top-0 md:h-screen">
+        <SideBar canAdd={true} Home={true} Account={true} LogOut={false} />
+      </div>
+      <div className="flex-1 flex flex-col overflow-hidden">
         <NavbarAccount activeTab={activeTab} setActiveTab={setActiveTab} />
-
         <div className="p-6 sm:p-10 pb-0">
           <h1 className="text-2xl font-medium text-txtp">Propostas</h1>
+        </div>
+        
+        {/* Updated Filters Section */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 mt-2 w-full">
+          <div className="bg-bgp rounded-lg p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="rounded-md p-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Status:</label>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="w-full text-txts border border-txtp rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-[#73802A] focus:border-[#73802A]"
+                >
+                  <option value="all">Todos</option>
+                  <option value="pending">Pendentes</option>
+                  <option value="accepted">Aceites</option>
+                  <option value="rejected">Rejeitadas</option>
+                </select>
+              </div>
+              <div className="rounded-md p-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Categoria:</label>
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  className="w-full text-txts border border-txtp rounded-md py-2 px-3 focus:outline-none focus:ring-1 focus:ring-[#73802A] focus:border-[#73802A]"
+                >
+                  <option value="all">Todas</option>
+                  <option value="sales">Vendas</option>
+                  <option value="loans">Empréstimos</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
 
         {error && (
@@ -282,52 +185,41 @@ const ProposalsPage = () => {
           </div>
         )}
 
-        <div className="flex flex-col md:flex-row flex-1 overflow-auto">
-          {/* Received Proposals */}
-          <div className="w-full md:w-1/2 p-4 md:p-6 overflow-y-auto">
-            <h2 className="text-gray-400 font-semibold mb-4 text-xl">Recebidas</h2>
-            
-            {loading.received ? (
-              <div className="flex justify-center items-center h-32">
-                <p className="text-[#7b892f]">Carregando...</p>
-              </div>
-            ) : announcingItemsAnnounce && announcingItemsAnnounce.length > 0 ? (
-              announcingItemsAnnounce.map((item, index) => (
-                <ProposalCardAnnouce 
-                  key={`received-${index}`} 
-                  item={item} 
-                  proposerId={item.proposerId}
-                />
-              ))
-            ) : (
-              <p className="text-[#7b892f] font-semibold text-lg text-center">
-                Nenhuma proposta recebida.
-              </p>
-            )}
-          </div>
-
-          <div className="hidden md:block w-px bg-[#8b9a41]" />
-
-          {/* Sent Proposals */}
-          <div className="w-full md:w-1/2 p-4 md:p-6 overflow-y-auto">
-            <h2 className="text-gray-400 font-semibold mb-4 text-xl">Efetuadas</h2>
-            
-            {loading.made ? (
-              <div className="flex justify-center items-center h-32">
-                <p className="text-[#7b892f]">Carregando...</p>
-              </div>
-            ) : announcingItems && announcingItems.length > 0 ? (
-              announcingItems.map((item, index) => (
-                <ProposalCard 
-                  key={`made-${index}`} 
-                  item={item} 
-                />
-              ))
-            ) : (
-              <p className="text-[#7b892f] font-semibold text-lg text-center">
-                Nenhuma proposta efetuada.
-              </p>
-            )}
+        <div className="flex-1 overflow-auto">
+          <div className="flex flex-col md:flex-row h-full">
+            <div className="w-full md:w-1/2 p-4 md:p-6">
+              <h2 className="text-gray-400 font-semibold mb-4 text-xl">Recebidas</h2>
+              {loading.received ? (
+                <div className="flex justify-center items-center h-32">
+                  <p className="text-[#7b892f]">Carregando...</p>
+                </div>
+              ) : filteredReceived.length > 0 ? (
+                <div className="space-y-4">
+                  {filteredReceived.map((item, i) => (
+                    <ProposalCardAnnouce key={`rec-${i}`} item={item} proposerId={item.proposerId} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-[#7b892f] font-semibold text-lg text-center">Nenhuma proposta recebida.</p>
+              )}
+            </div>
+            <div className="hidden md:block w-px bg-[#8b9a41]" />
+            <div className="w-full md:w-1/2 p-4 md:p-6">
+              <h2 className="text-gray-400 font-semibold mb-4 text-xl">Efetuadas</h2>
+              {loading.made ? (
+                <div className="flex justify-center items-center h-32">
+                  <p className="text-[#7b892f]">Carregando...</p>
+                </div>
+              ) : filteredMade.length > 0 ? (
+                <div className="space-y-4">
+                  {filteredMade.map((item, i) => (
+                    <ProposalCard key={`made-${i}`} item={item} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-[#7b892f] font-semibold text-lg text-center">Nenhuma proposta efetuada.</p>
+              )}
+            </div>
           </div>
         </div>
 

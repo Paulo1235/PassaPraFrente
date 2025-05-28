@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { Check, Trash } from 'lucide-react';
 
 const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => {
-  const [status, setStatus] = useState(item.status || 0);
+  const [status, setStatus] = useState(() => Number(item.status)); // Garante que status é número
 
-  // Garante valores padrão para título e descrição
   const safeItem = {
     ...item,
     title: item?.title || item?.Titulo || "Sem título",
@@ -13,14 +12,14 @@ const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => 
     category: item?.category || (item.idVenda ? "Vendas" : "Empréstimos")
   };
 
-  const formatDate = (dateString) => 
+  const formatDate = (dateString) =>
     dateString ? new Date(dateString).toLocaleDateString("pt-BR") : "Data não disponível";
 
+  // Ajuste para os códigos de status
   const statusConfig = {
     1: { text: "Pendente", class: "bg-yellow-100 text-yellow-800" },
     2: { text: "Aceite", class: "bg-green-100 text-green-800" },
-    3: { text: "Rejeitado", class: "bg-red-100 text-red-800" },
-    0: { text: "Pendente", class: "bg-yellow-100 text-yellow-800" }
+    3: { text: "Rejeitado", class: "bg-red-100 text-red-800" }
   };
 
   const handleAction = async (action) => {
@@ -29,30 +28,28 @@ const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => 
       const endpoint = isSale
         ? `http://localhost:5000/api/proposal-sales/${item.idVenda}/user/${proposerId}`
         : `http://localhost:5000/api/proposal-loans/${item.idEmprestimo}/user/${proposerId}`;
-  
-      // Determina o status baseado na ação
+
       const newStatus = action === 'approve' ? 2 : 3;
-  
+
       const response = await fetch(endpoint, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
           ...(isSale ? { idVenda: item.idVenda } : { idEmprestimo: item.idEmprestimo }),
-          status: newStatus // Envia o status diretamente
+          status: newStatus
         })
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || `Falha ao ${action === 'approve' ? 'aprovar' : 'rejeitar'}`);
       }
-  
+
       setStatus(newStatus);
       action === 'approve' ? onApprove?.(item) : onReject?.(item);
     } catch (error) {
       console.error(`Erro ao ${action === 'approve' ? 'aprovar' : 'rejeitar'}:`, error);
-      // Você pode querer adicionar um feedback visual para o usuário aqui
     }
   };
 
@@ -79,11 +76,11 @@ const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => 
       )}
 
       <div className="mt-2 flex justify-between items-center">
-        <span className={`text-xs px-2 py-1 rounded ${statusConfig[status]?.class || statusConfig[0].class}`}>
-          {statusConfig[status]?.text || statusConfig[0].text}
+        <span className={`text-xs px-2 py-1 rounded ${statusConfig[status]?.class || statusConfig[1].class}`}>
+          {statusConfig[status]?.text || statusConfig[1].text}
         </span>
 
-        {(status === 0 || status === 1) && (
+        {status === 1 && (
           <div className="p-2 rounded-lg flex justify-end gap-4">
             <button
               onClick={() => handleAction('approve')}
@@ -102,11 +99,8 @@ const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => 
           </div>
         )}
 
-        {(status === 2 || status === 3) && (
-          <div className="text-xs text-gray-500">
-            {status === 2 ? "Proposta aceita" : "Proposta rejeitada"}
-          </div>
-        )}
+        {status === 2 && <div className="text-xs text-gray-500">Proposta aceita</div>}
+        {status === 3 && <div className="text-xs text-gray-500">Proposta rejeitada</div>}
       </div>
 
       <div className="mt-2 text-xs text-gray-500 space-y-1">

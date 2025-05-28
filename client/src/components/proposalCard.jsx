@@ -7,18 +7,12 @@ const ProposalCard = ({ item }) => {
     return date.toLocaleDateString("pt-BR");
   };
 
-  // useEffect(() => { console.log(item) }, []);
-  // Convert status number to a readable string
   const getStatusText = (status) => {
-    if (status === undefined) return "Pendente";
-
-    console.log(item.Date)
-
     switch (status) {
       case 1:
         return "Pendente";
       case 2:
-        return "Aprovado";
+        return "Aceite";
       case 3:
         return "Rejeitado";
       default:
@@ -26,10 +20,7 @@ const ProposalCard = ({ item }) => {
     }
   };
 
-  // Get status class based on status number
   const getStatusClass = (status) => {
-    if (status === undefined) return "bg-yellow-100 text-yellow-800";
-
     switch (status) {
       case 1:
         return "bg-yellow-100 text-yellow-800";
@@ -46,19 +37,24 @@ const ProposalCard = ({ item }) => {
     <div className="bg-white rounded-lg shadow-md p-4 mb-4">
       <div className="flex justify-between items-start">
         <h3 className="text-lg font-semibold text-txtp">{item.title}</h3>
-        <span className="bg-[#e8f0c9] text-[#7b892f] px-2 py-1 rounded text-xs">{item.category}</span>
+        <span className="bg-[#e8f0c9] text-[#7b892f] px-2 py-1 rounded text-xs">
+          {item.category}
+        </span>
       </div>
 
-      {item.description && <p className="text-gray-600 mt-2 text-sm line-clamp-2">{item.description}</p>}
+      {item.description && (
+        <p className="text-gray-600 mt-2 text-sm line-clamp-2">
+          {item.description}
+        </p>
+      )}
 
       <div className="mt-3 flex justify-between items-center">
         {item.price !== undefined && (
-          <span className="font-medium text-txtp">
-            {"€ " + item.price}
-          </span>
+          <span className="font-medium text-txtp">€ {item.price}</span>
         )}
-
-        {item.date && <span className="text-xs text-gray-500">{formatDate(item.date)}</span>}
+        {item.date && (
+          <span className="text-xs text-gray-500">{formatDate(item.date)}</span>
+        )}
       </div>
 
       {item.duration && (
@@ -68,13 +64,21 @@ const ProposalCard = ({ item }) => {
       )}
 
       <div className="mt-2">
-        <span className={`text-xs px-2 py-1 rounded ${getStatusClass(item.status)}`}>{getStatusText(item.status)}</span>
+        <span className={`text-xs px-2 py-1 rounded ${getStatusClass(item.status)}`}>
+          {getStatusText(item.status)}
+        </span>
       </div>
 
       <div className="mt-2 text-xs text-gray-500">
-        {item.idVenda && item.idVenda !== "ID" && <div>ID Venda: {item.idVenda}</div>}
-        {item.idEmprestimo && item.idEmprestimo !== "ID" && <div>ID Empréstimo: {item.idEmprestimo}</div>}
-        {item.idSorteio && item.idSorteio !== "ID" && <div>ID Sorteio: {item.idSorteio}</div>}
+        {item.idVenda && item.idVenda !== "ID" && (
+          <div>ID Venda: {item.idVenda}</div>
+        )}
+        {item.idEmprestimo && item.idEmprestimo !== "ID" && (
+          <div>ID Empréstimo: {item.idEmprestimo}</div>
+        )}
+        {item.idSorteio && item.idSorteio !== "ID" && (
+          <div>ID Sorteio: {item.idSorteio}</div>
+        )}
       </div>
     </div>
   );
