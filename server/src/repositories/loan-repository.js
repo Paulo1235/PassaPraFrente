@@ -73,7 +73,7 @@ class LoanRepository {
         JOIN Artigo ON Artigo.Artigo_ID = Emprestimo.ArtigoArtigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado = 'Disponível' AND Emprestimo.Utilizador_ID <> @userId
+        WHERE Estado.Estado = 'Disponível' AND Emprestimo.Utilizador_ID <> @userId
       `)
 
     return availableLoans.recordset
@@ -167,13 +167,13 @@ class LoanRepository {
       .request()
       .input('userId', sql.Int, userId)
       .query(`
-        SELECT Emprestimo_ID, Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, Emprestimo.ArtigoArtigo_ID, Estado, Condicao, NomeCategoria
+        SELECT Emprestimo_ID, Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, Emprestimo.ArtigoArtigo_ID, Estado.Estado, Condicao, NomeCategoria
         FROM Emprestimo
         JOIN Estado ON Estado.Estado_ID = Emprestimo.EstadoEstado_ID
         JOIN Artigo ON Artigo.Artigo_ID = Emprestimo.ArtigoArtigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
+        WHERE Estado.Estado = 'Disponível' AND Utilizador_ID = @userId
       `)
 
     return uncompletedLoans.recordset
@@ -186,13 +186,13 @@ class LoanRepository {
       .request()
       .input('userId', sql.Int, userId)
       .query(`
-        SELECT Emprestimo_ID, Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, Emprestimo.ArtigoArtigo_ID, Estado, Condicao, NomeCategoria
+        SELECT Emprestimo_ID, Titulo, Descricao, Valor, DataInicio, DataFim, Utilizador_ID, Emprestimo.ArtigoArtigo_ID, Estado.Estado, Condicao, NomeCategoria
         FROM Emprestimo
         JOIN Estado ON Estado.Estado_ID = Emprestimo.EstadoEstado_ID
         JOIN Artigo ON Artigo.Artigo_ID = Emprestimo.ArtigoArtigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
+        WHERE Estado.Estado = 'Concluído' AND Utilizador_ID = @userId
       `)
 
     return completedLoans.recordset

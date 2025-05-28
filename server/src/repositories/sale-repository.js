@@ -70,7 +70,7 @@ class SaleRepository {
         JOIN Artigo ON Artigo.Artigo_ID = Venda.Artigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado = 'Disponível' AND Venda.Utilizador_ID <> @userId
+        WHERE Estado.Estado = 'Disponível' AND Venda.Utilizador_ID <> @userId
       `)
 
     return availableSales.recordset
@@ -85,7 +85,7 @@ class SaleRepository {
         SELECT * 
         FROM Venda
         JOIN Estado ON Estado.Estado_ID = Venda.Estado_ID
-        WHERE Estado = 'Em análise'
+        WHERE Estado.Estado = 'Em análise'
       `)
 
     return pendingSales.recordset
@@ -167,7 +167,7 @@ class SaleRepository {
         JOIN Artigo ON Artigo.Artigo_ID = Venda.Artigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
+        WHERE Estado.Estado = 'Disponível' AND Utilizador_ID = @userId
       `)
 
     return uncompletedSales.recordset
@@ -186,7 +186,7 @@ class SaleRepository {
         JOIN Artigo ON Artigo.Artigo_ID = Venda.Artigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
+        WHERE Estado.Estado = 'Concluído' AND Utilizador_ID = @userId
       `)
 
     return completedSales.recordset

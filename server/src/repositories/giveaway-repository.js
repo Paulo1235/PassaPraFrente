@@ -70,7 +70,7 @@ class GiveawayRepository {
         JOIN Artigo ON Artigo.Artigo_ID = Sorteio.ArtigoArtigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado = 'Disponível' AND Sorteio.Utilizador_ID <> @userId
+        WHERE Estado.Estado = 'Disponível' AND Sorteio.Utilizador_ID <> @userId
       `)
 
     return availableGiveaways.recordset
@@ -85,7 +85,7 @@ class GiveawayRepository {
         SELECT * 
         FROM Sorteio
         JOIN Estado ON Estado.Estado_ID = Sorteio.Estado_ID
-        WHERE Estado = 'Em análise'
+        WHERE Estado.Estado = 'Em análise'
       `)
 
     return pendingGiveaways.recordset
@@ -169,7 +169,7 @@ class GiveawayRepository {
         JOIN Artigo ON Artigo.Artigo_ID = Sorteio.ArtigoArtigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado <> 'Concluído' AND Utilizador_ID = @userId
+        WHERE Estado.Estado <> 'Concluído' AND Utilizador_ID = @userId
       `)
 
     return uncompletedGiveaways.recordset
@@ -188,7 +188,7 @@ class GiveawayRepository {
         JOIN Artigo ON Artigo.Artigo_ID = Sorteio.ArtigoArtigo_ID
         JOIN Categoria ON Categoria.Categoria_ID = Artigo.Categoria_ID
         JOIN Condicao ON Condicao.Condicao_ID = Artigo.Condicao_ID
-        WHERE Estado = 'Concluído' AND Utilizador_ID = @userId
+        WHERE Estado.Estado = 'Concluído' AND Utilizador_ID = @userId
       `)
 
     return completedGiveaways.recordset
