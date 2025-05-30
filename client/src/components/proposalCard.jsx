@@ -69,17 +69,7 @@ const ProposalCard = ({ item }) => {
         </span>
       </div>
 
-      <div className="mt-2 text-xs text-gray-500">
-        {item.idVenda && item.idVenda !== "ID" && (
-          <div>ID Venda: {item.idVenda}</div>
-        )}
-        {item.idEmprestimo && item.idEmprestimo !== "ID" && (
-          <div>ID Empréstimo: {item.idEmprestimo}</div>
-        )}
-        {item.idSorteio && item.idSorteio !== "ID" && (
-          <div>ID Sorteio: {item.idSorteio}</div>
-        )}
-      </div>
+
     </div>
   );
 };

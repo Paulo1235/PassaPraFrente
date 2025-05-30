@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Check, Trash } from 'lucide-react';
+import { Check, Trash, Loader2 } from 'lucide-react';
 
 const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => {
-  const [status, setStatus] = useState(() => Number(item.status)); // Garante que status é número
+  const [status, setStatus] = useState(() => Number(item.status));
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const safeItem = {
     ...item,
@@ -15,7 +16,6 @@ const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => 
   const formatDate = (dateString) =>
     dateString ? new Date(dateString).toLocaleDateString("pt-BR") : "Data não disponível";
 
-  // Ajuste para os códigos de status
   const statusConfig = {
     1: { text: "Pendente", class: "bg-yellow-100 text-yellow-800" },
     2: { text: "Aceite", class: "bg-green-100 text-green-800" },
@@ -23,6 +23,9 @@ const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => 
   };
 
   const handleAction = async (action) => {
+    if (isProcessing) return;
+    setIsProcessing(true);
+    
     try {
       const isSale = item.idVenda && item.idVenda !== "ID";
       const endpoint = isSale
@@ -47,14 +50,22 @@ const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => 
       }
 
       setStatus(newStatus);
-      action === 'approve' ? onApprove?.(item) : onReject?.(item);
+      
+      if (action === 'approve') {
+        onApprove?.({ ...item, status: newStatus });
+      } else {
+        onReject?.({ ...item, status: newStatus });
+      }
     } catch (error) {
       console.error(`Erro ao ${action === 'approve' ? 'aprovar' : 'rejeitar'}:`, error);
+      // Você pode adicionar um toast de erro aqui se desejar
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow p-4 mb-4">
+    <div className="bg-white rounded-2xl shadow p-4 mb-4 transition-all duration-200 hover:shadow-md">
       <div className="flex justify-between items-start">
         <h3 className="text-lg font-semibold text-txtp">{safeItem.title}</h3>
         <span className="bg-[#e8f0c9] text-[#7b892f] px-2 py-1 rounded text-xs">
@@ -65,7 +76,7 @@ const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => 
       <p className="text-gray-600 mt-2 text-sm line-clamp-2">{safeItem.description}</p>
 
       <div className="mt-3 flex justify-between items-center">
-        <span className="font-medium text-txtp">€ {safeItem.price}</span>
+        <span className="font-medium text-txtp">€ {safeItem.price.toFixed(2)}</span>
         {safeItem.date && (
           <span className="text-xs text-gray-500">{formatDate(safeItem.date)}</span>
         )}
@@ -75,38 +86,62 @@ const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => 
         <div className="mt-2 text-xs text-gray-600">Duração: {safeItem.duration}</div>
       )}
 
-      <div className="mt-2 flex justify-between items-center">
-        <span className={`text-xs px-2 py-1 rounded ${statusConfig[status]?.class || statusConfig[1].class}`}>
+      <div className="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
+        <span className={`text-xs px-2 py-1 rounded-full ${statusConfig[status]?.class || statusConfig[1].class}`}>
           {statusConfig[status]?.text || statusConfig[1].text}
         </span>
 
         {status === 1 && (
-          <div className="p-2 rounded-lg flex justify-end gap-4">
+          <div className="flex justify-end gap-3">
             <button
               onClick={() => handleAction('approve')}
-              className="flex items-center bg-[#f9f7e8] px-3 py-2 rounded-lg text-[#7b892f] font-medium hover:text-[#5a6622]"
+              disabled={isProcessing}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                isProcessing
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-green-50 text-green-700 hover:bg-green-100'
+              }`}
             >
-              <Check className="h-5 w-5 mr-2" />
-              Aceitar
+              {isProcessing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Check className="h-4 w-4" />
+              )}
+              <span className="text-sm font-medium">Aceitar</span>
             </button>
+            
             <button
               onClick={() => handleAction('reject')}
-              className="flex items-center bg-[#f9f7e8] px-3 py-2 rounded-lg text-red-600 font-medium hover:text-red-700"
+              disabled={isProcessing}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                isProcessing
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-red-50 text-red-700 hover:bg-red-100'
+              }`}
             >
-              <Trash className="h-5 w-5 mr-2" />
-              Rejeitar
+              {isProcessing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Trash className="h-4 w-4" />
+              )}
+              <span className="text-sm font-medium">Rejeitar</span>
             </button>
           </div>
         )}
 
-        {status === 2 && <div className="text-xs text-gray-500">Proposta aceita</div>}
-        {status === 3 && <div className="text-xs text-gray-500">Proposta rejeitada</div>}
-      </div>
-
-      <div className="mt-2 text-xs text-gray-500 space-y-1">
-        {safeItem.idVenda && safeItem.idVenda !== "ID" && <div>ID Venda: {safeItem.idVenda}</div>}
-        {safeItem.idEmprestimo && safeItem.idEmprestimo !== "ID" && <div>ID Empréstimo: {safeItem.idEmprestimo}</div>}
-        {proposerId && <div>Proponente ID: {proposerId}</div>}
+        {status === 2 && (
+          <div className="text-sm text-green-600 flex items-center gap-1">
+            <Check className="h-4 w-4" />
+            Proposta aceita
+          </div>
+        )}
+        
+        {status === 3 && (
+          <div className="text-sm text-red-600 flex items-center gap-1">
+            <Trash className="h-4 w-4" />
+            Proposta rejeitada
+          </div>
+        )}
       </div>
     </div>
   );
