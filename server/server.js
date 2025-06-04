@@ -8,7 +8,7 @@ import { closeConnection, getConnection } from './src/database/db-config.js'
 app.listen(PORT, async () => {
   console.info(
     chalk.green.bold(`\nApp '${NAME}' está a correr.`) + '\n' +
-    chalk.blue.underline(`Ativo em: http://localhost:${PORT}`)
+    chalk.blue.underline('Servidor web a ser executado com sucesso.')
   )
   await checkDatabaseConnection()
 })

@@ -1,36 +1,36 @@
-import config from 'config'
+process.loadEnvFile()
 
-export const NODE_ENV = config.get('NODE_ENV')
+export const NODE_ENV = process.env.NODE_ENV
 
-export const NAME = config.get('APP.NAME')
-export const PORT = config.get('APP.PORT')
+export const NAME = process.env.APP_NAME
+export const PORT = process.env.APP_PORT
 
-export const SALT_ROUNDS = config.get('SALT_ROUNDS')
+export const SALT_ROUNDS = process.env.SALT_ROUNDS
 
-export const MAX = config.get('RATE_LIMIT.MAX')
-export const WINDOWMS = config.get('RATE_LIMIT.WINDOWMS')
+export const MAX = process.env.RATE_LIMIT_MAX
+export const WINDOWMS = process.env.RATE_LIMIT_WINDOWMS
 
-export const USER = config.get('DATABASE.USER')
-export const PASSWORD = config.get('DATABASE.PASSWORD')
-export const SERVER_NAME = config.get('DATABASE.SERVER_NAME')
-export const DATABASE = config.get('DATABASE.DATABASE')
-export const PORTDB = config.get('DATABASE.PORTDB')
-export const INSTANCENAME = config.get('DATABASE.INSTANCENAME')
+export const USER = process.env.DATABASE_USER
+export const PASSWORD = process.env.DATABASE_PASSWORD
+export const SERVER_NAME = process.env.DATABASE_SERVER_NAME
+export const DATABASE = process.env.DATABASE_NAME
+export const PORTDB = process.env.DATABASE_PORTDB
+export const INSTANCENAME = process.env.DATABASE_INSTANCENAME
 
-export const ACCESS_TOKEN_SECRET_KEY = config.get('TOKEN.ACCESS_TOKEN_SECRET_KEY')
-export const REFRESH_TOKEN_SECRET_KEY = config.get('TOKEN.REFRESH_TOKEN_SECRET_KEY')
-export const ACCESS_TOKEN_EXPIRE = config.get('TOKEN.ACCESS_TOKEN_EXPIRE')
-export const REFRESH_TOKEN_EXPIRE = config.get('TOKEN.REFRESH_TOKEN_EXPIRE')
-export const ACTIVATION_CODE_EXPIRE = config.get('TOKEN.ACTIVATION_CODE_EXPIRE')
+export const ACCESS_TOKEN_SECRET_KEY = process.env.TOKEN_ACCESS_TOKEN_SECRET_KEY
+export const REFRESH_TOKEN_SECRET_KEY = process.env.TOKEN_REFRESH_TOKEN_SECRET_KEY
+export const ACCESS_TOKEN_EXPIRE = process.env.TOKEN_ACCESS_TOKEN_EXPIRE
+export const REFRESH_TOKEN_EXPIRE = process.env.TOKEN_REFRESH_TOKEN_EXPIRE
+export const ACTIVATION_CODE_EXPIRE = process.env.TOKEN_ACTIVATION_CODE_EXPIRE
 
 export const DIRNAME = import.meta.dirname
 
-export const SMTP_HOST = config.get('EMAIL.SMTP_HOST')
-export const SMTP_PORT = config.get('EMAIL.SMTP_PORT')
-export const SMTP_SERVICE = config.get('EMAIL.SMTP_SERVICE')
-export const SMTP_PASSWORD = config.get('EMAIL.SMTP_PASSWORD')
-export const SMTP_MAIL = config.get('EMAIL.SMTP_MAIL')
+export const SMTP_HOST = process.env.EMAIL_SMTP_HOST
+export const SMTP_PORT = process.env.EMAIL_SMTP_PORT
+export const SMTP_SERVICE = process.env.EMAIL_SMTP_SERVICE
+export const SMTP_PASSWORD = process.env.EMAIL_SMTP_MAIL
+export const SMTP_MAIL = process.env.EMAIL_SMTP_PASSWORD
 
-export const CLOUDINARY_NAME = config.get('CLOUDINARY.NAME')
-export const CLOUDINARY_API_KEY = config.get('CLOUDINARY.API_KEY')
-export const CLOUDINARY_API_SECRET = config.get('CLOUDINARY.API_SECRET')
+export const CLOUDINARY_NAME = process.env.CLOUDINARY_NAME
+export const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY
+export const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET

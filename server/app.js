@@ -30,7 +30,7 @@ import { configureCloudinary } from './src/services/cloudinary-service.js'
 const app = express()
 
 const corsOptions = {
-  origin: ['http://localhost:3000'],
+  origin: ['https://passaprafrente.vercel.app/'],
   methods: ['POST', 'GET', 'PUT', 'DELETE', 'PATCH'],
   credentials: true
 }
