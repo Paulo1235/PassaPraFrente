@@ -60,7 +60,7 @@ export default function CreateLoan() {
         thumbnails: photoUrls,
       }
 
-      const response = await fetch("http://localhost:5000/api/loans/create", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/loans/create`, {
         method: "POST",
         body: JSON.stringify(loanData),
         headers: {

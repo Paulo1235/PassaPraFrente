@@ -26,7 +26,7 @@ function LookSale() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/sales/id/${id}`,
+          `${process.env.REACT_APP_API_URL}/api/sales/id/${id}`,
           {
             method: "GET",
             headers: {
@@ -56,7 +56,7 @@ function LookSale() {
   const createTransaction = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/transactions-sales/create/${data.Venda_ID}`,
+        `${process.env.REACT_APP_API_URL}/api/transactions-sales/create/${data.Venda_ID}`,
         {
           method: "POST",
           headers: {

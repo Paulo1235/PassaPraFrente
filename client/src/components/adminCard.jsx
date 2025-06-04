@@ -6,11 +6,10 @@ import { Trash2, Check } from "lucide-react";
 const AdminCard = (props) => {
   const accept = async (id, values) => {
     toast.success("Aceite!");
-    // console.log("ACCEPT CALLED", { id, values });
-    // console.log("ACCEPT -> tipoAnuncio:", values.tipoAnuncio);
+    
     if (values.tipoAnuncio === "Empréstimo") {
       return await fetch(
-        `http://localhost:5000/api/loans/update-status/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/loans/update-status/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -25,7 +24,7 @@ const AdminCard = (props) => {
     }
     if (values.tipoAnuncio === "Venda") {
       return await fetch(
-        `http://localhost:5000/api/sales/update-status/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/sales/update-status/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -40,7 +39,7 @@ const AdminCard = (props) => {
     }
     if (values.tipoAnuncio === "Sorteio") {
       return await fetch(
-        `http://localhost:5000/api/giveaways/update-status/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/giveaways/update-status/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -57,11 +56,10 @@ const AdminCard = (props) => {
 
   const deny = async (id, values) => {
     toast.error("Recusado!");
-    // console.log("DENY CALLED", { id, values });
-    // console.log("DENY -> tipoAnuncio:", values.tipoAnuncio);
+
     if (values.tipoAnuncio === "Emprestimo") {
       return await fetch(
-        `http://localhost:5000/api/loans/update-status/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/loans/update-status/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -77,7 +75,7 @@ const AdminCard = (props) => {
     }
     if (values.tipoAnuncio === "Venda") {
       return await fetch(
-        `http://localhost:5000/api/sales/update-status/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/sales/update-status/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -92,7 +90,7 @@ const AdminCard = (props) => {
     }
     if (values.tipoAnuncio === "Sorteio") {
       return await fetch(
-        `http://localhost:5000/api/giveaways/update-status/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/giveaways/update-status/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -106,8 +104,6 @@ const AdminCard = (props) => {
       );
     }
   };
-
-  // useEffect(() => {console.log(props)}, [])
 
   return (
     <div className="w-[300px] h-[120px] rounded-lg bg-white shadow-xl flex items-center p-3">

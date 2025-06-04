@@ -22,35 +22,12 @@ export default function EditSale() {
   const navigate = useNavigate();
   
   const [isLoading, setIsLoading] = useState(true);
-  //! Acho que nao funciona ainda
-  // const convertToBase64 = (file) => {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader()
-  //     reader.readAsDataURL(file)
-  //     reader.onload = () => resolve(reader.result)
-  //     reader.onerror = (error) => reject(error)
-  //   })
-  // }
-
-  // const convertBase64ToFile = (base64, fileName) => {
-  //   const arr = base64.split(',')
-  //   const mime = arr[0].match(/:(.*?);/)[1]
-  //   const bstr = atob(arr[1])
-  //   let n = bstr.length
-  //   const u8arr = new Uint8Array(n)
-  
-  //   while (n--) {
-  //     u8arr[n] = bstr.charCodeAt(n)
-  //   }
-  
-  //   return new File([u8arr], fileName, { type: mime })
-  // }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/sales/id/${id}`,
+          `${process.env.REACT_APP_API_URL}/api/sales/id/${id}`,
           {
             method: "GET",
             headers: {
@@ -61,14 +38,8 @@ export default function EditSale() {
         );
 
         const result = await response.json();
-        // console.log(result.message);
-        setData(result.message); // Ajusta conforme estrutura do retorno
-        // if (result.message?.Imagens?.length > 0) {
-        //   const photoFiles = await result.message.Imagens.map((img, index) =>
-        //     convertBase64ToFile(img, `foto${index + 1}.jpg`)          
-        //   )
-        //   result.message.PhotosAsFiles = await Promise.all(photoFiles)
-        // }
+        setData(result.message);
+        
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
@@ -92,7 +63,7 @@ export default function EditSale() {
       const base64Promises = values.photos.map((photo) => convertToBase64(photo))
       const photoUrls = await Promise.all(base64Promises)
 
-      const response = await fetch(`http://localhost:5000/api/sales/id/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sales/id/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -112,8 +83,6 @@ export default function EditSale() {
         throw new Error("Erro ao atualizar a venda.");
       }
 
-      const result = await response.json();
-      // console.log("Venda atualizada:", result);
       toast.success("Venda atualizada com sucesso!");
       setTimeout(() => {
         navigate("/index");
@@ -138,7 +107,7 @@ export default function EditSale() {
     price: data?.Valor || "",
     condition: data?.Condicao || "Como novo",
     category: data?.NomeCategoria || "Outros",
-    photos: data?.PhotosAsFiles || [], // As fotos não vêm como URLs no fetch original?
+    photos: data?.PhotosAsFiles || [],
   };
 
   return (

@@ -23,15 +23,6 @@ export default function EditLoan() {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
-  //! Acho que nao funciona ainda
-  // const convertToBase64 = (file) => {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader()
-  //     reader.readAsDataURL(file)
-  //     reader.onload = () => resolve(reader.result)
-  //     reader.onerror = (error) => reject(error)
-  //   })
-  // }
 
   const convertBase64ToFile = (base64, fileName) => {
     const arr = base64.split(',')
@@ -51,7 +42,7 @@ export default function EditLoan() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/loans/id/${id}`,
+          `${process.env.REACT_APP_API_URL}/api/loans/id/${id}`,
           {
             method: "GET",
             headers: {
@@ -72,7 +63,7 @@ export default function EditLoan() {
         result.message.PhotosAsFiles = photoFiles;
         console.log(photoFiles)
       }
-      setData(result.message); // <- AGORA sim, depois de já ter PhotosAsFiles
+      setData(result.message);
       setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
@@ -93,11 +84,10 @@ export default function EditLoan() {
   const handleSubmit = async (values) => {
     try {
       // Converter todas as fotos para base64
-      console.log(values)
       const base64Promises = values.photos.map((photo) => convertToBase64(photo))
       const photoUrls = await Promise.all(base64Promises)
-      console.log(photoUrls)
-      const response = await fetch(`http://localhost:5000/api/loans/update/${id}`, {
+
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/loans/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -119,8 +109,6 @@ export default function EditLoan() {
         throw new Error("Erro ao atualizar o emprestimo.");
       }
 
-      const result = await response.json();
-      // console.log("Venda atualizada:", result);
       toast.success("Empréstimo atualizado com sucesso!")
       setTimeout(() => {
         navigate("/index");

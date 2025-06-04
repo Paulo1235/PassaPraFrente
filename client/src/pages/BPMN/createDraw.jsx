@@ -58,7 +58,7 @@ export default function CreateDraw() {
       };
 
       const response = await fetch(
-        "http://localhost:5000/api/giveaways/create",
+        `${process.env.REACT_APP_API_URL}/api/giveaways/create`,
         {
           method: "POST",
           body: JSON.stringify(drawData),

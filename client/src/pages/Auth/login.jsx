@@ -18,16 +18,19 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+        console.log('API URL:', process.env.REACT_APP_API_URL);
+
   const handleSubmit = async (values) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/login`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
         credentials: "include",
       });
       const data = await response.json();
+
 
       if (!data.success) {
         toast.error(data.message);

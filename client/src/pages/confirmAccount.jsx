@@ -10,9 +10,6 @@ import { Undo2 } from "lucide-react";
 import '../components/css/sidebar.css';
 import '../index.css';
 
-const BACKEND_URL =
-  process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
-
 const ConfirmAccount = () => {
   const [loading, setIsLoading] = useState(false);
   const [showCodeForm, setShowCodeForm] = useState(false);
@@ -34,7 +31,7 @@ const ConfirmAccount = () => {
       setIsLoading(true);
 
       try {
-        const response = await fetch(`http://localhost:5000/api/auth/activate-user`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/activate-user`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -67,7 +64,7 @@ const ConfirmAccount = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${BACKEND_URL}/api/auth/send-activation-email`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/send-activation-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -26,7 +26,7 @@ const EditAccountPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/users/me", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/me`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -96,7 +96,7 @@ const EditAccountPage = () => {
               validationSchema={EditAccountSchema}
               onSubmit={async (values) => {
                 try {
-                  const res = await fetch("http://localhost:5000/api/users/update", {
+                  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users/update`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     credentials: "include",
@@ -111,7 +111,7 @@ const EditAccountPage = () => {
 
                 if (values.imageUrl && values.imageUrl !== userData?.Url) {
                   try {
-                    const imgRes = await fetch("http://localhost:5000/api/users/update-avatar", {
+                    const imgRes = await fetch(`${process.env.REACT_APP_API_URL}/api/users/update-avatar`, {
                       method: "PATCH",
                       headers: { "Content-Type": "application/json" },
                       credentials: "include",

@@ -56,7 +56,7 @@ export default function CreateSale() {
         thumbnails: photoUrls, // Enviar o array de URLs base64
       };
 
-      const response = await fetch("http://localhost:5000/api/sales/create", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sales/create`, {
         method: "POST",
         body: JSON.stringify(saleData),
         headers: {

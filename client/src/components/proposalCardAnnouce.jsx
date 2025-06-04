@@ -29,8 +29,8 @@ const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => 
     try {
       const isSale = item.idVenda && item.idVenda !== "ID";
       const endpoint = isSale
-        ? `http://localhost:5000/api/proposal-sales/${item.idVenda}/user/${proposerId}`
-        : `http://localhost:5000/api/proposal-loans/${item.idEmprestimo}/user/${proposerId}`;
+        ? `${process.env.REACT_APP_API_URL}/api/proposal-sales/${item.idVenda}/user/${proposerId}`
+        : `${process.env.REACT_APP_API_URL}/api/proposal-loans/${item.idEmprestimo}/user/${proposerId}`;
 
       const newStatus = action === 'approve' ? 2 : 3;
 
@@ -58,7 +58,6 @@ const ProposalCardAnnouncement = ({ item, proposerId, onApprove, onReject }) => 
       }
     } catch (error) {
       console.error(`Erro ao ${action === 'approve' ? 'aprovar' : 'rejeitar'}:`, error);
-      // Você pode adicionar um toast de erro aqui se desejar
     } finally {
       setIsProcessing(false);
     }

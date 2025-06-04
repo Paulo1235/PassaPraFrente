@@ -72,7 +72,7 @@ const Main = () => {
       try {
         setLoading(true)
 
-        const responseSales = await fetch("http://localhost:5000/api/sales/available", {
+        const responseSales = await fetch(`${process.env.REACT_APP_API_URL}/api/sales/available`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -80,7 +80,7 @@ const Main = () => {
           credentials: "include",
         })
 
-        const responseLoans = await fetch("http://localhost:5000/api/loans/available", {
+        const responseLoans = await fetch(`${process.env.REACT_APP_API_URL}/api/loans/available`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -88,7 +88,7 @@ const Main = () => {
           credentials: "include",
         })
 
-        const responseGiveaways = await fetch("http://localhost:5000/api/giveaways/available", {
+        const responseGiveaways = await fetch(`${process.env.REACT_APP_API_URL}/api/giveaways/available`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

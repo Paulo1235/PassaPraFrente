@@ -60,7 +60,7 @@ const ProposalsPage = () => {
           return await Promise.all(data.message.map(async (proposal) => {
             const id = type === "sales" ? proposal.Venda_ID : proposal.Emprestimo_ID;
             const endpoint = type === "sales" ? "sales" : "loans";
-            const detailRes = await fetch(`http://localhost:5000/api/${endpoint}/id/${id}`, {
+            const detailRes = await fetch(`${process.env.REACT_APP_API_URL}/api/${endpoint}/id/${id}`, {
               credentials: 'include',
               headers: { "Content-Type": "application/json" }
             });
@@ -86,10 +86,10 @@ const ProposalsPage = () => {
         };
 
         const [madeSales, madeLoans, recSales, recLoans] = await Promise.all([
-          fetchProposalList("http://localhost:5000/api/proposal-sales/user/user", "sales"),
-          fetchProposalList("http://localhost:5000/api/proposal-loans/user/user", "loans"),
-          fetchProposalList("http://localhost:5000/api/proposal-sales/sales/user", "sales", true),
-          fetchProposalList("http://localhost:5000/api/proposal-loans/loans/user", "loans", true)
+          fetchProposalList(`${process.env.REACT_APP_API_URL}/api/proposal-sales/user/user`, "sales"),
+          fetchProposalList(`${process.env.REACT_APP_API_URL}/api/proposal-loans/user/user`, "loans"),
+          fetchProposalList(`${process.env.REACT_APP_API_URL}/api/proposal-sales/sales/user`, "sales", true),
+          fetchProposalList(`${process.env.REACT_APP_API_URL}/api/proposal-loans/loans/user`, "loans", true)
         ]);
 
         setProposalsMade([...madeSales, ...madeLoans]);

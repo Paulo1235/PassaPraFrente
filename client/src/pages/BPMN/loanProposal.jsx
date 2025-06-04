@@ -34,7 +34,7 @@ const LoanProposal = () =>  {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/loans/id/${id}`,
+          `${process.env.REACT_APP_API_URL}/api/loans/id/${id}`,
           {
             method: "GET",
             headers: {
@@ -58,7 +58,7 @@ const LoanProposal = () =>  {
   const handleSubmit = async (values) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/proposal-loans/create/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/proposal-loans/create/${id}`,
         {
           method: "POST",
           headers: {

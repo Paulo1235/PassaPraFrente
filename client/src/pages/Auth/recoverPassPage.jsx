@@ -21,7 +21,7 @@ export default function PasswordReset() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/users/send-email-password`,
+          `${process.env.REACT_APP_API_URL}/api/users/send-email-password`,
           {
             method: "POST",
             headers: {
@@ -43,7 +43,6 @@ export default function PasswordReset() {
           throw new Error(data.message || "Send Email failed");
         }
 
-        // Show success notification
       } catch (err) {
         toast.error("Erro ao enviar o email!");
       } finally {

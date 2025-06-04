@@ -7,11 +7,12 @@ import { Star, X } from "lucide-react";
 const Review = ({ closeModal, reviewId, category }) => {
   const [rating, setRating] = useState(1);
   const navigate = useNavigate();
+
   const submitAvaliation = async () => {
     if (category === "sale") {
       try {
         const result = await fetch(
-          `http://localhost:5000/api/transaction-sales/review/${reviewId}`,
+          `${process.env.REACT_APP_API_URL}/api/transaction-sales/review/${reviewId}`,
           {
             method: "PATCH",
             headers: {
@@ -47,7 +48,7 @@ const Review = ({ closeModal, reviewId, category }) => {
     if (category === "loan") {
       try {
         const result = await fetch(
-          `http://localhost:5000/api/transaction-loans/review/${reviewId}`,
+          `${process.env.REACT_APP_API_URL}/api/transaction-loans/review/${reviewId}`,
           {
             method: "PATCH",
             headers: {
@@ -84,7 +85,7 @@ const Review = ({ closeModal, reviewId, category }) => {
       try {
         //? Foi retirada o const result, pois não estava a ser utilizado
         const result = await fetch(
-          `http://localhost:5000/api/winner-giveaway/review/${reviewId}`,
+          `${process.env.REACT_APP_API_URL}/api/winner-giveaway/review/${reviewId}`,
           {
             method: "PATCH",
             headers: {

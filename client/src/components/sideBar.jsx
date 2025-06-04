@@ -83,7 +83,7 @@ const Sidebar = (props) => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/logout", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/logout`, {
         method: "POST",
         credentials: "include", // Ensures cookies are sent and removed
       });

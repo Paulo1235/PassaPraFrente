@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
-
 export const getTokenFromCookies = () => {
   const match = document.cookie.match(/(^| )accessToken=([^;]+)/);
   return match ? match[2] : null;
@@ -32,7 +30,7 @@ export const fetchUserInfo = createAsyncThunk("auth/fetchUserInfo", async (_, { 
   if (!token || isTokenExpired(token)) return rejectWithValue("Token expired");
 
   try {
-    const response = await axios.get(`${BACKEND_URL}/api/users/me`, {
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/me`, {
       withCredentials: true,
     });
     return response.data;

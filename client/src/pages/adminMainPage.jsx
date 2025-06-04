@@ -22,7 +22,7 @@ const AdminMain = () => {
     const fetchAdminData = async () => {
       try {
         const responseSales = await fetch(
-          "http://localhost:5000/api/sales/pending",
+          `${process.env.REACT_APP_API_URL}/api/sales/pending`,
           {
             method: "GET",
             headers: {
@@ -33,7 +33,7 @@ const AdminMain = () => {
         );
 
         const responseLoans = await fetch(
-          "http://localhost:5000/api/loans/pending",
+          `${process.env.REACT_APP_API_URL}/api/loans/pending`,
           {
             method: "GET",
             headers: {
@@ -44,7 +44,7 @@ const AdminMain = () => {
         );
 
         const responseGiveaways = await fetch(
-          "http://localhost:5000/api/giveaways/pending",
+          `${process.env.REACT_APP_API_URL}/api/giveaways/pending`,
           {
             method: "GET",
             headers: {

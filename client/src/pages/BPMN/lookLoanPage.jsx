@@ -26,7 +26,7 @@ function LookLoan() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/loans/id/${id}`,
+          `${process.env.REACT_APP_API_URL}/api/loans/id/${id}`,
           {
             method: "GET",
             headers: {
@@ -63,7 +63,7 @@ function LookLoan() {
   const createTransaction = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/transactions-loans/create/${data.Emprestimo_ID}`,
+        `${process.env.REACT_APP_API_URL}/api/transactions-loans/create/${data.Emprestimo_ID}`,
         {
           method: "POST",
           headers: {
